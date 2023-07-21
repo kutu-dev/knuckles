@@ -2,7 +2,18 @@ import hashlib
 import secrets
 from typing import Any
 from .models import License, Song, SubsonicResponse
-from .exceptions import CodeError40, UnknownErrorCode
+from .exceptions import (
+    CodeError0,
+    CodeError10,
+    CodeError20,
+    CodeError30,
+    CodeError40,
+    CodeError41,
+    CodeError50,
+    CodeError60,
+    CodeError70,
+    UnknownErrorCode,
+)
 from urllib.parse import urlparse, ParseResult
 import requests
 import re
@@ -45,8 +56,6 @@ class Subsonic:
 
         params: dict[str, str] = {
             "u": self.user,
-            # t
-            # s
             "v": "1.16.1",
             "c": self.client,
             "f": "json",
@@ -85,6 +94,7 @@ class Subsonic:
             params=self.__generate_params(extra_params),
         )
 
+        print(f"{self.url}/rest/{subroute}")
         json_response: dict[str, Any] = response.json()["subsonic-response"]
 
         if json_response["status"] == "failed":
@@ -126,19 +136,48 @@ class Subsonic:
         }
 
     @staticmethod
-    def __get_code_error(error_code: int) -> type[CodeError40 | UnknownErrorCode]:
+    def __get_code_error(
+        error_code: int,
+    ) -> type[
+        CodeError0
+        | CodeError10
+        | CodeError20
+        | CodeError30
+        | CodeError40
+        | CodeError41
+        | CodeError50
+        | CodeError60
+        | CodeError70
+        | UnknownErrorCode
+    ]:
         """Get the exception associated to the given Subsonic error code
 
         Args:
             error_code (int): The Subsonic error code
 
         Returns:
-            type[CodeError40 | UnknownErrorCode]: The associated exception
+            type[ CodeError0 | CodeError10 | CodeError20 | CodeError30 | CodeError40 | CodeError41 | CodeError50 | CodeError60 | CodeError70 | UnknownErrorCode ]: The exception associated with the provided error code
         """
 
         match error_code:
+            case 0:
+                return CodeError0
+            case 10:
+                return CodeError10
+            case 20:
+                return CodeError20
+            case 30:
+                return CodeError30
             case 40:
                 return CodeError40
+            case 41:
+                return CodeError41
+            case 50:
+                return CodeError50
+            case 60:
+                return CodeError60
+            case 70:
+                return CodeError70
             case _:
                 return UnknownErrorCode
 

@@ -29,11 +29,20 @@ class SubsonicResponse:
 class License:
     valid: bool
     email: str | None = None
-    license_expires: str | None = None
-    trial_expires: str | None = None
+    license_expires: datetime | str | None = None
+    trial_expires: datetime | str | None = None
 
     def __bool__(self) -> bool:
         return self.valid
+
+    def __post_init__(self) -> None:
+        if self.license_expires is not None:
+            # Ignore the error as it's a false positive
+            self.license_expires = parser.parse(self.license_expires)  # type: ignore [arg-type]
+
+        if self.trial_expires is not None:
+            # Ignore the error as it's a false positive
+            self.trial_expires = parser.parse(self.trial_expires)  # type: ignore [arg-type]
 
 
 @dataclass()
