@@ -1,3 +1,5 @@
+from typing import Any
+
 import knuckles.exceptions
 import pytest
 import responses
@@ -46,24 +48,19 @@ code_errors = [
 def test_code_errors(
     subsonic: Subsonic,
     params: dict[str, str],
+    subsonic_response: dict[str, Any],
     code: int,
     message: str,
     exception,
 ) -> None:
+    subsonic_response["subsonic-response"]["status"] = "failed"
+    subsonic_response["subsonic-response"]["error"] = {"code": code, "message": message}
+
     responses.add(
         responses.GET,
         url="https://example.com/rest/ping",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json={
-            "subsonic-response": {
-                "status": "failed",
-                "version": "1.16.1",
-                "type": "knuckles",
-                "serverVersion": "0.1.3 (tag)",
-                "openSubsonic": True,
-                "error": {"code": code, "message": message},
-            }
-        },
+        json=subsonic_response,
         status=200,
     )
 

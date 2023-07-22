@@ -1,33 +1,27 @@
 from typing import Any
 
+import knuckles
 import responses
 from dateutil import parser
-from responses import matchers
-
-import knuckles
 from knuckles import Song, Subsonic
+from responses import matchers
 
 
 @responses.activate
 def test_get_song(
-    subsonic: Subsonic, params: dict[str, str], song: dict[str, Any]
+    subsonic: Subsonic,
+    params: dict[str, str],
+    song: dict[str, Any],
+    subsonic_response: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
+    subsonic_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json={
-            "subsonic-response": {
-                "status": "ok",
-                "version": "1.16.1",
-                "type": "knuckles",
-                "serverVersion": "0.1.3 (tag)",
-                "openSubsonic": True,
-                "song": song,
-            }
-        },
+        json=subsonic_response,
         status=200,
     )
 
@@ -71,24 +65,19 @@ def test_get_song(
 
 @responses.activate
 def test_song_generate(
-    subsonic: Subsonic, params: dict[str, Any], song: dict[str, Any]
+    subsonic: Subsonic,
+    params: dict[str, Any],
+    song: dict[str, Any],
+    subsonic_response: dict[str, Any],
 ):
     params["id"] = song["id"]
+    subsonic_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json={
-            "subsonic-response": {
-                "status": "ok",
-                "version": "1.16.1",
-                "type": "knuckles",
-                "serverVersion": "0.1.3 (tag)",
-                "openSubsonic": True,
-                "song": song,
-            }
-        },
+        json=subsonic_response,
         status=200,
     )
 

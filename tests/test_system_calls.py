@@ -1,26 +1,20 @@
 from datetime import datetime
+from typing import Any
 
 import responses
-from responses import matchers
-
 from knuckles import License, Subsonic, SubsonicResponse
+from responses import matchers
 
 
 @responses.activate
-def test_ping(subsonic: Subsonic, params: dict[str, str]) -> None:
+def test_ping(
+    subsonic: Subsonic, params: dict[str, str], subsonic_response: dict[str, Any]
+) -> None:
     responses.add(
         responses.GET,
         url="https://example.com/rest/ping",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json={
-            "subsonic-response": {
-                "status": "ok",
-                "version": "1.16.1",
-                "type": "knuckles",
-                "serverVersion": "0.1.3 (tag)",
-                "openSubsonic": True,
-            }
-        },
+        json=subsonic_response,
         status=200,
     )
 
@@ -35,26 +29,23 @@ def test_ping(subsonic: Subsonic, params: dict[str, str]) -> None:
 
 
 @responses.activate
-def test_get_license(subsonic: Subsonic, params: dict[str, str]) -> None:
+def test_get_license(
+    subsonic: Subsonic, params: dict[str, str], subsonic_response: dict[str, Any]
+) -> None:
+    subsonic_response["subsonic-response"]["license"] = {
+        "valid": True,
+        "email": "user@example.com",
+        "licenseExpires": "2017-04-11T10:42:50.842Z",
+        "trialExpires": "2015-03-11T12:36:38.753Z",
+    }
+
+    print(subsonic_response)
+
     responses.add(
         responses.GET,
         url="https://example.com/rest/getLicense",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json={
-            "subsonic-response": {
-                "status": "ok",
-                "version": "1.16.1",
-                "type": "AwesomeServerName",
-                "serverVersion": "0.1.3 (tag)",
-                "openSubsonic": True,
-                "license": {
-                    "valid": True,
-                    "email": "user@example.com",
-                    "licenseExpires": "2017-04-11T10:42:50.842Z",
-                    "trialExpires": "2015-03-11T12:36:38.753Z",
-                },
-            }
-        },
+        json=subsonic_response,
         status=200,
     )
 
@@ -71,7 +62,10 @@ def test_get_license(subsonic: Subsonic, params: dict[str, str]) -> None:
 
 @responses.activate
 def test_auth_without_token(
-    subsonic: Subsonic, params: dict[str, str], password: str
+    subsonic: Subsonic,
+    params: dict[str, str],
+    password: str,
+    subsonic_response: dict[str, Any],
 ) -> None:
     params["p"] = password
 
@@ -79,15 +73,7 @@ def test_auth_without_token(
         responses.GET,
         url="https://example.com/rest/ping",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json={
-            "subsonic-response": {
-                "status": "ok",
-                "version": "1.16.1",
-                "type": "knuckles",
-                "serverVersion": "0.1.3 (tag)",
-                "openSubsonic": True,
-            }
-        },
+        json=subsonic_response,
         status=200,
     )
 

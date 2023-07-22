@@ -1,6 +1,7 @@
 from typing import Any
-import pytest
+
 import knuckles
+import pytest
 from knuckles import Subsonic
 
 
@@ -26,6 +27,19 @@ def params(user, client) -> dict[str, str]:
         "v": "1.16.1",
         "c": client,
         "f": "json",
+    }
+
+
+@pytest.fixture
+def subsonic_response() -> dict[str, Any]:
+    return {
+        "subsonic-response": {
+            "status": "ok",
+            "version": "1.16.1",
+            "type": "knuckles",
+            "serverVersion": "0.1.3 (tag)",
+            "openSubsonic": True,
+        }
     }
 
 
