@@ -1,10 +1,11 @@
-from typing import Any
+from typing import Any, Type
 
-import knuckles.exceptions
 import pytest
 import responses
-from knuckles import Subsonic
 from responses import matchers
+
+import knuckles.exceptions
+from knuckles import Subsonic
 
 code_errors = [
     (0, "A generic error.", knuckles.exceptions.CodeError0),
@@ -51,7 +52,7 @@ def test_code_errors(
     subsonic_response: dict[str, Any],
     code: int,
     message: str,
-    exception,
+    exception: Type[Exception],
 ) -> None:
     subsonic_response["subsonic-response"]["status"] = "failed"
     subsonic_response["subsonic-response"]["error"] = {"code": code, "message": message}

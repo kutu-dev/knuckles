@@ -1,11 +1,10 @@
 from typing import Any
 
+import knuckles
 import responses
 from dateutil import parser
-from responses import matchers
-
-import knuckles
 from knuckles import Song, Subsonic
+from responses import matchers
 
 
 @responses.activate
@@ -70,7 +69,7 @@ def test_song_generate(
     params: dict[str, Any],
     song: dict[str, Any],
     subsonic_response: dict[str, Any],
-):
+) -> None:
     params["id"] = song["id"]
     subsonic_response["subsonic-response"]["song"] = song
 

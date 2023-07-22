@@ -21,7 +21,7 @@ def password() -> str:
 
 
 @pytest.fixture
-def params(user, client) -> dict[str, str]:
+def params(user: str, client: str) -> dict[str, str]:
     return {
         "u": user,
         "v": "1.16.1",
@@ -77,7 +77,7 @@ def song() -> dict[str, Any]:
 
 
 @pytest.fixture
-def subsonic(user, password, client) -> Subsonic:
+def subsonic(user: str, password: str, client: str) -> Subsonic:
     return knuckles.Subsonic(
         url="http://example.com",
         user=user,

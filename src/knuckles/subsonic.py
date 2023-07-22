@@ -112,14 +112,14 @@ class Subsonic:
         return self.__dict_to_snake_case(json_response)
 
     @staticmethod
-    def __string_to_snake_case(string: str):
+    def __string_to_snake_case(string: str) -> str:
         """Convert a camelCase or PascalCase string to a snake_case string
 
         Args:
             string (str): The string to convert
 
         Returns:
-            _type_: The string converted to snake_case
+            str: The string converted to snake_case
         """
 
         return re.sub("([A-Z]\w+$)", "_\\1", string).lower()
