@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .subsonic import Subsonic
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Callable
@@ -70,12 +70,10 @@ class Song:
     title: str
 
     parent: str | None = None
-    album: Album = field(init=False)
+    album: str | None = None
     album_id: str | None = None
-    album_name: str | None = None
-    artist: Artist = field(init=False)
+    artist: str | None = None
     artist_id: str | None = None
-    artist_name: str | None = None
     track: int | None = None
     year: int | None = None
     genre: str | None = None
@@ -116,12 +114,6 @@ class Song:
         if type(self.cover_art) is str:
             self.cover_art = CoverArt(self.cover_art)
 
-        if self.album_id is not None and self.album_name is not None:
-            self.album = Album(self.album_id, self.album_name)
-
-        if self.artist_id is not None and self.artist_name is not None:
-            self.artist = Artist(self.artist_id, self.artist_name)
-
     def generate(self, subsonic_instance: "Subsonic") -> Callable:
         """Returns the function to the the same song with the maximum possible
         information from the Subsonic API.
@@ -138,8 +130,41 @@ class Song:
 
         return lambda: subsonic_instance.get_song(self.id)
 
+    def get_album(self) -> Album | None:
+        """Return an Album dataclass that correspond with the song.
+
+        Returns:
+            Album | None: The album of the song or
+            None if the song doesn't have artist data attached (album and album_id).
+        """
+
+        if self.album_id is None or self.album is None:
+            return None
+
+        return Album(self.album_id, self.album)
+
+    def get_artist(self) -> Album | None:
+        """Return an Artist dataclass that correspond with the song.
+
+        Returns:
+            Artist | None: The album of the song or
+            None if the song doesn't have artist data attached (artist and artist_id).
+        """
+
+        if self.artist_id is None or self.artist is None:
+            return None
+
+        return Album(self.artist_id, self.artist)
+
 
 @dataclass
 class ScanStatus:
     scanning: bool
     count: int
+
+
+@dataclass
+class ChatMessage:
+    username: str
+    time: int
+    message: str

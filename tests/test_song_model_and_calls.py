@@ -1,10 +1,11 @@
 from typing import Any
 
-import knuckles
+import pytest
 import responses
 from dateutil import parser
-from knuckles import Song, Subsonic
 from responses import matchers
+
+from knuckles import CoverArt, Song, Subsonic
 
 
 @responses.activate
@@ -31,18 +32,23 @@ def test_get_song(
     assert response.parent == song["parent"]
     assert response.is_dir == song["isDir"]
     assert response.title == song["title"]
+
+    # Album asserts
     assert response.album_id == song["albumId"]
-    assert response.album_id == response.album.id
-    assert response.album_name == song["album"]
-    assert response.album_name == response.album.name
+    assert response.album == song["album"]
+    assert response.get_album().id == song["albumId"]
+    assert response.get_album().name == song["album"]
+
+    # Artist asserts
     assert response.artist_id == song["artistId"]
-    assert response.artist_id == response.artist.id
-    assert response.artist_name == song["artist"]
-    assert response.artist_name == response.artist.name
+    assert response.artist == song["artist"]
+    assert response.get_artist().id == song["artistId"]
+    assert response.get_artist().name == song["artist"]
+
     assert response.track == song["track"]
     assert response.year == song["year"]
     assert response.genre == song["genre"]
-    assert type(response.cover_art) is knuckles.CoverArt
+    assert type(response.cover_art) is CoverArt
     assert response.cover_art.id == song["coverArt"]
     assert response.size == song["size"]
     assert response.content_type == song["contentType"]
@@ -61,6 +67,60 @@ def test_get_song(
     assert response.type == "music"
     assert response.bookmark_position is None
     assert response.played == parser.parse(song["played"])
+
+
+@pytest.mark.parametrize("key", ["artistId", "artist"])
+@responses.activate
+def test_song_without_artist(
+    subsonic: Subsonic,
+    params: dict[str, str],
+    song: dict[str, Any],
+    subsonic_response: dict[str, Any],
+    key: str,
+) -> None:
+    # Remove any of the two keys related with the artist in the response
+    # and see if it returns None
+    del song[key]
+
+    subsonic_response["subsonic-response"]["song"] = song
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    response: Song = subsonic.get_song(song["id"])
+    assert response.get_artist() is None
+
+
+@pytest.mark.parametrize("key", ["albumId", "album"])
+@responses.activate
+def test_song_without_album(
+    subsonic: Subsonic,
+    params: dict[str, str],
+    song: dict[str, Any],
+    subsonic_response: dict[str, Any],
+    key: str,
+) -> None:
+    # Remove any of the two keys related with the artist in the response
+    # and see if it returns None
+    del song[key]
+
+    subsonic_response["subsonic-response"]["song"] = song
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    response: Song = subsonic.get_song(song["id"])
+    assert response.get_album() is None
 
 
 @responses.activate
@@ -84,5 +144,4 @@ def test_song_generate(
     requested_song: Song = subsonic.get_song(song["id"])
     requested_song.title = "Foo"
     requested_song = requested_song.generate(subsonic)()
-    assert requested_song.title == song["title"]
     assert requested_song.title == song["title"]

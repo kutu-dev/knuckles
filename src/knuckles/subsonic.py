@@ -1,7 +1,7 @@
 import hashlib
 import re
 import secrets
-from typing import Any
+from typing import Any, Self
 from urllib.parse import ParseResult, urlparse
 
 import requests
@@ -18,7 +18,7 @@ from .exceptions import (
     CodeError70,
     UnknownErrorCode,
 )
-from .models import License, ScanStatus, Song, SubsonicResponse
+from .models import ChatMessage, License, ScanStatus, Song, SubsonicResponse
 
 
 class Subsonic:
@@ -204,13 +204,6 @@ class Subsonic:
             "song"
         ]
 
-        # Change key names
-        response["album_name"] = response["album"]
-        del response["album"]
-
-        response["artist_name"] = response["artist"]
-        del response["artist"]
-
         # Remove unnecessary keys
         if "is_video" in response:
             del response["is_video"]
@@ -232,3 +225,17 @@ class Subsonic:
         response: dict[str, Any] = self.__request_to_the_api("startScan")["scan_status"]
 
         return ScanStatus(**response)
+
+    def add_chat_message(self, message: str) -> Self:
+        self.__request_to_the_api("addChatMessage", {"message": message})
+
+        return self
+
+    def get_chat_messages(self) -> list[ChatMessage]:
+        response: list[dict[str, Any]] = self.__request_to_the_api("getChatMessages")[
+            "chat_messages"
+        ]["chat_message"]
+
+        messages: list[ChatMessage] = [ChatMessage(**message) for message in response]
+
+        return messages
