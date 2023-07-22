@@ -1,11 +1,11 @@
 from typing import Any
+
 import responses
-from responses import matchers
-from knuckles import Subsonic, SubsonicResponse, Song, License
-from datetime import datetime
-import knuckles
-import pytest
 from dateutil import parser
+from responses import matchers
+
+import knuckles
+from knuckles import Song, Subsonic
 
 
 @responses.activate
@@ -48,6 +48,7 @@ def test_get_song(
     assert response.track == song["track"]
     assert response.year == song["year"]
     assert response.genre == song["genre"]
+    assert type(response.cover_art) is knuckles.CoverArt
     assert response.cover_art.id == song["coverArt"]
     assert response.size == song["size"]
     assert response.content_type == song["contentType"]
@@ -94,4 +95,5 @@ def test_song_generate(
     requested_song: Song = subsonic.get_song(song["id"])
     requested_song.title = "Foo"
     requested_song = requested_song.generate(subsonic)()
+    assert requested_song.title == song["title"]
     assert requested_song.title == song["title"]

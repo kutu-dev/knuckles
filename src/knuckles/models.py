@@ -4,10 +4,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .subsonic import Subsonic
 
-from typing import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
+from typing import Callable
+
 from dateutil import parser
 
 
@@ -36,13 +37,11 @@ class License:
         return self.valid
 
     def __post_init__(self) -> None:
-        if self.license_expires is not None:
-            # Ignore the error as it's a false positive
-            self.license_expires = parser.parse(self.license_expires)  # type: ignore [arg-type]
+        if type(self.license_expires) is str:
+            self.license_expires = parser.parse(self.license_expires)
 
-        if self.trial_expires is not None:
-            # Ignore the error as it's a false positive
-            self.trial_expires = parser.parse(self.trial_expires)  # type: ignore [arg-type]
+        if type(self.trial_expires) is str:
+            self.trial_expires = parser.parse(self.trial_expires)
 
 
 @dataclass()
@@ -105,21 +104,17 @@ class Song:
         if self.path is not None:
             self.path = Path(self.path)
 
-        if self.created is not None:
-            # Ignore the error as it's a false positive
-            self.created = parser.parse(self.created)  # type: ignore [arg-type]
+        if type(self.created) is str:
+            self.created = parser.parse(self.created)
 
-        if self.starred is not None:
-            # Ignore the error as it's a false positive
-            self.starred = parser.parse(self.starred)  # type: ignore [arg-type]
+        if type(self.starred) is str:
+            self.starred = parser.parse(self.starred)
 
-        if self.played is not None:
-            # Ignore the error as it's a false positive
-            self.played = parser.parse(self.played)  # type: ignore [arg-type]
+        if type(self.played) is str:
+            self.played = parser.parse(self.played)
 
-        if self.cover_art is not None:
-            # Ignore the error as it's a false positive
-            self.cover_art = CoverArt(self.cover_art)  # type: ignore [arg-type]
+        if type(self.cover_art) is str:
+            self.cover_art = CoverArt(self.cover_art)
 
         if self.album_id is not None and self.album_name is not None:
             self.album = Album(self.album_id, self.album_name)
@@ -128,9 +123,11 @@ class Song:
             self.artist = Artist(self.artist_id, self.artist_name)
 
     def generate(self, subsonic_instance: "Subsonic") -> Callable:
-        """Returns the function to the the same song with the maximum possible information from the Subsonic API.
+        """Returns the function to the the same song with the maximum possible
+        information from the Subsonic API.
 
-        Useful for making copies with updated data or updating the instance itself with immutability, e.g., `foo = foo.generate(bar)()`.
+        Useful for making copies with updated data or updating the instance itself
+        with immutability, e.g., `foo = foo.generate(bar)()`.
 
         Args:
             subsonic_instance (Subsonic): A Subsonic object to make the call to the API

@@ -1,8 +1,7 @@
-import hashlib
 from typing import Any
 import pytest
 import knuckles
-from knuckles import Subsonic, SubsonicResponse, Song, License
+from knuckles import Subsonic
 
 
 @pytest.fixture

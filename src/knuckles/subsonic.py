@@ -1,7 +1,11 @@
 import hashlib
+import re
 import secrets
 from typing import Any
-from .models import License, Song, SubsonicResponse
+from urllib.parse import ParseResult, urlparse
+
+import requests
+
 from .exceptions import (
     CodeError0,
     CodeError10,
@@ -14,9 +18,7 @@ from .exceptions import (
     CodeError70,
     UnknownErrorCode,
 )
-from urllib.parse import urlparse, ParseResult
-import requests
-import re
+from .models import License, Song, SubsonicResponse
 
 
 class Subsonic:
@@ -37,7 +39,7 @@ class Subsonic:
         # Sanitize url and ensure the correct protocol is used
         parsed_url: ParseResult = urlparse(url)
 
-        # If the user accidentally specifies a protocol the url goes to netloc instead to path
+        # If the user accidentally specifies a protocol the url goes to netloc instead
         base_url: str = parsed_url.path if parsed_url.path != "" else parsed_url.netloc
 
         if use_https:
@@ -51,7 +53,8 @@ class Subsonic:
         This allow the user to change any variable without issues.
 
         Returns:
-            dict[str, str]: Dictionary containing only the parameters necessary for authenticating in the API.
+            dict[str, str]: Dictionary containing only the parameters necessary
+            for authenticating in the API.
         """
 
         params: dict[str, str] = {
@@ -82,8 +85,11 @@ class Subsonic:
         """Make a request to the Subsonic API
 
         Args:
-            subroute (str): The subroute inside the API to call. E.g., "ping", "getLicense", etc.
-            extra_params (dict[str, str], optional): Extra parameters to be added to the request. E.g., "id", "query", etc. Defaults to {}.
+            subroute (str): The subroute inside the API to call.
+            E.g., "ping", "getLicense", etc.
+
+            extra_params (dict[str, str], optional): Extra parameters to be added
+            to the request. E.g., "id", "query", etc. Defaults to {}.
 
         Returns:
             dict[str, Any]: Return the json response of the server
@@ -156,7 +162,9 @@ class Subsonic:
             error_code (int): The Subsonic error code
 
         Returns:
-            type[ CodeError0 | CodeError10 | CodeError20 | CodeError30 | CodeError40 | CodeError41 | CodeError50 | CodeError60 | CodeError70 | UnknownErrorCode ]: The exception associated with the provided error code
+            type[ CodeError0 | CodeError10 | CodeError20 | CodeError30 | CodeError40 |
+            CodeError41 | CodeError50 | CodeError60 | CodeError70 | UnknownErrorCode ]:
+            The exception associated with the provided error code
         """
 
         match error_code:

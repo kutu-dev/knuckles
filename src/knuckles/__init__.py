@@ -1,5 +1,12 @@
-from .subsonic import Subsonic
-from .models import *
+from .models import (  # noqa: F401
+    Album,
+    Artist,
+    CoverArt,
+    License,
+    Song,
+    Subsonic,
+    SubsonicResponse,
+)
 
 #! Not implemented
 # * - Audio transcoding

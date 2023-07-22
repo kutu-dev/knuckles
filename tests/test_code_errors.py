@@ -1,8 +1,8 @@
-import pytest
 import knuckles
-from knuckles import Subsonic, SubsonicResponse, Song, License
-from responses import matchers
+import pytest
 import responses
+from knuckles import Subsonic
+from responses import matchers
 
 
 @responses.activate
@@ -66,7 +66,10 @@ def test_code_error_20(subsonic: Subsonic) -> None:
                 "openSubsonic": True,
                 "error": {
                     "code": 20,
-                    "message": "Incompatible Subsonic REST protocol version. Client must upgrade.",
+                    "message": (
+                        "Incompatible Subsonic REST protocol version.",
+                        "Client must upgrade.",
+                    ),
                 },
             }
         },
@@ -94,7 +97,10 @@ def test_code_error_30(subsonic: Subsonic) -> None:
                 "openSubsonic": True,
                 "error": {
                     "code": 30,
-                    "message": "Incompatible Subsonic REST protocol version. Server must upgrade.",
+                    "message": (
+                        "Incompatible Subsonic REST protocol version."
+                        + "Server must upgrade."
+                    ),
                 },
             }
         },
@@ -206,7 +212,11 @@ def test_code_error_60(subsonic: Subsonic) -> None:
                 "openSubsonic": True,
                 "error": {
                     "code": 60,
-                    "message": "The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. Visit subsonic.org for details.",
+                    "message": (
+                        "The trial period for the Subsonic server is over."
+                        + "Please upgrade to Subsonic Premium."
+                        + "Visit subsonic.org for details."
+                    ),
                 },
             }
         },
@@ -215,7 +225,11 @@ def test_code_error_60(subsonic: Subsonic) -> None:
 
     with pytest.raises(
         knuckles.exceptions.CodeError60,
-        match="The trial period for the Subsonic server is over. Please upgrade to Subsonic Premium. Visit subsonic.org for details.",
+        match=(
+            "The trial period for the Subsonic server is over."
+            + "Please upgrade to Subsonic Premium."
+            + "Visit subsonic.org for details."
+        ),
     ):
         subsonic.ping()
 

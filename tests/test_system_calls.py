@@ -1,11 +1,9 @@
-from typing import Any
+from datetime import datetime
+
 import responses
 from responses import matchers
-from knuckles import Subsonic, SubsonicResponse, Song, License
-from datetime import datetime
-import knuckles
-import pytest
-from dateutil import parser
+
+from knuckles import License, Subsonic, SubsonicResponse
 
 
 @responses.activate
@@ -28,12 +26,12 @@ def test_ping(subsonic: Subsonic, params: dict[str, str]) -> None:
 
     response: SubsonicResponse = subsonic.ping()
 
-    assert bool(response) == True
+    assert bool(response) is True
     assert response.status == "ok"
     assert response.version == "1.16.1"
     assert response.type == "knuckles"
     assert response.server_version == "0.1.3 (tag)"
-    assert response.open_subsonic == True
+    assert response.open_subsonic is True
 
 
 @responses.activate
@@ -62,10 +60,12 @@ def test_get_license(subsonic: Subsonic, params: dict[str, str]) -> None:
 
     response: License = subsonic.get_license()
 
-    assert bool(response) == True
-    assert response.valid == True
+    assert bool(response) is True
+    assert response.valid is True
     assert response.email == "user@example.com"
+    assert type(response.license_expires) is datetime
     assert response.license_expires.timestamp() == 1491907370.842
+    assert type(response.trial_expires) is datetime
     assert response.trial_expires.timestamp() == 1426077398.753
 
 
@@ -92,4 +92,5 @@ def test_auth_without_token(
     )
 
     subsonic.use_token = False
+    assert subsonic.ping().status == "ok"
     assert subsonic.ping().status == "ok"
