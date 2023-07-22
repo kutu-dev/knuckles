@@ -24,7 +24,7 @@ def test_start_scan(
     )
 
     #! TYPES
-    response = Subsonic.start_scan()  # type: ignore[attr-defined]
+    response = Subsonic.start_scan()
 
     assert response.scanning is True
     assert response.count == 25
@@ -48,7 +48,7 @@ def test_get_scan_status(
     )
 
     #! TYPES
-    response = Subsonic.get_scan_status()  # type: ignore[attr-defined]
+    response = Subsonic.get_scan_status()
 
     assert response.scanning is True
     assert response.count == 25

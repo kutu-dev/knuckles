@@ -1,10 +1,11 @@
 from typing import Any
 
-import knuckles
 import responses
 from dateutil import parser
-from knuckles import Song, Subsonic
 from responses import matchers
+
+import knuckles
+from knuckles import Song, Subsonic
 
 
 @responses.activate
