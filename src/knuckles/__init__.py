@@ -1,12 +1,22 @@
-from .models import (  # noqa: F401
+from .models import (
     Album,
     Artist,
     CoverArt,
     License,
     Song,
-    Subsonic,
     SubsonicResponse,
 )
+from .subsonic import Subsonic
+
+__all__ = [
+    "Subsonic",
+    "Album",
+    "Artist",
+    "CoverArt",
+    "License",
+    "Song",
+    "SubsonicResponse",
+]
 
 #! Not implemented
 # * - Audio transcoding
