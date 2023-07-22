@@ -1,11 +1,4 @@
-from .models import (
-    Album,
-    Artist,
-    CoverArt,
-    License,
-    Song,
-    SubsonicResponse,
-)
+from .models import Album, Artist, CoverArt, License, ScanStatus, Song, SubsonicResponse
 from .subsonic import Subsonic
 
 __all__ = [
@@ -14,6 +7,7 @@ __all__ = [
     "Artist",
     "CoverArt",
     "License",
+    "ScanStatus",
     "Song",
     "SubsonicResponse",
 ]

@@ -12,7 +12,7 @@ from typing import Callable
 from dateutil import parser
 
 
-@dataclass()
+@dataclass
 class SubsonicResponse:
     status: str
     version: str
@@ -26,7 +26,7 @@ class SubsonicResponse:
         return self.status == "ok"
 
 
-@dataclass()
+@dataclass
 class License:
     valid: bool
     email: str | None = None
@@ -44,26 +44,26 @@ class License:
             self.trial_expires = parser.parse(self.trial_expires)
 
 
-@dataclass()
+@dataclass
 class CoverArt:
     id: str
 
 
 #! TODO
-@dataclass()
+@dataclass
 class Album:
     id: str
     name: str
 
 
 #! TODO
-@dataclass()
+@dataclass
 class Artist:
     id: str
     name: str
 
 
-@dataclass()
+@dataclass
 class Song:
     id: str
     is_dir: bool
@@ -137,3 +137,9 @@ class Song:
         """
 
         return lambda: subsonic_instance.get_song(self.id)
+
+
+@dataclass
+class ScanStatus:
+    scanning: bool
+    count: int

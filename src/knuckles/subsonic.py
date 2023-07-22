@@ -18,7 +18,7 @@ from .exceptions import (
     CodeError70,
     UnknownErrorCode,
 )
-from .models import License, Song, SubsonicResponse
+from .models import License, ScanStatus, Song, SubsonicResponse
 
 
 class Subsonic:
@@ -92,7 +92,7 @@ class Subsonic:
             to the request. E.g., "id", "query", etc. Defaults to {}.
 
         Returns:
-            dict[str, Any]: Return the json response of the server
+            dict[str, Any]: Return the subsonic response of the server
         """
 
         response = requests.get(
@@ -222,3 +222,13 @@ class Subsonic:
             del response["original_height"]
 
         return Song(**response)
+
+    def get_scan_status(self) -> ScanStatus:
+        response: dict[str, Any] = self.__request_to_the_api("getScanStatus")
+
+        return ScanStatus(**response["scan_status"])
+
+    def start_scan(self) -> ScanStatus:
+        response: dict[str, Any] = self.__request_to_the_api("startScan")["scan_status"]
+
+        return ScanStatus(**response)

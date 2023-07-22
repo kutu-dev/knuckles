@@ -1,9 +1,9 @@
 from typing import Any
 
 import responses
-from responses import matchers
-
 from knuckles import Subsonic
+from knuckles.models import ScanStatus
+from responses import matchers
 
 
 @responses.activate
@@ -23,8 +23,7 @@ def test_start_scan(
         status=200,
     )
 
-    #! TYPES
-    response = Subsonic.start_scan()
+    response: ScanStatus = subsonic.start_scan()
 
     assert response.scanning is True
     assert response.count == 25
@@ -47,8 +46,7 @@ def test_get_scan_status(
         status=200,
     )
 
-    #! TYPES
-    response = Subsonic.get_scan_status()
+    response: ScanStatus = subsonic.get_scan_status()
 
     assert response.scanning is True
     assert response.count == 25
