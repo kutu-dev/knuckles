@@ -1,0 +1,22 @@
+name: Lint and format
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pre-commit/action@v3.0.0
