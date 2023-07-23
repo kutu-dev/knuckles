@@ -14,7 +14,7 @@ on:
       - "*.md"
 
 jobs:
-  run_tests:
+  run_pre_commit:
     runs-on: ubuntu-latest
 
     steps:
