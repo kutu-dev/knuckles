@@ -241,3 +241,33 @@ class Subsonic:
         messages: list[ChatMessage] = [ChatMessage(**message) for message in response]
 
         return messages
+
+    def star_song(self, id: str) -> Self:
+        self.__request_to_the_api("star", {"id": id})
+
+        return self
+
+    def star_album(self, id: str) -> Self:
+        self.__request_to_the_api("star", {"albumId": id})
+
+        return self
+
+    def star_artist(self, id: str) -> Self:
+        self.__request_to_the_api("star", {"artistId": id})
+
+        return self
+
+    def unstar_song(self, id: str) -> Self:
+        self.__request_to_the_api("unstar", {"id": id})
+
+        return self
+
+    def unstar_album(self, id: str) -> Self:
+        self.__request_to_the_api("unstar", {"albumId": id})
+
+        return self
+
+    def unstar_artist(self, id: str) -> Self:
+        self.__request_to_the_api("unstar", {"artistId": id})
+
+        return self

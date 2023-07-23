@@ -1,8 +1,9 @@
 from typing import Any
 
 import responses
-from knuckles import Subsonic
 from responses import matchers
+
+from knuckles import Subsonic
 
 
 @responses.activate
@@ -74,7 +75,7 @@ def test_unstar_song(
     params["id"] = "testId"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/star",
+        url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
         json=subsonic_response,
         status=200,
@@ -94,7 +95,7 @@ def test_unstar_album(
     params["albumId"] = "testId"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/star",
+        url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
         json=subsonic_response,
         status=200,
@@ -114,7 +115,7 @@ def test_unstar_artist(
     params["artistId"] = "testId"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/star",
+        url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
         json=subsonic_response,
         status=200,

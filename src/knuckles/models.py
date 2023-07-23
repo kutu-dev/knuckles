@@ -1,5 +1,5 @@
 # Not fancy but does the job
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 if TYPE_CHECKING:
     from .subsonic import Subsonic
@@ -152,6 +152,16 @@ class Song:
             return None
 
         return Album(self.artist_id, self.artist)
+
+    def star(self) -> Self:
+        self._subsonic.star_song(self.id)
+
+        return self
+
+    def unstar(self) -> Self:
+        self._subsonic.unstar_song(self.id)
+
+        return self
 
 
 @dataclass
