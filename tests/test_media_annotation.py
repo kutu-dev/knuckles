@@ -1,9 +1,9 @@
 from typing import Any
 
+import pytest
 import responses
-from responses import matchers
-
 from knuckles import Subsonic
+from responses import matchers
 
 
 @responses.activate
@@ -122,5 +122,52 @@ def test_unstar_artist(
     )
 
     response: Subsonic = subsonic.unstar_artist("testId")
+
+    assert type(response) is Subsonic
+
+
+@pytest.mark.parametrize("rating", [1, 2, 3, 4, 5])
+@responses.activate
+def set_rating(
+    subsonic: Subsonic,
+    params: dict[str, str | int],
+    subsonic_response: dict[str, Any],
+    song: dict[str, Any],
+    rating: int,
+) -> None:
+    params["id"] = song["id"]
+    params["rating"] = rating
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/setRating",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    response: Subsonic = subsonic.set_rating(song["id"], rating)
+
+    assert type(response) is Subsonic
+
+
+@responses.activate
+def remove_rating(
+    subsonic: Subsonic,
+    params: dict[str, str | int],
+    subsonic_response: dict[str, Any],
+    song: dict[str, Any],
+    rating: int,
+) -> None:
+    params["id"] = song["id"]
+    params["rating"] = 0
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/setRating",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    response: Subsonic = subsonic.remove_rating(song["id"])
 
     assert type(response) is Subsonic
