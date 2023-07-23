@@ -22,8 +22,14 @@ __all__ = [
     "SubsonicResponse",
 ]
 
+# TODO to implement
+# * - star/unstar -> Song, Album, Artist
+# * - setRating -> Song, Album(Non ID3), Artist(Non ID3)
+# * - scrobble -> Song, Video (Maybe?, ambiguous docs)
+
 #! Not implemented
 # * - Audio transcoding
 # * - Video
 # * - Open Subsonic Extensions
 # * - CA Certs
+# * - Non ID3

@@ -3,9 +3,8 @@ from typing import Any
 import pytest
 import responses
 from dateutil import parser
-from responses import matchers
-
 from knuckles import CoverArt, Song, Subsonic
+from responses import matchers
 
 
 @responses.activate
@@ -30,7 +29,6 @@ def test_get_song(
 
     assert response.id == song["id"]
     assert response.parent == song["parent"]
-    assert response.is_dir == song["isDir"]
     assert response.title == song["title"]
 
     # Album asserts
@@ -143,5 +141,71 @@ def test_song_generate(
 
     requested_song: Song = subsonic.get_song(song["id"])
     requested_song.title = "Foo"
-    requested_song = requested_song.generate(subsonic)()
+    requested_song = requested_song.generate()()
     assert requested_song.title == song["title"]
+
+
+@responses.activate
+def test_song_star(
+    subsonic: Subsonic,
+    params: dict[str, Any],
+    song: dict[str, Any],
+    subsonic_response: dict[str, Any],
+) -> None:
+    params["id"] = song["id"]
+
+    get_song_response = subsonic_response
+    get_song_response["subsonic-response"]["song"] = song
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=get_song_response,
+        status=200,
+    )
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/star",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    requested_song: Song = subsonic.get_song(song["id"])
+
+    assert type(requested_song.star()) is Song
+
+
+@responses.activate
+def test_song_unstar(
+    subsonic: Subsonic,
+    params: dict[str, Any],
+    song: dict[str, Any],
+    subsonic_response: dict[str, Any],
+) -> None:
+    params["id"] = song["id"]
+
+    get_song_response = subsonic_response
+    get_song_response["subsonic-response"]["song"] = song
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=get_song_response,
+        status=200,
+    )
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/unstar",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    requested_song: Song = subsonic.get_song(song["id"])
+
+    assert type(requested_song.unstar()) is Song

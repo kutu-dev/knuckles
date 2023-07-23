@@ -65,8 +65,8 @@ class Artist:
 
 @dataclass
 class Song:
+    _subsonic: "Subsonic"
     id: str
-    is_dir: bool
     title: str
 
     parent: str | None = None
@@ -95,7 +95,7 @@ class Song:
     type: str | None = None
     bookmark_position: int | None = None
 
-    # Open Subsonic extensions
+    # OpenSubsonic extensions
     played: datetime | str | None = None
 
     def __post_init__(self) -> None:
@@ -114,21 +114,18 @@ class Song:
         if type(self.cover_art) is str:
             self.cover_art = CoverArt(self.cover_art)
 
-    def generate(self, subsonic_instance: "Subsonic") -> Callable:
+    def generate(self) -> Callable:
         """Returns the function to the the same song with the maximum possible
         information from the Subsonic API.
 
         Useful for making copies with updated data or updating the instance itself
         with immutability, e.g., `foo = foo.generate(bar)()`.
 
-        Args:
-            subsonic_instance (Subsonic): A Subsonic object to make the call to the API
-
         Returns:
             Callable: _description_
         """
 
-        return lambda: subsonic_instance.get_song(self.id)
+        return lambda: self._subsonic.get_song(self.id)
 
     def get_album(self) -> Album | None:
         """Return an Album dataclass that correspond with the song.

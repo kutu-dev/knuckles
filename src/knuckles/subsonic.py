@@ -205,6 +205,8 @@ class Subsonic:
         ]
 
         # Remove unnecessary keys
+        del response["is_dir"]
+
         if "is_video" in response:
             del response["is_video"]
 
@@ -214,7 +216,7 @@ class Subsonic:
         if "original_height" in response:
             del response["original_height"]
 
-        return Song(**response)
+        return Song(self, **response)
 
     def get_scan_status(self) -> ScanStatus:
         response: dict[str, Any] = self.__request_to_the_api("getScanStatus")
