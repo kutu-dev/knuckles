@@ -209,3 +209,49 @@ def test_song_unstar(
     requested_song: Song = subsonic.get_song(song["id"])
 
     assert type(requested_song.unstar()) is Song
+
+
+@pytest.mark.parametrize("rating", [1, 2, 3, 4, 5])
+@responses.activate
+def song_set_rating(
+    subsonic: Subsonic,
+    params: dict[str, str | int],
+    subsonic_response: dict[str, Any],
+    song: dict[str, Any],
+    rating: int,
+) -> None:
+    params["id"] = song["id"]
+    params["rating"] = rating
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/setRating",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    requested_song: Song = subsonic.get_song(song["id"])
+
+    assert type(requested_song.set_rating(rating)) is Song
+
+
+@responses.activate
+def song_remove_rating(
+    subsonic: Subsonic,
+    params: dict[str, str | int],
+    subsonic_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    params["id"] = song["id"]
+    params["rating"] = 0
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/setRating",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    requested_song: Song = subsonic.get_song(song["id"])
+
+    assert type(requested_song.remove_rating()) is Song

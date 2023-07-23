@@ -156,7 +156,6 @@ def remove_rating(
     params: dict[str, str | int],
     subsonic_response: dict[str, Any],
     song: dict[str, Any],
-    rating: int,
 ) -> None:
     params["id"] = song["id"]
     params["rating"] = 0
