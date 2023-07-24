@@ -1,16 +1,17 @@
 from typing import Any
 
 import responses
+from responses import matchers
+
 from knuckles import Subsonic
 from knuckles.models import ScanStatus
-from responses import matchers
 
 
 @responses.activate
 def test_start_scan(
-    subsonic: Subsonic, params: dict[str, str], song_response: dict[str, Any]
+    subsonic: Subsonic, params: dict[str, str], subsonic_response: dict[str, Any]
 ) -> None:
-    song_response["subsonic-response"]["scanStatus"] = {
+    subsonic_response["subsonic-response"]["scanStatus"] = {
         "scanning": True,
         "count": 25,
     }
@@ -19,7 +20,7 @@ def test_start_scan(
         responses.GET,
         url="https://example.com/rest/startScan",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
@@ -31,9 +32,9 @@ def test_start_scan(
 
 @responses.activate
 def test_get_scan_status(
-    subsonic: Subsonic, params: dict[str, str], song_response: dict[str, Any]
+    subsonic: Subsonic, params: dict[str, str], subsonic_response: dict[str, Any]
 ) -> None:
-    song_response["subsonic-response"]["scanStatus"] = {
+    subsonic_response["subsonic-response"]["scanStatus"] = {
         "scanning": True,
         "count": 25,
     }
@@ -42,7 +43,7 @@ def test_get_scan_status(
         responses.GET,
         url="https://example.com/rest/getScanStatus",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 

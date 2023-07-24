@@ -12,8 +12,8 @@ from responses import matchers
 def test_get_song(
     subsonic: Subsonic,
     params: dict[str, str],
-    song: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 
@@ -72,8 +72,8 @@ def test_get_song(
 def test_song_without_artist(
     subsonic: Subsonic,
     params: dict[str, str],
-    song: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
     key: str,
 ) -> None:
     # Remove any of the two keys related with the artist in the response
@@ -97,8 +97,8 @@ def test_song_without_artist(
 def test_song_without_album(
     subsonic: Subsonic,
     params: dict[str, str],
-    song: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
     key: str,
 ) -> None:
     # Remove any of the two keys related with the album in the response
@@ -121,8 +121,8 @@ def test_song_without_album(
 def test_song_generate(
     subsonic: Subsonic,
     params: dict[str, Any],
-    song: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 
@@ -144,9 +144,9 @@ def test_song_generate(
 def test_song_star(
     subsonic: Subsonic,
     params: dict[str, Any],
-    song: dict[str, Any],
     subsonic_response: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 
@@ -175,9 +175,9 @@ def test_song_star(
 def test_song_unstar(
     subsonic: Subsonic,
     params: dict[str, Any],
-    song: dict[str, Any],
     subsonic_response: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 

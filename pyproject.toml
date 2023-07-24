@@ -34,3 +34,6 @@ warn_unused_configs = true
 module = "tests.*"
 disable_error_code = "attr-defined, union-attr"
 disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = "tests"

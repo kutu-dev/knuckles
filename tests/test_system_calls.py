@@ -2,8 +2,9 @@ from datetime import datetime
 from typing import Any
 
 import responses
-from knuckles import License, Subsonic, SubsonicResponse
 from responses import matchers
+
+from knuckles import License, Subsonic, SubsonicResponse
 
 
 @responses.activate
@@ -38,8 +39,6 @@ def test_get_license(
         "licenseExpires": "2017-04-11T10:42:50.842Z",
         "trialExpires": "2015-03-11T12:36:38.753Z",
     }
-
-    print(subsonic_response)
 
     responses.add(
         responses.GET,

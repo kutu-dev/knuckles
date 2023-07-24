@@ -1,10 +1,11 @@
 from typing import Any, Type
 
-import knuckles.exceptions
 import pytest
 import responses
-from knuckles import Subsonic
 from responses import matchers
+
+import knuckles.exceptions
+from knuckles import Subsonic
 
 code_errors = [
     (0, "A generic error.", knuckles.exceptions.CodeError0),
@@ -48,19 +49,19 @@ code_errors = [
 def test_code_errors(
     subsonic: Subsonic,
     params: dict[str, str],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
     code: int,
     message: str,
     exception: Type[Exception],
 ) -> None:
-    song_response["subsonic-response"]["status"] = "failed"
-    song_response["subsonic-response"]["error"] = {"code": code, "message": message}
+    subsonic_response["subsonic-response"]["status"] = "failed"
+    subsonic_response["subsonic-response"]["error"] = {"code": code, "message": message}
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/ping",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 

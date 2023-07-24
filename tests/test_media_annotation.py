@@ -12,18 +12,19 @@ from responses import matchers
 def test_star_song(
     subsonic: Subsonic,
     params: dict[str, str],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
-    params["id"] = "testId"
+    params["id"] = song["id"]
     responses.add(
         responses.GET,
         url="https://example.com/rest/star",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
-    response: Subsonic = subsonic.star_song("testId")
+    response: Subsonic = subsonic.star_song(song["id"])
 
     assert type(response) is Subsonic
 
@@ -32,18 +33,18 @@ def test_star_song(
 def test_star_album(
     subsonic: Subsonic,
     params: dict[str, str],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
 ) -> None:
-    params["albumId"] = "testId"
+    params["albumId"] = "albumId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/star",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
-    response: Subsonic = subsonic.star_album("testId")
+    response: Subsonic = subsonic.star_album("albumId")
 
     assert type(response) is Subsonic
 
@@ -52,18 +53,18 @@ def test_star_album(
 def test_star_artist(
     subsonic: Subsonic,
     params: dict[str, str],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
 ) -> None:
-    params["artistId"] = "testId"
+    params["artistId"] = "artistId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/star",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
-    response: Subsonic = subsonic.star_artist("testId")
+    response: Subsonic = subsonic.star_artist("artistId")
 
     assert type(response) is Subsonic
 
@@ -72,18 +73,19 @@ def test_star_artist(
 def test_unstar_song(
     subsonic: Subsonic,
     params: dict[str, str],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
-    params["id"] = "testId"
+    params["id"] = song["id"]
     responses.add(
         responses.GET,
         url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
-    response: Subsonic = subsonic.unstar_song("testId")
+    response: Subsonic = subsonic.unstar_song(song["id"])
 
     assert type(response) is Subsonic
 
@@ -92,18 +94,18 @@ def test_unstar_song(
 def test_unstar_album(
     subsonic: Subsonic,
     params: dict[str, str],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
 ) -> None:
-    params["albumId"] = "testId"
+    params["albumId"] = "albumId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
-    response: Subsonic = subsonic.unstar_album("testId")
+    response: Subsonic = subsonic.unstar_album("albumId")
 
     assert type(response) is Subsonic
 
@@ -112,18 +114,18 @@ def test_unstar_album(
 def test_unstar_artist(
     subsonic: Subsonic,
     params: dict[str, str],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
 ) -> None:
-    params["artistId"] = "testId"
+    params["artistId"] = "artistId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
-    response: Subsonic = subsonic.unstar_artist("testId")
+    response: Subsonic = subsonic.unstar_artist("artistId")
 
     assert type(response) is Subsonic
 
@@ -133,7 +135,7 @@ def test_unstar_artist(
 def test_set_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
     song: dict[str, Any],
     rating: int,
 ) -> None:
@@ -143,7 +145,7 @@ def test_set_rating(
         responses.GET,
         url="https://example.com/rest/setRating",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
@@ -156,7 +158,7 @@ def test_set_rating(
 def test_remove_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
@@ -165,7 +167,7 @@ def test_remove_rating(
         responses.GET,
         url="https://example.com/rest/setRating",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
@@ -179,7 +181,7 @@ def test_remove_rating(
 def test_set_invalid_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
     song: dict[str, Any],
     rating: int,
 ) -> None:
@@ -189,7 +191,7 @@ def test_set_invalid_rating(
         responses.GET,
         url="https://example.com/rest/setRating",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
@@ -207,7 +209,7 @@ def test_set_invalid_rating(
 def test_default_scrobble(
     subsonic: Subsonic,
     params: dict[str, str | int | float],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
@@ -218,7 +220,7 @@ def test_default_scrobble(
         responses.GET,
         url="https://example.com/rest/scrobble",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
@@ -233,7 +235,7 @@ def test_default_scrobble(
 def test_submission_scrobble(
     subsonic: Subsonic,
     params: dict[str, str | int | float],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
@@ -244,7 +246,7 @@ def test_submission_scrobble(
         responses.GET,
         url="https://example.com/rest/scrobble",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 
@@ -259,7 +261,7 @@ def test_submission_scrobble(
 def test_now_playing_scrobble(
     subsonic: Subsonic,
     params: dict[str, str | int | float],
-    song_response: dict[str, Any],
+    subsonic_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
@@ -269,7 +271,7 @@ def test_now_playing_scrobble(
         responses.GET,
         url="https://example.com/rest/scrobble",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
+        json=subsonic_response,
         status=200,
     )
 

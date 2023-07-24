@@ -74,6 +74,20 @@ def song() -> dict[str, Any]:
 
 
 @pytest.fixture
+def jukebox_status() -> dict[str, Any]:
+    return {"currentIndex": 7, "playing": True, "gain": 0.9, "position": 67}
+
+
+@pytest.fixture
+def jukebox_playlist(
+    jukebox_status: dict[str, Any], song: dict[str, Any]
+) -> dict[str, Any]:
+    jukebox_status["entry"] = [song]
+
+    return jukebox_status
+
+
+@pytest.fixture
 def subsonic_response() -> dict[str, Any]:
     return {
         "subsonic-response": {
@@ -91,4 +105,23 @@ def song_response(
     subsonic_response: dict[str, Any], song: dict[str, Any]
 ) -> dict[str, Any]:
     subsonic_response["subsonic-response"]["song"] = song
+
+    return subsonic_response
+
+
+@pytest.fixture
+def jukebox_status_response(
+    subsonic_response: dict[str, Any], jukebox_status: dict[str, Any]
+) -> dict[str, Any]:
+    subsonic_response["subsonic-response"]["jukeboxStatus"] = jukebox_status
+
+    return subsonic_response
+
+
+@pytest.fixture
+def jukebox_playlist_response(
+    subsonic_response: dict[str, Any], jukebox_playlist: dict[str, Any]
+) -> dict[str, Any]:
+    subsonic_response["subsonic-response"]["jukeboxPlaylist"] = jukebox_playlist
+
     return subsonic_response
