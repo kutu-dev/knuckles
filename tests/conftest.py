@@ -21,25 +21,22 @@ def password() -> str:
 
 
 @pytest.fixture
+def subsonic(user: str, password: str, client: str) -> Subsonic:
+    return knuckles.Subsonic(
+        url="http://example.com",
+        user=user,
+        password=password,
+        client=client,
+    )
+
+
+@pytest.fixture
 def params(user: str, client: str) -> dict[str, str]:
     return {
         "u": user,
         "v": "1.16.1",
         "c": client,
         "f": "json",
-    }
-
-
-@pytest.fixture
-def subsonic_response() -> dict[str, Any]:
-    return {
-        "subsonic-response": {
-            "status": "ok",
-            "version": "1.16.1",
-            "type": "knuckles",
-            "serverVersion": "0.1.3 (tag)",
-            "openSubsonic": True,
-        }
     }
 
 
@@ -77,10 +74,21 @@ def song() -> dict[str, Any]:
 
 
 @pytest.fixture
-def subsonic(user: str, password: str, client: str) -> Subsonic:
-    return knuckles.Subsonic(
-        url="http://example.com",
-        user=user,
-        password=password,
-        client=client,
-    )
+def subsonic_response() -> dict[str, Any]:
+    return {
+        "subsonic-response": {
+            "status": "ok",
+            "version": "1.16.1",
+            "type": "knuckles",
+            "serverVersion": "0.1.3 (tag)",
+            "openSubsonic": True,
+        }
+    }
+
+
+@pytest.fixture
+def song_response(
+    subsonic_response: dict[str, Any], song: dict[str, Any]
+) -> dict[str, Any]:
+    subsonic_response["subsonic-response"]["song"] = song
+    return subsonic_response

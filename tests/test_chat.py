@@ -8,7 +8,7 @@ from responses import matchers
 
 @responses.activate
 def test_add_chat_messages(
-    subsonic: Subsonic, params: dict[str, str], subsonic_response: dict[str, Any]
+    subsonic: Subsonic, params: dict[str, str], song_response: dict[str, Any]
 ) -> None:
     params["message"] = "Hello World!"
 
@@ -16,7 +16,7 @@ def test_add_chat_messages(
         responses.GET,
         url="https://example.com/rest/addChatMessage",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -27,9 +27,9 @@ def test_add_chat_messages(
 
 @responses.activate
 def test_get_chat_messages(
-    subsonic: Subsonic, params: dict[str, str], subsonic_response: dict[str, Any]
+    subsonic: Subsonic, params: dict[str, str], song_response: dict[str, Any]
 ) -> None:
-    subsonic_response["subsonic-response"]["chatMessages"] = {
+    song_response["subsonic-response"]["chatMessages"] = {
         "chatMessage": [
             {
                 "username": "admin",
@@ -48,7 +48,7 @@ def test_get_chat_messages(
         responses.GET,
         url="https://example.com/rest/getChatMessages",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
