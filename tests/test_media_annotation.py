@@ -11,14 +11,14 @@ from responses import matchers
 def test_star_song(
     subsonic: Subsonic,
     params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["id"] = "testId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/star",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -31,14 +31,14 @@ def test_star_song(
 def test_star_album(
     subsonic: Subsonic,
     params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["albumId"] = "testId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/star",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -51,14 +51,14 @@ def test_star_album(
 def test_star_artist(
     subsonic: Subsonic,
     params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["artistId"] = "testId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/star",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -71,14 +71,14 @@ def test_star_artist(
 def test_unstar_song(
     subsonic: Subsonic,
     params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["id"] = "testId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -91,14 +91,14 @@ def test_unstar_song(
 def test_unstar_album(
     subsonic: Subsonic,
     params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["albumId"] = "testId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -111,14 +111,14 @@ def test_unstar_album(
 def test_unstar_artist(
     subsonic: Subsonic,
     params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["artistId"] = "testId"
     responses.add(
         responses.GET,
         url="https://example.com/rest/unstar",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -132,7 +132,7 @@ def test_unstar_artist(
 def test_set_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     song: dict[str, Any],
     rating: int,
 ) -> None:
@@ -142,7 +142,7 @@ def test_set_rating(
         responses.GET,
         url="https://example.com/rest/setRating",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -155,7 +155,7 @@ def test_set_rating(
 def test_remove_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
@@ -164,7 +164,7 @@ def test_remove_rating(
         responses.GET,
         url="https://example.com/rest/setRating",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -178,7 +178,7 @@ def test_remove_rating(
 def test_set_invalid_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     song: dict[str, Any],
     rating: int,
 ) -> None:
@@ -188,7 +188,7 @@ def test_set_invalid_rating(
         responses.GET,
         url="https://example.com/rest/setRating",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 

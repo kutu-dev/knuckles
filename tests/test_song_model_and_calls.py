@@ -12,16 +12,15 @@ def test_get_song(
     subsonic: Subsonic,
     params: dict[str, str],
     song: dict[str, Any],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
-    subsonic_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -73,20 +72,18 @@ def test_song_without_artist(
     subsonic: Subsonic,
     params: dict[str, str],
     song: dict[str, Any],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     key: str,
 ) -> None:
     # Remove any of the two keys related with the artist in the response
     # and see if it returns None
     del song[key]
 
-    subsonic_response["subsonic-response"]["song"] = song
-
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -100,20 +97,18 @@ def test_song_without_album(
     subsonic: Subsonic,
     params: dict[str, str],
     song: dict[str, Any],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     key: str,
 ) -> None:
-    # Remove any of the two keys related with the artist in the response
+    # Remove any of the two keys related with the album in the response
     # and see if it returns None
     del song[key]
-
-    subsonic_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -126,16 +121,15 @@ def test_song_generate(
     subsonic: Subsonic,
     params: dict[str, Any],
     song: dict[str, Any],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
-    subsonic_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
@@ -151,17 +145,15 @@ def test_song_star(
     params: dict[str, Any],
     song: dict[str, Any],
     subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
-
-    get_song_response = subsonic_response
-    get_song_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=get_song_response,
+        json=song_response,
         status=200,
     )
 
@@ -184,17 +176,15 @@ def test_song_unstar(
     params: dict[str, Any],
     song: dict[str, Any],
     subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
-
-    get_song_response = subsonic_response
-    get_song_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=get_song_response,
+        json=song_response,
         status=200,
     )
 
@@ -215,21 +205,19 @@ def test_song_unstar(
 @responses.activate
 def test_song_set_rating(
     subsonic: Subsonic,
-    params: dict[str, str | int],
+    params: dict[str, Any],
     subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     song: dict[str, Any],
     rating: int,
 ) -> None:
     params["id"] = song["id"]
 
-    get_song_response = subsonic_response
-    get_song_response["subsonic-response"]["song"] = song
-
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=get_song_response,
+        json=song_response,
         status=200,
     )
 
@@ -254,18 +242,16 @@ def test_song_remove_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
     subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
-
-    get_song_response = subsonic_response
-    get_song_response["subsonic-response"]["song"] = song
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/getSong",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=get_song_response,
+        json=song_response,
         status=200,
     )
 

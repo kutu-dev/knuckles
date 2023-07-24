@@ -48,19 +48,19 @@ code_errors = [
 def test_code_errors(
     subsonic: Subsonic,
     params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
     code: int,
     message: str,
     exception: Type[Exception],
 ) -> None:
-    subsonic_response["subsonic-response"]["status"] = "failed"
-    subsonic_response["subsonic-response"]["error"] = {"code": code, "message": message}
+    song_response["subsonic-response"]["status"] = "failed"
+    song_response["subsonic-response"]["error"] = {"code": code, "message": message}
 
     responses.add(
         responses.GET,
         url="https://example.com/rest/ping",
         match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
+        json=song_response,
         status=200,
     )
 
