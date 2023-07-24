@@ -23,8 +23,8 @@ __all__ = [
 ]
 
 # TODO to implement
-# * - setRating -> Song, Album(Non ID3), Artist(Non ID3)
-# * - scrobble -> Song, Video (Maybe?, ambiguous docs)
+# * - setRating -> Album(Non ID3), Artist(Non ID3)
+# * - scrobble -> Song, Video -> (Multiple files at the same time? ambiguous docs)
 
 #! Not implemented
 # * - Audio transcoding

@@ -173,6 +173,11 @@ class Song:
 
         return self
 
+    def scrobble(self, time: datetime, submission: bool = True) -> Self:
+        self._subsonic.scrobble(self.id, time, submission)
+
+        return self
+
 
 @dataclass
 class ScanStatus:

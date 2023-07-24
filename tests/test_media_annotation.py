@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 import pytest
@@ -200,3 +201,80 @@ def test_set_invalid_rating(
         ),
     ):
         subsonic.set_rating(song["id"], rating)
+
+
+@responses.activate
+def test_default_scrobble(
+    subsonic: Subsonic,
+    params: dict[str, str | int | float],
+    song_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    params["id"] = song["id"]
+    params["time"] = 1690160968.328745
+    params["submission"] = True
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/scrobble",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=song_response,
+        status=200,
+    )
+
+    response: Subsonic = subsonic.scrobble(
+        song["id"], datetime.fromtimestamp(1690160968.328745)
+    )
+
+    assert type(response) is Subsonic
+
+
+@responses.activate
+def test_submission_scrobble(
+    subsonic: Subsonic,
+    params: dict[str, str | int | float],
+    song_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    params["id"] = song["id"]
+    params["time"] = 1690160968.328745
+    params["submission"] = True
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/scrobble",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=song_response,
+        status=200,
+    )
+
+    response: Subsonic = subsonic.scrobble(
+        song["id"], datetime.fromtimestamp(1690160968.328745), True
+    )
+
+    assert type(response) is Subsonic
+
+
+@responses.activate
+def test_now_playing_scrobble(
+    subsonic: Subsonic,
+    params: dict[str, str | int | float],
+    song_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    params["id"] = song["id"]
+    params["time"] = 1690160968.328745
+    params["submission"] = False
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/scrobble",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=song_response,
+        status=200,
+    )
+
+    response: Subsonic = subsonic.scrobble(
+        song["id"], datetime.fromtimestamp(1690160968.328745), False
+    )
+
+    assert type(response) is Subsonic

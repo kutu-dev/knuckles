@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 import pytest
@@ -269,3 +270,123 @@ def test_song_remove_rating(
     requested_song: Song = subsonic.get_song(song["id"])
 
     assert type(requested_song.remove_rating()) is Song
+
+
+@responses.activate
+def test_song_default_scrobble(
+    subsonic: Subsonic,
+    params: dict[str, str | int | float],
+    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    unix_time: float = 1690160968.328745
+
+    params["id"] = song["id"]
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=song_response,
+        status=200,
+    )
+
+    rating_params: dict[str, Any] = {**params}
+    rating_params["time"] = unix_time
+    rating_params["submission"] = True
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/scrobble",
+        match=[matchers.query_param_matcher(rating_params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    requested_song: Song = subsonic.get_song(song["id"])
+    datetime_time: datetime = datetime.fromtimestamp(unix_time)
+
+    scrobble_response: Song = requested_song.scrobble(datetime_time)
+
+    assert type(scrobble_response) is Song
+
+
+@responses.activate
+def test_song_submission_scrobble(
+    subsonic: Subsonic,
+    params: dict[str, str | int | float],
+    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    unix_time: float = 1690160968.328745
+
+    params["id"] = song["id"]
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=song_response,
+        status=200,
+    )
+
+    rating_params: dict[str, Any] = {**params}
+    rating_params["time"] = unix_time
+    rating_params["submission"] = True
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/scrobble",
+        match=[matchers.query_param_matcher(rating_params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    requested_song: Song = subsonic.get_song(song["id"])
+    datetime_time: datetime = datetime.fromtimestamp(unix_time)
+
+    scrobble_response: Song = requested_song.scrobble(datetime_time, True)
+
+    assert type(scrobble_response) is Song
+
+
+@responses.activate
+def test_song_now_playing_scrobble(
+    subsonic: Subsonic,
+    params: dict[str, str | int | float],
+    subsonic_response: dict[str, Any],
+    song_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    unix_time: float = 1690160968.328745
+
+    params["id"] = song["id"]
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=song_response,
+        status=200,
+    )
+
+    rating_params: dict[str, Any] = {**params}
+    rating_params["time"] = unix_time
+    rating_params["submission"] = False
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/scrobble",
+        match=[matchers.query_param_matcher(rating_params, strict_match=False)],
+        json=subsonic_response,
+        status=200,
+    )
+
+    requested_song: Song = subsonic.get_song(song["id"])
+    datetime_time: datetime = datetime.fromtimestamp(unix_time)
+
+    scrobble_response: Song = requested_song.scrobble(datetime_time, False)
+
+    assert type(scrobble_response) is Song
