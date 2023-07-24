@@ -163,6 +163,16 @@ class Song:
 
         return self
 
+    def set_rating(self, rating: int) -> Self:
+        self._subsonic.set_rating(self.id, rating)
+
+        return self
+
+    def remove_rating(self) -> Self:
+        self._subsonic.remove_rating(self.id)
+
+        return self
+
 
 @dataclass
 class ScanStatus:

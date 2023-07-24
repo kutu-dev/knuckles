@@ -1,11 +1,10 @@
 from typing import Any, Type
 
+import knuckles.exceptions
 import pytest
 import responses
-from responses import matchers
-
-import knuckles.exceptions
 from knuckles import Subsonic
+from responses import matchers
 
 code_errors = [
     (0, "A generic error.", knuckles.exceptions.CodeError0),
@@ -34,7 +33,7 @@ code_errors = [
     (
         60,
         (
-            "The trial period for the Subsonic server is over."
+            "The trial period for the Subsonic server is over. "
             + "Please upgrade to Subsonic Premium. Visit subsonic.org for details."
         ),
         knuckles.exceptions.CodeError60,

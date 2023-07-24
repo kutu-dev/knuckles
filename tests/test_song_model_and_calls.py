@@ -213,7 +213,7 @@ def test_song_unstar(
 
 @pytest.mark.parametrize("rating", [1, 2, 3, 4, 5])
 @responses.activate
-def song_set_rating(
+def test_song_set_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
     subsonic_response: dict[str, Any],
@@ -221,11 +221,25 @@ def song_set_rating(
     rating: int,
 ) -> None:
     params["id"] = song["id"]
-    params["rating"] = rating
+
+    get_song_response = subsonic_response
+    get_song_response["subsonic-response"]["song"] = song
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=get_song_response,
+        status=200,
+    )
+
+    rating_params = {**params}
+    rating_params["rating"] = rating
+
     responses.add(
         responses.GET,
         url="https://example.com/rest/setRating",
-        match=[matchers.query_param_matcher(params, strict_match=False)],
+        match=[matchers.query_param_matcher(rating_params, strict_match=False)],
         json=subsonic_response,
         status=200,
     )
@@ -236,18 +250,32 @@ def song_set_rating(
 
 
 @responses.activate
-def song_remove_rating(
+def test_song_remove_rating(
     subsonic: Subsonic,
     params: dict[str, str | int],
     subsonic_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
-    params["rating"] = 0
+
+    get_song_response = subsonic_response
+    get_song_response["subsonic-response"]["song"] = song
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=get_song_response,
+        status=200,
+    )
+
+    rating_params = {**params}
+    rating_params["rating"] = 0
+
     responses.add(
         responses.GET,
         url="https://example.com/rest/setRating",
-        match=[matchers.query_param_matcher(params, strict_match=False)],
+        match=[matchers.query_param_matcher(rating_params, strict_match=False)],
         json=subsonic_response,
         status=200,
     )

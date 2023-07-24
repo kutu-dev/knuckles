@@ -16,6 +16,7 @@ from .exceptions import (
     CodeError50,
     CodeError60,
     CodeError70,
+    InvalidRatingNumber,
     UnknownErrorCode,
 )
 from .models import ChatMessage, License, ScanStatus, Song, SubsonicResponse
@@ -47,7 +48,7 @@ class Subsonic:
         else:
             self.url = f"http://{base_url}"
 
-    def __generate_params(self, extra_params: dict[str, str] = {}) -> dict[str, str]:
+    def __generate_params(self, extra_params: dict[str, Any] = {}) -> dict[str, Any]:
         """Generate the parameters for any request to the API.
 
         This allow the user to change any variable without issues.
@@ -57,7 +58,7 @@ class Subsonic:
             for authenticating in the API.
         """
 
-        params: dict[str, str] = {
+        params: dict[str, Any] = {
             "u": self.user,
             "v": "1.16.1",
             "c": self.client,
@@ -80,7 +81,7 @@ class Subsonic:
         return {**params, "t": token, "s": salt}
 
     def __request_to_the_api(
-        self, subroute: str, extra_params: dict[str, str] = {}
+        self, subroute: str, extra_params: dict[str, Any] = {}
     ) -> dict[str, Any]:
         """Make a request to the Subsonic API
 
@@ -269,5 +270,23 @@ class Subsonic:
 
     def unstar_artist(self, id: str) -> Self:
         self.__request_to_the_api("unstar", {"artistId": id})
+
+        return self
+
+    def set_rating(self, id: str, rating: int) -> Self:
+        if rating not in range(1, 6):
+            raise InvalidRatingNumber(
+                (
+                    "Invalid rating number, "
+                    + "only numbers between 1 and 5 (inclusive) are allowed"
+                )
+            )
+
+        self.__request_to_the_api("setRating", {"id": id, "rating": rating})
+
+        return self
+
+    def remove_rating(self, id: str) -> Self:
+        self.__request_to_the_api("setRating", {"id": id, "rating": 0})
 
         return self

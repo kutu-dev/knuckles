@@ -36,3 +36,7 @@ class CodeError70(Exception):
 
 class UnknownErrorCode(Exception):
     pass
+
+
+class InvalidRatingNumber(Exception):
+    pass
