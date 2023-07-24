@@ -1,6 +1,7 @@
 import hashlib
 import re
 import secrets
+from datetime import datetime
 from typing import Any, Self
 from urllib.parse import ParseResult, urlparse
 
@@ -288,5 +289,12 @@ class Subsonic:
 
     def remove_rating(self, id: str) -> Self:
         self.__request_to_the_api("setRating", {"id": id, "rating": 0})
+
+        return self
+
+    def scrobble(self, id: str, time: datetime, submission: bool = True) -> Self:
+        self.__request_to_the_api(
+            "scrobble", {"id": id, "time": time.timestamp(), "submission": submission}
+        )
 
         return self

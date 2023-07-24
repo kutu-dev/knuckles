@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 import pytest
@@ -221,7 +222,9 @@ def test_default_scrobble(
         status=200,
     )
 
-    response: Subsonic = subsonic.scrobble(song["id"], 1690160968.328745)
+    response: Subsonic = subsonic.scrobble(
+        song["id"], datetime.fromtimestamp(1690160968.328745)
+    )
 
     assert type(response) is Subsonic
 
@@ -245,7 +248,9 @@ def test_submission_scrobble(
         status=200,
     )
 
-    response: Subsonic = subsonic.scrobble(song["id"], 1690160968.328745, True)
+    response: Subsonic = subsonic.scrobble(
+        song["id"], datetime.fromtimestamp(1690160968.328745), True
+    )
 
     assert type(response) is Subsonic
 
@@ -268,6 +273,8 @@ def test_now_playing_scrobble(
         status=200,
     )
 
-    response: Subsonic = subsonic.scrobble(song["id"], 1690160968.328745, False)
+    response: Subsonic = subsonic.scrobble(
+        song["id"], datetime.fromtimestamp(1690160968.328745), False
+    )
 
     assert type(response) is Subsonic

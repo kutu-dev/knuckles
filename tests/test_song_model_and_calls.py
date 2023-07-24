@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 import pytest
@@ -279,6 +280,8 @@ def test_song_default_scrobble(
     song_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
+    unix_time: float = 1690160968.328745
+
     params["id"] = song["id"]
 
     responses.add(
@@ -290,7 +293,7 @@ def test_song_default_scrobble(
     )
 
     rating_params: dict[str, Any] = {**params}
-    rating_params["time"] = 1690160968.328745
+    rating_params["time"] = unix_time
     rating_params["submission"] = True
 
     responses.add(
@@ -302,8 +305,11 @@ def test_song_default_scrobble(
     )
 
     requested_song: Song = subsonic.get_song(song["id"])
+    datetime_time: datetime = datetime.fromtimestamp(unix_time)
 
-    assert type(requested_song.scrobble(1690160968.328745)) is Song
+    scrobble_response: Song = requested_song.scrobble(datetime_time)
+
+    assert type(scrobble_response) is Song
 
 
 @responses.activate
@@ -314,6 +320,8 @@ def test_song_submission_scrobble(
     song_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
+    unix_time: float = 1690160968.328745
+
     params["id"] = song["id"]
 
     responses.add(
@@ -325,7 +333,7 @@ def test_song_submission_scrobble(
     )
 
     rating_params: dict[str, Any] = {**params}
-    rating_params["time"] = 1690160968.328745
+    rating_params["time"] = unix_time
     rating_params["submission"] = True
 
     responses.add(
@@ -337,8 +345,11 @@ def test_song_submission_scrobble(
     )
 
     requested_song: Song = subsonic.get_song(song["id"])
+    datetime_time: datetime = datetime.fromtimestamp(unix_time)
 
-    assert type(requested_song.scrobble(1690160968.328745, True)) is Song
+    scrobble_response: Song = requested_song.scrobble(datetime_time, True)
+
+    assert type(scrobble_response) is Song
 
 
 @responses.activate
@@ -349,6 +360,8 @@ def test_song_now_playing_scrobble(
     song_response: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
+    unix_time: float = 1690160968.328745
+
     params["id"] = song["id"]
 
     responses.add(
@@ -360,7 +373,7 @@ def test_song_now_playing_scrobble(
     )
 
     rating_params: dict[str, Any] = {**params}
-    rating_params["time"] = 1690160968.328745
+    rating_params["time"] = unix_time
     rating_params["submission"] = False
 
     responses.add(
@@ -372,5 +385,8 @@ def test_song_now_playing_scrobble(
     )
 
     requested_song: Song = subsonic.get_song(song["id"])
+    datetime_time: datetime = datetime.fromtimestamp(unix_time)
 
-    assert type(requested_song.scrobble(1690160968.328745, False)) is Song
+    scrobble_response: Song = requested_song.scrobble(datetime_time, False)
+
+    assert type(scrobble_response) is Song
