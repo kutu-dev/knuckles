@@ -8,6 +8,7 @@ import requests
 from requests import Response
 
 from .exceptions import (
+    CODE_ERROR_EXCEPTIONS,
     CodeError0,
     CodeError10,
     CodeError20,
@@ -20,10 +21,24 @@ from .exceptions import (
     InvalidRatingNumber,
     UnknownErrorCode,
 )
-from .models import ChatMessage, Jukebox, License, ScanStatus, Song, SubsonicResponse
+from .models import (
+    Album,
+    Artist,
+    ChatMessage,
+    Jukebox,
+    License,
+    ScanStatus,
+    Song,
+    SubsonicResponse,
+)
 
 
 class Subsonic:
+    """The main class of the package.
+
+    Allow easy interactions with the Subsonic API with the given authentication values.
+    """
+
     def __init__(
         self,
         url: str,
@@ -33,6 +48,27 @@ class Subsonic:
         use_https: bool = True,
         use_token: bool = True,
     ) -> None:
+        """The main class of the package.
+
+        Allow easy interactions with the Subsonic API
+        with the given authentication values.
+
+        :param url: The url of the Subsonic server.
+        :type url: str
+        :param user: The user to authenticate with
+        :type user: str
+        :param password: The password to authenticate with
+        :type password: str
+        :param client: A unique string identifying the client application.
+        :type client: str
+        :param use_https: If the requests should be sended using HTTPS,
+            defaults to True
+        :type use_https: bool, optional
+        :param use_token: If the connection should send to the server the clean password
+            or encode it in a token with a random salt, defaults to True
+        :type use_token: bool, optional
+        """
+
         self.user = user
         self.password = password
         self.client = client
@@ -52,11 +88,16 @@ class Subsonic:
     def __generate_params(self, extra_params: dict[str, Any] = {}) -> dict[str, Any]:
         """Generate the parameters for any request to the API.
 
-        This allow the user to change any variable without issues.
+        This allow the user to change any variable in any time without issues.
+        If it's enabled (True by default) it will generate a diferent token and salt
+        for each call.
 
-        Returns:
-            dict[str, str]: Dictionary containing only the parameters necessary
-            for authenticating in the API.
+        :param extra_params: Extra parameters to be attached to the generated ones,
+            defaults to {}.
+        :type extra_params: dict[str, Any], optional
+        :return: All the parameters needed by the Subsonic API to authenticate
+            with the extra ones attached to them.
+        :rtype: dict[str, Any]
         """
 
         params: dict[str, Any] = {
@@ -82,59 +123,49 @@ class Subsonic:
         return {**params, "t": token, "s": salt}
 
     def __request_to_the_api(
-        self, subroute: str, extra_params: dict[str, Any] = {}
+        self, endpoint: str, extra_params: dict[str, Any] = {}
     ) -> dict[str, Any]:
-        """Make a request to the Subsonic API
+        """Make a request to the Subsonic API.
 
-        Args:
-            subroute (str): The subroute inside the API to call.
-            E.g., "ping", "getLicense", etc.
-
-            extra_params (dict[str, str], optional): Extra parameters to be added
-            to the request. E.g., "id", "query", etc. Defaults to {}.
-
-        Returns:
-            dict[str, Any]: Return the subsonic response of the server
+        :param endpoint: The endpoint where the request should be made,
+            only specifies the route name, without slashes.
+            E.g. "ping", "getLicense", etc.
+        :type endpoint: str
+        :param extra_params: The extra parameters required by the endpoint,
+            defaults to {}.
+        :type extra_params: dict[str, Any], optional
+        :raises code_error: Raises an exception with the format CodeErrorXX or
+            UnknownCodeError if the request fails.
+        :return: The JSON data inside the "subsonic-response" object.
+        :rtype: dict[str, Any]
         """
 
         response: Response = requests.get(
-            url=f"{self.url}/rest/{subroute}",
+            url=f"{self.url}/rest/{endpoint}",
             params=self.__generate_params(extra_params),
         )
 
         json_response: dict[str, Any] = response.json()["subsonic-response"]
 
         if json_response["status"] == "failed":
-            raise self.__get_code_error(json_response["error"]["code"])(
-                json_response["error"]["message"]
+            code_error: CODE_ERROR_EXCEPTIONS = (
+                self.__get_subsonic_code_error_exception(json_response["error"]["code"])
             )
+
+            raise code_error(json_response["error"]["message"])
 
         return json_response
 
     @staticmethod
-    def __get_code_error(
+    def __get_subsonic_code_error_exception(
         error_code: int,
-    ) -> type[
-        CodeError0
-        | CodeError10
-        | CodeError20
-        | CodeError30
-        | CodeError40
-        | CodeError41
-        | CodeError50
-        | CodeError60
-        | CodeError70
-        | UnknownErrorCode
-    ]:
-        """Get the exception associated to the given Subsonic error code
+    ) -> CODE_ERROR_EXCEPTIONS:
+        """With a given code error returns the corresponding exception.
 
-        Args:
-            error_code (int): The Subsonic error code
-
-        Returns:
-            type[ CodeError0 | CodeError10 | CodeError20 | CodeError30 | CodeError40 |
-            CodeError41 | CodeError50 | CodeError60 | CodeError70 | UnknownErrorCode ]:
-            The exception associated with the provided error code
+        :param error_code: The error code.
+        :type error_code: int
+        :return: The associated exception with the error code.
+        :rtype: CODE_ERROR_EXCEPTIONS
         """
 
         match error_code:
@@ -160,16 +191,39 @@ class Subsonic:
                 return UnknownErrorCode
 
     def ping(self) -> SubsonicResponse:
+        """Calls to the "ping" endpoint of the API.
+
+        Useful to test the status of the server.
+
+        :return: An object with all the data received from the server.
+        :rtype: SubsonicResponse
+        """
+
         response: dict[str, Any] = self.__request_to_the_api("ping")
 
         return SubsonicResponse(**response)
 
     def get_license(self) -> License:
+        """Calls to the "getLicense" endpoint of the API.
+
+        :return: An object with all the information about the status of the license.
+        :rtype: License
+        """
+
         response: dict[str, Any] = self.__request_to_the_api("getLicense")["license"]
 
         return License(**response)
 
     def get_song(self, id: str) -> Song:
+        """Calls to the "getSong" endpoint of the API.
+
+        :param id: The ID of the song to get.
+        :type id: str
+        :return: An object with all the information
+            that the server has given about the song.
+        :rtype: Song
+        """
+
         response: dict[str, Any] = self.__request_to_the_api("getSong", {"id": id})[
             "song"
         ]
@@ -177,21 +231,50 @@ class Subsonic:
         return Song(self, **response)
 
     def get_scan_status(self) -> ScanStatus:
-        response: dict[str, Any] = self.__request_to_the_api("getScanStatus")
+        """Calls to the "getScanStatus" endpoint of the API.
 
-        return ScanStatus(**response["scanStatus"])
+        :return: An object with the information about the status of the scan.
+        :rtype: ScanStatus
+        """
+
+        response: dict[str, Any] = self.__request_to_the_api("getScanStatus")[
+            "scanStatus"
+        ]
+
+        return ScanStatus(**response)
 
     def start_scan(self) -> ScanStatus:
+        """Calls to the "scanStatus" endpoint of the API.
+
+        :return: An object with the information about the status of the scan.
+        :rtype: ScanStatus
+        """
+
         response: dict[str, Any] = self.__request_to_the_api("startScan")["scanStatus"]
 
         return ScanStatus(**response)
 
     def add_chat_message(self, message: str) -> Self:
+        """Calls to the "addChatMessage" endpoint of the API:
+
+        :param message: The message to send.
+        :type message: str
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__request_to_the_api("addChatMessage", {"message": message})
 
         return self
 
     def get_chat_messages(self) -> list[ChatMessage]:
+        """Calls to the "getChatMessages" endpoint of the API.
+
+        :return: A list with objects containing
+            each one all the information given about each message.
+        :rtype: list[ChatMessage]
+        """
+
         response: list[dict[str, Any]] = self.__request_to_the_api("getChatMessages")[
             "chatMessages"
         ]["chatMessage"]
@@ -200,37 +283,160 @@ class Subsonic:
 
         return messages
 
-    def star_song(self, id: str) -> Self:
+    def star_song(self, song: Song | str) -> Self:
+        """Calls the "star" endpoint of the API.
+
+        :param song: Either a Song object or the ID of a song to star.
+        :type song: Song | str
+        :raises TypeError: Raised if the passed value to song isn't a Song object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(song) is Song:
+            id = song.id
+        elif type(song) is str:
+            id = song
+        else:
+            raise TypeError("The type of the song parameter is invalid")
+
         self.__request_to_the_api("star", {"id": id})
 
         return self
 
-    def star_album(self, id: str) -> Self:
+    def star_album(self, album: Album | str) -> Self:
+        """Calls the "star" endpoint of the API.
+
+        :param album: Either a Album object or the ID of a album to star.
+        :type album: Album | str
+        :raises TypeError: Raised if the passed value to song isn't a Album object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(album) is Album:
+            id = album.id
+        elif type(album) is str:
+            id = album
+        else:
+            raise TypeError("The type of the album parameter is invalid")
+
         self.__request_to_the_api("star", {"albumId": id})
 
         return self
 
-    def star_artist(self, id: str) -> Self:
+    def star_artist(self, artist: Artist | str) -> Self:
+        """Calls the "star" endpoint of the API.
+
+        :param artist: Either a Artist object or the ID of a artist to star.
+        :type artist: Artist | str
+        :raises TypeError: Raised if the passed value to artist isn't a Artist object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(artist) is Artist:
+            id = artist.id
+        elif type(artist) is str:
+            id = artist
+        else:
+            raise TypeError("The type of the artist parameter is invalid")
+
         self.__request_to_the_api("star", {"artistId": id})
 
         return self
 
-    def unstar_song(self, id: str) -> Self:
+    def unstar_song(self, song: Song | str) -> Self:
+        """Calls the "unstar" endpoint of the API.
+
+        :param song: Either a Song object or the ID of a song to unstar.
+        :type song: Song | str
+        :raises TypeError: Raised if the passed value to song isn't a Song object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(song) is Song:
+            id = song.id
+        elif type(song) is str:
+            id = song
+        else:
+            raise TypeError("The type of the song parameter is invalid")
+
         self.__request_to_the_api("unstar", {"id": id})
 
         return self
 
-    def unstar_album(self, id: str) -> Self:
+    def unstar_album(self, album: Album | str) -> Self:
+        """Calls the "unstar" endpoint of the API.
+
+        :param album: Either a Album object or the ID of a album to unstar.
+        :type album: Album | str
+        :raises TypeError: Raised if the passed value to song isn't a Album object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(album) is Album:
+            id = album.id
+        elif type(album) is str:
+            id = album
+        else:
+            raise TypeError("The type of the album parameter is invalid")
+
         self.__request_to_the_api("unstar", {"albumId": id})
 
         return self
 
-    def unstar_artist(self, id: str) -> Self:
+    def unstar_artist(self, artist: Artist | str) -> Self:
+        """Calls the "unstar" endpoint of the API.
+
+        :param artist: Either a Artist object or the ID of a artist to unstar.
+        :type artist: Artist | str
+        :raises TypeError: Raised if the passed value to artist isn't a Artist object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(artist) is Artist:
+            id = artist.id
+        elif type(artist) is str:
+            id = artist
+        else:
+            raise TypeError("The type of the artist parameter is invalid")
+
         self.__request_to_the_api("unstar", {"artistId": id})
 
         return self
 
-    def set_rating(self, id: str, rating: int) -> Self:
+    def set_rating(self, song: Song | str, rating: int) -> Self:
+        """Calls to the "setRating" endpoint of the API.
+
+        :param song: Either a Song object or the ID of a song to set its rating.
+        :type song: Song | str
+        :param rating: The rating to set. It should be a number
+            between 1 and 5 (inclusive).
+        :type rating: int
+        :raises InvalidRatingNumber: Raised if the given rating number
+            isn't in the valid range.
+        :raises TypeError: Raised if the passed value to song isn't a Song object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         if rating not in range(1, 6):
             raise InvalidRatingNumber(
                 (
@@ -239,16 +445,67 @@ class Subsonic:
                 )
             )
 
+        id: str
+        if type(song) is Song:
+            id = song.id
+        elif type(song) is str:
+            id = song
+        else:
+            raise TypeError("The type of the song parameter is invalid")
+
         self.__request_to_the_api("setRating", {"id": id, "rating": rating})
 
         return self
 
-    def remove_rating(self, id: str) -> Self:
+    def remove_rating(self, song: Song | str) -> Self:
+        """Calls the "setRating" endpoint of the API with a rating of 0.
+
+        :param song: Either a Song object or the ID of a song to set its rating.
+        :type song: Song | str
+        :raises TypeError: Raised if the passed value to song isn't a Song object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(song) is Song:
+            id = song.id
+        elif type(song) is str:
+            id = song
+        else:
+            raise TypeError("The type of the song parameter is invalid")
+
         self.__request_to_the_api("setRating", {"id": id, "rating": 0})
 
         return self
 
-    def scrobble(self, id: str, time: datetime, submission: bool = True) -> Self:
+    def scrobble(
+        self, song: Song | str, time: datetime, submission: bool = True
+    ) -> Self:
+        """Calls to the "scrobble" endpoint of the API
+
+        :param song: Either a Song object or the ID of a song to set its rating.
+        :type song: Song | str
+        :param time: The time at which the song was listened to.
+        :type time: datetime
+        :param submission: If the scrobble is a submission
+            or a "now playing" notification, defaults to True.
+        :type submission: bool, optional
+        :raises TypeError: Raised if the passed value to song isn't a Song object
+             or an ID.
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        id: str
+        if type(song) is Song:
+            id = song.id
+        elif type(song) is str:
+            id = song
+        else:
+            raise TypeError("The type of the song parameter is invalid")
+
         self.__request_to_the_api(
             "scrobble", {"id": id, "time": time.timestamp(), "submission": submission}
         )
@@ -256,6 +513,12 @@ class Subsonic:
         return self
 
     def jukebox_get(self) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "get".
+
+        :return: An object with all the given information about the jukebox.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "get"}
         )["jukeboxPlaylist"]
@@ -263,6 +526,13 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_status(self) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "get".
+
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "status"}
         )["jukeboxStatus"]
@@ -270,6 +540,17 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_set(self, song: Song | str) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "set".
+
+        :param song: Either a Song object or the ID of a song to set it in the jukebox.
+        :type song: Song | str
+        :raises TypeError: Raised if the passed value to song isn't a Song object
+             or an ID.
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         id: str
         if type(song) is Song:
             id = song.id
@@ -285,6 +566,13 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_start(self) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "start".
+
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "start"}
         )["jukeboxStatus"]
@@ -292,6 +580,13 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_stop(self) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "stop".
+
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "stop"}
         )["jukeboxStatus"]
@@ -299,6 +594,17 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_skip(self, index: int, offset: float = 0) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "skip".
+
+        :param index: The index in the jukebox playlist to skip to.
+        :type index: int
+        :param offset: Start playing this many seconds into the track, defaults to 0
+        :type offset: float, optional
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "skip", "index": index, "offset": offset}
         )["jukeboxStatus"]
@@ -306,6 +612,17 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_add(self, song: Song | str) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "add".
+
+        :param song: Either a Song object or the ID of a song to add it in the jukebox.
+        :type song: Song | str
+        :raises TypeError: Raised if the passed value to song isn't a Song object
+             or an ID.
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         id: str
         if type(song) is Song:
             id = song.id
@@ -321,6 +638,13 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_clear(self) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "clear".
+
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "clear"}
         )["jukeboxStatus"]
@@ -328,6 +652,15 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_remove(self, index: int) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "remove".
+
+        :param index: The index in the jukebox playlist for the song to remove.
+        :type index: int
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "remove", "index": index}
         )["jukeboxStatus"]
@@ -335,6 +668,13 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_shuffle(self) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "shuffle".
+
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         response: dict[str, Any] = self.__request_to_the_api(
             "jukeboxControl", {"action": "shuffle"}
         )["jukeboxStatus"]
@@ -342,6 +682,16 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_set_gain(self, gain: float) -> Jukebox:
+        """Calls the "jukeboxControl" endpoint of the API with the action "setGain"
+
+        :param gain: A number between 0 and 1 (inclusive) to set the gain.
+        :type gain: float
+        :raises ValueError: Raised if the gain argument isn't between the valid range.
+        :return: An object with all the given information about the jukebox.
+        Except the jukebox playlist.
+        :rtype: Jukebox
+        """
+
         if not 1 > gain > 0:
             raise ValueError("The gain should be between 0 and 1 (inclusive)")
 
