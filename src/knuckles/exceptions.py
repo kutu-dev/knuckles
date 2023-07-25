@@ -40,3 +40,11 @@ class UnknownErrorCode(Exception):
 
 class InvalidRatingNumber(Exception):
     pass
+
+
+class VideoArgumentsInSong(ValueError):
+    pass
+
+
+class AlbumOrArtistArgumentsInSong(ValueError):
+    pass

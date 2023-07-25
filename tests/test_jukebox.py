@@ -2,9 +2,10 @@ from typing import Any
 
 import pytest
 import responses
+from responses import matchers
+
 from knuckles.models import Song
 from knuckles.subsonic import Subsonic
-from responses import matchers
 
 
 @responses.activate
@@ -32,7 +33,7 @@ def test_jukebox_get(
     assert response.gain == jukebox_playlist["gain"]
     assert response.position == jukebox_playlist["position"]
     assert type(response.playlist) == list
-    assert response.playlist[0] == Song
+    assert type(response.playlist[0]) == Song
     assert response.playlist[0].id == song["id"]
 
 

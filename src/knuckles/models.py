@@ -1,232 +1,251 @@
 # Not fancy but does the job
 from typing import TYPE_CHECKING, Any, Self
 
+from knuckles.exceptions import AlbumOrArtistArgumentsInSong, VideoArgumentsInSong
+
 if TYPE_CHECKING:
     from .subsonic import Subsonic
 
-from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
-from typing import Callable
 
 from dateutil import parser
 
 
-@dataclass
 class SubsonicResponse:
-    status: str
-    version: str
+    def __init__(
+        self,
+        status: str,
+        version: str,
+        type: str | None = None,
+        serverVersion: str | None = None,
+        openSubsonic: bool = False,
+    ) -> None:
+        self.status: str = status
+        self.version: str = version
+        self.type: str | None = type
+        self.server_version: str | None = serverVersion
+        self.open_subsonic: bool = openSubsonic
 
-    # Open Subsonic extensions
-    type: str | None = None
-    server_version: str | None = None
-    open_subsonic: bool = False
 
-    def __bool__(self) -> bool:
-        return self.status == "ok"
-
-
-@dataclass
 class License:
-    valid: bool
-    email: str | None = None
-    license_expires: datetime | str | None = None
-    trial_expires: datetime | str | None = None
+    def __init__(
+        self,
+        valid: bool,
+        email: str | None = None,
+        licenseExpires: str | None = None,
+        trialExpires: str | None = None,
+    ) -> None:
+        self.valid: bool = valid
+        self.email: str | None = email
+
+        self.license_expires: datetime | None
+        if licenseExpires is not None:
+            self.license_expires = parser.parse(licenseExpires)
+        else:
+            self.license_expires = None
+
+        self.trial_expires: datetime | None
+        if trialExpires is not None:
+            self.trial_expires = parser.parse(trialExpires)
+        else:
+            self.trial_expires = None
 
     def __bool__(self) -> bool:
         return self.valid
 
-    def __post_init__(self) -> None:
-        if type(self.license_expires) is str:
-            self.license_expires = parser.parse(self.license_expires)
 
-        if type(self.trial_expires) is str:
-            self.trial_expires = parser.parse(self.trial_expires)
-
-
-@dataclass
 class CoverArt:
-    id: str
+    def __init__(self, id: str) -> None:
+        self.id: str = id
 
 
-#! TODO
-@dataclass
 class Album:
-    id: str
-    name: str
+    def __init__(self, id: str, name: str | None = None) -> None:
+        self.id: str = id
+        self.name: str | None = name
 
 
-#! TODO
-@dataclass
 class Artist:
-    id: str
-    name: str
+    def __init__(self, id: str, name: str | None = None) -> None:
+        self.id: str = id
+        self.name: str | None = name
 
 
-@dataclass
 class Song:
-    _subsonic: "Subsonic"
-    id: str
-    title: str
+    def __init__(
+        self,
+        # Internal
+        subsonic: "Subsonic",
+        # Subsonic fields
+        id: str,
+        title: str,
+        isDir: bool = False,
+        parent: str | None = None,
+        album: str | None = None,
+        artist: str | None = None,
+        track: int | None = None,
+        year: int | None = None,
+        genre: str | None = None,
+        coverArt: str | None = None,
+        size: int | None = None,
+        contentType: str | None = None,
+        suffix: str | None = None,
+        transcodedContentType: str | None = None,
+        transcodedSuffix: str | None = None,
+        duration: int | None = None,
+        bitRate: int | None = None,
+        path: str | None = None,
+        isVideo: bool = False,
+        userRating: int | None = None,
+        averageRating: float | None = None,
+        playCount: int | None = None,
+        discNumber: int | None = None,
+        created: str | None = None,
+        starred: str | None = None,
+        albumId: str | None = None,
+        artistId: str | None = None,
+        type: str | None = None,
+        bookmarkPosition: int | None = None,
+        originalWidth: None = None,
+        originalHeight: None = None,
+        # OpenSubsonic fields
+        played: str | None = None,
+    ) -> None:
+        if isVideo or originalWidth is not None or originalHeight is not None:
+            raise VideoArgumentsInSong(
+                (
+                    "A song shouldn't contain values valid for videos."
+                    + "Did you mean: Video()?"
+                )
+            )
 
-    parent: str | None = None
-    album: str | None = None
-    album_id: str | None = None
-    artist: str | None = None
-    artist_id: str | None = None
-    track: int | None = None
-    year: int | None = None
-    genre: str | None = None
-    cover_art: CoverArt | str | None = None
-    size: int | None = None
-    content_type: str | None = None
-    suffix: str | None = None
-    transcoded_content_type: str | None = None
-    transcoded_suffix: str | None = None
-    duration: int | None = None
-    bit_rate: int | None = None
-    path: Path | str | None = None
-    user_rating: int | None = None
-    average_rating: float | None = None
-    play_count: int | None = None
-    disc_number: int | None = None
-    created: datetime | str | None = None
-    starred: datetime | str | None = None
-    type: str | None = None
-    bookmark_position: int | None = None
+        if isDir:
+            raise AlbumOrArtistArgumentsInSong(
+                "'isDir' shouldn't be True. Did you mean: Album() or Artist()?"
+            )
 
-    # OpenSubsonic extensions
-    played: datetime | str | None = None
+        self.__subsonic: "Subsonic" = subsonic
+        self.id: str = id
+        self.title: str = title
+        self.parent: str | None = parent
+        self.track: int | None = track
+        self.year: int | None = year
+        self.genre: str | None = genre
+        self.size: int | None = size
+        self.content_type: str | None = contentType
+        self.suffix: str | None = suffix
+        self.transcoded_content_type: str | None = transcodedContentType
+        self.transcoded_suffix: str | None = transcodedSuffix
+        self.duration: int | None = duration
+        self.bit_rate: int | None = bitRate
+        self.path: str | None = path
+        self.user_rating: int | None = userRating
+        self.average_rating: float | None = averageRating
+        self.play_count: int | None = playCount
+        self.disc_number: int | None = discNumber
+        self.type: str | None = type
+        self.bookmark_position: int | None = bookmarkPosition
 
-    def __post_init__(self) -> None:
-        if self.path is not None:
-            self.path = Path(self.path)
+        self.album: Album | None = None
+        if albumId is not None:
+            self.album = Album(albumId, album)
 
-        if type(self.created) is str:
-            self.created = parser.parse(self.created)
+        self.artist: Artist | None = None
+        if artistId is not None:
+            self.artist = Artist(artistId, artist)
 
-        if type(self.starred) is str:
-            self.starred = parser.parse(self.starred)
+        self.cover_art: CoverArt | None = None
+        if coverArt is not None:
+            self.cover_art = CoverArt(coverArt)
 
-        if type(self.played) is str:
-            self.played = parser.parse(self.played)
+        self.created: datetime | None = None
+        if created is not None:
+            self.created = parser.parse(created)
 
-        if type(self.cover_art) is str:
-            self.cover_art = CoverArt(self.cover_art)
+        self.starred: datetime | None = None
+        if starred is not None:
+            self.starred = parser.parse(starred)
 
-    def generate(self) -> Callable:
+        self.played: datetime | None = None
+        if played is not None:
+            self.played = parser.parse(played)
+
+    def generate(self) -> "Song":
         """Returns the function to the the same song with the maximum possible
         information from the Subsonic API.
 
-        Useful for making copies with updated data or updating the instance itself
-        with immutability, e.g., `foo = foo.generate(bar)()`.
+        Useful for making copies with updated data or updating the object itself
+        with immutability, e.g., `foo = foo.generate()`.
 
         Returns:
-            Callable: _description_
+            Song: The same object with updated data
         """
 
-        return lambda: self._subsonic.get_song(self.id)
-
-    def get_album(self) -> Album | None:
-        """Return an Album dataclass that correspond with the song.
-
-        Returns:
-            Album | None: The album of the song or
-            None if the song doesn't have artist data attached (album and album_id).
-        """
-
-        if self.album_id is None or self.album is None:
-            return None
-
-        return Album(self.album_id, self.album)
-
-    def get_artist(self) -> Album | None:
-        """Return an Artist dataclass that correspond with the song.
-
-        Returns:
-            Artist | None: The album of the song or
-            None if the song doesn't have artist data attached (artist and artist_id).
-        """
-
-        if self.artist_id is None or self.artist is None:
-            return None
-
-        return Album(self.artist_id, self.artist)
+        return self.__subsonic.get_song(self.id)
 
     def star(self) -> Self:
-        self._subsonic.star_song(self.id)
+        self.__subsonic.star_song(self.id)
 
         return self
 
     def unstar(self) -> Self:
-        self._subsonic.unstar_song(self.id)
+        self.__subsonic.unstar_song(self.id)
 
         return self
 
     def set_rating(self, rating: int) -> Self:
-        self._subsonic.set_rating(self.id, rating)
+        self.__subsonic.set_rating(self.id, rating)
 
         return self
 
     def remove_rating(self) -> Self:
-        self._subsonic.remove_rating(self.id)
+        self.__subsonic.remove_rating(self.id)
 
         return self
 
     def scrobble(self, time: datetime, submission: bool = True) -> Self:
-        self._subsonic.scrobble(self.id, time, submission)
+        self.__subsonic.scrobble(self.id, time, submission)
 
         return self
 
 
-@dataclass
 class ScanStatus:
-    scanning: bool
-    count: int
+    def __init__(self, scanning: bool, count: int) -> None:
+        self.scanning: bool = scanning
+        self.count: int = count
 
 
-@dataclass
 class ChatMessage:
-    username: str
-    time: int
-    message: str
+    def __init__(self, username: str, time: int, message: str) -> None:
+        self.username: str = username
+
+        # Divide by 1000 as the Subsonic API return in milliseconds instead of seconds
+        self.time: datetime = datetime.fromtimestamp(time / 1000)
+        self.message: str = message
 
 
 class Jukebox:
     def __init__(
         self,
-        current_index: int,
+        # Internal
+        subsonic: "Subsonic",
+        # Subsonic fields
+        currentIndex: int,
         playing: bool,
         gain: float,
         position: int,
         entry: list[dict[str, Any]] | None = None,
     ) -> None:
-        self.current_index: int = current_index
+        self.current_index: int = currentIndex
         self.playing: bool = playing
         self.gain: float = gain
         self.position: int = position
-        self.playlist: list[Song] | None = self.__generate_playlist(entry)
 
-    def __generate_playlist(
-        self, entry: list[dict[str, Any]] | None
-    ) -> list[Song] | None:
+        self.playlist: list[Song] | None = None
         if entry is None:
-            return None
+            return
 
-        playlist: list[Song] = []
+        self.playlist = []
+
         for song in entry:
-            #! TO REFACTORIZE
-            del song["isDir"]
-
-            if "is_video" in song:
-                del song["isVideo"]
-
-            if "original_width" in song:
-                del song["originalWidth"]
-
-            if "original_height" in song:
-                del song["originalHeight"]
-
-            playlist.append(Song(**song))
-
-        return playlist
+            self.playlist.append(Song(subsonic=subsonic, **song))
