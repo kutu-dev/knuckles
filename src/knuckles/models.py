@@ -1,5 +1,5 @@
 # Not fancy but does the job
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Any, Self
 
 if TYPE_CHECKING:
     from .subsonic import Subsonic
@@ -190,3 +190,43 @@ class ChatMessage:
     username: str
     time: int
     message: str
+
+
+class Jukebox:
+    def __init__(
+        self,
+        current_index: int,
+        playing: bool,
+        gain: float,
+        position: int,
+        entry: list[dict[str, Any]] | None = None,
+    ) -> None:
+        self.current_index: int = current_index
+        self.playing: bool = playing
+        self.gain: float = gain
+        self.position: int = position
+        self.playlist: list[Song] | None = self.__generate_playlist(entry)
+
+    def __generate_playlist(
+        self, entry: list[dict[str, Any]] | None
+    ) -> list[Song] | None:
+        if entry is None:
+            return None
+
+        playlist: list[Song] = []
+        for song in entry:
+            #! TO REFACTORIZE
+            del song["isDir"]
+
+            if "is_video" in song:
+                del song["isVideo"]
+
+            if "original_width" in song:
+                del song["originalWidth"]
+
+            if "original_height" in song:
+                del song["originalHeight"]
+
+            playlist.append(Song(**song))
+
+        return playlist

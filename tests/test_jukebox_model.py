@@ -18,7 +18,7 @@ def test_jukebox_non_partial_generate(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -28,7 +28,7 @@ def test_jukebox_non_partial_generate(
     get_params["action"] = "get"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(get_params, strict_match=False)],
         json=jukebox_playlist_response,
         status=200,
@@ -55,7 +55,7 @@ def test_jukebox_partial_generate(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -80,7 +80,7 @@ def test_jukebox_start(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -90,7 +90,7 @@ def test_jukebox_start(
     start_params["action"] = "start"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(start_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -110,7 +110,7 @@ def test_jukebox_stop(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -120,7 +120,7 @@ def test_jukebox_stop(
     stop_params["action"] = "stop"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(stop_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -140,7 +140,7 @@ def test_jukebox_skip_without_offset(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -151,7 +151,7 @@ def test_jukebox_skip_without_offset(
     skip_params["index"] = 0
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(skip_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -172,7 +172,7 @@ def test_jukebox_skip_with_offset(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -184,7 +184,7 @@ def test_jukebox_skip_with_offset(
     skip_params["offset"] = 10
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(skip_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -205,7 +205,7 @@ def test_jukebox_shuffle(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -215,7 +215,7 @@ def test_jukebox_shuffle(
     shuffle_params["action"] = "shuffle"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(shuffle_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -236,7 +236,7 @@ def test_jukebox_set_gain(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -247,7 +247,7 @@ def test_jukebox_set_gain(
     set_gain_params["gain"] = 75
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(set_gain_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -268,7 +268,7 @@ def test_jukebox_clear(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -278,7 +278,7 @@ def test_jukebox_clear(
     clear_params["action"] = "clear"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(clear_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -300,7 +300,7 @@ def test_jukebox_remove_with_populated_playlist(
     get_params["action"] = "get"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(get_params, strict_match=False)],
         json=jukebox_playlist_response,
         status=200,
@@ -311,7 +311,7 @@ def test_jukebox_remove_with_populated_playlist(
     remove_params["index"] = 0
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(remove_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -336,7 +336,7 @@ def test_jukebox_add_with_populated_playlist(
     get_params["action"] = "get"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(get_params, strict_match=False)],
         json=jukebox_playlist_response,
         status=200,
@@ -347,7 +347,7 @@ def test_jukebox_add_with_populated_playlist(
     add_params["id"] = song["id"]
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(add_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -357,6 +357,7 @@ def test_jukebox_add_with_populated_playlist(
     response = subsonic.jukebox_get()
     response.add("secondSongId")
 
+    assert type(response.playlist) == list
     assert response.playlist[1].id == "secondSongId"
 
 
@@ -372,7 +373,7 @@ def test_jukebox_set(
     get_params["action"] = "get"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(get_params, strict_match=False)],
         json=jukebox_playlist_response,
         status=200,
@@ -383,7 +384,7 @@ def test_jukebox_set(
     add_params["id"] = song["id"]
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(add_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -393,6 +394,7 @@ def test_jukebox_set(
     response = subsonic.jukebox_get()
     response.set("secondSongId")
 
+    assert type(response.playlist) == list
     assert response.playlist[0].id == "secondSongId"
 
 
@@ -407,7 +409,7 @@ def test_jukebox_remove_without_populated_playlist(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -417,7 +419,7 @@ def test_jukebox_remove_without_populated_playlist(
     get_params["action"] = "get"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(get_params, strict_match=False)],
         json=jukebox_playlist_response,
         status=200,
@@ -428,7 +430,7 @@ def test_jukebox_remove_without_populated_playlist(
     remove_params["index"] = 0
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(remove_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -453,7 +455,7 @@ def test_jukebox_add_without_populated_playlist(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -463,7 +465,7 @@ def test_jukebox_add_without_populated_playlist(
     get_params["action"] = "get"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(get_params, strict_match=False)],
         json=jukebox_playlist_response,
         status=200,
@@ -474,7 +476,7 @@ def test_jukebox_add_without_populated_playlist(
     add_params["id"] = song["id"]
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukebox",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(add_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -484,4 +486,5 @@ def test_jukebox_add_without_populated_playlist(
     response = subsonic.jukebox_status()
     response.add("secondSongId")
 
+    assert type(response.playlist) == list
     assert response.playlist[1].id == "secondSongId"

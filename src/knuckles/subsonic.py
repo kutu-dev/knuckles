@@ -20,7 +20,7 @@ from .exceptions import (
     InvalidRatingNumber,
     UnknownErrorCode,
 )
-from .models import ChatMessage, License, ScanStatus, Song, SubsonicResponse
+from .models import ChatMessage, Jukebox, License, ScanStatus, Song, SubsonicResponse
 
 
 class Subsonic:
@@ -298,3 +298,99 @@ class Subsonic:
         )
 
         return self
+
+    def jukebox_get(self) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "get"}
+        )["jukebox_playlist"]
+
+        return Jukebox(**response)
+
+    def jukebox_status(self) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "status"}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_set(self, song: Song | str) -> Jukebox:
+        id: str
+        if type(song) is Song:
+            id = song.id
+        elif type(song) is str:
+            id = song
+        else:
+            raise TypeError("The type of the song parameter is invalid")
+
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "set", "id": id}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_start(self) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "start"}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_stop(self) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "stop"}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_skip(self, index: int, offset: float = 0) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "skip", "index": index, "offset": offset}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_add(self, song: Song | str) -> Jukebox:
+        id: str
+        if type(song) is Song:
+            id = song.id
+        elif type(song) is str:
+            id = song
+        else:
+            raise TypeError("The type of the song parameter is invalid")
+
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "add", "id": id}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_clear(self) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "clear"}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_remove(self, index: int) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "remove", "index": index}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_shuffle(self) -> Jukebox:
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "shuffle"}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
+
+    def jukebox_set_gain(self, gain: float) -> Jukebox:
+        if not 1 > gain > 0:
+            raise ValueError("The gain should be between 0 and 1 (inclusive)")
+
+        response: dict[str, Any] = self.__request_to_the_api(
+            "jukeboxControl", {"action": "setGain", "gain": gain}
+        )["jukebox_status"]
+
+        return Jukebox(**response)
