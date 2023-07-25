@@ -24,7 +24,10 @@ __all__ = [
 
 # TODO to implement
 # * - setRating -> Album(Non ID3), Artist(Non ID3)
-# * - scrobble -> Song, Video -> (Multiple files at the same time? ambiguous docs)
+# * - scrobble -> Video -> (Multiple files at the same time? ambiguous docs)
+
+#! Should be implemented
+# * - POST Support
 
 #! Not implemented
 # * - Audio transcoding

@@ -12,8 +12,8 @@ from responses import matchers
 def test_get_song(
     subsonic: Subsonic,
     params: dict[str, str],
-    song: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 
@@ -30,19 +30,10 @@ def test_get_song(
     assert response.id == song["id"]
     assert response.parent == song["parent"]
     assert response.title == song["title"]
-
-    # Album asserts
-    assert response.album_id == song["albumId"]
-    assert response.album == song["album"]
-    assert response.get_album().id == song["albumId"]
-    assert response.get_album().name == song["album"]
-
-    # Artist asserts
-    assert response.artist_id == song["artistId"]
-    assert response.artist == song["artist"]
-    assert response.get_artist().id == song["artistId"]
-    assert response.get_artist().name == song["artist"]
-
+    assert response.album.id == song["albumId"]
+    assert response.album.name == song["album"]
+    assert response.artist.id == song["artistId"]
+    assert response.artist.name == song["artist"]
     assert response.track == song["track"]
     assert response.year == song["year"]
     assert response.genre == song["genre"]
@@ -67,43 +58,16 @@ def test_get_song(
     assert response.played == parser.parse(song["played"])
 
 
-@pytest.mark.parametrize("key", ["artistId", "artist"])
-@responses.activate
-def test_song_without_artist(
-    subsonic: Subsonic,
-    params: dict[str, str],
-    song: dict[str, Any],
-    song_response: dict[str, Any],
-    key: str,
-) -> None:
-    # Remove any of the two keys related with the artist in the response
-    # and see if it returns None
-    del song[key]
-
-    responses.add(
-        responses.GET,
-        url="https://example.com/rest/getSong",
-        match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=song_response,
-        status=200,
-    )
-
-    response: Song = subsonic.get_song(song["id"])
-    assert response.get_artist() is None
-
-
-@pytest.mark.parametrize("key", ["albumId", "album"])
 @responses.activate
 def test_song_without_album(
     subsonic: Subsonic,
     params: dict[str, str],
-    song: dict[str, Any],
     song_response: dict[str, Any],
-    key: str,
+    song: dict[str, Any],
 ) -> None:
     # Remove any of the two keys related with the album in the response
     # and see if it returns None
-    del song[key]
+    del song["albumId"]
 
     responses.add(
         responses.GET,
@@ -114,15 +78,36 @@ def test_song_without_album(
     )
 
     response: Song = subsonic.get_song(song["id"])
-    assert response.get_album() is None
+    assert response.album is None
+
+
+@responses.activate
+def test_song_without_artist(
+    subsonic: Subsonic,
+    params: dict[str, str],
+    song_response: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    del song["artistId"]
+
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/getSong",
+        match=[matchers.query_param_matcher(params, strict_match=False)],
+        json=song_response,
+        status=200,
+    )
+
+    response: Song = subsonic.get_song(song["id"])
+    assert response.artist is None
 
 
 @responses.activate
 def test_song_generate(
     subsonic: Subsonic,
     params: dict[str, Any],
-    song: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 
@@ -136,7 +121,7 @@ def test_song_generate(
 
     requested_song: Song = subsonic.get_song(song["id"])
     requested_song.title = "Foo"
-    requested_song = requested_song.generate()()
+    requested_song = requested_song.generate()
     assert requested_song.title == song["title"]
 
 
@@ -144,9 +129,9 @@ def test_song_generate(
 def test_song_star(
     subsonic: Subsonic,
     params: dict[str, Any],
-    song: dict[str, Any],
     subsonic_response: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 
@@ -175,9 +160,9 @@ def test_song_star(
 def test_song_unstar(
     subsonic: Subsonic,
     params: dict[str, Any],
-    song: dict[str, Any],
     subsonic_response: dict[str, Any],
     song_response: dict[str, Any],
+    song: dict[str, Any],
 ) -> None:
     params["id"] = song["id"]
 
