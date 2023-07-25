@@ -1,7 +1,8 @@
 from typing import Any
 
-import knuckles
 import pytest
+
+import knuckles
 from knuckles import Subsonic
 
 
@@ -82,9 +83,7 @@ def jukebox_status() -> dict[str, Any]:
 def jukebox_playlist(
     jukebox_status: dict[str, Any], song: dict[str, Any]
 ) -> dict[str, Any]:
-    jukebox_status["entry"] = [song]
-
-    return jukebox_status
+    return {**jukebox_status, "entry": [song]}
 
 
 @pytest.fixture

@@ -78,7 +78,7 @@ class Song:
         subsonic: "Subsonic",
         # Subsonic fields
         id: str,
-        title: str,
+        title: str | None = None,
         isDir: bool = False,
         parent: str | None = None,
         album: str | None = None,
@@ -126,7 +126,7 @@ class Song:
 
         self.__subsonic: "Subsonic" = subsonic
         self.id: str = id
-        self.title: str = title
+        self.title: str | None = title
         self.parent: str | None = parent
         self.track: int | None = track
         self.year: int | None = year
@@ -236,6 +236,7 @@ class Jukebox:
         position: int,
         entry: list[dict[str, Any]] | None = None,
     ) -> None:
+        self.__subsonic: "Subsonic" = subsonic
         self.current_index: int = currentIndex
         self.playing: bool = playing
         self.gain: float = gain
@@ -248,4 +249,79 @@ class Jukebox:
         self.playlist = []
 
         for song in entry:
-            self.playlist.append(Song(subsonic=subsonic, **song))
+            self.playlist.append(Song(subsonic=self.__subsonic, **song))
+
+    def generate(self) -> "Jukebox":
+        return self.__subsonic.jukebox_get()
+
+    def start(self) -> Self:
+        self.__subsonic.jukebox_start()
+
+        return self
+
+    def stop(self) -> Self:
+        self.__subsonic.jukebox_stop()
+
+        return self
+
+    def skip(self, index: int, offset: float = 0) -> Self:
+        self.__subsonic.jukebox_skip(index, offset)
+
+        return self
+
+    def shuffle(self) -> Self:
+        self.__subsonic.jukebox_shuffle()
+
+        # The shuffle is server side so a call to the API is necessary
+        # to get the new order of the playlist
+        self.playlist = self.__subsonic.jukebox_get().playlist
+
+        return self
+
+    def set_gain(self, gain: float) -> Self:
+        self.__subsonic.jukebox_set_gain(gain)
+        self.gain = gain
+
+        return self
+
+    def clear(self) -> Self:
+        self.__subsonic.jukebox_clear()
+        self.playlist = []
+
+        return self
+
+    def set(self, song: Song | str) -> Self:
+        if type(song) is str:
+            song_to_set: Song = Song(self.__subsonic, song)
+
+        self.__subsonic.jukebox_set(song_to_set)
+        self.playlist = [song_to_set]
+
+        return self
+
+    def add(self, song: Song | str) -> Self:
+        if type(song) is str:
+            song_to_add: Song = Song(self.__subsonic, song)
+
+        self.__subsonic.jukebox_add(song_to_add)
+
+        if self.playlist is not None:
+            self.playlist.append(song_to_add)
+            return self
+
+        # If the playlist is None the real value of it is unknown,
+        # so a call the API is necessary to get a correct representation of the jukebox
+        self.playlist = self.generate().playlist
+        return self
+
+    def remove(self, index: int) -> Self:
+        self.__subsonic.jukebox_remove(index)
+
+        if self.playlist is not None:
+            del self.playlist[index]
+            return self
+
+        # If the playlist is None the real value of it is unknown,
+        # so a call the API is necessary to get a correct representation of the jukebox
+        self.playlist = self.generate().playlist
+        return self

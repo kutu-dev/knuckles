@@ -1,13 +1,12 @@
 from typing import Any
 
 import responses
-from responses import matchers
-
 from knuckles.subsonic import Subsonic
+from responses import matchers
 
 
 @responses.activate
-def test_jukebox_non_partial_generate(
+def test_jukebox_generate(
     subsonic: Subsonic,
     params: dict[str, str | int | float],
     song: dict[str, Any],
@@ -18,7 +17,7 @@ def test_jukebox_non_partial_generate(
     status_params["action"] = "status"
     responses.add(
         responses.GET,
-        url="https://example.com/rest/jukeboControl",
+        url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
         status=200,
@@ -35,39 +34,16 @@ def test_jukebox_non_partial_generate(
     )
 
     #!TYPES
+    a = jukebox_status_response
+    print(a)
     response = subsonic.jukebox_status()
 
     assert response.playlist is None
 
-    jukebox_with_playlist = response.generate()
+    jukebox = response.generate()
 
-    assert jukebox_with_playlist.playlist[0].id == song["id"]
-
-
-@responses.activate
-def test_jukebox_partial_generate(
-    subsonic: Subsonic,
-    params: dict[str, str | int | float],
-    song: dict[str, Any],
-    jukebox_status_response: dict[str, Any],
-) -> None:
-    status_params: dict[str, Any] = {**params}
-    status_params["action"] = "status"
-    responses.add(
-        responses.GET,
-        url="https://example.com/rest/jukeboxControl",
-        match=[matchers.query_param_matcher(status_params, strict_match=False)],
-        json=jukebox_status_response,
-        status=200,
-    )
-
-    #!TYPES
-    response = subsonic.jukebox_status()
-    response.playing = False
-
-    response = response.generate(True)
-
-    assert response.playing is True
+    assert jukebox.playlist is not None
+    assert jukebox.playlist[0].id == song["id"]
 
 
 @responses.activate
@@ -200,6 +176,7 @@ def test_jukebox_shuffle(
     subsonic: Subsonic,
     params: dict[str, str | int | float],
     jukebox_status_response: dict[str, Any],
+    jukebox_playlist_response: dict[str, Any],
 ) -> None:
     status_params: dict[str, Any] = {**params}
     status_params["action"] = "status"
@@ -208,6 +185,16 @@ def test_jukebox_shuffle(
         url="https://example.com/rest/jukeboxControl",
         match=[matchers.query_param_matcher(status_params, strict_match=False)],
         json=jukebox_status_response,
+        status=200,
+    )
+
+    get_params: dict[str, Any] = {**params}
+    get_params["action"] = "get"
+    responses.add(
+        responses.GET,
+        url="https://example.com/rest/jukeboxControl",
+        match=[matchers.query_param_matcher(get_params, strict_match=False)],
+        json=jukebox_playlist_response,
         status=200,
     )
 
@@ -244,7 +231,7 @@ def test_jukebox_set_gain(
 
     set_gain_params: dict[str, Any] = {**params}
     set_gain_params["action"] = "setGain"
-    set_gain_params["gain"] = 75
+    set_gain_params["gain"] = 0.75
     responses.add(
         responses.GET,
         url="https://example.com/rest/jukeboxControl",
@@ -255,7 +242,7 @@ def test_jukebox_set_gain(
 
     #!TYPES
     response = subsonic.jukebox_status()
-    response.set_gain(75)
+    response.set_gain(0.75)
 
 
 @responses.activate
@@ -355,10 +342,10 @@ def test_jukebox_add_with_populated_playlist(
 
     #!TYPES
     response = subsonic.jukebox_get()
-    response.add("secondSongId")
+    response.add(song["id"])
 
     assert type(response.playlist) == list
-    assert response.playlist[1].id == "secondSongId"
+    assert response.playlist[1].id == song["id"]
 
 
 @responses.activate
@@ -392,10 +379,10 @@ def test_jukebox_set(
 
     #!TYPES
     response = subsonic.jukebox_get()
-    response.set("secondSongId")
+    response.set(song["id"])
 
     assert type(response.playlist) == list
-    assert response.playlist[0].id == "secondSongId"
+    assert response.playlist[0].id == song["id"]
 
 
 @responses.activate
@@ -451,16 +438,6 @@ def test_jukebox_add_without_populated_playlist(
     jukebox_status_response: dict[str, Any],
     jukebox_playlist_response: dict[str, Any],
 ) -> None:
-    status_params: dict[str, Any] = {**params}
-    status_params["action"] = "status"
-    responses.add(
-        responses.GET,
-        url="https://example.com/rest/jukeboxControl",
-        match=[matchers.query_param_matcher(status_params, strict_match=False)],
-        json=jukebox_status_response,
-        status=200,
-    )
-
     get_params: dict[str, Any] = {**params}
     get_params["action"] = "get"
     responses.add(
@@ -483,8 +460,8 @@ def test_jukebox_add_without_populated_playlist(
     )
 
     #!TYPES
-    response = subsonic.jukebox_status()
-    response.add("secondSongId")
+    response = subsonic.jukebox_get()
+    response.add(song["id"])
 
     assert type(response.playlist) == list
-    assert response.playlist[1].id == "secondSongId"
+    assert response.playlist[1].id == song["id"]
