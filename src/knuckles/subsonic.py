@@ -9,17 +9,8 @@ from requests import Response
 
 from .exceptions import (
     CODE_ERROR_EXCEPTIONS,
-    CodeError0,
-    CodeError10,
-    CodeError20,
-    CodeError30,
-    CodeError40,
-    CodeError41,
-    CodeError50,
-    CodeError60,
-    CodeError70,
     InvalidRatingNumber,
-    UnknownErrorCode,
+    get_code_error_exception,
 )
 from .models import (
     Album,
@@ -148,47 +139,13 @@ class Subsonic:
         json_response: dict[str, Any] = response.json()["subsonic-response"]
 
         if json_response["status"] == "failed":
-            code_error: CODE_ERROR_EXCEPTIONS = (
-                self.__get_subsonic_code_error_exception(json_response["error"]["code"])
+            code_error: CODE_ERROR_EXCEPTIONS = get_code_error_exception(
+                json_response["error"]["code"]
             )
 
             raise code_error(json_response["error"]["message"])
 
         return json_response
-
-    @staticmethod
-    def __get_subsonic_code_error_exception(
-        error_code: int,
-    ) -> CODE_ERROR_EXCEPTIONS:
-        """With a given code error returns the corresponding exception.
-
-        :param error_code: The error code.
-        :type error_code: int
-        :return: The associated exception with the error code.
-        :rtype: CODE_ERROR_EXCEPTIONS
-        """
-
-        match error_code:
-            case 0:
-                return CodeError0
-            case 10:
-                return CodeError10
-            case 20:
-                return CodeError20
-            case 30:
-                return CodeError30
-            case 40:
-                return CodeError40
-            case 41:
-                return CodeError41
-            case 50:
-                return CodeError50
-            case 60:
-                return CodeError60
-            case 70:
-                return CodeError70
-            case _:
-                return UnknownErrorCode
 
     def ping(self) -> SubsonicResponse:
         """Calls to the "ping" endpoint of the API.
@@ -526,7 +483,7 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_status(self) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "get".
+        """Calls the "jukeboxControl" endpoint of the API with the action "status".
 
         :return: An object with all the given information about the jukebox.
         Except the jukebox playlist.
@@ -682,7 +639,7 @@ class Subsonic:
         return Jukebox(self, **response)
 
     def jukebox_set_gain(self, gain: float) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "setGain"
+        """Calls the "jukeboxControl" endpoint of the API with the action "setGain".
 
         :param gain: A number between 0 and 1 (inclusive) to set the gain.
         :type gain: float

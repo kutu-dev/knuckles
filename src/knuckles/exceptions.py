@@ -1,6 +1,18 @@
 from typing import Type
 
 
+class InvalidRatingNumber(Exception):
+    pass
+
+
+class VideoArgumentsInSong(ValueError):
+    pass
+
+
+class AlbumOrArtistArgumentsInSong(ValueError):
+    pass
+
+
 class CodeError0(Exception):
     pass
 
@@ -55,13 +67,35 @@ CODE_ERROR_EXCEPTIONS = Type[
 ]
 
 
-class InvalidRatingNumber(Exception):
-    pass
+def get_code_error_exception(
+    error_code: int,
+) -> CODE_ERROR_EXCEPTIONS:
+    """With a given code error returns the corresponding exception.
 
+    :param error_code: The error code.
+    :type error_code: int
+    :return: The associated exception with the error code.
+    :rtype: CODE_ERROR_EXCEPTIONS
+    """
 
-class VideoArgumentsInSong(ValueError):
-    pass
-
-
-class AlbumOrArtistArgumentsInSong(ValueError):
-    pass
+    match error_code:
+        case 0:
+            return CodeError0
+        case 10:
+            return CodeError10
+        case 20:
+            return CodeError20
+        case 30:
+            return CodeError30
+        case 40:
+            return CodeError40
+        case 41:
+            return CodeError41
+        case 50:
+            return CodeError50
+        case 60:
+            return CodeError60
+        case 70:
+            return CodeError70
+        case _:
+            return UnknownErrorCode
