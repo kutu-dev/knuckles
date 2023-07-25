@@ -1,7 +1,8 @@
 # Not fancy but does the job
 from typing import TYPE_CHECKING, Any, Self
 
-from knuckles.exceptions import AlbumOrArtistArgumentsInSong, VideoArgumentsInSong
+from knuckles.exceptions import (AlbumOrArtistArgumentsInSong,
+                                 VideoArgumentsInSong)
 
 if TYPE_CHECKING:
     from .subsonic import Subsonic
@@ -549,39 +550,37 @@ class Jukebox:
 
         return self
 
-    def set(self, song: Song | str) -> Self:
+    def set(self, id: str) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "set".
 
-        :param song: Either a Song object or the ID of a song to set it in the jukebox.
-        :type song: Song | str
+        :param id: The ID of a song to set it in the jukebox.
+        :type id: str
         :raises ValueError: Raised if the gain argument isn't between the valid range.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        if type(song) is str:
-            song_to_set: Song = Song(self.__subsonic, song)
+        song_to_set: Song = Song(self.__subsonic, id)
 
-        self.__subsonic.jukebox_set(song_to_set)
+        self.__subsonic.jukebox_set(song_to_set.id)
         self.playlist = [song_to_set]
 
         return self
 
-    def add(self, song: Song | str) -> Self:
+    def add(self, id: str) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "add".
 
-        :param song: Either a Song object or the ID of a song to add it in the jukebox.
-        :type song: Song | str
+        :param id: The ID of a song to add it in the jukebox.
+        :type id: str
         :raises TypeError: Raised if the passed value to song isn't a Song object
              or an ID.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        if type(song) is str:
-            song_to_add: Song = Song(self.__subsonic, song)
+        song_to_add: Song = Song(self.__subsonic, id)
 
-        self.__subsonic.jukebox_add(song_to_add)
+        self.__subsonic.jukebox_add(song_to_add.id)
 
         if self.playlist is not None:
             self.playlist.append(song_to_add)
