@@ -11,6 +11,7 @@ pytest_plugins = [
     "tests.mocks.media_annotation",
     "tests.mocks.media_library_scanning",
     "tests.mocks.browsing",
+    "tests.mocks.user_management",
 ]
 
 
