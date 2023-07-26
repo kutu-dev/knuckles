@@ -3,9 +3,10 @@ from typing import Any
 
 import pytest
 import responses
+from responses import matchers
+
 from knuckles import Subsonic
 from knuckles.exceptions import InvalidRatingNumber
-from responses import matchers
 
 
 @responses.activate
@@ -24,7 +25,7 @@ def test_star_song(
         status=200,
     )
 
-    response: Subsonic = subsonic.star_song(song["id"])
+    response: Subsonic = subsonic.media_annotation.star_song(song["id"])
 
     assert type(response) is Subsonic
 
@@ -44,7 +45,7 @@ def test_star_album(
         status=200,
     )
 
-    response: Subsonic = subsonic.star_album("albumId")
+    response: Subsonic = subsonic.media_annotation.star_album("albumId")
 
     assert type(response) is Subsonic
 
@@ -64,7 +65,7 @@ def test_star_artist(
         status=200,
     )
 
-    response: Subsonic = subsonic.star_artist("artistId")
+    response: Subsonic = subsonic.media_annotation.star_artist("artistId")
 
     assert type(response) is Subsonic
 
@@ -85,7 +86,7 @@ def test_unstar_song(
         status=200,
     )
 
-    response: Subsonic = subsonic.unstar_song(song["id"])
+    response: Subsonic = subsonic.media_annotation.unstar_song(song["id"])
 
     assert type(response) is Subsonic
 
@@ -105,7 +106,7 @@ def test_unstar_album(
         status=200,
     )
 
-    response: Subsonic = subsonic.unstar_album("albumId")
+    response: Subsonic = subsonic.media_annotation.unstar_album("albumId")
 
     assert type(response) is Subsonic
 
@@ -125,7 +126,7 @@ def test_unstar_artist(
         status=200,
     )
 
-    response: Subsonic = subsonic.unstar_artist("artistId")
+    response: Subsonic = subsonic.media_annotation.unstar_artist("artistId")
 
     assert type(response) is Subsonic
 
@@ -149,7 +150,7 @@ def test_set_rating(
         status=200,
     )
 
-    response: Subsonic = subsonic.set_rating(song["id"], rating)
+    response: Subsonic = subsonic.media_annotation.set_rating(song["id"], rating)
 
     assert type(response) is Subsonic
 
@@ -171,7 +172,7 @@ def test_remove_rating(
         status=200,
     )
 
-    response: Subsonic = subsonic.remove_rating(song["id"])
+    response: Subsonic = subsonic.media_annotation.remove_rating(song["id"])
 
     assert type(response) is Subsonic
 
@@ -202,7 +203,7 @@ def test_set_invalid_rating(
             + "only numbers between 1 and 5 \(inclusive\) are allowed"
         ),
     ):
-        subsonic.set_rating(song["id"], rating)
+        subsonic.media_annotation.set_rating(song["id"], rating)
 
 
 @responses.activate
@@ -224,7 +225,7 @@ def test_default_scrobble(
         status=200,
     )
 
-    response: Subsonic = subsonic.scrobble(
+    response: Subsonic = subsonic.media_annotation.scrobble(
         song["id"], datetime.fromtimestamp(1690160968.328745)
     )
 
@@ -250,7 +251,7 @@ def test_submission_scrobble(
         status=200,
     )
 
-    response: Subsonic = subsonic.scrobble(
+    response: Subsonic = subsonic.media_annotation.scrobble(
         song["id"], datetime.fromtimestamp(1690160968.328745), True
     )
 
@@ -275,7 +276,7 @@ def test_now_playing_scrobble(
         status=200,
     )
 
-    response: Subsonic = subsonic.scrobble(
+    response: Subsonic = subsonic.media_annotation.scrobble(
         song["id"], datetime.fromtimestamp(1690160968.328745), False
     )
 

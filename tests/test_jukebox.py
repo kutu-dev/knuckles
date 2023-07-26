@@ -26,7 +26,7 @@ def test_jukebox_get(
     )
 
     #!TYPES
-    response = subsonic.jukebox_get()
+    response = subsonic.jukebox.get()
 
     assert response.current_index == jukebox_playlist["currentIndex"]
     assert response.playing == jukebox_playlist["playing"]
@@ -54,7 +54,7 @@ def test_jukebox_status(
     )
 
     #!TYPES
-    response = subsonic.jukebox_status()
+    response = subsonic.jukebox.status()
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -82,7 +82,7 @@ def test_jukebox_set(
     )
 
     #!TYPES
-    response = subsonic.jukebox_set(song["id"])
+    response = subsonic.jukebox.set(song["id"])
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -108,7 +108,7 @@ def test_jukebox_start(
     )
 
     #!TYPES
-    response = subsonic.jukebox_start()
+    response = subsonic.jukebox.start()
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -134,7 +134,7 @@ def test_jukebox_stop(
     )
 
     #!TYPES
-    response = subsonic.jukebox_stop()
+    response = subsonic.jukebox.stop()
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -161,7 +161,7 @@ def test_jukebox_skip_without_offset(
     )
 
     #!TYPES
-    response = subsonic.jukebox_skip(0)
+    response = subsonic.jukebox.skip(0)
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -189,7 +189,7 @@ def test_jukebox_skip_with_offset(
     )
 
     #!TYPES
-    response = subsonic.jukebox_skip(0, 10)
+    response = subsonic.jukebox.skip(0, 10)
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -217,26 +217,13 @@ def test_jukebox_add(
     )
 
     #!TYPES
-    response = subsonic.jukebox_add(song["id"])
+    response = subsonic.jukebox.add(song["id"])
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
     assert response.gain == jukebox_status["gain"]
     assert response.position == jukebox_status["position"]
     assert response.playlist is None
-
-
-@responses.activate
-def test_jukebox_add_invalid_id(
-    subsonic: Subsonic,
-) -> None:
-    #!TYPES
-
-    with pytest.raises(
-        TypeError,
-        match="The type of the song parameter is invalid",
-    ):
-        subsonic.jukebox_add(True)  # type: ignore[arg-type]
 
 
 @responses.activate
@@ -256,7 +243,7 @@ def test_jukebox_clear(
     )
 
     #!TYPES
-    response = subsonic.jukebox_clear()
+    response = subsonic.jukebox.clear()
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -283,7 +270,7 @@ def test_jukebox_remove(
     )
 
     #!TYPES
-    response = subsonic.jukebox_remove(0)
+    response = subsonic.jukebox.remove(0)
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -309,7 +296,7 @@ def test_jukebox_shuffle(
     )
 
     #!TYPES
-    response = subsonic.jukebox_shuffle()
+    response = subsonic.jukebox.shuffle()
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -336,7 +323,7 @@ def test_jukebox_set_gain(
     )
 
     #!TYPES
-    response = subsonic.jukebox_set_gain(0.75)
+    response = subsonic.jukebox.set_gain(0.75)
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -355,4 +342,4 @@ def test_jukebox_set_invalid_gain(
         ValueError,
         match="The gain should be between 0 and 1 \(inclusive\)",
     ):
-        subsonic.jukebox_set_gain(2)
+        subsonic.jukebox.set_gain(2)

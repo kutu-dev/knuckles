@@ -2,9 +2,10 @@ from datetime import datetime
 from typing import Any
 
 import responses
+from responses import matchers
+
 from knuckles import Subsonic
 from knuckles.models import ChatMessage
-from responses import matchers
 
 
 @responses.activate
@@ -21,7 +22,7 @@ def test_add_chat_messages(
         status=200,
     )
 
-    response: Subsonic = subsonic.add_chat_message("Hello World!")
+    response: Subsonic = subsonic.chat.add_chat_message("Hello World!")
 
     assert type(response) is Subsonic
 
@@ -53,7 +54,7 @@ def test_get_chat_messages(
         status=200,
     )
 
-    response: list[ChatMessage] = subsonic.get_chat_messages()
+    response: list[ChatMessage] = subsonic.chat.get_chat_messages()
 
     assert response[0].username == "admin"
     assert response[0].time == datetime.fromtimestamp(1678935707000 / 1000)
