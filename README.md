@@ -1,30 +1,16 @@
-```python
-subsonic: Subsonic = Subsonic('user', 'password', ')
-subsonic.system.ping()
-```
+Partially implemented
 
-- Subsonic
-  - System
-  - Media Annotations
-  - Jukebox
-  - Chat
+- - setRating -> Album(Non ID3), Artist(Non ID3)
+- - scrobble -> Video -> (Multiple files at the same time? ambiguous docs)
 
-## Approach #1
+Should be implemented
 
-- Subsonic
-  - Params y make request
-  - Chat(request: callback)
+- - POST Support
 
-## Approach #2
+Not implemented
 
-- Subsonic _(API Publica)_
-- API (Subsonic API)
-- Chat
-
-## Approach #3
-
-```python
-auth: Auth = Auth()
-subsonic: Subsonic = Subsonic(auth)
-subsonic.system.ping()
-```
+- - Audio transcoding
+- - Video
+- - Open Subsonic Extensions
+- - CA Certs
+- - Non ID3
