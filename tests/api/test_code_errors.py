@@ -1,10 +1,11 @@
-from typing import Any, Type
+from typing import Type
 
 import knuckles.exceptions
 import pytest
 import responses
 from knuckles import Subsonic
-from responses import matchers
+
+from tests.conftest import MockGenerator
 
 code_errors = [
     (0, "A generic error.", knuckles.exceptions.CodeError0),
@@ -43,25 +44,22 @@ code_errors = [
 ]
 
 
+# Manually generate a mock for each error
 @pytest.mark.parametrize("code, message, exception", code_errors)
 @responses.activate
 def test_code_errors(
     subsonic: Subsonic,
-    params: dict[str, str],
-    subsonic_response: dict[str, Any],
+    mock_generator: MockGenerator,
     code: int,
     message: str,
     exception: Type[Exception],
 ) -> None:
-    subsonic_response["subsonic-response"]["status"] = "failed"
-    subsonic_response["subsonic-response"]["error"] = {"code": code, "message": message}
-
     responses.add(
-        responses.GET,
-        url="https://example.com/rest/ping",
-        match=[matchers.query_param_matcher(params, strict_match=False)],
-        json=subsonic_response,
-        status=200,
+        mock_generator(
+            "ping",
+            {},
+            {"status": "failed", "error": {"code": code, "message": message}},
+        )
     )
 
     with pytest.raises(exception, match=message):

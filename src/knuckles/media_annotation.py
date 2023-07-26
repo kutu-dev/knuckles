@@ -149,7 +149,10 @@ class MediaAnnotation:
         """
 
         self.api.request(
-            "scrobble", {"id": id, "time": time.timestamp(), "submission": submission}
+            "scrobble",
+            # Multiply by 1000 because the API uses
+            # milliseconds instead of seconds for UNIX time
+            {"id": id, "time": int(time.timestamp() * 1000), "submission": submission},
         )
 
         return self.subsonic
