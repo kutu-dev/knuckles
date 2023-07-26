@@ -113,7 +113,7 @@ class Album:
         self.name: str | None = name
 
 
-#! Unfinisehd
+# TODO Unfinished
 class Artist:
     """Representation of all the data related to artist in Subsonic."""
 

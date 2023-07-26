@@ -1,44 +1,17 @@
 from typing import Any, Protocol
 
-import knuckles
 import pytest
-from knuckles.subsonic import Subsonic
 from responses import GET, Response, matchers
 
-
-@pytest.fixture
-def user() -> str:
-    return "user"
-
-
-@pytest.fixture
-def password() -> str:
-    return "password"
-
-
-@pytest.fixture
-def client() -> str:
-    return "client"
-
-
-@pytest.fixture
-def subsonic(user: str, password: str, client: str) -> Subsonic:
-    return knuckles.Subsonic(
-        url="http://example.com",
-        user=user,
-        password=password,
-        client=client,
-    )
-
-
-@pytest.fixture
-def params(user: str, client: str) -> dict[str, str]:
-    return {
-        "u": user,
-        "v": "1.16.1",
-        "c": client,
-        "f": "json",
-    }
+pytest_plugins = [
+    "tests.subsonic",
+    "tests.mocks.system",
+    "tests.mocks.chat",
+    "tests.mocks.jukebox_control",
+    "tests.mocks.media_annotation",
+    "tests.mocks.media_library_scanning",
+    "tests.mocks.browsing",
+]
 
 
 @pytest.fixture
@@ -52,31 +25,7 @@ def subsonic_response() -> dict[str, Any]:
     }
 
 
-@pytest.fixture
-def license() -> dict[str, Any]:
-    return {
-        "valid": True,
-        "email": "user@example.com",
-        "licenseExpires": "2017-04-11T10:42:50.842Z",
-        "trialExpires": "2015-03-11T12:36:38.753Z",
-    }
-
-
-@pytest.fixture
-def message() -> dict[str, Any]:
-    return {
-        "username": "admin",
-        "time": 1678935707000,
-        "message": "Api Script Testing",
-    }
-
-
-@pytest.fixture
-def messages(message: dict[str, Any]) -> dict[str, Any]:
-    return {"chatMessage": [message]}
-
-
-class ResponseGenerator(Protocol):
+class MockGenerator(Protocol):
     def __call__(
         self,
         endpoint: str,
@@ -87,9 +36,9 @@ class ResponseGenerator(Protocol):
 
 
 @pytest.fixture
-def response_generator(
+def mock_generator(
     params: dict[str, str], subsonic_response: dict[str, Any]
-) -> ResponseGenerator:
+) -> MockGenerator:
     def inner(
         endpoint: str,
         extra_params: dict[str, Any] = {},
@@ -108,29 +57,3 @@ def response_generator(
         )
 
     return inner
-
-
-@pytest.fixture
-def mock_ping(response_generator: ResponseGenerator) -> Response:
-    return response_generator("ping")
-
-
-@pytest.fixture
-def mock_get_license(
-    response_generator: ResponseGenerator, license: dict[str, Any]
-) -> Response:
-    return response_generator("getLicense", {}, {"license": license})
-
-
-@pytest.fixture
-def mock_add_chat_message(
-    response_generator: ResponseGenerator, message: dict[str, Any]
-) -> Response:
-    return response_generator("addChatMessage", {"message": message["message"]})
-
-
-@pytest.fixture
-def mock_get_chat_messages(
-    response_generator: ResponseGenerator, messages: dict[str, Any]
-) -> Response:
-    return response_generator("getChatMessages", {}, {"chatMessages": messages})

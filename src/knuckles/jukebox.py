@@ -52,7 +52,6 @@ class JukeboxControl:
         :param id: The ID of a song to set it in the jukebox.
         :type id: str
         :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
         :rtype: Jukebox
         """
 
@@ -60,7 +59,8 @@ class JukeboxControl:
             "jukeboxStatus"
         ]
 
-        return Jukebox(self.subsonic, **response)
+        # Preset the song list as this call changes it in a predictable way
+        return Jukebox(self.subsonic, **response, entry=[{"id": id}])
 
     def start(self) -> Jukebox:
         """Calls the "jukeboxControl" endpoint of the API with the action "start".
