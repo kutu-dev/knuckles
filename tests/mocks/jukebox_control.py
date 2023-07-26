@@ -89,10 +89,15 @@ def mock_jukebox_control_skip_without_offset(
 
 
 @pytest.fixture
+def offset_time() -> int:
+    return 1
+
+
+@pytest.fixture
 def mock_jukebox_control_skip_with_offset(
-    jukebox_status_generator: JukeboxStatusGenerator,
+    jukebox_status_generator: JukeboxStatusGenerator, offset_time: int
 ) -> Response:
-    return jukebox_status_generator("skip", {"index": 0, "offset": 1})
+    return jukebox_status_generator("skip", {"index": 0, "offset": offset_time})
 
 
 @pytest.fixture

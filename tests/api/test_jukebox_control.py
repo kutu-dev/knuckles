@@ -2,9 +2,8 @@ from typing import Any
 
 import pytest
 import responses
-from responses import Response
-
 from knuckles.subsonic import Subsonic
+from responses import Response
 
 
 @responses.activate
@@ -117,10 +116,11 @@ def test_jukebox_skip_with_offset(
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
     mock_jukebox_control_skip_with_offset: Response,
+    offset_time: int,
 ) -> None:
     responses.add(mock_jukebox_control_skip_with_offset)
 
-    response = subsonic.jukebox.skip(0, 1)
+    response = subsonic.jukebox.skip(0, offset_time)
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
