@@ -11,7 +11,7 @@ from .api import Api
 
 
 class Subsonic:
-    """The main class of the package, is used to interact with a Subsonic API"""
+    """The main class of the package, is used to interact with a Subsonic API."""
 
     def __init__(
         self,
@@ -22,6 +22,24 @@ class Subsonic:
         use_https: bool = True,
         use_token: bool = True,
     ) -> None:
+        """The main class of the package, is used to interact with a Subsonic API.
+
+        :param url: The url of the Subsonic server.
+        :type url: str
+        :param user: The user to authenticate with
+        :type user: str
+        :param password: The password to authenticate with
+        :type password: str
+        :param client: A unique string identifying the client application.
+        :type client: str
+        :param use_https: If the requests should be sended using HTTPS,
+            defaults to True
+        :type use_https: bool, optional
+        :param use_token: If the connection should send to the server the clean password
+            or encode it in a token with a random salt, defaults to True
+        :type use_token: bool, optional
+        """
+
         self.api = Api(url, user, password, client, use_https, use_token)
         self.system = System(self.api)
         self.browsing = Browsing(self.api, self)
