@@ -25,7 +25,7 @@ def test_get_song(
         status=200,
     )
 
-    response: Song = subsonic.get_song(song["id"])
+    response: Song = subsonic.browsing.get_song(song["id"])
 
     assert response.id == song["id"]
     assert response.parent == song["parent"]
@@ -77,7 +77,7 @@ def test_song_without_album(
         status=200,
     )
 
-    response: Song = subsonic.get_song(song["id"])
+    response: Song = subsonic.browsing.get_song(song["id"])
     assert response.album is None
 
 
@@ -98,7 +98,7 @@ def test_song_without_artist(
         status=200,
     )
 
-    response: Song = subsonic.get_song(song["id"])
+    response: Song = subsonic.browsing.get_song(song["id"])
     assert response.artist is None
 
 
@@ -119,7 +119,7 @@ def test_song_generate(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
     requested_song.title = "Foo"
     requested_song = requested_song.generate()
     assert requested_song.title == song["title"]
@@ -151,7 +151,7 @@ def test_song_star(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
 
     assert type(requested_song.star()) is Song
 
@@ -182,7 +182,7 @@ def test_song_unstar(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
 
     assert type(requested_song.unstar()) is Song
 
@@ -218,7 +218,7 @@ def test_song_set_rating(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
 
     assert type(requested_song.set_rating(rating)) is Song
 
@@ -252,7 +252,7 @@ def test_song_remove_rating(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
 
     assert type(requested_song.remove_rating()) is Song
 
@@ -289,7 +289,7 @@ def test_song_default_scrobble(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
     datetime_time: datetime = datetime.fromtimestamp(unix_time)
 
     scrobble_response: Song = requested_song.scrobble(datetime_time)
@@ -329,7 +329,7 @@ def test_song_submission_scrobble(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
     datetime_time: datetime = datetime.fromtimestamp(unix_time)
 
     scrobble_response: Song = requested_song.scrobble(datetime_time, True)
@@ -369,7 +369,7 @@ def test_song_now_playing_scrobble(
         status=200,
     )
 
-    requested_song: Song = subsonic.get_song(song["id"])
+    requested_song: Song = subsonic.browsing.get_song(song["id"])
     datetime_time: datetime = datetime.fromtimestamp(unix_time)
 
     scrobble_response: Song = requested_song.scrobble(datetime_time, False)

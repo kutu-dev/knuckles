@@ -1,11 +1,10 @@
 from typing import Any, Type
 
+import knuckles.exceptions
 import pytest
 import responses
-from responses import matchers
-
-import knuckles.exceptions
 from knuckles import Subsonic
+from responses import matchers
 
 code_errors = [
     (0, "A generic error.", knuckles.exceptions.CodeError0),
@@ -66,4 +65,4 @@ def test_code_errors(
     )
 
     with pytest.raises(exception, match=message):
-        subsonic.ping()
+        subsonic.system.ping()

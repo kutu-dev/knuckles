@@ -35,7 +35,7 @@ def test_jukebox_generate(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_status()
+    response = subsonic.jukebox.status()
 
     assert response.playlist is None
 
@@ -71,7 +71,7 @@ def test_jukebox_start(
         status=200,
     )
 
-    response = subsonic.jukebox_status()
+    response = subsonic.jukebox.status()
     response.start()
 
 
@@ -101,7 +101,7 @@ def test_jukebox_stop(
         status=200,
     )
 
-    response = subsonic.jukebox_status()
+    response = subsonic.jukebox.status()
     response.stop()
 
 
@@ -132,7 +132,7 @@ def test_jukebox_skip_without_offset(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_status()
+    response: Jukebox = subsonic.jukebox.status()
     response.skip(0)
 
 
@@ -164,7 +164,7 @@ def test_jukebox_skip_with_offset(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_status()
+    response: Jukebox = subsonic.jukebox.status()
     response.skip(0, 10)
 
 
@@ -205,7 +205,7 @@ def test_jukebox_shuffle(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_status()
+    response: Jukebox = subsonic.jukebox.status()
     response.shuffle()
 
 
@@ -236,7 +236,7 @@ def test_jukebox_set_gain(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_status()
+    response: Jukebox = subsonic.jukebox.status()
     response.set_gain(0.75)
 
 
@@ -266,7 +266,7 @@ def test_jukebox_clear(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_status()
+    response: Jukebox = subsonic.jukebox.status()
     response.clear()
 
 
@@ -298,7 +298,7 @@ def test_jukebox_remove_with_populated_playlist(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_get()
+    response: Jukebox = subsonic.jukebox.get()
     response.remove(0)
 
     assert response.playlist == []
@@ -333,7 +333,7 @@ def test_jukebox_add_with_populated_playlist(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_get()
+    response: Jukebox = subsonic.jukebox.get()
     response.add(song["id"])
 
     assert type(response.playlist) == list
@@ -369,7 +369,7 @@ def test_jukebox_set(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_get()
+    response: Jukebox = subsonic.jukebox.get()
     response.set(song["id"])
 
     assert type(response.playlist) == list
@@ -414,7 +414,7 @@ def test_jukebox_remove_without_populated_playlist(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_get()
+    response: Jukebox = subsonic.jukebox.get()
     response.remove(0)
 
     assert response.playlist == []
@@ -449,7 +449,7 @@ def test_jukebox_add_without_populated_playlist(
         status=200,
     )
 
-    response: Jukebox = subsonic.jukebox_get()
+    response: Jukebox = subsonic.jukebox.get()
     response.add(song["id"])
 
     assert type(response.playlist) == list

@@ -90,7 +90,7 @@ class License:
         return self.valid
 
 
-#! Unfinished
+# TODO Unfinished
 class CoverArt:
     """Representation of all the data related to cover arts in Subsonic."""
 
@@ -104,7 +104,7 @@ class CoverArt:
         self.id: str = id
 
 
-#! Unfinished
+# TODO Unfinished
 class Album:
     """Representation of all the data related to albums in Subsonic."""
 
@@ -313,7 +313,7 @@ class Song:
         :rtype: Song
         """
 
-        return self.__subsonic.get_song(self.id)
+        return self.__subsonic.browsing.get_song(self.id)
 
     def star(self) -> Self:
         """Calls the "star" endpoint of the API.
@@ -322,7 +322,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.star_song(self.id)
+        self.__subsonic.media_annotation.star_song(self.id)
 
         return self
 
@@ -333,7 +333,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.unstar_song(self.id)
+        self.__subsonic.media_annotation.unstar_song(self.id)
 
         return self
 
@@ -346,7 +346,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.set_rating(self.id, rating)
+        self.__subsonic.media_annotation.set_rating(self.id, rating)
 
         return self
 
@@ -357,7 +357,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.remove_rating(self.id)
+        self.__subsonic.media_annotation.remove_rating(self.id)
 
         return self
 
@@ -368,7 +368,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.scrobble(self.id, time, submission)
+        self.__subsonic.media_annotation.scrobble(self.id, time, submission)
 
         return self
 
@@ -469,7 +469,7 @@ class Jukebox:
         :rtype: Jukebox
         """
 
-        return self.__subsonic.jukebox_get()
+        return self.__subsonic.jukebox.get()
 
     def start(self) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "start".
@@ -478,7 +478,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox_start()
+        self.__subsonic.jukebox.start()
 
         return self
 
@@ -489,7 +489,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox_stop()
+        self.__subsonic.jukebox.stop()
 
         return self
 
@@ -504,7 +504,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox_skip(index, offset)
+        self.__subsonic.jukebox.skip(index, offset)
 
         return self
 
@@ -515,11 +515,11 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox_shuffle()
+        self.__subsonic.jukebox.shuffle()
 
         # The shuffle is server side so a call to the API is necessary
         # to get the new order of the playlist
-        self.playlist = self.__subsonic.jukebox_get().playlist
+        self.playlist = self.__subsonic.jukebox.get().playlist
 
         return self
 
@@ -532,7 +532,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox_set_gain(gain)
+        self.__subsonic.jukebox.set_gain(gain)
         self.gain = gain
 
         return self
@@ -544,44 +544,42 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox_clear()
+        self.__subsonic.jukebox.clear()
         self.playlist = []
 
         return self
 
-    def set(self, song: Song | str) -> Self:
+    def set(self, id: str) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "set".
 
-        :param song: Either a Song object or the ID of a song to set it in the jukebox.
-        :type song: Song | str
+        :param id: The ID of a song to set it in the jukebox.
+        :type id: str
         :raises ValueError: Raised if the gain argument isn't between the valid range.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        if type(song) is str:
-            song_to_set: Song = Song(self.__subsonic, song)
+        song_to_set: Song = Song(self.__subsonic, id)
 
-        self.__subsonic.jukebox_set(song_to_set)
+        self.__subsonic.jukebox.set(song_to_set.id)
         self.playlist = [song_to_set]
 
         return self
 
-    def add(self, song: Song | str) -> Self:
+    def add(self, id: str) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "add".
 
-        :param song: Either a Song object or the ID of a song to add it in the jukebox.
-        :type song: Song | str
+        :param id: The ID of a song to add it in the jukebox.
+        :type id: str
         :raises TypeError: Raised if the passed value to song isn't a Song object
              or an ID.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        if type(song) is str:
-            song_to_add: Song = Song(self.__subsonic, song)
+        song_to_add: Song = Song(self.__subsonic, id)
 
-        self.__subsonic.jukebox_add(song_to_add)
+        self.__subsonic.jukebox.add(song_to_add.id)
 
         if self.playlist is not None:
             self.playlist.append(song_to_add)
@@ -601,7 +599,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox_remove(index)
+        self.__subsonic.jukebox.remove(index)
 
         if self.playlist is not None:
             del self.playlist[index]

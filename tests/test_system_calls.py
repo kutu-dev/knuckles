@@ -19,7 +19,7 @@ def test_ping(
         status=200,
     )
 
-    response: SubsonicResponse = subsonic.ping()
+    response: SubsonicResponse = subsonic.system.ping()
 
     assert bool(response) is True
     assert response.status == "ok"
@@ -48,7 +48,7 @@ def test_get_license(
         status=200,
     )
 
-    response: License = subsonic.get_license()
+    response: License = subsonic.system.get_license()
 
     assert bool(response) is True
     assert response.valid is True
@@ -76,6 +76,6 @@ def test_auth_without_token(
         status=200,
     )
 
-    subsonic.use_token = False
-    assert subsonic.ping().status == "ok"
-    assert subsonic.ping().status == "ok"
+    subsonic.api.use_token = False
+    assert subsonic.system.ping().status == "ok"
+    assert subsonic.system.ping().status == "ok"
