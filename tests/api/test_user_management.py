@@ -1,9 +1,10 @@
 from typing import Any
 
 import responses
+from responses import Response
+
 from knuckles import Subsonic
 from knuckles.models.user import User
-from responses import Response
 
 
 @responses.activate
@@ -37,8 +38,7 @@ def test_get_users(subsonic: Subsonic, mock_get_users: Response, username: str) 
 
     response = subsonic.user_management.get_users()
 
-    # Ignore the error as in normal conditions it should exists
-    assert response[0].username == username  # type: ignore[index]
+    assert response[0].username == username
 
 
 @responses.activate

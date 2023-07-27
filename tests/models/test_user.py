@@ -6,6 +6,7 @@ from responses import Response
 from knuckles import Subsonic
 
 
+@responses.activate
 def test_user_generate(subsonic: Subsonic, mock_get_user, user: dict[str, Any]) -> None:
     responses.add(mock_get_user)
 
@@ -16,6 +17,7 @@ def test_user_generate(subsonic: Subsonic, mock_get_user, user: dict[str, Any]) 
     assert response.scrobbling_enabled is True
 
 
+@responses.activate
 def test_user_create(
     subsonic: Subsonic, mock_get_user, mock_create_user, user: dict[str, Any]
 ) -> None:
@@ -28,6 +30,7 @@ def test_user_create(
     # assert type(response) ==
 
 
+@responses.activate
 def test_user_update(
     subsonic: Subsonic, mock_get_user, mock_update_user, user: dict[str, Any]
 ) -> None:
@@ -40,6 +43,7 @@ def test_user_update(
     # assert type(response) ==
 
 
+@responses.activate
 def test_user_delete(
     subsonic: Subsonic, mock_get_user, mock_delete_user, user: dict[str, Any]
 ) -> None:
@@ -52,6 +56,7 @@ def test_user_delete(
     # assert type(response) ==
 
 
+@responses.activate
 def test_user_change_password(
     subsonic: Subsonic,
     mock_get_user,

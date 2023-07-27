@@ -32,8 +32,7 @@ class Chat:
     def get_chat_messages(self) -> list[ChatMessage]:
         """Calls to the "getChatMessages" endpoint of the API.
 
-        :return: A list with objects containing
-            each one all the information given about each message.
+        :return: A list of ChatMessage objects.
         :rtype: list[ChatMessage]
         """
 

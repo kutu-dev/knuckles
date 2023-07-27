@@ -26,8 +26,7 @@ class UserManagement:
         :param user: The user to convert to a dictionary
         :type user: User
         :return: The dictionary with the data and valid keys to the API.
-        :rtype: dict[str, Any]
-        """
+        :rtype: dict[str, Any]"""
 
         return {
             "username": user.username,
@@ -48,18 +47,40 @@ class UserManagement:
         }
 
     def get_user(self, username: str) -> User:
+        """Calls the "getUser" endpoint of the API.
+
+        :param username: The username of the user to get.
+        :type username: str
+        :return: A User object will all the data of the requested user.
+        :rtype: User
+        """
+
         request = self.api.request("getUser", {"username": username})["user"]
 
-        return User(**request)
+        return User(self.subsonic, **request)
 
     def get_users(self) -> list[User]:
+        """Calls the "getUsers" endpoint of the API.
+
+        :return: A list of User objects.
+        :rtype: list[User]
+        """
+
         request = self.api.request("getUsers")["users"]["user"]
 
-        users = [User(**user) for user in request]
+        users = [User(self.subsonic, **user) for user in request]
 
         return users
 
     def create_user(self, new_user: User) -> User:
+        """Calls the "createUser" endpoint of the API.
+
+        :param new_user: A user with all the data for the new user.
+        :type new_user: User
+        :return: The object itself to allow method chaining.
+        :rtype: User
+        """
+
         user_json_data = self.__user_properties_to_json(new_user)
 
         self.api.request("createUser", {**user_json_data})
@@ -67,6 +88,17 @@ class UserManagement:
         return new_user
 
     def update_user(self, updated_data_user: User) -> User:
+        """Calls the "updateUser" endpoint of the API.
+
+        The user to update with the new data will be
+        selected with the username property of the User object.
+
+        :param updated_data_user: A user object with the updated data.
+        :type updated_data_user: User
+        :return: The object itself to allow method chaining.
+        :rtype: User
+        """
+
         user_json_data = self.__user_properties_to_json(updated_data_user)
 
         self.api.request("updateUser", {**user_json_data})

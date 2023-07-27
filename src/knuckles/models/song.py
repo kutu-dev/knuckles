@@ -177,7 +177,7 @@ class Song:
                 "'isDir' shouldn't be True. Did you mean: Album() or Artist()?"
             )
 
-        self.__subsonic: "Subsonic" = subsonic
+        self.__subsonic = subsonic
         self.id: str = id
         self.title: str | None = title
         self.parent: str | None = parent
