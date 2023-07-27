@@ -1,10 +1,9 @@
-import typing
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from .api import Api
 from .models.chat_message import ChatMessage
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from .subsonic import Subsonic
 
 
@@ -42,6 +41,6 @@ class Chat:
             "chatMessages"
         ]["chatMessage"]
 
-        messages: list[ChatMessage] = [ChatMessage(**message) for message in response]
+        messages = [ChatMessage(**message) for message in response]
 
         return messages

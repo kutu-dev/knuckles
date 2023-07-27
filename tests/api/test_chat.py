@@ -2,8 +2,7 @@ from datetime import datetime
 from typing import Any
 
 import responses
-from knuckles import Subsonic
-from knuckles.models.chat_message import ChatMessage
+from knuckles import ChatMessage, Subsonic
 from responses import Response
 
 

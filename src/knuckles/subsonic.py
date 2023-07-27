@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .api import Api
 from .browsing import Browsing
 from .chat import Chat
@@ -7,6 +5,7 @@ from .jukebox import JukeboxControl
 from .media_annotation import MediaAnnotation
 from .media_library_scanning import MediaLibraryScanning
 from .system import System
+from .user_management import UserManagement
 
 
 class Subsonic:
@@ -52,6 +51,6 @@ class Subsonic:
         self.jukebox = JukeboxControl(self.api, self)
         self.internet_radio = None
         self.chat = Chat(self.api, self)
-        self.user_management = None
+        self.user_management = UserManagement(self.api, self)
         self.bookmarks = None
         self.media_library_scanning = MediaLibraryScanning(self.api)

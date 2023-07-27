@@ -1,10 +1,8 @@
 from typing import Any
 
 import responses
+from knuckles import ScanStatus, Subsonic
 from responses import Response
-
-from knuckles import Subsonic
-from knuckles.models.scan_status import ScanStatus
 
 
 @responses.activate

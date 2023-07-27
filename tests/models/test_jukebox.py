@@ -1,10 +1,9 @@
 from typing import Any
 
 import responses
-from responses import Response
-
-from knuckles.models.jukebox import Jukebox
+from knuckles import Jukebox
 from knuckles.subsonic import Subsonic
+from responses import Response
 
 
 @responses.activate

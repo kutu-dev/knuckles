@@ -1,10 +1,10 @@
-import typing
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from .api import Api
 from .exceptions import InvalidRatingNumber
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from .subsonic import Subsonic
 
 

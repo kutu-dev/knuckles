@@ -1,9 +1,9 @@
 from typing import Any
 
 import responses
-from responses import Response
-
 from knuckles import Subsonic
+from knuckles.models.user import User
+from responses import Response
 
 
 @responses.activate
@@ -31,6 +31,7 @@ def test_get_user(
     assert response.video_conversion_role == user["videoConversionRole"]
 
 
+@responses.activate
 def test_get_users(subsonic: Subsonic, mock_get_users: Response, username: str) -> None:
     responses.add(mock_get_users)
 
@@ -40,26 +41,29 @@ def test_get_users(subsonic: Subsonic, mock_get_users: Response, username: str) 
     assert response[0].username == username  # type: ignore[index]
 
 
+@responses.activate
 def test_create_user(
     subsonic: Subsonic, mock_create_user: Response, user: dict[str, Any]
 ) -> None:
     responses.add(mock_create_user)
 
-    response = subsonic.user_management.create_user(**user)
+    response = subsonic.user_management.create_user(User(**user))
 
     assert response.username == user["username"]
 
 
+@responses.activate
 def test_update_user(
     subsonic: Subsonic, mock_update_user: Response, user: dict[str, Any]
 ) -> None:
     responses.add(mock_update_user)
 
-    response = subsonic.user_management.update_user(**user)
+    response = subsonic.user_management.update_user(User(**user))
 
     assert response.username == user["username"]
 
 
+@responses.activate
 def test_delete_user(
     subsonic: Subsonic, mock_delete_user: Response, username: str
 ) -> None:
@@ -70,11 +74,12 @@ def test_delete_user(
     assert type(response) == Subsonic
 
 
+@responses.activate
 def test_change_password(
-    subsonic: Subsonic, mock_change_password: Response, new_password: str
+    subsonic: Subsonic, mock_change_password: Response, username: str, new_password: str
 ) -> None:
     responses.add(mock_change_password)
 
-    response = subsonic.user_management.update_password(new_password)
+    response = subsonic.user_management.change_password(username, new_password)
 
     assert type(response) == Subsonic

@@ -1,9 +1,9 @@
-import typing
+from typing import TYPE_CHECKING
 
 from .api import Api
 from .models.song import Song
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from .subsonic import Subsonic
 
 

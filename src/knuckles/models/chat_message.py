@@ -1,9 +1,3 @@
-# Not fancy but does the job
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    pass
-
 from datetime import datetime
 
 
