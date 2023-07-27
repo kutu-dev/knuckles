@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, Self
 
+from ..exceptions import NoApiAccess
+
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
@@ -7,8 +9,6 @@ if TYPE_CHECKING:
 class User:
     def __init__(
         self,
-        # Internal
-        subsonic: "Subsonic",
         # Subsonic fields
         username: str,
         email: str,
@@ -25,8 +25,10 @@ class User:
         jukeboxRole: bool = False,
         shareRole: bool = False,
         videoConversionRole: bool = False,
+        # Internal
+        subsonic: "Subsonic | None" = None,
     ) -> None:
-        self.__subsonic = subsonic
+        self.subsonic = subsonic
         self.username = username
         self.email = email
         self.scrobbling_enabled = scrobblingEnabled
@@ -43,6 +45,20 @@ class User:
         self.share_role = shareRole
         self.video_conversion_role = videoConversionRole
 
+    def __check_api_access(self) -> None:
+        """Check if the object has a valid subsonic property
+
+        :raises NoApiAccess: _description_
+        """
+
+        if self.subsonic is None:
+            raise NoApiAccess(
+                (
+                    "This user isn't associated with a Subsonic object."
+                    + "A non None value in the subsonic property is required"
+                )
+            )
+
     def generate(self) -> "User":
         """Returns the function to the the same user with the maximum possible
         information from the Subsonic API.
@@ -50,20 +66,28 @@ class User:
         Useful for making copies with updated data or updating the object itself
         with immutability, e.g., foo = foo.generate().
 
+        :raises NoApiAccess: Raised if the subsonic property is None.
         :return: A new user object with all the data updated.
         :rtype: User
         """
 
-        return self.__subsonic.user_management.get_user(self.username)
+        self.__check_api_access()
+
+        return self.subsonic.user_management.get_user(  # type: ignore[union-attr]
+            self.username
+        )
 
     def create(self) -> Self:
         """Calls the "createUser" endpoint of the API.
 
+        :raises NoApiAccess: Raised if the subsonic property is None.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        self.__subsonic.user_management.create_user(self)
+        self.__check_api_access()
+
+        self.subsonic.user_management.create_user(self)  # type: ignore[union-attr]
 
         return self
 
@@ -73,22 +97,28 @@ class User:
         The user will be updated with
         the data stored in the properties of the object itself.
 
+        :raises NoApiAccess: Raised if the subsonic property is None.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        self.__subsonic.user_management.update_user(self)
+        self.__check_api_access()
+
+        self.subsonic.user_management.update_user(self)  # type: ignore[union-attr]
 
         return self
 
     def delete(self) -> Self:
         """Calls the "deleteUser" endpoint of the API.
 
+        :raises NoApiAccess: Raised if the subsonic property is None.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        self.__subsonic.user_management.delete_user(self.username)
+        self.subsonic.user_management.delete_user(  # type: ignore[union-attr]
+            self.username
+        )
 
         return self
 
@@ -100,10 +130,15 @@ class User:
 
         :param new_password: The new password for the user.
         :type new_password: str
+        :raises NoApiAccess: Raised if the subsonic property is None.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        self.__subsonic.user_management.change_password(self.username, new_password)
+        self.__check_api_access()
+
+        self.subsonic.user_management.change_password(  # type: ignore[union-attr]
+            self.username, new_password
+        )
 
         return self

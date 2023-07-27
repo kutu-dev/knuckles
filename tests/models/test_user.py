@@ -1,9 +1,12 @@
 from typing import Any
 
+import pytest
 import responses
 from responses import Response
 
 from knuckles import Subsonic
+from knuckles.exceptions import NoApiAccess
+from knuckles.models.user import User
 
 
 @responses.activate
@@ -27,7 +30,7 @@ def test_user_create(
     response = subsonic.user_management.get_user(user["username"])
     response = response.create()
 
-    # assert type(response) ==
+    assert type(response) == User
 
 
 @responses.activate
@@ -40,7 +43,7 @@ def test_user_update(
     response = subsonic.user_management.get_user(user["username"])
     response.update()
 
-    # assert type(response) ==
+    assert type(response) == User
 
 
 @responses.activate
@@ -53,7 +56,7 @@ def test_user_delete(
     response = subsonic.user_management.get_user(user["username"])
     response.delete()
 
-    # assert type(response) ==
+    assert type(response) == User
 
 
 @responses.activate
@@ -70,4 +73,19 @@ def test_user_change_password(
     response = subsonic.user_management.get_user(user["username"])
     response = response.change_password(new_password)
 
-    # assert type(response) ==
+    assert type(response) == User
+
+
+def test_user_without_api_access(user: dict[str, Any]) -> None:
+    no_api_user = User(**user)
+
+    no_api_access_message = (
+        "This user isn't associated with a Subsonic object."
+        + "A non None value in the subsonic property is required"
+    )
+
+    with pytest.raises(
+        NoApiAccess,
+        match=no_api_access_message,
+    ):
+        no_api_user.generate()

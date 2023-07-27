@@ -57,7 +57,7 @@ class UserManagement:
 
         request = self.api.request("getUser", {"username": username})["user"]
 
-        return User(self.subsonic, **request)
+        return User(subsonic=self.subsonic, **request)
 
     def get_users(self) -> list[User]:
         """Calls the "getUsers" endpoint of the API.
@@ -68,7 +68,7 @@ class UserManagement:
 
         request = self.api.request("getUsers")["users"]["user"]
 
-        users = [User(self.subsonic, **user) for user in request]
+        users = [User(subsonic=self.subsonic, **user) for user in request]
 
         return users
 
@@ -84,6 +84,9 @@ class UserManagement:
         user_json_data = self.__user_properties_to_json(new_user)
 
         self.api.request("createUser", {**user_json_data})
+
+        # Attach the Subsonic object
+        new_user.subsonic = self.subsonic
 
         return new_user
 
@@ -102,6 +105,9 @@ class UserManagement:
         user_json_data = self.__user_properties_to_json(updated_data_user)
 
         self.api.request("updateUser", {**user_json_data})
+
+        # Attach the Subsonic object
+        updated_data_user.subsonic = self.subsonic
 
         return updated_data_user
 
