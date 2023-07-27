@@ -289,6 +289,6 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.media_annotation.scrobble(self.id, time, submission)
+        self.__subsonic.media_annotation.scrobble([self.id], time, submission)
 
         return self

@@ -3,10 +3,10 @@ from typing import Any
 
 import pytest
 import responses
-from knuckles import Subsonic
-from knuckles.exceptions import InvalidRatingNumber
 from responses import Response
 
+from knuckles import Subsonic
+from knuckles.exceptions import InvalidRatingNumber
 from tests.conftest import MockGenerator
 
 
@@ -126,8 +126,8 @@ def test_default_scrobble(
     responses.add(mock_scrobble_submission)
 
     response: Subsonic = subsonic.media_annotation.scrobble(
+        [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
-        song["id"],
         datetime.fromtimestamp(1678935707000 / 1000),
     )
 
@@ -144,8 +144,8 @@ def test_submission_scrobble(
     responses.add(mock_scrobble_submission)
 
     response: Subsonic = subsonic.media_annotation.scrobble(
+        [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
-        song["id"],
         datetime.fromtimestamp(scrobble_time / 1000),
         True,
     )
@@ -163,8 +163,8 @@ def test_now_playing_scrobble(
     responses.add(mock_scrobble_now_playing)
 
     response: Subsonic = subsonic.media_annotation.scrobble(
+        [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
-        song["id"],
         datetime.fromtimestamp(scrobble_time / 1000),
         False,
     )
