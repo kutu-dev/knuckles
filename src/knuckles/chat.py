@@ -1,11 +1,11 @@
 import typing
 from typing import Any
 
-from knuckles.api import Api
-from knuckles.models import ChatMessage
+from .api import Api
+from .models.chat_message import ChatMessage
 
 if typing.TYPE_CHECKING:
-    from knuckles.subsonic import Subsonic
+    from .subsonic import Subsonic
 
 
 class Chat:

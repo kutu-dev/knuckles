@@ -1,5 +1,6 @@
-import knuckles
 import pytest
+
+import knuckles
 from knuckles.subsonic import Subsonic
 
 

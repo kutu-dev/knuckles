@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from knuckles.browsing import Browsing
-from knuckles.chat import Chat
-from knuckles.jukebox import JukeboxControl
-from knuckles.media_annotation import MediaAnnotation
-from knuckles.media_library_scanning import MediaLibraryScanning
-from knuckles.system import System
-
 from .api import Api
+from .browsing import Browsing
+from .chat import Chat
+from .jukebox import JukeboxControl
+from .media_annotation import MediaAnnotation
+from .media_library_scanning import MediaLibraryScanning
+from .system import System
 
 
 class Subsonic:

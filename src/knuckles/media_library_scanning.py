@@ -1,5 +1,5 @@
-from knuckles.api import Api
-from knuckles.models import ScanStatus
+from .api import Api
+from .models.scan_status import ScanStatus
 
 
 class MediaLibraryScanning:

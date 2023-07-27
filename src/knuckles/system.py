@@ -1,6 +1,5 @@
-from knuckles.models import License, SubsonicResponse
-
 from .api import Api
+from .models.system import License, SubsonicResponse
 
 
 class System:

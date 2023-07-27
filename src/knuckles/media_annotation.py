@@ -1,11 +1,11 @@
 import typing
 from datetime import datetime
 
-from knuckles.api import Api
-from knuckles.exceptions import InvalidRatingNumber
+from .api import Api
+from .exceptions import InvalidRatingNumber
 
 if typing.TYPE_CHECKING:
-    from knuckles.subsonic import Subsonic
+    from .subsonic import Subsonic
 
 
 class MediaAnnotation:

@@ -1,11 +1,10 @@
 import typing
 
-from knuckles.api import Api
-
-from .models import Jukebox
+from .api import Api
+from .models.jukebox import Jukebox
 
 if typing.TYPE_CHECKING:
-    from knuckles.subsonic import Subsonic
+    from .subsonic import Subsonic
 
 
 class JukeboxControl:
