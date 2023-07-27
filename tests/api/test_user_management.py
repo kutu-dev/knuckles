@@ -1,8 +1,9 @@
 from typing import Any
 
 import responses
-from knuckles import Subsonic
 from responses import Response
+
+from knuckles import Subsonic
 
 
 @responses.activate
@@ -11,7 +12,7 @@ def test_get_user(
 ) -> None:
     responses.add(mock_get_user)
 
-    response = subsonic.user_management.get_user()
+    response = subsonic.user_management.get_user(user["username"])
 
     assert response.username == user["username"]
     assert response.email == user["email"]
@@ -46,7 +47,7 @@ def test_create_user(
 
     response = subsonic.user_management.create_user(**user)
 
-    assert type(response) == Subsonic
+    assert response.username == user["username"]
 
 
 def test_update_user(
@@ -56,7 +57,7 @@ def test_update_user(
 
     response = subsonic.user_management.update_user(**user)
 
-    assert type(response) == Subsonic
+    assert response.username == user["username"]
 
 
 def test_delete_user(
@@ -70,10 +71,10 @@ def test_delete_user(
 
 
 def test_change_password(
-    subsonic: Subsonic, mock_change_password: Response, password: str
+    subsonic: Subsonic, mock_change_password: Response, new_password: str
 ) -> None:
     responses.add(mock_change_password)
 
-    response = subsonic.user_management.update_password(password)
+    response = subsonic.user_management.update_password(new_password)
 
     assert type(response) == Subsonic

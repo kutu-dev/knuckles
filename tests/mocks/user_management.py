@@ -55,9 +55,14 @@ def mock_delete_user(mock_generator: MockGenerator, username: str) -> Response:
 
 
 @pytest.fixture
+def new_password() -> str:
+    return "MoreSecureThanPHP"
+
+
+@pytest.fixture
 def mock_change_password(
-    mock_generator: MockGenerator, username: str, password: str
+    mock_generator: MockGenerator, username: str, new_password: str
 ) -> Response:
     return mock_generator(
-        "changePassword", {"username": username, "password": password}
+        "changePassword", {"username": username, "password": new_password}
     )
