@@ -75,7 +75,7 @@ class UserManagement:
     def create_user(self, new_user: User) -> User:
         """Calls the "createUser" endpoint of the API.
 
-        :param new_user: A user with all the data for the new user.
+        :param new_user: A user object with all the data for the new user.
         :type new_user: User
         :return: The object itself to allow method chaining.
         :rtype: User

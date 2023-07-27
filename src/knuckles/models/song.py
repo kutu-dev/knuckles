@@ -27,7 +27,7 @@ class CoverArt:
 
 # TODO Unfinished
 class Album:
-    """Representation of all the data related to albums in Subsonic."""
+    """Representation of all the data related to an album in Subsonic."""
 
     def __init__(self, id: str, name: str | None = None) -> None:
         self.id: str = id
@@ -36,7 +36,7 @@ class Album:
 
 # TODO Unfinished
 class Artist:
-    """Representation of all the data related to artist in Subsonic."""
+    """Representation of all the data related to an artist in Subsonic."""
 
     def __init__(self, id: str, name: str | None = None) -> None:
         self.id: str = id
@@ -44,7 +44,7 @@ class Artist:
 
 
 class Song:
-    """Representation of all the data related to song in Subsonic."""
+    """Representation of all the data related to a song in Subsonic."""
 
     def __init__(
         self,
@@ -91,7 +91,7 @@ class Song:
         :type subsonic: Subsonic
         :param id: The id of the media.
         :type id: str
-        :param title:  The song name., defaults to None.
+        :param title:  The song name, defaults to None.
         :type title: str | None, optional
         :param isDir: If the media is a dir (should always be False), defaults to False.
         :type isDir: bool, optional
