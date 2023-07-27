@@ -2,10 +2,8 @@ from datetime import datetime
 from typing import Any
 
 import responses
+from knuckles import ChatMessage, Subsonic
 from responses import Response
-
-from knuckles import Subsonic
-from knuckles.models import ChatMessage
 
 
 @responses.activate

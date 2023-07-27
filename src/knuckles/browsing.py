@@ -1,10 +1,10 @@
-import typing
+from typing import TYPE_CHECKING
 
-from knuckles.api import Api
-from knuckles.models import Song
+from .api import Api
+from .models.song import Song
 
-if typing.TYPE_CHECKING:
-    from knuckles.subsonic import Subsonic
+if TYPE_CHECKING:
+    from .subsonic import Subsonic
 
 
 # TODO Unfinished

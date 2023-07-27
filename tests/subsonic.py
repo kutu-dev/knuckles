@@ -1,10 +1,11 @@
-import knuckles
 import pytest
+
+import knuckles
 from knuckles.subsonic import Subsonic
 
 
 @pytest.fixture
-def user() -> str:
+def username() -> str:
     return "user"
 
 
@@ -19,19 +20,19 @@ def client() -> str:
 
 
 @pytest.fixture
-def subsonic(user: str, password: str, client: str) -> Subsonic:
+def subsonic(username: str, password: str, client: str) -> Subsonic:
     return knuckles.Subsonic(
         url="http://example.com",
-        user=user,
+        user=username,
         password=password,
         client=client,
     )
 
 
 @pytest.fixture
-def params(user: str, client: str) -> dict[str, str]:
+def params(username: str, client: str) -> dict[str, str]:
     return {
-        "u": user,
+        "u": username,
         "v": "1.16.1",
         "c": client,
         "f": "json",

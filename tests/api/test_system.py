@@ -2,9 +2,8 @@ from typing import Any
 
 import responses
 from dateutil import parser
+from knuckles import Subsonic
 from responses import Response
-
-from knuckles import License, Subsonic
 
 
 @responses.activate
@@ -27,7 +26,7 @@ def test_get_license(
 ) -> None:
     responses.add(mock_get_license)
 
-    response: License = subsonic.system.get_license()
+    response = subsonic.system.get_license()
 
     assert bool(response) is True
     assert response.valid is license["valid"]

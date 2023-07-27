@@ -1,8 +1,7 @@
 from typing import Any
 
 import responses
-from knuckles import Subsonic
-from knuckles.models import ScanStatus
+from knuckles import ScanStatus, Subsonic
 from responses import Response
 
 

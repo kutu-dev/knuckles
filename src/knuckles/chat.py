@@ -1,11 +1,10 @@
-import typing
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from knuckles.api import Api
-from knuckles.models import ChatMessage
+from .api import Api
+from .models.chat_message import ChatMessage
 
-if typing.TYPE_CHECKING:
-    from knuckles.subsonic import Subsonic
+if TYPE_CHECKING:
+    from .subsonic import Subsonic
 
 
 class Chat:
@@ -33,8 +32,7 @@ class Chat:
     def get_chat_messages(self) -> list[ChatMessage]:
         """Calls to the "getChatMessages" endpoint of the API.
 
-        :return: A list with objects containing
-            each one all the information given about each message.
+        :return: A list of ChatMessage objects.
         :rtype: list[ChatMessage]
         """
 
@@ -42,6 +40,6 @@ class Chat:
             "chatMessages"
         ]["chatMessage"]
 
-        messages: list[ChatMessage] = [ChatMessage(**message) for message in response]
+        messages = [ChatMessage(**message) for message in response]
 
         return messages

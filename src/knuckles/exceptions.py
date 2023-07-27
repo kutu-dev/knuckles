@@ -1,7 +1,11 @@
 from typing import Type
 
 
-class InvalidRatingNumber(Exception):
+class NoApiAccess(Exception):
+    pass
+
+
+class InvalidRatingNumber(ValueError):
     pass
 
 
@@ -98,4 +102,5 @@ def get_code_error_exception(
         case 70:
             return CodeError70
         case _:
+            return UnknownErrorCode
             return UnknownErrorCode
