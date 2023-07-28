@@ -2,6 +2,9 @@
 from typing import TYPE_CHECKING, Self
 
 from ..exceptions import AlbumOrArtistArgumentsInSong, VideoArgumentsInSong
+from .album import Album
+from .artist import Artist
+from .cover_art import CoverArt
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
@@ -9,38 +12,6 @@ if TYPE_CHECKING:
 from datetime import datetime
 
 from dateutil import parser
-
-
-# TODO Unfinished
-class CoverArt:
-    """Representation of all the data related to cover arts in Subsonic."""
-
-    def __init__(self, id: str) -> None:
-        """Representation of all the data related to cover arts in Subsonic.
-
-        :param id: The ID of the cover art.
-        :type id: str
-        """
-
-        self.id: str = id
-
-
-# TODO Unfinished
-class Album:
-    """Representation of all the data related to an album in Subsonic."""
-
-    def __init__(self, id: str, name: str | None = None) -> None:
-        self.id: str = id
-        self.name: str | None = name
-
-
-# TODO Unfinished
-class Artist:
-    """Representation of all the data related to an artist in Subsonic."""
-
-    def __init__(self, id: str, name: str | None = None) -> None:
-        self.id: str = id
-        self.name: str | None = name
 
 
 class Song:
@@ -201,7 +172,7 @@ class Song:
 
         self.album: Album | None = None
         if albumId is not None:
-            self.album = Album(albumId, album)
+            self.album = Album(self.__subsonic, albumId, name=album)
 
         self.artist: Artist | None = None
         if artistId is not None:

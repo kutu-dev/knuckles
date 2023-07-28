@@ -7,6 +7,35 @@ from tests.conftest import MockGenerator
 
 
 @pytest.fixture
+def album(song: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": "200000021",
+        "parent": "100000036",
+        "album": "Forget and Remember",
+        "title": "Forget and Remember",
+        "name": "Forget and Remember",
+        "isDir": True,
+        "coverArt": "al-200000021",
+        "songCount": 20,
+        "created": "2021-07-22T02:09:31+00:00",
+        "duration": 4248,
+        "playCount": 0,
+        "artistId": "100000036",
+        "artist": "Comfort Fit",
+        "year": 2005,
+        "genre": "Hip-Hop",
+        "song": [song],
+        "played": "2023-03-26T22:27:46Z",
+        "userRating": 4,
+    }
+
+
+@pytest.fixture
+def mock_get_album(mock_generator: MockGenerator, album: dict[str, Any]) -> Response:
+    return mock_generator("getAlbum", {"id": album["id"]}, {"album": album})
+
+
+@pytest.fixture
 def song() -> dict[str, Any]:
     return {
         "id": "nonIntId",

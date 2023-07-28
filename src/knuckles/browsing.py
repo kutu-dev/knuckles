@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from .api import Api
+from .models.album import Album
 from .models.song import Song
 
 if TYPE_CHECKING:
@@ -16,6 +17,11 @@ class Browsing:
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
         self.api = api
         self.subsonic = subsonic
+
+    def get_album(self, id: str) -> Album:
+        response = self.api.request("getAlbum", {"id": id})["album"]
+
+        return Album(self.subsonic, **response)
 
     def get_song(self, id: str) -> Song:
         """Calls to the "getSong" endpoint of the API.
