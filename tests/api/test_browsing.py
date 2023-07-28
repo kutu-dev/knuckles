@@ -2,9 +2,8 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from responses import Response
-
 from knuckles import CoverArt, Subsonic
+from responses import Response
 
 
 @responses.activate
@@ -33,6 +32,7 @@ def test_get_album(
     assert response.artist.name == album["artist"]
     assert response.year == album["year"]
     assert response.genre == album["genre"]
+    assert type(response.songs) == list
     assert response.songs[0].id == song["id"]
     assert response.played == parser.parse(album["played"])
     assert response.user_rating == album["userRating"]
