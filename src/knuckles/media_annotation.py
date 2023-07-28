@@ -134,11 +134,13 @@ class MediaAnnotation:
 
         return self.subsonic
 
-    def scrobble(self, id: str, time: datetime, submission: bool = True) -> "Subsonic":
+    def scrobble(
+        self, id: list[str], time: datetime, submission: bool = True
+    ) -> "Subsonic":
         """Calls to the "scrobble" endpoint of the API
 
-        :param id: The ID of a song to set its rating.
-        :type id: str
+        :param id: The list of song IDs to scrobble.
+        :type id: list[str]
         :param time: The time at which the song was listened to.
         :type time: datetime
         :param submission: If the scrobble is a submission

@@ -7,11 +7,13 @@ if TYPE_CHECKING:
 
 
 class User:
+    """Representation of all the data related to a user in Subsonic."""
+
     def __init__(
         self,
         # Subsonic fields
         username: str,
-        email: str,
+        email: str | None = None,
         scrobblingEnabled: bool = False,
         adminRole: bool = False,
         settingsRole: bool = False,
@@ -28,6 +30,52 @@ class User:
         # Internal
         subsonic: "Subsonic | None" = None,
     ) -> None:
+        """Representation of all the data related to a user in Subsonic.
+
+        :param username: The username of the user
+        :type username: str
+        :param email: The email of the user
+        :type email: str
+        :param scrobblingEnabled: If the user is allow to do scrobbling,
+            defaults to False.
+        :type scrobblingEnabled: bool, optional
+        :param adminRole: If the user has admin privileges,
+            overrides all the rest of roles,defaults to False.
+        :type adminRole: bool, optional
+        :param settingsRole: If the user is allow to modify global settings,
+            defaults to False.
+        :type settingsRole: bool, optional
+        :param downloadRole: If the user is allow to download songs, defaults to False.
+        :type downloadRole: bool, optional
+        :param uploadRole: If the user is allow to upload data to the server,
+            defaults to False.
+        :type uploadRole: bool, optional
+        :param playlistRole: If the user is allow to use playlist, defaults to False.
+        :type playlistRole: bool, optional
+        :param coverArtRole: If the user is allow to access cover arts,
+            defaults to False.
+        :type coverArtRole: bool, optional
+        :param commentRole: If the user is allow to do comments, defaults to False.
+        :type commentRole: bool, optional
+        :param podcastRole: If the user is allow to listen to podcasts,
+            defaults to False.
+        :type podcastRole: bool, optional
+        :param streamRole: If the user is allow to listen media with streaming,
+            defaults to False.
+        :type streamRole: bool, optional
+        :param jukeboxRole: If the user is allow to use the jukebox, defaults to False
+        :type jukeboxRole: bool, optional
+        :param shareRole: If the user is allow to use sharing capabilities,
+            defaults to False
+        :type shareRole: bool, optional
+        :param videoConversionRole: If the user is allow to do video conversion,
+            defaults to False
+        :type videoConversionRole: bool, optional
+        :param subsonic: The subsonic object to make all the internal requests with it,
+            defaults to None
+        :type subsonic: Subsonic | None, optional
+        """
+
         self.subsonic = subsonic
         self.username = username
         self.email = email
@@ -115,6 +163,8 @@ class User:
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
+
+        self.__check_api_access()
 
         self.subsonic.user_management.delete_user(  # type: ignore[union-attr]
             self.username

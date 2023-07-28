@@ -68,7 +68,7 @@ class Api:
         """Generate the parameters for any request to the API.
 
         This allow the user to change any variable in any time without issues.
-        If it's enabled (True by default) it will generate a diferent token and salt
+        If it's enabled (True by default) it will generate a different token and salt
         for each call.
 
         :param extra_params: Extra parameters to be attached to the generated ones,

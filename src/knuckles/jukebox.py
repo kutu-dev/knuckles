@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class JukeboxControl:
     """Class that contains all the methods needed to interact
-    with the jukebox call and actions in the Subsonic API. <https://opensubsonic.netlify.app/docs/endpoints/jukeboxcontrol/>
+    with the jukebox calls and actions in the Subsonic API. <https://opensubsonic.netlify.app/docs/endpoints/jukeboxcontrol/>
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
