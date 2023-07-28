@@ -80,6 +80,21 @@ def mock_update_playlist(
 
 
 @pytest.fixture
+def mock_update_comment_and_public(
+    mock_generator: MockGenerator,
+    playlist: dict[str, Any],
+) -> Response:
+    return mock_generator(
+        "updatePlaylist",
+        {
+            "playlistId": playlist["id"],
+            "comment": playlist["comment"],
+            "public": True,
+        },
+    )
+
+
+@pytest.fixture
 def mock_delete_playlist(
     mock_generator: MockGenerator, playlist: dict[str, Any]
 ) -> Response:

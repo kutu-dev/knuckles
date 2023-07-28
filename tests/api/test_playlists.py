@@ -68,14 +68,20 @@ def test_get_playlist(
 def test_create_playlist(
     subsonic: Subsonic,
     mock_create_playlist: Response,
+    mock_update_comment_and_public: Response,
     playlist: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
     responses.add(mock_create_playlist)
+    responses.add(mock_update_comment_and_public)
 
-    response = subsonic.playlists.create_playlist(playlist["name"], [song["id"]])
+    response = subsonic.playlists.create_playlist(
+        playlist["name"], playlist["comment"], playlist["public"], [song["id"]]
+    )
 
     assert response.id == playlist["id"]
+    assert response.comment == playlist["comment"]
+    assert response.public == playlist["public"]
     assert type(response.songs) is list
     assert response.songs[0].id == song["id"]
 

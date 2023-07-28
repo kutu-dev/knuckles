@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 
 from dateutil import parser
 
+from ..exceptions import MissingPlaylistName
 from ..models.song import CoverArt, Song
 from ..models.user import User
 
@@ -25,7 +26,7 @@ class Playlist:
         changed: str | None = None,
         comment: str | None = None,
         owner: str | None = None,
-        public: bool = False,
+        public: bool | None = None,
         coverArt: str | None = None,
         allowedUser: list[str] | None = None,
         entry: list[dict[str, Any]] | None = None,
@@ -47,3 +48,38 @@ class Playlist:
         self.songs = (
             [Song(self.__subsonic, **song) for song in entry] if entry else None
         )
+
+    def generate(self) -> "Playlist":
+        return self.__subsonic.playlists.get_playlist(self.id)
+
+    def create(self) -> "Playlist":
+        if self.name is None:
+            raise MissingPlaylistName(
+                (
+                    "A not None value in the name parameter"
+                    + "is necessary to create a playlist"
+                )
+            )
+
+        # Create a list of Song IDs if songs is not None
+        songs_ids = [song.id for song in self.songs] if self.songs else None
+
+        # As the createPlaylist endpoint is very limited
+        # a call to the updatePlaylist endpoint is used to extend it
+        new_playlist = self.__subsonic.playlists.create_playlist(
+            self.name, self.comment, self.public, songs_ids
+        )
+
+        return new_playlist
+
+    def update(self) -> Self:
+        self.__subsonic.playlists.update_playlist(
+            self.id, self.name, self.comment, self.public
+        )
+
+        return self
+
+    def delete(self) -> Self:
+        self.__subsonic.playlists.delete_playlist(self.id)
+
+        return self

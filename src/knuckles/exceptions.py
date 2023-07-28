@@ -13,6 +13,10 @@ class VideoArgumentsInSong(ValueError):
     pass
 
 
+class MissingPlaylistName(ValueError):
+    pass
+
+
 class AlbumOrArtistArgumentsInSong(ValueError):
     pass
 

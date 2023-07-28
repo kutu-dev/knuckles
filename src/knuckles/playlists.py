@@ -31,19 +31,35 @@ class Playlists:
 
         return Playlist(self.subsonic, **response)
 
-    def create_playlist(self, name: str, song_ids: list[str]) -> Playlist:
+    def create_playlist(
+        self,
+        name: str,
+        comment: str | None = None,
+        public: bool | None = None,
+        song_ids: list[str] | None = None,
+    ) -> Playlist:
         response = self.api.request(
             "createPlaylist", {"name": name, "songId": song_ids}
         )["playlist"]
 
-        return Playlist(self.subsonic, **response)
+        new_playlist = Playlist(self.subsonic, **response)
+
+        # Allow modify comment and public
+        # with a workaround using the updatePlaylist endpoint
+
+        if comment or public:
+            self.update_playlist(new_playlist.id, comment=comment, public=public)
+            new_playlist.comment = comment
+            new_playlist.public = public
+
+        return new_playlist
 
     def update_playlist(
         self,
         id: str,
         name: str | None = None,
         comment: str | None = None,
-        public: bool = False,
+        public: bool | None = None,
         song_ids_to_add: list[str] | None = None,
         song_indexes_to_remove: list[int] | None = None,
     ) -> Playlist:
