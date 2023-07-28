@@ -11,6 +11,7 @@ def playlist(song: dict[str, Any], username: str) -> dict[str, Any]:
     return {
         "id": "800000075",
         "name": "testcreate",
+        "comment": "comment",
         "owner": username,
         "public": True,
         "created": "2023-03-16T03:18:41+00:00",
@@ -18,6 +19,8 @@ def playlist(song: dict[str, Any], username: str) -> dict[str, Any]:
         "songCount": 1,
         "duration": 304,
         "entry": [song],
+        "coverArt": song["coverArt"],
+        "allowedUser": [username],
     }
 
 
@@ -51,20 +54,16 @@ def mock_create_playlist(
     song: dict[str, Any],
 ) -> Response:
     return mock_generator(
-        "createPlaylist", {"name": playlist["name"], "songId": song["id"]}, {**playlist}
+        "createPlaylist",
+        {"name": playlist["name"], "songId": song["id"]},
+        {"playlist": playlist},
     )
-
-
-@pytest.fixture
-def playlist_comment() -> str:
-    return "Playlist comment"
 
 
 @pytest.fixture
 def mock_update_playlist(
     mock_generator: MockGenerator,
     playlist: dict[str, Any],
-    playlist_comment: str,
     song: dict[str, Any],
 ) -> Response:
     return mock_generator(
@@ -72,7 +71,7 @@ def mock_update_playlist(
         {
             "playlistId": playlist["id"],
             "name": playlist["name"],
-            "comment": playlist_comment,
+            "comment": playlist["comment"],
             "public": True,
             "songIdToAdd": song["id"],
             "songIndexToRemove": 0,

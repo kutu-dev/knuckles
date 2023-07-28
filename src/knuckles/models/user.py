@@ -13,7 +13,7 @@ class User:
         self,
         # Subsonic fields
         username: str,
-        email: str,
+        email: str | None = None,
         scrobblingEnabled: bool = False,
         adminRole: bool = False,
         settingsRole: bool = False,
@@ -163,6 +163,8 @@ class User:
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
+
+        self.__check_api_access()
 
         self.subsonic.user_management.delete_user(  # type: ignore[union-attr]
             self.username
