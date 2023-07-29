@@ -195,8 +195,8 @@ class Song:
             self.played = parser.parse(played)
 
     def generate(self) -> "Song":
-        """Returns the function to the the same song with the maximum possible
-        information from the Subsonic API.
+        """Return a new song with all the data updated from the API,
+        using the endpoint that return the most information possible.
 
         Useful for making copies with updated data or updating the object itself
         with immutability, e.g., foo = foo.generate().
