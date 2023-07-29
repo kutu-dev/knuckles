@@ -14,9 +14,19 @@ class Playlists:
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
         self.api = api
+
+        # Only to pass it to the models
         self.subsonic = subsonic
 
     def get_playlists(self, username: str | None = None) -> list[Playlist]:
+        """Calls to the "getPlaylists" endpoint of the API.
+
+        :param username: The user to get its playlist,
+            if None gets the playlist of the authenticated user, defaults to None.
+        :type username: str | None, optional
+        :return: A list with all the playlist of the desired user.
+        :rtype: list[Playlist]
+        """
         response = self.api.request(
             "getPlaylists",
             {"username": username} if username else {},
@@ -27,6 +37,13 @@ class Playlists:
         return playlists
 
     def get_playlist(self, id: str) -> Playlist:
+        """Calls to the "getPlaylist" endpoint of the API.
+
+        :param id: The ID of the playlist to get.
+        :type id: str
+        :return: The requested playlist.
+        :rtype: Playlist
+        """
         response = self.api.request("getPlaylist", {"id": id})["playlist"]
 
         return Playlist(self.subsonic, **response)
@@ -38,6 +55,23 @@ class Playlists:
         public: bool | None = None,
         song_ids: list[str] | None = None,
     ) -> Playlist:
+        """Calls the "createPlaylist" endpoint of the API.
+
+        The Subsonic API only allows to set a name and a list of songs when creating
+        a playlist. To allow more initial customization (comment and public)
+        this method calls the "updatePlaylist" endpoint internally.
+
+        :param name: The name of the new playlist.
+        :type name: str
+        :param comment: A comment to append to the playlist, defaults to None.
+        :type comment: str | None, optional
+        :param public: If the playlist should be public of private, defaults to None.
+        :type public: bool | None, optional
+        :param song_ids: A list of songs to add to the playlist, defaults to None.
+        :type song_ids: list[str] | None, optional
+        :return: The new created playlist.
+        :rtype: Playlist
+        """
         response = self.api.request(
             "createPlaylist", {"name": name, "songId": song_ids}
         )["playlist"]
@@ -63,6 +97,25 @@ class Playlists:
         song_ids_to_add: list[str] | None = None,
         song_indexes_to_remove: list[int] | None = None,
     ) -> Playlist:
+        """Calls the "updatePlaylist" endpoint of the API.
+
+        :param id: The ID of the playlist to update.
+        :type id: str
+        :param name: A new name for the playlist, defaults to None.
+        :type name: str | None, optional
+        :param comment: A new comment for the playlist, defaults to None.
+        :type comment: str | None, optional
+        :param public: A new public state for the playlist, defaults to None.
+        :type public: bool | None, optional
+        :param song_ids_to_add: A list of IDs of songs to add to the playlist,
+            defaults to None.
+        :type song_ids_to_add: list[str] | None, optional
+        :param song_indexes_to_remove: A list of indexes of songs to remove
+            in the playlist, defaults to None.
+        :type song_indexes_to_remove: list[int] | None, optional
+        :return: The updated version of the playlist.
+        :rtype: Playlist
+        """
         self.api.request(
             "updatePlaylist",
             {
@@ -78,6 +131,13 @@ class Playlists:
         return Playlist(self.subsonic, id=id, name=name, comment=comment, public=public)
 
     def delete_playlist(self, id: str) -> "Subsonic":
+        """Calls the "deletePlaylist" endpoint of the API.
+
+        :param id: The ID of the song to remove.
+        :type id: str
+        :return: The object itself to allow method chaining.
+        :rtype: Subsonic
+        """
         self.api.request("deletePlaylist", {"id": id})
 
         return self.subsonic
