@@ -50,9 +50,27 @@ class Playlist:
         )
 
     def generate(self) -> "Playlist":
+        """Return a new playlist with all the data updated from the API,
+        using the endpoint that return the most information possible.
+
+        :return: A new playlist object with all the data updated.
+        :rtype: Playlist
+        """
+
         return self.__subsonic.playlists.get_playlist(self.id)
 
     def create(self) -> "Playlist":
+        """Calls the "createPlaylist" endpoint of the API.
+
+        Creates a new playlist with the same data of the object
+        where the method is called.
+
+        :raises MissingPlaylistName: Raised if the object where the method is called
+        has a None value in the name parameter.
+
+        :return: The new created playlist.
+        :rtype: Playlist
+        """
         if self.name is None:
             raise MissingPlaylistName(
                 (
@@ -73,6 +91,14 @@ class Playlist:
         return new_playlist
 
     def update(self) -> Self:
+        """Calls the "updatePlaylist" endpoint of the API.
+
+        Updates the name, comment and public state of the playlist with the ones
+        in the parameters of the object.
+
+        :return: _description_
+        :rtype: Self
+        """
         self.__subsonic.playlists.update_playlist(
             self.id, self.name, self.comment, self.public
         )
@@ -80,6 +106,13 @@ class Playlist:
         return self
 
     def delete(self) -> Self:
+        """Calls the "deletePlaylist" endpoint of the API.
+
+        Delete the playlist with the same ID as the id parameter in the object.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
         self.__subsonic.playlists.delete_playlist(self.id)
 
         return self
