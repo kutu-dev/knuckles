@@ -17,6 +17,10 @@ class MissingPlaylistName(ValueError):
     pass
 
 
+class ResourceNotFound(Exception):
+    pass
+
+
 class AlbumOrArtistArgumentsInSong(ValueError):
     pass
 

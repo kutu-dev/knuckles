@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from knuckles.models.genre import Genre
+
 from .api import Api
 from .models.album import Album
 from .models.song import Song
@@ -17,6 +19,20 @@ class Browsing:
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
         self.api = api
         self.subsonic = subsonic
+
+    def get_genres(self) -> list[Genre]:
+        response = self.api.request("getGenres")["genres"]["genre"]
+
+        return [Genre(self.subsonic, **genre) for genre in response]
+
+    def get_genre(self, name: str) -> Genre | None:
+        genres = self.get_genres()
+
+        for genre in genres:
+            if genre.value == name:
+                return genre
+
+        return None
 
     def get_album(self, id: str) -> Album:
         response = self.api.request("getAlbum", {"id": id})["album"]
