@@ -7,6 +7,16 @@ from tests.conftest import MockGenerator
 
 
 @pytest.fixture
+def genre() -> dict[str, Any]:
+    return {"songCount": 1, "albumCount": 1, "value": "Jazz"}
+
+
+@pytest.fixture
+def mock_get_genres(mock_generator: MockGenerator, genre: dict[str, Any]) -> Response:
+    return mock_generator("getGenres", {}, {"genres": {"genre": [genre]}})
+
+
+@pytest.fixture
 def album(song: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": "200000021",
@@ -36,7 +46,7 @@ def mock_get_album(mock_generator: MockGenerator, album: dict[str, Any]) -> Resp
 
 
 @pytest.fixture
-def song() -> dict[str, Any]:
+def song(genre: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": "nonIntId",
         "parent": "parentId",
@@ -46,7 +56,7 @@ def song() -> dict[str, Any]:
         "artist": "Frank Sinatra",
         "track": 8,
         "year": 2008,
-        "genre": "Jazz",
+        "genre": genre["value"],
         "coverArt": "coverId",
         "size": 19866778,
         "contentType": "audio/flac",

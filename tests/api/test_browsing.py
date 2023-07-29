@@ -7,6 +7,17 @@ from responses import Response
 
 
 @responses.activate
+def test_get_genres(subsonic: Subsonic, mock_get_genres: Response, genre) -> None:
+    responses.add(mock_get_genres)
+
+    response = subsonic.browsing.get_genres()
+
+    assert response[0].value == genre["value"]
+    assert response[0].song_count == genre["songCount"]
+    assert response[0].album_count == genre["albumCount"]
+
+
+@responses.activate
 def test_get_album(
     subsonic: Subsonic,
     mock_get_album: Response,
