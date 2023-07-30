@@ -16,6 +16,18 @@ class Genre:
         songCount: int | None = None,
         albumCount: int | None = None,
     ) -> None:
+        """Representation of all the data related to genres in Subsonic.
+
+        :param subsonic: The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param value: The name of the genre.
+        :type value: str
+        :param songCount: The number of songs with this genre, defaults to None.
+        :type songCount: int | None, optional
+        :param albumCount: The number of albums with this genre, defaults to None.
+        :type albumCount: int | None, optional
+        """
+
         self.__subsonic = subsonic
         self.value = value
         self.song_count = songCount

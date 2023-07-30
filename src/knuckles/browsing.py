@@ -21,11 +21,25 @@ class Browsing:
         self.subsonic = subsonic
 
     def get_genres(self) -> list[Genre]:
+        """Calls the "getGenres" endpoint of the API.
+
+        :return: A list will all the registered genres.
+        :rtype: list[Genre]
+        """
+
         response = self.api.request("getGenres")["genres"]["genre"]
 
         return [Genre(self.subsonic, **genre) for genre in response]
 
     def get_genre(self, name: str) -> Genre | None:
+        """Get a desired genre.
+
+        :param name: The name of the genre to get.
+        :type name: str
+        :return: A genre object that correspond with the given name.
+        :rtype: Genre | None
+        """
+
         genres = self.get_genres()
 
         for genre in genres:
