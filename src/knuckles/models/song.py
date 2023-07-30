@@ -1,6 +1,8 @@
 # Not fancy but does the job
 from typing import TYPE_CHECKING, Self
 
+from knuckles.models.genre import Genre
+
 from ..exceptions import AlbumOrArtistArgumentsInSong, VideoArgumentsInSong
 from .album import Album
 from .artist import Artist
@@ -154,7 +156,7 @@ class Song:
         self.parent: str | None = parent
         self.track: int | None = track
         self.year: int | None = year
-        self.genre: str | None = genre
+        self.genre = Genre(self.__subsonic, genre) if genre else None
         self.size: int | None = size
         self.content_type: str | None = contentType
         self.suffix: str | None = suffix
@@ -169,30 +171,12 @@ class Song:
         self.disc_number: int | None = discNumber
         self.type: str | None = type
         self.bookmark_position: int | None = bookmarkPosition
-
-        self.album: Album | None = None
-        if albumId is not None:
-            self.album = Album(self.__subsonic, albumId, name=album)
-
-        self.artist: Artist | None = None
-        if artistId is not None:
-            self.artist = Artist(artistId, artist)
-
-        self.cover_art: CoverArt | None = None
-        if coverArt is not None:
-            self.cover_art = CoverArt(coverArt)
-
-        self.created: datetime | None = None
-        if created is not None:
-            self.created = parser.parse(created)
-
-        self.starred: datetime | None = None
-        if starred is not None:
-            self.starred = parser.parse(starred)
-
-        self.played: datetime | None = None
-        if played is not None:
-            self.played = parser.parse(played)
+        self.album = Album(self.__subsonic, albumId, name=album) if albumId else None
+        self.artist = Artist(artistId, artist) if artistId else None
+        self.cover_art = CoverArt(coverArt) if coverArt else None
+        self.created = parser.parse(created) if created else None
+        self.starred = parser.parse(starred) if starred else None
+        self.played = parser.parse(played) if played else None
 
     def generate(self) -> "Song":
         """Return a new song with all the data updated from the API,

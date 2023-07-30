@@ -2,12 +2,15 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from knuckles import CoverArt, Subsonic
 from responses import Response
+
+from knuckles import CoverArt, Subsonic
 
 
 @responses.activate
-def test_get_genres(subsonic: Subsonic, mock_get_genres: Response, genre) -> None:
+def test_get_genres(
+    subsonic: Subsonic, mock_get_genres: Response, genre: dict[str, Any]
+) -> None:
     responses.add(mock_get_genres)
 
     response = subsonic.browsing.get_genres()
@@ -15,6 +18,19 @@ def test_get_genres(subsonic: Subsonic, mock_get_genres: Response, genre) -> Non
     assert response[0].value == genre["value"]
     assert response[0].song_count == genre["songCount"]
     assert response[0].album_count == genre["albumCount"]
+
+
+@responses.activate
+def test_get_genre(
+    subsonic: Subsonic, mock_get_genres: Response, genre: dict[str, Any]
+) -> None:
+    responses.add(mock_get_genres)
+
+    response = subsonic.browsing.get_genre(genre["value"])
+
+    assert response.value == genre["value"]
+    assert response.song_count == genre["songCount"]
+    assert response.album_count == genre["albumCount"]
 
 
 @responses.activate
@@ -66,7 +82,7 @@ def test_get_song(
     assert response.artist.name == song["artist"]
     assert response.track == song["track"]
     assert response.year == song["year"]
-    assert response.genre == song["genre"]
+    assert response.genre.value == song["genre"]
     assert type(response.cover_art) is CoverArt
     assert response.cover_art.id == song["coverArt"]
     assert response.size == song["size"]
