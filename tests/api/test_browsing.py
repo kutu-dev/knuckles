@@ -2,9 +2,8 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from responses import Response
-
 from knuckles import CoverArt, Subsonic
+from responses import Response
 
 
 @responses.activate
@@ -102,3 +101,21 @@ def test_get_song(
     assert response.type == "music"
     assert response.bookmark_position is None
     assert response.played == parser.parse(song["played"])
+
+
+@responses.activate
+def test_get_album_info(
+    subsonic: Subsonic,
+    mock_get_album_info: Response,
+    album: dict[str, Any],
+    album_info: dict[str, Any],
+) -> None:
+    responses.add(mock_get_album_info)
+
+    response = subsonic.browsing.get_album_info(album["id"])
+
+    assert response.notes == album_info["notes"]
+    assert response.music_brainz_id == album_info["musicBrainzId"]
+    assert response.small_image_url == album_info["smallImageUrl"]
+    assert response.medium_image_url == album_info["mediumImageUrl"]
+    assert response.large_image_url == album_info["largeImageUrl"]

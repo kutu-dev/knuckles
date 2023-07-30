@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING, Any
 
-import knuckles.models.song as song_object
 from dateutil import parser
+
+import knuckles.models.song as song_object
 
 from ..models.artist import Artist
 from ..models.cover_art import CoverArt
@@ -10,6 +11,7 @@ if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
+# TODO Unfinished
 class Album:
     """Representation of all the data related to an album in Subsonic."""
 
