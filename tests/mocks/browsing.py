@@ -81,3 +81,23 @@ def song(genre: dict[str, Any]) -> dict[str, Any]:
 @pytest.fixture
 def mock_get_song(mock_generator: MockGenerator, song: dict[str, Any]) -> Response:
     return mock_generator("getSong", {"id": song["id"]}, {"song": song})
+
+
+@pytest.fixture
+def album_info() -> dict[str, Any]:
+    return {
+        "notes": "Example note",
+        "musicBrainzId": "6e1d48f7-717c-416e-af35-5d2454a13af2",
+        "smallImageUrl": "http://localhost:8989/play/art/0f8c3cbd6b0b22c3b5402141351ac812/album/21/thumb34.jpg",
+        "mediumImageUrl": "http://localhost:8989/play/art/41b16680dc1b3aaf5dfba24ddb6a1712/album/21/thumb64.jpg",
+        "largeImageUrl": "http://localhost:8989/play/art/e6fd8d4e0d35c4436e56991892bfb27b/album/21/thumb174.jpg",
+    }
+
+
+@pytest.fixture
+def mock_get_album_info(
+    mock_generator: MockGenerator, album: dict[str, Any], album_info: dict[str, Any]
+) -> Response:
+    return mock_generator(
+        "getAlbumInfo2", {"id": album["id"]}, {"albumInfo": album_info}
+    )

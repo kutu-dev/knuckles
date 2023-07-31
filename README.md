@@ -5,7 +5,7 @@ Partially implemented
 
 Should be implemented
 
-- Reactor if not None to use oneliners
+- Refactor "if \* else None" to use oneliners
 - POST Support
 
 Not implemented

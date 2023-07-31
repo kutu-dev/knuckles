@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING, Any
 
-import knuckles.models.song as song_object
 from dateutil import parser
+
+import knuckles.models.song as song_object
 
 from ..models.artist import Artist
 from ..models.cover_art import CoverArt
@@ -10,6 +11,61 @@ if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
+class AlbumInfo:
+    """Representation of all the data related to an album info in Subsonic."""
+
+    def __init__(
+        self,
+        # Internal
+        subsonic: "Subsonic",
+        album_id: str,
+        # Subsonic fields
+        notes: str,
+        musicBrainzId: str | None,
+        smallImageUrl: str | None,
+        mediumImageUrl: str | None,
+        largeImageUrl: str | None,
+    ) -> None:
+        """Representation of all the data related to an album info in Subsonic.
+        :param subsonic:The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param album_id: The ID3 of the album associated with the info.
+        :type album_id: str
+        :param notes: A note for the album.
+        :type notes: str
+        :param musicBrainzId:The ID in music Brainz of the album.
+        :type musicBrainzId: str
+        :param smallImageUrl: An URL to the small size cover image of the album.
+        :type smallImageUrl: str
+        :param mediumImageUrl: An URL to the medium size cover image of the album.
+        :type mediumImageUrl: str
+        :param largeImageUrl: An URL to the large size cover image of the album.
+        :type largeImageUrl: str
+        """
+
+        self.__subsonic = subsonic
+        self.album_id = album_id
+        self.notes = notes
+        self.music_brainz_id = musicBrainzId
+        self.small_image_url = smallImageUrl
+        self.medium_image_url = mediumImageUrl
+        self.large_image_url = largeImageUrl
+
+    def generate(self) -> "AlbumInfo":
+        """Return a new album with all the data updated from the API,
+        using the endpoint that return the most information possible.
+
+        Useful for making copies with updated data or updating the object itself
+        with immutability, e.g., foo = foo.generate().
+
+        :return: A new album info object with all the data updated.
+        :rtype: AlbumInfo
+        """
+
+        return self.__subsonic.browsing.get_album_info(self.album_id)
+
+
+# TODO Unfinished
 class Album:
     """Representation of all the data related to an album in Subsonic."""
 

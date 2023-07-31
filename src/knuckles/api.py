@@ -67,7 +67,7 @@ class Api:
     def generate_params(self, extra_params: dict[str, Any] = {}) -> dict[str, Any]:
         """Generate the parameters for any request to the API.
 
-        This allow the user to change any variable in any time without issues.
+        This allows the user to change any variable in any time without issues.
         If it's enabled (True by default) it will generate a different token and salt
         for each call.
 
