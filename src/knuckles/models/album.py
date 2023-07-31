@@ -11,6 +11,43 @@ if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
+class AlbumInfo:
+    """Representation of all the data related to an album info in Subsonic."""
+
+    def __init__(
+        self,
+        # Internal
+        subsonic: "Subsonic",
+        album_id: str,
+        # Subsonic fields
+        notes: str,
+        musicBrainzId: str | None,
+        smallImageUrl: str | None,
+        mediumImageUrl: str | None,
+        largeImageUrl: str | None,
+    ) -> None:
+        self.__subsonic = subsonic
+        self.album_id = album_id
+        self.notes = notes
+        self.music_brainz_id = musicBrainzId
+        self.small_image_url = smallImageUrl
+        self.medium_image_url = mediumImageUrl
+        self.large_image_url = largeImageUrl
+
+    def generate(self) -> "AlbumInfo":
+        """Return a new album with all the data updated from the API,
+        using the endpoint that return the most information possible.
+
+        Useful for making copies with updated data or updating the object itself
+        with immutability, e.g., foo = foo.generate().
+
+        :return: A new album info object with all the data updated.
+        :rtype: AlbumInfo
+        """
+
+        return self.__subsonic.browsing.get_album_info(self.album_id)
+
+
 # TODO Unfinished
 class Album:
     """Representation of all the data related to an album in Subsonic."""

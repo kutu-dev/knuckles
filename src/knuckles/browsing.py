@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from knuckles.models.genre import Genre
 
 from .api import Api
-from .models.album import Album
+from .models.album import Album, AlbumInfo
 from .models.song import Song
 
 if TYPE_CHECKING:
@@ -47,6 +47,11 @@ class Browsing:
                 return genre
 
         return None
+
+    def get_album_info(self, id: str) -> AlbumInfo:
+        response = self.api.request("getAlbumInfo2", {"id": id})["albumInfo"]
+
+        return AlbumInfo(self.subsonic, id, **response)
 
     def get_album(self, id: str) -> Album:
         response = self.api.request("getAlbum", {"id": id})["album"]
