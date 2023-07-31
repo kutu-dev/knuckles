@@ -49,6 +49,14 @@ class Browsing:
         return None
 
     def get_album_info(self, id: str) -> AlbumInfo:
+        """Calls to the "getAlbumInfo2" endpoint of the API.
+
+        :param id: The ID of the album to get its info.
+        :type id: str
+        :return: An object with all the extra info given by the server about the album.
+        :rtype: AlbumInfo
+        """
+
         response = self.api.request("getAlbumInfo2", {"id": id})["albumInfo"]
 
         return AlbumInfo(self.subsonic, id, **response)

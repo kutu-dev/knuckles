@@ -26,6 +26,23 @@ class AlbumInfo:
         mediumImageUrl: str | None,
         largeImageUrl: str | None,
     ) -> None:
+        """Representation of all the data related to an album info in Subsonic.
+        :param subsonic:The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param album_id: The ID3 of the album associated with the info.
+        :type album_id: str
+        :param notes: A note for the album.
+        :type notes: str
+        :param musicBrainzId:The ID in music Brainz of the album.
+        :type musicBrainzId: str
+        :param smallImageUrl: An URL to the small size cover image of the album.
+        :type smallImageUrl: str
+        :param mediumImageUrl: An URL to the medium size cover image of the album.
+        :type mediumImageUrl: str
+        :param largeImageUrl: An URL to the large size cover image of the album.
+        :type largeImageUrl: str
+        """
+
         self.__subsonic = subsonic
         self.album_id = album_id
         self.notes = notes
