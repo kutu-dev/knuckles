@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any
 
 from dateutil import parser
 
-import knuckles.models.song as song_object
+import knuckles.models.song as song_model
 
 from ..models.artist import Artist
 from ..models.cover_art import CoverArt
@@ -22,6 +22,7 @@ class AlbumInfo:
         # Subsonic fields
         notes: str,
         musicBrainzId: str | None,
+        lastFmUrl: str | None,
         smallImageUrl: str | None,
         mediumImageUrl: str | None,
         largeImageUrl: str | None,
@@ -47,12 +48,13 @@ class AlbumInfo:
         self.album_id = album_id
         self.notes = notes
         self.music_brainz_id = musicBrainzId
+        self.last_fm_url = lastFmUrl
         self.small_image_url = smallImageUrl
         self.medium_image_url = mediumImageUrl
         self.large_image_url = largeImageUrl
 
     def generate(self) -> "AlbumInfo":
-        """Return a new album with all the data updated from the API,
+        """Return a new album info with all the data updated from the API,
         using the endpoint that return the most information possible.
 
         Useful for making copies with updated data or updating the object itself
@@ -113,7 +115,36 @@ class Album:
         self.played = parser.parse(played) if played else None
         self.user_rating = userRating
         self.songs = (
-            [song_object.Song(self.__subsonic, **song_data) for song_data in song]
+            [song_model.Song(self.__subsonic, **song_data) for song_data in song]
             if song
             else None
         )
+        self.info: AlbumInfo | None = None
+
+    def generate(self) -> "Album":
+        """Return a new album with all the data updated from the API,
+        using the endpoints that return the most information possible.
+
+        Useful for making copies with updated data or updating the object itself
+        with immutability, e.g., foo = foo.generate().
+
+        :return: A new album info object with all the data updated.
+        :rtype: AlbumInfo
+        """
+
+        new_album = self.__subsonic.browsing.get_album(self.id)
+        new_album.get_album_info()
+
+        return new_album
+
+    def get_album_info(self) -> AlbumInfo:
+        """Returns the extra info given by the "getAlbumInfo2" endpoint,
+        also sets it in the info property of the model.
+
+        :return: An AlbumInfo object with all the extra info given by the API.
+        :rtype: AlbumInfo
+        """
+
+        self.info = self.__subsonic.browsing.get_album_info(self.id)
+
+        return self.info
