@@ -1,7 +1,7 @@
 from typing import Any
 
 import responses
-from knuckles import Song, Subsonic
+from knuckles import Subsonic
 from responses import Response
 
 
