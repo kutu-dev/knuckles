@@ -103,7 +103,7 @@ class Album:
         self.name = name
         self.is_dir = isDir
         self.title = title
-        self.artist = Artist(artistId, artist) if artistId else None
+        self.artist = Artist(self.__subsonic, artistId, artist) if artistId else None
         self.cover_art = CoverArt(coverArt) if coverArt else None
         self.song_count = songCount
         self.duration = duration
@@ -129,7 +129,7 @@ class Album:
         with immutability, e.g., foo = foo.generate().
 
         :return: A new album info object with all the data updated.
-        :rtype: AlbumInfo
+        :rtype: Album
         """
 
         new_album = self.__subsonic.browsing.get_album(self.id)

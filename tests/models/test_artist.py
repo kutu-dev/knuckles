@@ -14,7 +14,7 @@ def test_generate(
     responses.add(mock_get_artist)
 
     requested_artist = subsonic.browsing.get_artist(artist["id"])
-    requested_artist.title = "Foo"
+    requested_artist.name = "Foo"
     requested_artist = requested_artist.generate()
 
-    assert requested_artist.title == artist["title"]
+    assert requested_artist.name == artist["name"]

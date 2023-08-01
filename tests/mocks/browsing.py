@@ -29,6 +29,7 @@ def artist(album: dict[str, Any]) -> dict[str, Any]:
         "coverArt": "ar-37ec820ca7193e17040c98f7da7c4b51_0",
         "albumCount": 1,
         "userRating": 5,
+        "averageRating": 4.5,
         "artistImageUrl": "https://demo.org/image.jpg",
         "starred": "2017-04-11T10:42:50.842Z",
         "album": [album],

@@ -63,7 +63,12 @@ def test_get_artist(
     assert response.starred == artist["starred"]
     assert response.user_rating == artist["userRating"]
     assert response.average_rating == artist["averageRating"]
+    assert response.average_rating == artist["averageRating"]
+    assert response.album_count == artist["albumCount"]
+    assert type(response.albums) == list
+    assert type(response.albums[0].songs) == list
     assert response.albums[0].songs[0].title == song["title"]
+    assert response.cover_art.id == artist["coverArt"]
 
 
 @responses.activate

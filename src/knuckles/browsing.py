@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 
-from knuckles.models.genre import Genre
+from .models.genre import Genre
 
 from .api import Api
 from .models.album import Album, AlbumInfo
+from .models.artist import Artist
 from .models.song import Song
 
 if TYPE_CHECKING:
@@ -48,6 +49,30 @@ class Browsing:
 
         return None
 
+    def get_artists(self, music_folder_id: str | None = None) -> list[Artist]:
+        response = self.api.request("getArtists", {"musicFolderId": music_folder_id})[
+            "artists"
+        ]["index"]
+
+        artists: list[Artist] = []
+
+        for index in response:
+            for artist_data in index["artist"]:
+                artist = Artist(self.subsonic, **artist_data)
+                artists.append(artist)
+
+        return artists
+
+    def get_artist(self, id: str) -> Artist:
+        response = self.api.request("getArtist", {"id": id})["artist"]
+
+        return Artist(self.subsonic, **response)
+
+    def get_album(self, id: str) -> Album:
+        response = self.api.request("getAlbum", {"id": id})["album"]
+
+        return Album(self.subsonic, **response)
+
     def get_album_info(self, id: str) -> AlbumInfo:
         """Calls to the "getAlbumInfo2" endpoint of the API.
 
@@ -60,11 +85,6 @@ class Browsing:
         response = self.api.request("getAlbumInfo2", {"id": id})["albumInfo"]
 
         return AlbumInfo(self.subsonic, id, **response)
-
-    def get_album(self, id: str) -> Album:
-        response = self.api.request("getAlbum", {"id": id})["album"]
-
-        return Album(self.subsonic, **response)
 
     def get_song(self, id: str) -> Song:
         """Calls to the "getSong" endpoint of the API.
