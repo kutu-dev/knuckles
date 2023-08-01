@@ -6,6 +6,7 @@ from knuckles.models.cover_art import CoverArt
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
+from dateutil import parser
 
 
 class Artist:
@@ -26,13 +27,37 @@ class Artist:
         averageRating: float | None = None,
         album: list[dict[str, Any]] | None = None,
     ) -> None:
+        """Representation of all the data related to an artist in Subsonic.
+
+        :param subsonic: The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param id: The ID of the artist.
+        :type id: str
+        :param name: The name of the artist.
+        :type name: str
+        :param coverArt: The ID of the cover art of the artist.
+        :type coverArt: str
+        :param albumCount: The number of albums that the artist has.
+        :type albumCount: int
+        :param artistImageUrl: A URL to an image of the artist.
+        :type artistImageUrl: str
+        :param starred: The time when the artist was starred.
+        :type starred: str
+        :param userRating: The rating of the authenticated user.
+        :type userRating: int
+        :param averageRating: The average rating of all the users.
+        :type averageRating: float
+        :param album: A list with all the albums made by the artist.
+        :type album: list[dict[str, Any]]
+        """
+
         self.__subsonic = subsonic
         self.id = id
         self.name = name
         self.cover_art = CoverArt(coverArt) if coverArt else None
         self.album_count = albumCount
         self.artist_image_url = artistImageUrl
-        self.starred = starred
+        self.starred = parser.parse(starred) if starred else None
         self.user_rating = userRating
         self.average_rating = averageRating
         self.albums = (

@@ -4,7 +4,8 @@ from .models.system import License, SubsonicResponse
 
 class System:
     """Class that contains all the methods needed to interact
-    with the systems calls in the Subsonic API. <https://opensubsonic.netlify.app/categories/system/>
+    with the systems calls in the Subsonic API.
+    <https://opensubsonic.netlify.app/categories/system/>
     """
 
     def __init__(self, api: Api) -> None:

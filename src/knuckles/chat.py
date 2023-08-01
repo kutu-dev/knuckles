@@ -9,7 +9,8 @@ if TYPE_CHECKING:
 
 class Chat:
     """Class that contains all the methods needed to interact
-    with the chat calls in the Subsonic API. <https://opensubsonic.netlify.app/categories/chat/>
+    with the chat calls in the Subsonic API.
+    <https://opensubsonic.netlify.app/categories/chat/>
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:

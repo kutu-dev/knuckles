@@ -4,7 +4,8 @@ from .models.scan_status import ScanStatus
 
 class MediaLibraryScanning:
     """Class that contains all the methods needed to interact
-    with the media library scanning calls in the Subsonic API. <https://opensubsonic.netlify.app/categories/media-library-scanning/>
+    with the media library scanning calls in the Subsonic API.
+    <https://opensubsonic.netlify.app/categories/media-library-scanning/>
     """
 
     def __init__(self, api: Api) -> None:

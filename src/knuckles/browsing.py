@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 # TODO Unfinished
 class Browsing:
     """Class that contains all the methods needed to interact
-    with the browsing calls in the Subsonic API. <https://opensubsonic.netlify.app/categories/browsing/>
+    with the browsing calls in the Subsonic API.
+    <https://opensubsonic.netlify.app/categories/browsing/>
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -50,6 +51,15 @@ class Browsing:
         return None
 
     def get_artists(self, music_folder_id: str | None = None) -> list[Artist]:
+        """Calls the "getArtists" endpoint of the API.
+
+        :param music_folder_id: Only return artists in the music folder
+            with the given ID.
+        :type music_folder_id: str | None
+        :return: A list with all the artists.
+        :rtype: list[Artist]
+        """
+
         response = self.api.request("getArtists", {"musicFolderId": music_folder_id})[
             "artists"
         ]["index"]
@@ -64,11 +74,29 @@ class Browsing:
         return artists
 
     def get_artist(self, id: str) -> Artist:
+        """Calls the "getArtist" endpoint of the API.
+
+        :param id: The ID of the artist to get.
+        :type id: str
+        :return: An object with all the information
+            that the server has given about the album.
+        :rtype: Artist
+        """
+
         response = self.api.request("getArtist", {"id": id})["artist"]
 
         return Artist(self.subsonic, **response)
 
     def get_album(self, id: str) -> Album:
+        """Calls the "getAlbum" endpoint of the API.
+
+        :param id: The ID of the album to get.
+        :type id: str
+        :return: An object with all the information
+            that the server has given about the album.
+        :rtype: Album
+        """
+
         response = self.api.request("getAlbum", {"id": id})["album"]
 
         return Album(self.subsonic, **response)

@@ -60,7 +60,7 @@ def test_get_artist(
     assert response.id == artist["id"]
     assert response.name == artist["name"]
     assert response.artist_image_url == artist["artistImageUrl"]
-    assert response.starred == artist["starred"]
+    assert response.starred == parser.parse(artist["starred"])
     assert response.user_rating == artist["userRating"]
     assert response.average_rating == artist["averageRating"]
     assert response.average_rating == artist["averageRating"]
