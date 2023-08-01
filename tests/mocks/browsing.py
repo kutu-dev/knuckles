@@ -7,6 +7,11 @@ from tests.conftest import MockGenerator
 
 
 @pytest.fixture
+def music_folder_id() -> str:
+    return "musicFolderId"
+
+
+@pytest.fixture
 def genre() -> dict[str, Any]:
     return {"songCount": 1, "albumCount": 1, "value": "Jazz"}
 
@@ -14,6 +19,47 @@ def genre() -> dict[str, Any]:
 @pytest.fixture
 def mock_get_genres(mock_generator: MockGenerator, genre: dict[str, Any]) -> Response:
     return mock_generator("getGenres", {}, {"genres": {"genre": [genre]}})
+
+
+@pytest.fixture()
+def artist(album: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": "37ec820ca7193e17040c98f7da7c4b51",
+        "name": "2 Mello",
+        "coverArt": "ar-37ec820ca7193e17040c98f7da7c4b51_0",
+        "albumCount": 1,
+        "userRating": 5,
+        "artistImageUrl": "https://demo.org/image.jpg",
+        "starred": "2017-04-11T10:42:50.842Z",
+        "album": [album],
+    }
+
+
+@pytest.fixture()
+def artists(artist: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
+        "index": [
+            {
+                "name": "#",
+                "artist": [artist],
+            }
+        ],
+    }
+
+
+@pytest.fixture()
+def mock_get_artists(
+    mock_generator: MockGenerator, artists: dict[str, Any], music_folder_id: str
+) -> Response:
+    return mock_generator(
+        "getArtists", {"musicFolderId": music_folder_id}, {"artists": artists}
+    )
+
+
+@pytest.fixture()
+def mock_get_artist(mock_generator: MockGenerator, artist: dict[str, Any]) -> Response:
+    return mock_generator("getArtist", {"id": artist["id"]}, {"artist": artist})
 
 
 @pytest.fixture
