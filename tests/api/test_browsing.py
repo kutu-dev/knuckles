@@ -116,6 +116,7 @@ def test_get_album_info(
 
     assert response.notes == album_info["notes"]
     assert response.music_brainz_id == album_info["musicBrainzId"]
+    assert response.last_fm_url == album_info["lastFmUrl"]
     assert response.small_image_url == album_info["smallImageUrl"]
     assert response.medium_image_url == album_info["mediumImageUrl"]
     assert response.large_image_url == album_info["largeImageUrl"]
