@@ -9,7 +9,8 @@ if TYPE_CHECKING:
 
 class Playlists:
     """Class that contains all the methods needed to interact
-    with the playlists calls and actions in the Subsonic API. <https://opensubsonic.netlify.app/categories/playlists/>
+    with the playlists calls and actions in the Subsonic API.
+    <https://opensubsonic.netlify.app/categories/playlists/>
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:

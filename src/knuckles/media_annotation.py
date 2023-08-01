@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 
 class MediaAnnotation:
     """Class that contains all the methods needed to interact
-    with the media annotation calls in the Subsonic API. <https://opensubsonic.netlify.app/categories/media-annotation/>
+    with the media annotation calls in the Subsonic API.
+    <https://opensubsonic.netlify.app/categories/media-annotation/>
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:

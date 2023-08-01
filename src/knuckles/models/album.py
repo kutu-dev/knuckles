@@ -96,6 +96,51 @@ class Album:
         userRating: int | None = None,
         song: list[dict[str, Any]] | None = None,
     ) -> None:
+        """Representation of all the data related to an album in Subsonic.
+
+        :param subsonic:The subsonic object to make all the internal requests with it.
+            The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param id: The ID of the album.
+        :type id: str
+        :param parent: The ID of the parent directory.
+        :type parent: str
+        :param album: The name of the album (Same as title and name).
+        :type album: str
+        :param title: The name of the album (Same as album and name).
+        :type title: str
+        :param name: The name of the album (Same as album and title).
+        :type name: str
+        :param isDir: If the album is a directory.
+        :type isDir: bool
+        :param artist: The name of the artist author of the album.
+        :type artist: str
+        :param artistId: The ID of the artist author of the album.
+        :type artistId: str
+        :param coverArt: The ID of the cover art of the album.
+        :type coverArt: str
+        :param songCount: The number of songs inside the album.
+        :type songCount: int
+        :param duration: The total duration of the album.
+        :type duration: int
+        :param playCount: The times the album has been played.
+        :type playCount: int
+        :param created: The time when the album was created.
+        :type created: str
+        :param starred: The time when the album was starred.
+        :type starred: str
+        :param year: The year when the album was released.
+        :type year: int
+        :param genre: The genre of the album.
+        :type genre: str
+        :param played: The time the album was last played.
+        :type played: str
+        :param userRating:
+        :type userRating: int
+        :param song: A list with all the songs of the album.
+        :type song: list[dict[str, Any]]
+        """
+
         self.__subsonic = subsonic
         self.id = id
         self.parent = parent
@@ -103,7 +148,7 @@ class Album:
         self.name = name
         self.is_dir = isDir
         self.title = title
-        self.artist = Artist(artistId, artist) if artistId else None
+        self.artist = Artist(self.__subsonic, artistId, artist) if artistId else None
         self.cover_art = CoverArt(coverArt) if coverArt else None
         self.song_count = songCount
         self.duration = duration
@@ -129,7 +174,7 @@ class Album:
         with immutability, e.g., foo = foo.generate().
 
         :return: A new album info object with all the data updated.
-        :rtype: AlbumInfo
+        :rtype: Album
         """
 
         new_album = self.__subsonic.browsing.get_album(self.id)

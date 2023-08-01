@@ -9,7 +9,8 @@ if TYPE_CHECKING:
 
 class UserManagement:
     """Class that contains all the methods needed to interact
-    with the user management calls in the Subsonic API. <https://opensubsonic.netlify.app/categories/user-management/>
+    with the user management calls in the Subsonic API.
+    <https://opensubsonic.netlify.app/categories/user-management/>
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:

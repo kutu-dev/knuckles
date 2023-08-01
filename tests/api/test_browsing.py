@@ -33,6 +33,45 @@ def test_get_genre(
 
 
 @responses.activate
+def test_get_artists(
+    subsonic: Subsonic,
+    mock_get_artists: Response,
+    artist: dict[str, Any],
+    music_folder_id: str,
+) -> None:
+    responses.add(mock_get_artists)
+
+    response = subsonic.browsing.get_artists(music_folder_id)
+
+    assert response[0].id == artist["id"]
+
+
+@responses.activate
+def test_get_artist(
+    subsonic: Subsonic,
+    mock_get_artist: Response,
+    artist: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    responses.add(mock_get_artist)
+
+    response = subsonic.browsing.get_artist(artist["id"])
+
+    assert response.id == artist["id"]
+    assert response.name == artist["name"]
+    assert response.artist_image_url == artist["artistImageUrl"]
+    assert response.starred == parser.parse(artist["starred"])
+    assert response.user_rating == artist["userRating"]
+    assert response.average_rating == artist["averageRating"]
+    assert response.average_rating == artist["averageRating"]
+    assert response.album_count == artist["albumCount"]
+    assert type(response.albums) == list
+    assert type(response.albums[0].songs) == list
+    assert response.albums[0].songs[0].title == song["title"]
+    assert response.cover_art.id == artist["coverArt"]
+
+
+@responses.activate
 def test_get_album(
     subsonic: Subsonic,
     mock_get_album: Response,

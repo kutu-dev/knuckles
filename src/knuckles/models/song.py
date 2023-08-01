@@ -172,7 +172,7 @@ class Song:
         self.type: str | None = type
         self.bookmark_position: int | None = bookmarkPosition
         self.album = Album(self.__subsonic, albumId, name=album) if albumId else None
-        self.artist = Artist(artistId, artist) if artistId else None
+        self.artist = Artist(self.__subsonic, artistId, artist) if artistId else None
         self.cover_art = CoverArt(coverArt) if coverArt else None
         self.created = parser.parse(created) if created else None
         self.starred = parser.parse(starred) if starred else None
