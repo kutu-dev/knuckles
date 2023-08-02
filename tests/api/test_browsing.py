@@ -2,8 +2,23 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from knuckles import CoverArt, Subsonic
 from responses import Response
+
+from knuckles import CoverArt, Subsonic
+
+
+@responses.activate
+def test_get_music_folders(
+    subsonic: Subsonic,
+    mock_get_music_folders: Response,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    responses.add(mock_get_music_folders)
+
+    response = subsonic.browsing.get_music_folders()
+
+    assert response[0].id == music_folders[0]["id"]
+    assert response[0].name == music_folders[0]["name"]
 
 
 @responses.activate
@@ -158,4 +173,5 @@ def test_get_album_info(
     assert response.last_fm_url == album_info["lastFmUrl"]
     assert response.small_image_url == album_info["smallImageUrl"]
     assert response.medium_image_url == album_info["mediumImageUrl"]
+    assert response.large_image_url == album_info["largeImageUrl"]
     assert response.large_image_url == album_info["largeImageUrl"]
