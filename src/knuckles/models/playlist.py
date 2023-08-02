@@ -31,6 +31,37 @@ class Playlist:
         allowedUser: list[str] | None = None,
         entry: list[dict[str, Any]] | None = None,
     ) -> None:
+        """Representation of all the data related to a user in Subsonic.
+
+        :param subsonic: The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param id: The ID of the playlist.
+        :type id: str
+        :param name: The name of the playlist, defaults to None.
+        :type name: str | None, optional
+        :param songCount: The numbers of songs inside the playlist, defaults to None.
+        :type songCount: int | None, optional
+        :param duration: The total duration of the playlist, defaults to None.
+        :type duration: int | None, optional
+        :param created: The time when the playlist was created, defaults to None.
+        :type created: str | None, optional
+        :param changed: The last time the playlist was changed, defaults to None.
+        :type changed: str | None, optional
+        :param comment: The comment of the playlist, defaults to None.
+        :type comment: str | None, optional
+        :param owner: The owner of the playlist, defaults to None.
+        :type owner: str | None, optional
+        :param public: If the playlist is public, defaults to None.
+        :type public: bool | None, optional
+        :param coverArt: The ID of the cover art of the playlist, defaults to None.
+        :type coverArt: str | None, optional
+        :param allowedUser: The list of users allowed to reproduce the playlist,
+            defaults to None.
+        :type allowedUser: list[str] | None, optional
+        :param entry: A list with all the songs inside the playlist, defaults to None.
+        :type entry: list[dict[str, Any]] | None, optional
+        """
+
         self.__subsonic = subsonic
         self.id = id
         self.name = name

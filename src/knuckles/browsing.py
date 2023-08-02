@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 
-from .models.genre import Genre
-
 from .api import Api
 from .models.album import Album, AlbumInfo
 from .models.artist import Artist
+from .models.genre import Genre
+from .models.music_folder import MusicFolder
 from .models.song import Song
 
 if TYPE_CHECKING:
@@ -21,6 +21,17 @@ class Browsing:
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
         self.api = api
         self.subsonic = subsonic
+
+    def get_music_folders(self) -> list[MusicFolder]:
+        """Calls the "getMusicFolders" endpoint of the API.
+
+        :return: A list with all the received music folders.
+        :rtype: list[MusicFolder]
+        """
+
+        response = self.api.request("getMusicFolders")["musicFolders"]["musicFolder"]
+
+        return [MusicFolder(self.subsonic, **music_folder) for music_folder in response]
 
     def get_genres(self) -> list[Genre]:
         """Calls the "getGenres" endpoint of the API.

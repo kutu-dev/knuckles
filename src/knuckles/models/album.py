@@ -28,7 +28,7 @@ class AlbumInfo:
         largeImageUrl: str | None,
     ) -> None:
         """Representation of all the data related to an album info in Subsonic.
-        :param subsonic:The subsonic object to make all the internal requests with it.
+        :param subsonic: The subsonic object to make all the internal requests with it.
         :type subsonic: Subsonic
         :param album_id: The ID3 of the album associated with the info.
         :type album_id: str
