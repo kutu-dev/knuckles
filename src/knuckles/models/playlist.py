@@ -58,7 +58,7 @@ class Playlist:
         :param allowedUser: The list of users allowed to reproduce the playlist,
             defaults to None.
         :type allowedUser: list[str] | None, optional
-        :param entry: The list of songs inside the playlist, defaults to None.
+        :param entry: A list with all the songs inside the playlist, defaults to None.
         :type entry: list[dict[str, Any]] | None, optional
         """
 

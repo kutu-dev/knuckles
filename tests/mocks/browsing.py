@@ -60,10 +60,12 @@ def artists(artist: dict[str, Any]) -> dict[str, Any]:
 
 @pytest.fixture()
 def mock_get_artists(
-    mock_generator: MockGenerator, artists: dict[str, Any], music_folder_id: str
+    mock_generator: MockGenerator,
+    artists: dict[str, Any],
+    music_folders: list[dict[str, Any]],
 ) -> Response:
     return mock_generator(
-        "getArtists", {"musicFolderId": music_folder_id}, {"artists": artists}
+        "getArtists", {"musicFolderId": music_folders[0]["id"]}, {"artists": artists}
     )
 
 

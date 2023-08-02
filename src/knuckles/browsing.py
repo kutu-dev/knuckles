@@ -31,7 +31,7 @@ class Browsing:
 
         response = self.api.request("getMusicFolders")["musicFolders"]["musicFolder"]
 
-        return [MusicFolder(**music_folder) for music_folder in response]
+        return [MusicFolder(self.subsonic, **music_folder) for music_folder in response]
 
     def get_genres(self) -> list[Genre]:
         """Calls the "getGenres" endpoint of the API.

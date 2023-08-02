@@ -52,11 +52,11 @@ def test_get_artists(
     subsonic: Subsonic,
     mock_get_artists: Response,
     artist: dict[str, Any],
-    music_folder_id: str,
+    music_folders: list[dict[str, Any]],
 ) -> None:
     responses.add(mock_get_artists)
 
-    response = subsonic.browsing.get_artists(music_folder_id)
+    response = subsonic.browsing.get_artists(music_folders[0]["id"])
 
     assert response[0].id == artist["id"]
 
