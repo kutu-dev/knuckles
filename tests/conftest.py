@@ -13,7 +13,7 @@ pytest_plugins = [
     "tests.mocks.browsing",
     "tests.mocks.user_management",
     "tests.mocks.playlists",
-    "test.mocks.sharing",
+    "tests.mocks.sharing",
 ]
 
 

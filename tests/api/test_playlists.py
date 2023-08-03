@@ -2,9 +2,8 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from responses import Response
-
 from knuckles import Subsonic
+from responses import Response
 
 
 @responses.activate
