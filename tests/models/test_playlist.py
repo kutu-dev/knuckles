@@ -2,10 +2,11 @@ from typing import Any
 
 import pytest
 import responses
+from responses import Response
+
 from knuckles import Subsonic
 from knuckles.exceptions import MissingPlaylistName
 from knuckles.models.playlist import Playlist
-from responses import Response
 
 
 @responses.activate
@@ -54,7 +55,7 @@ def test_playlisy_create_none_name_value(
     with pytest.raises(
         MissingPlaylistName,
         match=(
-            "A not None value in the name parameter"
+            "A non None value in the name parameter"
             + "is necessary to create a playlist"
         ),
     ):

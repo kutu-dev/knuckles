@@ -8,6 +8,14 @@ Should be implemented
 - Refactor "if \* else None" to use oneliners
 - POST Support
 
+To think more...
+
+- Normalized variable names in tests
+- Checks if the model method can be executed (Avoid server side errors?)
+- Singular method for getMusicFolder(s)
+- Capitalized model names (E.g. Song vs song)
+- Value vs Name in Genre model
+
 Not implemented
 
 - Audio transcoding

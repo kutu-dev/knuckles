@@ -105,7 +105,7 @@ class Playlist:
         if self.name is None:
             raise MissingPlaylistName(
                 (
-                    "A not None value in the name parameter"
+                    "A non None value in the name parameter"
                     + "is necessary to create a playlist"
                 )
             )
