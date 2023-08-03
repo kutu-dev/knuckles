@@ -11,22 +11,35 @@ def test_get_shares(
     subsonic: Subsonic,
     mock_get_shares: Response,
     share: dict[str, Any],
-    song: dict[str, Any],
-    username: str,
 ) -> None:
     responses.add(mock_get_shares)
 
     response = subsonic.sharing.get_shares()
 
     assert response[0].id == share["id"]
-    assert response[0].url == share["url"]
-    assert response[0].description == share["description"]
-    assert response[0].username == username
-    assert response[0].created == parser.parse(share["created"])
-    assert response[0].expires == parser.parse(share["expires"])
-    assert response[0].last_visited == share["lastVisited"]
-    assert response[0].visit_count == share["visitCount"]
-    assert response[0].songs[0].title == song["title"]
+
+
+@responses.activate
+def test_get_share(
+    subsonic: Subsonic,
+    mock_get_shares: Response,
+    share: dict[str, Any],
+    song: dict[str, Any],
+    username: str,
+) -> None:
+    responses.add(mock_get_shares)
+
+    response = subsonic.sharing.get_share(share["id"])
+
+    assert response.id == share["id"]
+    assert response.url == share["url"]
+    assert response.description == share["description"]
+    assert response.user.username == username
+    assert response.created == parser.parse(share["created"])
+    assert response.expires == parser.parse(share["expires"])
+    assert response.last_visited == share["lastVisited"]
+    assert response.visit_count == share["visitCount"]
+    assert response.songs[0].title == song["title"]
 
 
 @responses.activate

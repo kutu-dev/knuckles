@@ -25,6 +25,10 @@ class AlbumOrArtistArgumentsInSong(ValueError):
     pass
 
 
+class ShareInvalidSongList(ValueError):
+    pass
+
+
 class CodeError0(Exception):
     pass
 

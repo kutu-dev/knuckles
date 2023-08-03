@@ -10,7 +10,10 @@ Should be implemented
 
 To think more...
 
+- Normalized variable names in tests
+- Checks if the model method can be executed (Avoid server side errors?)
 - Singular method for getMusicFolder(s)
+- Capitalized model names (E.g. Song vs song)
 
 Not implemented
 
