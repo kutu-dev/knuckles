@@ -3,7 +3,8 @@ from typing import Any
 import pytest
 import responses
 from knuckles import Subsonic
-from knuckles.exceptions import ShareInvalidSongList
+from knuckles.exceptions import ResourceNotFound, ShareInvalidSongList
+from knuckles.models.share import Share
 from responses import Response
 
 
@@ -23,6 +24,22 @@ def test_generate(
 
 
 @responses.activate
+def test_generate_nonexistent_genre(
+    subsonic: Subsonic,
+    mock_get_shares: Response,
+) -> None:
+    responses.add(mock_get_shares)
+
+    nonexistent_share = Share(subsonic, "Foo")
+
+    with pytest.raises(
+        ResourceNotFound,
+        match="Unable to generate share as it does not exist in the server",
+    ):
+        nonexistent_share.generate()
+
+
+@responses.activate
 def test_create(
     subsonic: Subsonic,
     mock_get_shares: Response,
@@ -35,8 +52,7 @@ def test_create(
     requested_share = subsonic.sharing.get_share(share["id"])
     requested_share.create()
 
-    assert True is False
-    # assert type(requested_share) ==
+    assert type(requested_share) == Share
 
 
 @responses.activate
@@ -98,8 +114,7 @@ def test_update(
     requested_share = subsonic.sharing.get_share(share["id"])
     requested_share.update()
 
-    assert True is False
-    # assert type(requested_share) ==
+    assert type(requested_share) == Share
 
 
 @responses.activate
@@ -115,5 +130,4 @@ def test_delete(
     requested_share = subsonic.sharing.get_share(share["id"])
     requested_share.delete()
 
-    assert True is False
-    # assert type(requested_share) ==
+    assert type(requested_share) == Share

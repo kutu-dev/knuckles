@@ -14,9 +14,9 @@ def share(song: dict[str, Any], username: str) -> dict[str, Any]:
         "url": "http://example.com/share/1",
         "description": "Forget and Remember (Comfort Fit)",
         "username": username,
-        "created": "2023-03-16T04:13:12+30:00",
-        "expires": "2024-04-16T04:13:11+56:23",
-        "lastVisited": "2023-11-14T04:13:09+00:01",
+        "created": "2020-04-16T04:12:09+00:00",
+        "expires": "2024-05-21T04:13:10+00:00",
+        "lastVisited": "2023-03-17T04:10:09+00:00",
         "visitCount": 0,
         "entry": [song],
     }
@@ -28,11 +28,13 @@ def mock_get_shares(mock_generator: MockGenerator, share: dict[str, Any]) -> Res
 
 
 @pytest.fixture
-def mock_create_share(mock_generator: MockGenerator, share: dict[str, Any]) -> Response:
+def mock_create_share(
+    mock_generator: MockGenerator, share: dict[str, Any], song: dict[str, Any]
+) -> Response:
     return mock_generator(
         "createShare",
         {
-            "id": [share["id"]],
+            "id": song["id"],
             "description": share["description"],
             "expires": parser.parse(share["expires"]).timestamp() * 1000,
         },

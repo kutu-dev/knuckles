@@ -37,8 +37,9 @@ def test_get_share(
     assert response.user.username == username
     assert response.created == parser.parse(share["created"])
     assert response.expires == parser.parse(share["expires"])
-    assert response.last_visited == share["lastVisited"]
+    assert response.last_visited == parser.parse(share["lastVisited"])
     assert response.visit_count == share["visitCount"]
+    assert type(response.songs) == list
     assert response.songs[0].title == song["title"]
 
 

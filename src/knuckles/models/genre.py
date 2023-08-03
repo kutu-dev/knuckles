@@ -33,7 +33,7 @@ class Genre:
         self.song_count = songCount
         self.album_count = albumCount
 
-    def generate(self) -> "Genre | None":
+    def generate(self) -> "Genre":
         """Return a new genre with all the data updated from the API,
         using the endpoint that return the most information possible.
 

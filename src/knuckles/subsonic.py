@@ -5,6 +5,7 @@ from .jukebox import JukeboxControl
 from .media_annotation import MediaAnnotation
 from .media_library_scanning import MediaLibraryScanning
 from .playlists import Playlists
+from .sharing import Sharing
 from .system import System
 from .user_management import UserManagement
 
@@ -47,7 +48,7 @@ class Subsonic:
         self.playlists = Playlists(self.api, self)
         self.media_retrieval = None
         self.media_annotation = MediaAnnotation(self.api, self)
-        self.sharing = None
+        self.sharing = Sharing(self.api, self)
         self.podcast = None
         self.jukebox = JukeboxControl(self.api, self)
         self.internet_radio = None

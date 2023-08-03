@@ -49,7 +49,8 @@ class Browsing:
 
         :param name: The name of the genre to get.
         :type name: str
-        :return: A genre object that correspond with the given name.
+        :return: A genre object that correspond with the given name
+            or None if if no genre found.
         :rtype: Genre | None
         """
 

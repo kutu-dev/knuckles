@@ -1,4 +1,3 @@
-# Not fancy but does the job
 from typing import TYPE_CHECKING, Self
 
 from knuckles.models.genre import Genre
