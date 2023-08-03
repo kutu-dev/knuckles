@@ -11,16 +11,14 @@ def mock_star_song(mock_generator: MockGenerator, song: dict[str, Any]) -> Respo
     return mock_generator("star", {"id": song["id"]})
 
 
-# TODO Album
 @pytest.fixture
-def mock_star_album(mock_generator: MockGenerator, song: dict[str, Any]) -> Response:
-    return mock_generator("star", {"albumId": "albumId"})
+def mock_star_album(mock_generator: MockGenerator, album: dict[str, Any]) -> Response:
+    return mock_generator("star", {"albumId": album["id"]})
 
 
-# TODO Artist
 @pytest.fixture
-def mock_star_artist(mock_generator: MockGenerator) -> Response:
-    return mock_generator("star", {"artistId": "artistId"})
+def mock_star_artist(mock_generator: MockGenerator, artist: dict[str, Any]) -> Response:
+    return mock_generator("star", {"artistId": artist["id"]})
 
 
 @pytest.fixture
@@ -28,16 +26,16 @@ def mock_unstar_song(mock_generator: MockGenerator, song: dict[str, Any]) -> Res
     return mock_generator("unstar", {"id": song["id"]})
 
 
-# TODO Album
 @pytest.fixture
-def mock_unstar_album(mock_generator: MockGenerator) -> Response:
-    return mock_generator("unstar", {"albumId": "albumId"})
+def mock_unstar_album(mock_generator: MockGenerator, album: dict[str, Any]) -> Response:
+    return mock_generator("unstar", {"albumId": album["id"]})
 
 
-# TODO Artist
 @pytest.fixture
-def mock_unstar_artist(mock_generator: MockGenerator) -> Response:
-    return mock_generator("unstar", {"artistId": "artistId"})
+def mock_unstar_artist(
+    mock_generator: MockGenerator, artist: dict[str, Any]
+) -> Response:
+    return mock_generator("unstar", {"artistId": artist["id"]})
 
 
 @pytest.fixture

@@ -7,9 +7,12 @@ Should be implemented
 
 - Refactor "if \* else None" to use oneliners
 - POST Support
+- Clean imports
+- Fix TODOs
 
 To think more...
 
+- isDir in models
 - Normalized variable names in tests
 - Checks if the model method can be executed (Avoid server side errors?)
 - Singular method for getMusicFolder(s)
