@@ -84,6 +84,22 @@ def mock_get_podcast_without_episodes(
     )
 
 
+@pytest.fixture()
+def number_of_new_episodes() -> int:
+    return 1
+
+
+@pytest.fixture()
+def mock_get_newest_podcasts(
+    mock_generator: MockGenerator, number_of_new_episodes: int, episode: dict[str, Any]
+) -> Response:
+    return mock_generator(
+        "getNewestPodcasts",
+        {"count": number_of_new_episodes},
+        {"newestPodcasts": {"episode": [episode] * number_of_new_episodes}},
+    )
+
+
 @pytest.fixture
 def mock_refresh_podcasts(mock_generator: MockGenerator) -> Response:
     return mock_generator("refreshPodcasts")

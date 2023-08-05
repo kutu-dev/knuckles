@@ -18,6 +18,7 @@ To think more...
 - Singular method for getMusicFolder(s)
 - Capitalized model names (E.g. Song vs song)
 - Value vs Name in Genre model
+- Parametrized scrobble and podcast?
 
 Not implemented
 
