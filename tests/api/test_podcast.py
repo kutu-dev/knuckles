@@ -2,8 +2,9 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from knuckles import Subsonic
 from responses import Response
+
+from knuckles import Subsonic
 
 
 @responses.activate
@@ -126,6 +127,19 @@ def test_get_newest_podcasts(
     response = subsonic.podcast.get_newest_podcasts()
 
     assert response[0].id == episode["id"]
+
+
+@responses.activate
+def test_get_episode(
+    subsonic: Subsonic,
+    mock_get_podcasts_with_episodes: Response,
+    episode: dict[str, Any],
+) -> None:
+    responses.add(mock_get_podcasts_with_episodes)
+
+    response = subsonic.podcast.get_episode(episode["id"])
+
+    assert response.id == episode["id"]
 
 
 @responses.activate
