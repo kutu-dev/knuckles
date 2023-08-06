@@ -28,6 +28,32 @@ class Share:
         visitCount: int | None = None,
         entry: list[dict[str, Any]] | None = None,
     ) -> None:
+        """Representation of all the data related to a share in Subsonic.
+
+        :param subsonic: The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param id: The id of the share.
+        :type id: str
+        :param url: The url of the share, defaults to None.
+        :type url: str | None, optional
+        :param description: The description of the share, defaults to None.
+        :type description: str | None, optional
+        :param username: The username of the creator of the share, defaults to None.
+        :type username: str | None, optional
+        :param created: The time when the share was created, defaults to None.
+        :type created: str | None, optional
+        :param expires: The time when the share expires, defaults to None.
+        :type expires: str | None, optional
+        :param lastVisited: The last tim the share was used, defaults to None.
+        :type lastVisited: str | None, optional
+        :param visitCount: The number of times the share has been used,
+            defaults to None.
+        :type visitCount: int | None, optional
+        :param entry: A list with all the songs that the share gives access,
+            defaults to None.
+        :type entry: list[dict[str, Any]] | None, optional
+        """
+
         self.__subsonic = subsonic
         self.id = id
         self.url = url
@@ -62,6 +88,17 @@ class Share:
         return getted_share
 
     def create(self) -> "Share":
+        """Calls the "createShare" endpoint of the API.
+
+        Creates a new playlist with the same data of the object
+        where the method is called.
+
+        :raises ShareInvalidSongList: Raised if the list of songs
+            in the share is empty of None.
+        :return: The new created share.
+        :rtype: Share
+        """
+
         if self.songs is None or self.songs == []:
             raise ShareInvalidSongList(
                 (
@@ -79,11 +116,28 @@ class Share:
         return new_share
 
     def update(self) -> Self:
+        """Calls the "updateShare" endpoint of the API.
+
+        Updates the description and expire date of the share with the ones
+        in the parameters of the object.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.sharing.update_share(self.id, self.description, self.expires)
 
         return self
 
     def delete(self) -> Self:
+        """Calls the "deleteShare" endpoint of the API.
+
+        Delete the share with the same ID as the id parameter in the object.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.sharing.delete_share(self.id)
 
         return self

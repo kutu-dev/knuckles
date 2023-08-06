@@ -98,7 +98,6 @@ class Playlist:
 
         :raises MissingPlaylistName: Raised if the object where the method is called
         has a None value in the name parameter.
-
         :return: The new created playlist.
         :rtype: Playlist
         """
@@ -127,7 +126,7 @@ class Playlist:
         Updates the name, comment and public state of the playlist with the ones
         in the parameters of the object.
 
-        :return: _description_
+        :return: The object itself to allow method chaining.
         :rtype: Self
         """
         self.__subsonic.playlists.update_playlist(

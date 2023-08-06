@@ -21,11 +21,26 @@ class Sharing:
         self.subsonic = subsonic
 
     def get_shares(self) -> list[Share]:
+        """Calls the "getShares" endpoint of the API.
+
+        :return: A list with all the shares given by the server.
+        :rtype: list[Share]
+        """
+
         response = self.api.request("getShares")["shares"]["share"]
 
         return [Share(self.subsonic, **share) for share in response]
 
     def get_share(self, id: str) -> Share | None:
+        """Using the "getShares" endpoint iterates over all the shares
+        and find the one with the same ID.
+
+        :param id: The ID of the share to find.
+        :type id: str
+        :return: The found share or None if no one is found.
+        :rtype: Share | None
+        """
+
         shares = self.get_shares()
 
         for share in shares:
@@ -40,6 +55,18 @@ class Sharing:
         description: str | None = None,
         expires: datetime | None = None,
     ) -> Share:
+        """Calls the "createShare" endpoint of the API.
+
+        :param songs_ids: A list with IDs of songs to add to the new share.
+        :type songs_ids: list[str]
+        :param description: A description for the share, defaults to None.
+        :type description: str | None, optional
+        :param expires: The time when the share should expires, defaults to None.
+        :type expires: datetime | None, optional
+        :return: The new created share.
+        :rtype: Share
+        """
+
         response = self.api.request(
             "createShare",
             {
@@ -57,6 +84,18 @@ class Sharing:
         new_description: str | None = None,
         new_expires: datetime | None = None,
     ) -> Share:
+        """Calls the "updateShare" endpoint of the API.
+
+        :param share_id: The ID of the share to update.
+        :type share_id: str
+        :param new_description: A new description for the share, defaults to None.
+        :type new_description: str | None, optional
+        :param new_expires: A new expire date fot the share, defaults to None.
+        :type new_expires: datetime | None, optional
+        :return: An object with a Share object with all the updated info.
+        :rtype: Share
+        """
+
         self.api.request(
             "updateShare",
             {
@@ -75,6 +114,14 @@ class Sharing:
         return updated_share
 
     def delete_share(self, share_id: str) -> "Subsonic":
+        """Calls the "deleteShare" endpoint of the API.
+
+        :param share_id: The ID of the share to delete.
+        :type share_id: str
+        :return: The object itself to allow method chaining.
+        :rtype: Subsonic
+        """
+
         self.api.request("deleteShare", {"id": share_id})
 
         return self.subsonic
