@@ -31,6 +31,6 @@ def test_generate_nonexistent_genre(
 
     with pytest.raises(
         ResourceNotFound,
-        match="Unable to generate gender as it does not exist in the server",
+        match="Unable to generate genre as it does not exist in the server",
     ):
         nonexistent_genre.generate()

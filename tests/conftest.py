@@ -14,6 +14,7 @@ pytest_plugins = [
     "tests.mocks.user_management",
     "tests.mocks.playlists",
     "tests.mocks.sharing",
+    "tests.mocks.podcast",
 ]
 
 

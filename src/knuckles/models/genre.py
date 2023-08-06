@@ -47,7 +47,7 @@ class Genre:
 
         if getted_genre is None:
             raise ResourceNotFound(
-                "Unable to generate gender as it does not exist in the server"
+                "Unable to generate genre as it does not exist in the server"
             )
 
         return getted_genre

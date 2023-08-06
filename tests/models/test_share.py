@@ -50,7 +50,7 @@ def test_create(
     responses.add(mock_create_share)
 
     requested_share = subsonic.sharing.get_share(share["id"])
-    requested_share.create()
+    requested_share = requested_share.create()
 
     assert type(requested_share) == Share
 

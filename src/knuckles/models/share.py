@@ -1,15 +1,11 @@
 from typing import TYPE_CHECKING, Any, Self
 
-from ..exceptions import (
-    ResourceNotFound,
-    ShareInvalidSongList,
-)
+from ..exceptions import ResourceNotFound, ShareInvalidSongList
 from .song import Song
 from .user import User
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
-
 
 from dateutil import parser
 
@@ -65,7 +61,7 @@ class Share:
 
         return getted_share
 
-    def create(self) -> Self:
+    def create(self) -> "Share":
         if self.songs is None or self.songs == []:
             raise ShareInvalidSongList(
                 (
@@ -76,9 +72,11 @@ class Share:
 
         songs_ids = [song.id for song in self.songs]
 
-        self.__subsonic.sharing.create_share(songs_ids, self.description, self.expires)
+        new_share = self.__subsonic.sharing.create_share(
+            songs_ids, self.description, self.expires
+        )
 
-        return self
+        return new_share
 
     def update(self) -> Self:
         self.__subsonic.sharing.update_share(self.id, self.description, self.expires)
