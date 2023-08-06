@@ -34,22 +34,23 @@ def episode() -> dict[str, Any]:
 def channel(episode: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": "1",
-        "url": "https://downloads.domain.com/podcasts/rss.xml",
+        "url": "https://example.com/podcasts/rss.xml",
         "title": "Title",
         "description": "Description",
         "coverArt": "coverArtId",
-        "originalImageUrl": "https://downloads.domain.com/podcasts/drkarl.jpg",
+        "originalImageUrl": "https://example.com/podcasts/image.jpg",
         "status": "completed",
-        "episode": [episode],
     }
 
 
 @pytest.fixture
 def mock_get_podcasts_with_episodes(
-    mock_generator: MockGenerator, channel: dict[str, Any]
+    mock_generator: MockGenerator, channel: dict[str, Any], episode: dict[str, Any]
 ) -> Response:
     return mock_generator(
-        "getPlaylists", {"includeEpisodes": True}, {"podcasts": [channel]}
+        "getPodcasts",
+        {"includeEpisodes": True},
+        {"podcasts": [{**channel, "episode": [episode]}]},
     )
 
 
@@ -58,18 +59,18 @@ def mock_get_podcasts_without_episodes(
     mock_generator: MockGenerator, channel: dict[str, Any]
 ) -> Response:
     return mock_generator(
-        "getPlaylists", {"includeEpisodes": False}, {"podcasts": [channel]}
+        "getPodcasts", {"includeEpisodes": False}, {"podcasts": [channel]}
     )
 
 
 @pytest.fixture
 def mock_get_podcast_with_episodes(
-    mock_generator: MockGenerator, channel: dict[str, Any]
+    mock_generator: MockGenerator, channel: dict[str, Any], episode: dict[str, Any]
 ) -> Response:
     return mock_generator(
-        "getPlaylists",
+        "getPodcasts",
         {"id": channel["id"], "includeEpisodes": True},
-        {"podcasts": [channel]},
+        {"podcasts": [{**channel, "episode": [episode]}]},
     )
 
 
@@ -78,7 +79,7 @@ def mock_get_podcast_without_episodes(
     mock_generator: MockGenerator, channel: dict[str, Any]
 ) -> Response:
     return mock_generator(
-        "getPlaylists",
+        "getPodcasts",
         {"id": channel["id"], "includeEpisodes": False},
         {"podcasts": [channel]},
     )

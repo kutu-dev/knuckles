@@ -1,9 +1,11 @@
 from typing import Any
 
+import pytest
 import responses
-from responses import Response
-
 from knuckles import Subsonic
+from knuckles.exceptions import ResourceNotFound
+from knuckles.models.podcast import Episode
+from responses import Response
 
 
 @responses.activate
@@ -22,6 +24,21 @@ def test_generate(
 
 
 @responses.activate
+def test_generate_nonexistent_episode(
+    subsonic: Subsonic, mock_get_podcasts_with_episodes: Response
+) -> None:
+    responses.add(mock_get_podcasts_with_episodes)
+
+    nonexistent_episode = Episode(subsonic, "Foo")
+
+    with pytest.raises(
+        ResourceNotFound,
+        match="Unable to generate episode as it does not exist in the server",
+    ):
+        nonexistent_episode.generate()
+
+
+@responses.activate
 def test_download(
     subsonic: Subsonic,
     mock_get_podcasts_with_episodes: Response,
@@ -34,7 +51,7 @@ def test_download(
     requested_episode = subsonic.podcast.get_episode(episode["id"])
     requested_episode = requested_episode.download()
 
-    # assert type(requested_channel) == Episode
+    assert type(requested_episode) == Episode
 
 
 @responses.activate
@@ -50,4 +67,4 @@ def test_delete(
     requested_episode = subsonic.podcast.get_episode(episode["id"])
     requested_episode = requested_episode.delete()
 
-    # assert type(requested_channel) == Episode
+    assert type(requested_episode) == Episode

@@ -2,9 +2,8 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from responses import Response
-
 from knuckles import Subsonic
+from responses import Response
 
 
 @responses.activate
@@ -19,6 +18,7 @@ def test_get_podcasts_default(
     response = subsonic.podcast.get_podcasts()
 
     assert response[0].id == channel["id"]
+    assert type(response[0].episodes) is list
     assert response[0].episodes[0].id == episode["id"]
 
 
@@ -34,6 +34,7 @@ def test_get_podcasts_with_episodes(
     response = subsonic.podcast.get_podcasts(True)
 
     assert response[0].id == channel["id"]
+    assert type(response[0].episodes) is list
     assert response[0].episodes[0].id == episode["id"]
 
 
@@ -69,6 +70,7 @@ def test_get_podcast_default(
     assert response.cover_art.id == channel["coverArt"]
     assert response.original_image_url == channel["originalImageUrl"]
     assert response.status == channel["status"]
+    assert type(response.episodes) is list
     assert response.episodes[0].id == episode["id"]
     assert response.episodes[0].stream_id == episode["streamId"]
     assert response.episodes[0].channel.id == episode["channelId"]
@@ -100,6 +102,7 @@ def test_get_podcast_with_episodes(
     response = subsonic.podcast.get_podcast(channel["id"], True)
 
     assert response.id == channel["id"]
+    assert type(response.episodes) is list
     assert response.episodes[0].id == episode["id"]
 
 
@@ -108,23 +111,25 @@ def test_get_podcast_without_episodes(
     subsonic: Subsonic,
     mock_get_podcast_without_episodes: Response,
     channel: dict[str, Any],
-    episode: dict[str, Any],
 ) -> None:
     responses.add(mock_get_podcast_without_episodes)
 
     response = subsonic.podcast.get_podcast(channel["id"], False)
 
     assert response.id == channel["id"]
-    assert response.episodes[0].id == episode["id"]
+    assert response.episodes is None
 
 
 @responses.activate
 def test_get_newest_podcasts(
-    subsonic: Subsonic, mock_get_newest_podcasts: Response, episode: dict[str, Any]
+    subsonic: Subsonic,
+    mock_get_newest_podcasts: Response,
+    number_of_new_episodes: int,
+    episode: dict[str, Any],
 ) -> None:
     responses.add(mock_get_newest_podcasts)
 
-    response = subsonic.podcast.get_newest_podcasts()
+    response = subsonic.podcast.get_newest_podcasts(number_of_new_episodes)
 
     assert response[0].id == episode["id"]
 

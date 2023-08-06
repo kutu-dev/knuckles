@@ -19,6 +19,7 @@ To think more...
 - Capitalized model names (E.g. Song vs song)
 - Value vs Name in Genre model
 - Parametrized scrobble and podcast?
+- Exceptions in generates, etc
 
 Not implemented
 

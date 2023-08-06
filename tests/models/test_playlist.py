@@ -2,15 +2,14 @@ from typing import Any
 
 import pytest
 import responses
-from responses import Response
-
 from knuckles import Subsonic
 from knuckles.exceptions import MissingPlaylistName
 from knuckles.models.playlist import Playlist
+from responses import Response
 
 
 @responses.activate
-def test_playlist_generate(
+def test_generate(
     subsonic: Subsonic,
     mock_get_playlist: Response,
     playlist: dict[str, Any],
@@ -26,7 +25,7 @@ def test_playlist_generate(
 
 
 @responses.activate
-def test_playlist_create(
+def test_create(
     subsonic: Subsonic,
     mock_get_playlist: Response,
     mock_create_playlist: Response,
@@ -44,7 +43,7 @@ def test_playlist_create(
 
 
 @responses.activate
-def test_playlisy_create_none_name_value(
+def test_create_none_name_value(
     subsonic: Subsonic, mock_get_playlist: Response, playlist: dict[str, Any]
 ):
     responses.add(mock_get_playlist)
@@ -63,7 +62,7 @@ def test_playlisy_create_none_name_value(
 
 
 @responses.activate
-def test_playlist_update(
+def test_update(
     subsonic: Subsonic,
     mock_get_playlist: Response,
     mock_update_comment_and_public: Response,
@@ -79,7 +78,7 @@ def test_playlist_update(
 
 
 @responses.activate
-def test_playlist_delete(
+def test_delete(
     subsonic: Subsonic,
     mock_get_playlist: Response,
     mock_delete_playlist: Response,

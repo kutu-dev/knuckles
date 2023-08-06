@@ -3,10 +3,10 @@ from typing import Any
 
 import pytest
 import responses
-from responses import Response
-
 from knuckles import Subsonic
 from knuckles.exceptions import InvalidRatingNumber
+from responses import Response
+
 from tests.conftest import MockGenerator
 
 
@@ -21,22 +21,24 @@ def test_star_song(
     assert type(response) is Subsonic
 
 
-# TODO Album
 @responses.activate
-def test_star_album(subsonic: Subsonic, mock_star_album: Response) -> None:
+def test_star_album(
+    subsonic: Subsonic, mock_star_album: Response, album: dict[str, Any]
+) -> None:
     responses.add(mock_star_album)
 
-    response: Subsonic = subsonic.media_annotation.star_album("albumId")
+    response: Subsonic = subsonic.media_annotation.star_album(album["id"])
 
     assert type(response) is Subsonic
 
 
-# TODO Artist
 @responses.activate
-def test_star_artist(subsonic: Subsonic, mock_star_artist: Response) -> None:
+def test_star_artist(
+    subsonic: Subsonic, mock_star_artist: Response, artist: dict[str, Any]
+) -> None:
     responses.add(mock_star_artist)
 
-    response: Subsonic = subsonic.media_annotation.star_artist("artistId")
+    response: Subsonic = subsonic.media_annotation.star_artist(artist["id"])
 
     assert type(response) is Subsonic
 
@@ -52,22 +54,24 @@ def test_unstar_song(
     assert type(response) is Subsonic
 
 
-# TODO Album
 @responses.activate
-def test_unstar_album(subsonic: Subsonic, mock_unstar_album: Response) -> None:
+def test_unstar_album(
+    subsonic: Subsonic, mock_unstar_album: Response, album: dict[str, Any]
+) -> None:
     responses.add(mock_unstar_album)
 
-    response: Subsonic = subsonic.media_annotation.unstar_album("albumId")
+    response: Subsonic = subsonic.media_annotation.unstar_album(album["id"])
 
     assert type(response) is Subsonic
 
 
-# TODO Artist
 @responses.activate
-def test_unstar_artist(subsonic: Subsonic, mock_unstar_artist: Response) -> None:
+def test_unstar_artist(
+    subsonic: Subsonic, mock_unstar_artist: Response, artist: dict[str, Any]
+) -> None:
     responses.add(mock_unstar_artist)
 
-    response: Subsonic = subsonic.media_annotation.unstar_artist("artistId")
+    response: Subsonic = subsonic.media_annotation.unstar_artist(artist["id"])
 
     assert type(response) is Subsonic
 
