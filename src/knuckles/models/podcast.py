@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Self
 
-from ..exceptions import MissingChannelUrl, ResourceNotFound
+from ..exceptions import ResourceNotFound
 from .cover_art import CoverArt
 
 if TYPE_CHECKING:
@@ -110,14 +110,14 @@ class Episode:
         :rtype: Episode
         """
 
-        getted_episode = self.__subsonic.podcast.get_episode(self.id)
+        get_episode = self.__subsonic.podcast.get_episode(self.id)
 
-        if getted_episode is None:
+        if get_episode is None:
             raise ResourceNotFound(
                 "Unable to generate episode as it does not exist in the server"
             )
 
-        return getted_episode
+        return get_episode
 
     def download(self) -> Self:
         """Calls the "downloadPodcastEpisode" endpoint of the API.
@@ -212,21 +212,15 @@ class Channel:
     def create(self) -> Self:
         """Calls the "createPodcastChannel" endpoint of the API.
 
-        :raises MissingChannelUrl: Raised if the object where the method is called
-        has a None value in the url parameter.
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
 
-        if self.url is None:
-            raise MissingChannelUrl(
-                (
-                    "A non None value in the url parameter"
-                    + "is necessary to create a channel"
-                )
-            )
-
-        self.__subsonic.podcast.create_podcast_channel(self.url)
+        # Ignore the None type error as the server
+        # should return a Error Code 10 in response
+        self.__subsonic.podcast.create_podcast_channel(
+            self.url  # type: ignore[arg-type]
+        )
 
         return self
 

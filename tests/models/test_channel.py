@@ -1,11 +1,10 @@
 from typing import Any
 
-import pytest
 import responses
-from knuckles import Subsonic
-from knuckles.exceptions import MissingChannelUrl
-from knuckles.models.podcast import Channel
 from responses import Response
+
+from knuckles import Subsonic
+from knuckles.models.podcast import Channel
 
 
 @responses.activate
@@ -37,26 +36,6 @@ def test_create(
     requested_channel = requested_channel.create()
 
     assert type(requested_channel) == Channel
-
-
-@responses.activate
-def test_create_none_url_value(
-    subsonic: Subsonic,
-    mock_get_podcast_with_episodes: Response,
-    channel: dict[str, Any],
-):
-    responses.add(mock_get_podcast_with_episodes)
-
-    response = subsonic.podcast.get_podcast(channel["id"])
-    response.url = None
-
-    with pytest.raises(
-        MissingChannelUrl,
-        match=(
-            "A non None value in the url parameter" + "is necessary to create a channel"
-        ),
-    ):
-        response.create()
 
 
 @responses.activate

@@ -1,6 +1,7 @@
 from .api import Api
 from .browsing import Browsing
 from .chat import Chat
+from .internet_radio import InternetRadio
 from .jukebox import JukeboxControl
 from .media_annotation import MediaAnnotation
 from .media_library_scanning import MediaLibraryScanning
@@ -52,7 +53,7 @@ class Subsonic:
         self.sharing = Sharing(self.api, self)
         self.podcast = Podcast(self.api, self)
         self.jukebox = JukeboxControl(self.api, self)
-        self.internet_radio = None
+        self.internet_radio = InternetRadio(self.api, self)
         self.chat = Chat(self.api, self)
         self.user_management = UserManagement(self.api, self)
         self.bookmarks = None

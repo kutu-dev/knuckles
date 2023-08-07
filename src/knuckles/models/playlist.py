@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Any, Self
 
 from dateutil import parser
 
-from ..exceptions import MissingPlaylistName
 from ..models.song import CoverArt, Song
 from ..models.user import User
 
@@ -11,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class Playlist:
-    """Representation of all the data related to a user in Subsonic."""
+    """Representation of all the data related to a playlist in Subsonic."""
 
     def __init__(
         self,
@@ -96,26 +95,19 @@ class Playlist:
         Creates a new playlist with the same data of the object
         where the method is called.
 
-        :raises MissingPlaylistName: Raised if the object where the method is called
-        has a None value in the name parameter.
         :return: The new created playlist.
         :rtype: Playlist
         """
-        if self.name is None:
-            raise MissingPlaylistName(
-                (
-                    "A non None value in the name parameter"
-                    + "is necessary to create a playlist"
-                )
-            )
-
         # Create a list of Song IDs if songs is not None
         songs_ids = [song.id for song in self.songs] if self.songs else None
 
-        # As the createPlaylist endpoint is very limited
-        # a call to the updatePlaylist endpoint is used to extend it
         new_playlist = self.__subsonic.playlists.create_playlist(
-            self.name, self.comment, self.public, songs_ids
+            # Ignore the None type error as the server
+            # should return a Error Code 10 in response
+            self.name,  # type: ignore[arg-type]
+            self.comment,
+            self.public,
+            songs_ids,
         )
 
         return new_playlist

@@ -78,14 +78,14 @@ class Share:
         :rtype: Share
         """
 
-        getted_share = self.__subsonic.sharing.get_share(self.id)
+        get_share = self.__subsonic.sharing.get_share(self.id)
 
-        if getted_share is None:
+        if get_share is None:
             raise ResourceNotFound(
                 "Unable to generate share as it does not exist in the server"
             )
 
-        return getted_share
+        return get_share
 
     def create(self) -> "Share":
         """Calls the "createShare" endpoint of the API.

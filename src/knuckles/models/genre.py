@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 
 
 class Genre:
-    """Representation of all the data related to genres in Subsonic."""
+    """Representation of all the data related to a genre in Subsonic."""
 
     def __init__(
         self,
@@ -16,7 +16,7 @@ class Genre:
         songCount: int | None = None,
         albumCount: int | None = None,
     ) -> None:
-        """Representation of all the data related to genres in Subsonic.
+        """Representation of all the data related a to genre in Subsonic.
 
         :param subsonic: The subsonic object to make all the internal requests with it.
         :type subsonic: Subsonic
@@ -43,11 +43,11 @@ class Genre:
         :return: A new genre object with all the data updated.
         :rtype: Genre
         """
-        getted_genre = self.__subsonic.browsing.get_genre(self.value)
+        get_genre = self.__subsonic.browsing.get_genre(self.value)
 
-        if getted_genre is None:
+        if get_genre is None:
             raise ResourceNotFound(
                 "Unable to generate genre as it does not exist in the server"
             )
 
-        return getted_genre
+        return get_genre
