@@ -22,17 +22,17 @@ class Jukebox:
     ) -> None:
         """Representation of all the data related to the jukebox in Subsonic.
 
-        :param subsonic: _description_
+        :param subsonic: The subsonic object to make all the internal requests with it.
         :type subsonic: Subsonic
-        :param currentIndex: _description_
+        :param currentIndex: The current index of the jukebox.
         :type currentIndex: int
-        :param playing: _description_
+        :param playing: If the jukebox is playing a song.
         :type playing: bool
-        :param gain: _description_
+        :param gain: The gain of the jukebox.
         :type gain: float
-        :param position: _description_
+        :param position: The position of the jukebox.
         :type position: int
-        :param entry: _description_, defaults to None
+        :param entry: A list with all the songs inside the jukebox, defaults to None.
         :type entry: list[dict[str, Any]] | None, optional
         """
 

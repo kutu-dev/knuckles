@@ -36,6 +36,16 @@ class InternetRadioStation:
         self.homepage_url = homepageUrl
 
     def generate(self) -> "InternetRadioStation | None":
+        """Return a new internet radio station with all the data updated from the API,
+        using the endpoint that return the most information possible.
+
+        Useful for making copies with updated data or updating the object itself
+        with immutability, e.g., foo = foo.generate().
+
+        :return: A new internet radio station object with all the data updated.
+        :rtype: InternetRadioStation
+        """
+
         get_station = self.__subsonic.internet_radio.get_internet_radio_station(self.id)
 
         if get_station is None:
@@ -49,6 +59,12 @@ class InternetRadioStation:
         return get_station
 
     def create(self) -> Self:
+        """Calls the "createInternetRadioStation" endpoint of the API.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.internet_radio.create_internet_radio_station(
             self.stream_url, self.name, self.homepage_url
         )
@@ -56,6 +72,12 @@ class InternetRadioStation:
         return self
 
     def update(self) -> Self:
+        """Calls the "updateInternetRadioStation" endpoint of the API.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.internet_radio.update_internet_radio_station(
             self.id, self.stream_url, self.name, self.homepage_url
         )
@@ -63,6 +85,12 @@ class InternetRadioStation:
         return self
 
     def delete(self) -> Self:
+        """Calls the "deleteInternetRadioStation" endpoint of the API.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.internet_radio.delete_internet_radio_station(self.id)
 
         return self
