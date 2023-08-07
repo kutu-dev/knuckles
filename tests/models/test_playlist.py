@@ -1,11 +1,10 @@
 from typing import Any
 
-import pytest
 import responses
-from knuckles import Subsonic
-from knuckles.exceptions import MissingPlaylistName
-from knuckles.models.playlist import Playlist
 from responses import Response
+
+from knuckles import Subsonic
+from knuckles.models.playlist import Playlist
 
 
 @responses.activate
@@ -40,25 +39,6 @@ def test_create(
     response = response.create()
 
     assert type(response) == Playlist
-
-
-@responses.activate
-def test_create_none_name_value(
-    subsonic: Subsonic, mock_get_playlist: Response, playlist: dict[str, Any]
-):
-    responses.add(mock_get_playlist)
-
-    response = subsonic.playlists.get_playlist(playlist["id"])
-    response.name = None
-
-    with pytest.raises(
-        MissingPlaylistName,
-        match=(
-            "A non None value in the name parameter"
-            + "is necessary to create a playlist"
-        ),
-    ):
-        response.create()
 
 
 @responses.activate

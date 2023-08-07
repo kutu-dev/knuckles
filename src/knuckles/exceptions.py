@@ -13,14 +13,6 @@ class VideoArgumentsInSong(ValueError):
     pass
 
 
-class MissingPlaylistName(ValueError):
-    pass
-
-
-class MissingChannelUrl(ValueError):
-    pass
-
-
 class ResourceNotFound(Exception):
     pass
 
