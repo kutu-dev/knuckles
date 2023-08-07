@@ -3,6 +3,7 @@ from typing import Any
 import responses
 from responses import Response
 
+from knuckles.models.internet_radio_station import InternetRadioStation
 from knuckles.subsonic import Subsonic
 
 
@@ -38,7 +39,7 @@ def test_create(
     )
     requested_station = requested_station.create()
 
-    assert type(requested_station) is None
+    assert type(requested_station) is InternetRadioStation
 
 
 @responses.activate
@@ -56,7 +57,7 @@ def test_update(
     )
     requested_station = requested_station.update()
 
-    assert type(requested_station) is None
+    assert type(requested_station) is InternetRadioStation
 
 
 @responses.activate
@@ -74,4 +75,4 @@ def test_delete(
     )
     requested_station = requested_station.delete()
 
-    assert type(requested_station) is None
+    assert type(requested_station) is InternetRadioStation

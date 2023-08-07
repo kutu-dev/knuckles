@@ -110,14 +110,14 @@ class Episode:
         :rtype: Episode
         """
 
-        getted_episode = self.__subsonic.podcast.get_episode(self.id)
+        get_episode = self.__subsonic.podcast.get_episode(self.id)
 
-        if getted_episode is None:
+        if get_episode is None:
             raise ResourceNotFound(
                 "Unable to generate episode as it does not exist in the server"
             )
 
-        return getted_episode
+        return get_episode
 
     def download(self) -> Self:
         """Calls the "downloadPodcastEpisode" endpoint of the API.
