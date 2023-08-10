@@ -3,9 +3,9 @@ from typing import Any
 
 import pytest
 import responses
-from knuckles import Song, Subsonic
 from responses import Response
 
+from knuckles import Song, Subsonic
 from tests.conftest import MockGenerator
 
 
@@ -17,7 +17,7 @@ def test_generate(
 ) -> None:
     responses.add(mock_get_song)
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
+    requested_song = subsonic.browsing.get_song(song["id"])
     requested_song.title = "Foo"
     requested_song = requested_song.generate()
 
@@ -34,7 +34,7 @@ def test_song_star(
     responses.add(mock_get_song)
     responses.add(mock_star_song)
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
+    requested_song = subsonic.browsing.get_song(song["id"])
 
     assert type(requested_song.star()) is Song
 
