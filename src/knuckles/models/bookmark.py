@@ -56,6 +56,12 @@ class Bookmark:
         return get_bookmark
 
     def create(self) -> Self:
+        """Calls the "createBookmark" endpoint of the API.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.bookmarks.create_bookmark(
             self.song.id, self.position, self.comment
         )
@@ -63,6 +69,13 @@ class Bookmark:
         return self
 
     def update(self) -> Self:
+        """Calls the "createBookmark" endpoint of the API, as creating and updating
+        a bookmark uses the same endpoint. Useful for having more self descriptive code.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.bookmarks.update_bookmark(
             self.song.id, self.position, self.comment
         )
@@ -70,6 +83,12 @@ class Bookmark:
         return self
 
     def delete(self) -> Self:
+        """Calls the "deleteBookmark" endpoint of the API.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
         self.__subsonic.bookmarks.delete_bookmark(self.song.id)
 
         return self

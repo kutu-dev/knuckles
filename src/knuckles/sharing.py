@@ -92,7 +92,7 @@ class Sharing:
         :type new_description: str | None, optional
         :param new_expires: A new expire date fot the share, defaults to None.
         :type new_expires: datetime | None, optional
-        :return: An object with a Share object with all the updated info.
+        :return: A Share object with all the updated info.
         :rtype: Share
         """
 

@@ -1,10 +1,9 @@
 from typing import Any
 
 import responses
-from responses import Response
-
 from knuckles import Subsonic
 from knuckles.models.bookmark import Bookmark
+from responses import Response
 
 
 @responses.activate
@@ -61,7 +60,6 @@ def test_delete(
     mock_get_bookmarks: Response,
     mock_delete_bookmark: Response,
     song: dict[str, Any],
-    bookmark: dict[str, Any],
 ) -> None:
     responses.add(mock_get_bookmarks)
     responses.add(mock_delete_bookmark)
