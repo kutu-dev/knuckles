@@ -1,11 +1,11 @@
-# TODO Unfinished
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import knuckles.models.album as album_model
 from knuckles.models.cover_art import CoverArt
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
+
 from dateutil import parser
 
 
@@ -77,6 +77,6 @@ class Artist:
         :rtype: Artist
         """
 
-        new_artist = self.__subsonic.browsing.get_artist(self.id)
+        get_artist = self.__subsonic.browsing.get_artist(self.id)
 
-        return new_artist
+        return get_artist
