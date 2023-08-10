@@ -2,6 +2,7 @@ from typing import Any
 
 import responses
 from knuckles import Subsonic
+from knuckles.models.play_queue import PlayQueue
 from responses import Response
 
 
@@ -32,5 +33,4 @@ def test_save(
     requested_queue = subsonic.bookmarks.get_play_queue()
     requested_queue = requested_queue.save()
 
-    assert True is False
-    # assert type(requested_queue) is PlayQueue
+    assert type(requested_queue) is PlayQueue

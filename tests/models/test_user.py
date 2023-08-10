@@ -73,7 +73,7 @@ def test_user_change_password(
     response = subsonic.user_management.get_user(user["username"])
     response = response.change_password(new_password)
 
-    assert type(response) == User
+    assert type(response) is User
 
 
 def test_user_without_api_access(user: dict[str, Any]) -> None:

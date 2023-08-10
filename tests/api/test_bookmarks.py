@@ -97,6 +97,7 @@ def test_get_play_queue(
     assert response.current.id == song["id"]
     assert response.changed == parser.parse(play_queue["changed"])
     assert response.changed_by == client
+    assert type(response.songs) is list
     assert response.songs[0].id == song["id"]
 
 
@@ -109,4 +110,8 @@ def test_save_play_queue(
 ) -> None:
     responses.add(mock_save_play_queue)
 
-    subsonic.bookmarks.save_play_queue([song["id"]], song["id"], play_queue["position"])
+    response = subsonic.bookmarks.save_play_queue(
+        [song["id"]], song["id"], play_queue["position"]
+    )
+
+    assert response.current.id == song["id"]
