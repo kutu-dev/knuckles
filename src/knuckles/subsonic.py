@@ -1,4 +1,5 @@
 from .api import Api
+from .bookmarks import Bookmarks
 from .browsing import Browsing
 from .chat import Chat
 from .internet_radio import InternetRadio
@@ -56,6 +57,6 @@ class Subsonic:
         self.internet_radio = InternetRadio(self.api, self)
         self.chat = Chat(self.api, self)
         self.user_management = UserManagement(self.api, self)
-        self.bookmarks = None
+        self.bookmarks = Bookmarks(self.api, self)
         self.media_library_scanning = MediaLibraryScanning(self.api)
         self.media_library_scanning = MediaLibraryScanning(self.api)

@@ -11,7 +11,6 @@ if TYPE_CHECKING:
     from .subsonic import Subsonic
 
 
-# TODO Unfinished
 class Browsing:
     """Class that contains all the methods needed to interact
     with the browsing calls in the Subsonic API.
