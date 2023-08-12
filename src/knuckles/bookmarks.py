@@ -102,6 +102,12 @@ class Bookmarks:
         return self.subsonic
 
     def get_play_queue(self) -> PlayQueue:
+        """Calls the "getPlayQueue" endpoint of the API.
+
+        :return: The play queue of the authenticated user.
+        :rtype: PlayQueue
+        """
+
         response = self.api.request("getPlayQueue")["playQueue"]
 
         return PlayQueue(self.subsonic, **response)
@@ -112,6 +118,20 @@ class Bookmarks:
         current_song_id: str | None = None,
         position: int | None = None,
     ) -> PlayQueue:
+        """Calls the "savePlayQueue" endpoint of the API.
+
+        :param song_ids: A list with all the IDs of the songs to add.
+        :type song_ids: list[str]
+        :param current_song_id: The ID of the current song in the queue,
+            defaults to None.
+        :type current_song_id: str | None, optional
+        :param position: The position in seconds of the current song,
+            defaults to None.
+        :type position: int | None, optional
+        :return: The new saved play queue.
+        :rtype: PlayQueue
+        """
+
         self.api.request(
             "savePlayQueue",
             {"id": song_ids, "current": current_song_id, "position": position},

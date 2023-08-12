@@ -48,7 +48,15 @@ class PlayQueue:
         return get_play_queue
 
     def save(self) -> Self:
-        # TODO This should raise an exception
+        """Calls the "savePlayQueue" endpoint of the API.
+
+        Saves the play queue using the parameters in the object.
+
+        :return: _description_
+        :rtype: Self
+        """
+
+        # TODO This should raise an exception?
         song_ids: list[str] = [song.id for song in self.songs] if self.songs else []
 
         self.__subsonic.bookmarks.save_play_queue(
