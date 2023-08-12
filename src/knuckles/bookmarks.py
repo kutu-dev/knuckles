@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from .api import Api
 from .models.bookmark import Bookmark
+from .models.play_queue import PlayQueue
 
 if TYPE_CHECKING:
     from .subsonic import Subsonic
@@ -65,7 +66,7 @@ class Bookmarks:
             "createBookmark", {"id": id, "position": position, "comment": comment}
         )
 
-        # Fake the structure given by the songs in the API.
+        # Fake the song structure given by in the API.
         return Bookmark(self.subsonic, {"id": id}, position=position, comment=comment)
 
     def update_bookmark(
@@ -73,7 +74,7 @@ class Bookmarks:
     ) -> Bookmark:
         """Method that internally calls the create_bookmark method
         as creating and updating a bookmark uses the same endpoint. Useful for having
-        more self descriptive code.
+        more self-descriptive code.
 
         :param id: The ID of the song of the bookmark.
         :type id: str
@@ -99,3 +100,47 @@ class Bookmarks:
         self.api.request("deleteBookmark", {"id": id})
 
         return self.subsonic
+
+    def get_play_queue(self) -> PlayQueue:
+        """Calls the "getPlayQueue" endpoint of the API.
+
+        :return: The play queue of the authenticated user.
+        :rtype: PlayQueue
+        """
+
+        response = self.api.request("getPlayQueue")["playQueue"]
+
+        return PlayQueue(self.subsonic, **response)
+
+    def save_play_queue(
+        self,
+        song_ids: list[str],
+        current_song_id: str | None = None,
+        position: int | None = None,
+    ) -> PlayQueue:
+        """Calls the "savePlayQueue" endpoint of the API.
+
+        :param song_ids: A list with all the IDs of the songs to add.
+        :type song_ids: list[str]
+        :param current_song_id: The ID of the current song in the queue,
+            defaults to None.
+        :type current_song_id: str | None, optional
+        :param position: The position in seconds of the current song,
+            defaults to None.
+        :type position: int | None, optional
+        :return: The new saved play queue.
+        :rtype: PlayQueue
+        """
+
+        self.api.request(
+            "savePlayQueue",
+            {"id": song_ids, "current": current_song_id, "position": position},
+        )
+
+        # TODO This approach is expensive, a better one is preferred
+        # Fake the song structure given by in the API.
+        songs = []
+        for song_id in song_ids:
+            songs.append({"id": song_id})
+
+        return PlayQueue(self.subsonic, songs, current_song_id, position)

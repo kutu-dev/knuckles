@@ -103,7 +103,7 @@ class Playlist:
 
         new_playlist = self.__subsonic.playlists.create_playlist(
             # Ignore the None type error as the server
-            # should return a Error Code 10 in response
+            # should return an Error Code 10 in response
             self.name,  # type: ignore[arg-type]
             self.comment,
             self.public,

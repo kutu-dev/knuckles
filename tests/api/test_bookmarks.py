@@ -2,8 +2,9 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from knuckles import Subsonic
 from responses import Response
+
+from knuckles import Subsonic
 
 
 @responses.activate
@@ -77,3 +78,40 @@ def test_delete_bookmark(
     response = subsonic.bookmarks.delete_bookmark(song["id"])
 
     assert type(response) == Subsonic
+
+
+@responses.activate
+def test_get_play_queue(
+    subsonic: Subsonic,
+    mock_get_play_queue: Response,
+    username: str,
+    song: dict[str, Any],
+    play_queue: dict[str, Any],
+    client: str,
+) -> None:
+    responses.add(mock_get_play_queue)
+
+    response = subsonic.bookmarks.get_play_queue()
+
+    assert response.user.username == username
+    assert response.current.id == song["id"]
+    assert response.changed == parser.parse(play_queue["changed"])
+    assert response.changed_by == client
+    assert type(response.songs) is list
+    assert response.songs[0].id == song["id"]
+
+
+@responses.activate
+def test_save_play_queue(
+    subsonic: Subsonic,
+    mock_save_play_queue: Response,
+    song: dict[str, Any],
+    play_queue: dict[str, Any],
+) -> None:
+    responses.add(mock_save_play_queue)
+
+    response = subsonic.bookmarks.save_play_queue(
+        [song["id"]], song["id"], play_queue["position"]
+    )
+
+    assert response.current.id == song["id"]
