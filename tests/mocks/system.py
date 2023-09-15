@@ -34,8 +34,20 @@ def mock_auth_without_token(mock_generator: MockGenerator, password: str) -> Res
 
 
 @pytest.fixture
-def open_subsonic_extensions() -> dict[str, Any]:
-    return {"template": [1, 2], "extension2": [2, 3]}
+def open_subsonic_extension_name() -> str:
+    return "extensionName"
+
+
+@pytest.fixture
+def open_subsonic_extension_versions() -> list[int]:
+    return [1, 2]
+
+
+@pytest.fixture
+def open_subsonic_extensions(
+    open_subsonic_extension_name: str, open_subsonic_extension_versions: list[int]
+) -> dict[str, Any]:
+    return {open_subsonic_extension_name: open_subsonic_extension_versions}
 
 
 @pytest.fixture
