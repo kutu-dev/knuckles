@@ -12,8 +12,6 @@ if TYPE_CHECKING:
 
 # Use a plain dataclass as it only stores lists
 # and doesn't have any sort of method to be generated
-
-
 @dataclass
 class SearchResult:
     songs: list[Song] | None = None
