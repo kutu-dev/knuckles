@@ -8,6 +8,7 @@ from .media_annotation import MediaAnnotation
 from .media_library_scanning import MediaLibraryScanning
 from .playlists import Playlists
 from .podcast import Podcast
+from .searching import Searching
 from .sharing import Sharing
 from .system import System
 from .user_management import UserManagement
@@ -47,7 +48,7 @@ class Subsonic:
         self.system = System(self.api)
         self.browsing = Browsing(self.api, self)
         self.lists = None  #! ?
-        self.searching = None  #! ?
+        self.searching = Searching(self.api, self)
         self.playlists = Playlists(self.api, self)
         self.media_retrieval = None
         self.media_annotation = MediaAnnotation(self.api, self)
