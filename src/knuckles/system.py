@@ -1,5 +1,13 @@
+from dataclasses import dataclass
+
 from .api import Api
 from .models.system import License, SubsonicResponse
+
+
+@dataclass
+class OpenSubsonicExtension:
+    name: str
+    versions: list[int]
 
 
 class System:
@@ -34,3 +42,11 @@ class System:
         response = self.api.request("getLicense")["license"]
 
         return License(**response)
+
+    def get_open_subsonic_extensions(self) -> list[OpenSubsonicExtension]:
+        response = self.api.request("getOpenSubsonicExtensions")[
+            "openSubsonicExtensions"
+        ]
+        return [
+            OpenSubsonicExtension(name, versions) for name, versions in response.items()
+        ]
