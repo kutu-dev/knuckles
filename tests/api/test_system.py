@@ -43,3 +43,16 @@ def test_auth_without_token(
 
     subsonic.api.use_token = False
     assert subsonic.system.ping().status == "ok"
+
+
+@responses.activate
+def test_get_open_subsonic_extensions(
+    subsonic: Subsonic,
+    mock_get_open_subsonic_extensions: Response,
+    open_subsonic_extensions: dict[str, Any],
+) -> None:
+    responses.add(mock_get_open_subsonic_extensions)
+
+    response = subsonic.system.get_open_subsonic_extensions()
+
+    assert response == open_subsonic_extensions

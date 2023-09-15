@@ -31,3 +31,19 @@ def mock_get_license(
 @pytest.fixture
 def mock_auth_without_token(mock_generator: MockGenerator, password: str) -> Response:
     return mock_generator("ping", {"p": password})
+
+
+@pytest.fixture
+def open_subsonic_extensions() -> dict[str, Any]:
+    return {"template": [1, 2], "extension2": [2, 3]}
+
+
+@pytest.fixture
+def mock_get_open_subsonic_extensions(
+    mock_generator: MockGenerator, open_subsonic_extensions: dict[str, Any]
+) -> Response:
+    return mock_generator(
+        "getOpenSubsonicExtensions",
+        {},
+        {"openSubsonicExtensions": open_subsonic_extensions},
+    )
