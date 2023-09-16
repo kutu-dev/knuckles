@@ -160,3 +160,31 @@ def mock_get_album_info(
     return mock_generator(
         "getAlbumInfo2", {"id": album["id"]}, {"albumInfo": album_info}
     )
+
+
+@pytest.fixture
+def artist_info(artist: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "biography": {},
+        "musicBrainzId": "1",
+        "lastFmUrl": "",
+        "smallImageUrl": "http://localhost:8989/play/art/f20070e8e11611cc53542a38801d60fa/artist/2/thumb34.jpg",
+        "mediumImageUrl": "http://localhost:8989/play/art/2b9b6c057cd4bf21089ce7572e7792b6/artist/2/thumb64.jpg",
+        "largeImageUrl": "http://localhost:8989/play/art/e18287c23a75e263b64c31b3d64c1944/artist/2/thumb174.jpg",
+        "similarArtist": [artist],
+    }
+
+
+@pytest.fixture
+def mock_get_artist_info(
+    mock_generator: MockGenerator, artist: dict[str, Any], artist_info: dict[str, Any]
+) -> Response:
+    return mock_generator(
+        "getArtistInfo2",
+        {
+            "id": artist["id"],
+            "count": len(artist_info["similarArtist"]),
+            "includeNotPresent": False,
+        },
+        {"artistInfo2": artist_info},
+    )
