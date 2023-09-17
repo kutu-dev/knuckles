@@ -174,9 +174,20 @@ def artist_info(artist: dict[str, Any]) -> dict[str, Any]:
         "similarArtist": [artist],
     }
 
-
 @pytest.fixture
 def mock_get_artist_info(
+    mock_generator: MockGenerator, artist: dict[str, Any], artist_info: dict[str, Any]
+) -> Response:
+    return mock_generator(
+        "getArtistInfo2",
+        {
+            "id": artist["id"],
+        },
+        {"artistInfo2": artist_info},
+    )
+
+@pytest.fixture
+def mock_get_artist_info_with_all_optional_params(
     mock_generator: MockGenerator, artist: dict[str, Any], artist_info: dict[str, Any]
 ) -> Response:
     return mock_generator(

@@ -179,15 +179,13 @@ def test_get_album_info(
 @responses.activate
 def test_get_artist_info(
     subsonic: Subsonic,
-    mock_get_artist_info: Response,
+    mock_get_artist_info_with_all_optional_params: Response,
     artist: dict[str, Any],
     artist_info: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_artist_info)
+    responses.add(mock_get_artist_info_with_all_optional_params)
 
-    response = subsonic.browsing.get_artist_info(
-        artist["id"], len(artist_info["similarArtist"]), False
-    )
+    response = subsonic.browsing.get_artist_info(artist["id"], len(artist_info["similarArtist"]), False)
 
     assert response.biography == artist_info["biography"]
     assert response.music_brainz_id == artist_info["musicBrainzId"]

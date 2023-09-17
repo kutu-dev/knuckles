@@ -8,6 +8,66 @@ if TYPE_CHECKING:
 
 from dateutil import parser
 
+class ArtistInfo:
+    """Representation of all the data related to an artist info in Subsonic."""
+
+    def __init__(
+        self,
+        # Internal
+        subsonic: "Subsonic",
+        artist_id: str,
+        # Subsonic fields
+        biography: str,
+        musicBrainzId: str | None,
+        lastFmUrl: str | None,
+        smallImageUrl: str | None,
+        mediumImageUrl: str | None,
+        largeImageUrl: str | None,
+        similarArtist: list[dict[str, Any]] | None = None
+    ) -> None:
+        """Representation of all the data related to an album info in Subsonic.
+        :param subsonic: The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param artist_id: The ID3 of the artist associated with the info.
+        :type artist_id: str
+        :param biography: A biography for the album.
+        :type biography: str
+        :param musicBrainzId:The ID in music Brainz of the album.
+        :type musicBrainzId: str
+        :param smallImageUrl: An URL to the small size cover image of the artist.
+        :type smallImageUrl: str
+        :param mediumImageUrl: An URL to the medium size cover image of the artist.
+        :type mediumImageUrl: str
+        :param largeImageUrl: An URL to the large size cover image of the artist.
+        :type largeImageUrl: str
+        :param similarArtist: A list with all the similar artists.
+        :type similarArtist: list[str, Any]
+        """
+
+        self.__subsonic = subsonic
+        self.artist_id = artist_id
+        self.biography = biography
+        self.music_brainz_id = musicBrainzId
+        self.last_fm_url = lastFmUrl
+        self.small_image_url = smallImageUrl
+        self.medium_image_url = mediumImageUrl
+        self.large_image_url = largeImageUrl
+        self.similar_artists = [
+            Artist(self.__subsonic, **artist) for artist in similarArtist
+        ]
+
+    def generate(self) -> "ArtistInfo":
+        """Return a new artist info with all the data updated from the API,
+        using the endpoint that return the most information possible.
+
+        Useful for making copies with updated data or updating the object itself
+        with immutability, e.g., foo = foo.generate().
+
+        :return: A new album info object with all the data updated.
+        :rtype: ArtistInfo
+        """
+
+        return self.__subsonic.browsing.get_artist_info(self.artist_id)
 
 class Artist:
     """Representation of all the data related to an artist in Subsonic."""
@@ -65,6 +125,7 @@ class Artist:
             if album
             else None
         )
+        self.info: ArtistInfo | None = None
 
     def generate(self) -> "Artist":
         """Return a new artist with all the data updated from the API,
@@ -77,6 +138,19 @@ class Artist:
         :rtype: Artist
         """
 
-        get_artist = self.__subsonic.browsing.get_artist(self.id)
+        new_artist = self.__subsonic.browsing.get_artist(self.id)
+        new_artist.get_artist_info()
 
-        return get_artist
+        return new_artist
+
+    def get_artist_info(self) -> ArtistInfo:
+        """Returns the extra info given by the "getAlbumInfo2" endpoint,
+        also sets it in the info property of the model.
+
+        :return: An AlbumInfo object with all the extra info given by the API.
+        :rtype: AlbumInfo
+        """
+
+        self.info = self.__subsonic.browsing.get_artist_info(self.id)
+
+        return self.info
