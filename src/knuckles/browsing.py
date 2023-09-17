@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from .api import Api
 from .models.album import Album, AlbumInfo
-from .models.artist import Artist
+from .models.artist import Artist, ArtistInfo
 from .models.genre import Genre
 from .models.music_folder import MusicFolder
 from .models.song import Song
@@ -138,3 +138,13 @@ class Browsing:
         response = self.api.request("getSong", {"id": id})["song"]
 
         return Song(self.subsonic, **response)
+
+    def get_artist_info(
+        self, id: str, count: int | None = None, include_not_present: bool | None = None
+    ) -> ArtistInfo:
+        response = self.api.request(
+            "getArtistInfo2",
+            {"id": id, "count": count, "includeNotPresent": include_not_present},
+        )["artistInfo2"]
+
+        return ArtistInfo(self.subsonic, id, **response)

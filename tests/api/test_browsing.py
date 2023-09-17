@@ -2,9 +2,8 @@ from typing import Any
 
 import responses
 from dateutil import parser
-from responses import Response
-
 from knuckles import CoverArt, Subsonic
+from responses import Response
 
 
 @responses.activate
@@ -175,3 +174,28 @@ def test_get_album_info(
     assert response.medium_image_url == album_info["mediumImageUrl"]
     assert response.large_image_url == album_info["largeImageUrl"]
     assert response.large_image_url == album_info["largeImageUrl"]
+
+
+@responses.activate
+def test_get_artist_info(
+    subsonic: Subsonic,
+    mock_get_artist_info_with_all_optional_params: Response,
+    artist: dict[str, Any],
+    artist_info: dict[str, Any],
+) -> None:
+    responses.add(mock_get_artist_info_with_all_optional_params)
+
+    response = subsonic.browsing.get_artist_info(
+        artist["id"], len(artist_info["similarArtist"]), False
+    )
+
+    assert response.biography == artist_info["biography"]
+    assert response.music_brainz_id == artist_info["musicBrainzId"]
+    assert response.last_fm_url == artist_info["lastFmUrl"]
+    assert response.small_image_url == artist_info["smallImageUrl"]
+    assert response.medium_image_url == artist_info["mediumImageUrl"]
+    assert response.large_image_url == artist_info["largeImageUrl"]
+    assert response.large_image_url == artist_info["largeImageUrl"]
+    assert response.similar_artists is not None
+    assert len(response.similar_artists) == len(artist_info["similarArtist"])
+    assert response.similar_artists[0].name == artist["name"]
