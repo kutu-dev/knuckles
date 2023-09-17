@@ -185,7 +185,9 @@ def test_get_artist_info(
 ) -> None:
     responses.add(mock_get_artist_info_with_all_optional_params)
 
-    response = subsonic.browsing.get_artist_info(artist["id"], len(artist_info["similarArtist"]), False)
+    response = subsonic.browsing.get_artist_info(
+        artist["id"], len(artist_info["similarArtist"]), False
+    )
 
     assert response.biography == artist_info["biography"]
     assert response.music_brainz_id == artist_info["musicBrainzId"]
@@ -194,5 +196,6 @@ def test_get_artist_info(
     assert response.medium_image_url == artist_info["mediumImageUrl"]
     assert response.large_image_url == artist_info["largeImageUrl"]
     assert response.large_image_url == artist_info["largeImageUrl"]
+    assert response.similar_artists is not None
     assert len(response.similar_artists) == len(artist_info["similarArtist"])
     assert response.similar_artists[0].name == artist["name"]
