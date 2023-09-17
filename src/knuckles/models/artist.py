@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 from dateutil import parser
 
+
 class ArtistInfo:
     """Representation of all the data related to an artist info in Subsonic."""
 
@@ -23,7 +24,7 @@ class ArtistInfo:
         smallImageUrl: str | None,
         mediumImageUrl: str | None,
         largeImageUrl: str | None,
-        similarArtist: list[dict[str, Any]] | None = None
+        similarArtist: list[dict[str, Any]] | None = None,
     ) -> None:
         """Representation of all the data related to an album info in Subsonic.
         :param subsonic: The subsonic object to make all the internal requests with it.
@@ -52,9 +53,11 @@ class ArtistInfo:
         self.small_image_url = smallImageUrl
         self.medium_image_url = mediumImageUrl
         self.large_image_url = largeImageUrl
-        self.similar_artists = [
-            Artist(self.__subsonic, **artist) for artist in similarArtist
-        ]
+        self.similar_artists = (
+            [Artist(self.__subsonic, **artist) for artist in similarArtist]
+            if similarArtist
+            else None
+        )
 
     def generate(self) -> "ArtistInfo":
         """Return a new artist info with all the data updated from the API,
@@ -68,6 +71,7 @@ class ArtistInfo:
         """
 
         return self.__subsonic.browsing.get_artist_info(self.artist_id)
+
 
 class Artist:
     """Representation of all the data related to an artist in Subsonic."""
