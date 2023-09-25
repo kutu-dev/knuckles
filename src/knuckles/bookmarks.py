@@ -137,7 +137,6 @@ class Bookmarks:
             {"id": song_ids, "current": current_song_id, "position": position},
         )
 
-        # TODO This approach is expensive, a better one is preferred
         # Fake the song structure given by in the API.
         songs = []
         for song_id in song_ids:

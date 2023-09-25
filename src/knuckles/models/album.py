@@ -67,7 +67,6 @@ class AlbumInfo:
         return self.__subsonic.browsing.get_album_info(self.album_id)
 
 
-# TODO Unfinished
 class Album:
     """Representation of all the data related to an album in Subsonic."""
 

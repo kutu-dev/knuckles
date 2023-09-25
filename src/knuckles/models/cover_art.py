@@ -1,4 +1,3 @@
-# TODO Unfinished
 class CoverArt:
     """Representation of all the data related to a cover art in Subsonic."""
 

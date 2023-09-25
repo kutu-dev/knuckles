@@ -34,7 +34,7 @@ class MediaAnnotation:
     def star_album(self, id: str) -> "Subsonic":
         """Calls the "star" endpoint of the API.
 
-        :param id: The ID of a album to star.
+        :param id: The ID of an album to star.
         :type id: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
@@ -47,7 +47,7 @@ class MediaAnnotation:
     def star_artist(self, id: str) -> "Subsonic":
         """Calls the "star" endpoint of the API.
 
-        :param id: The ID of a artist to star.
+        :param id: The ID of an artist to star.
         :type id: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
@@ -73,7 +73,7 @@ class MediaAnnotation:
     def unstar_album(self, id: str) -> "Subsonic":
         """Calls the "unstar" endpoint of the API.
 
-        :param id: The ID of a album to unstar.
+        :param id: The ID of an album to unstar.
         :type id: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
@@ -86,7 +86,7 @@ class MediaAnnotation:
     def unstar_artist(self, id: str) -> "Subsonic":
         """Calls the "unstar" endpoint of the API.
 
-        :param id: The ID of a artist to unstar.
+        :param id: The ID of an artist to unstar.
         :type id: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic

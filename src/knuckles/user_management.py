@@ -22,8 +22,6 @@ class UserManagement:
         """Converts the data in a User object to a dictionary
         with the keys used in all the user related calls to the API.
 
-        # TODO Find a better approach to this.
-
         :param user: The user to convert to a dictionary
         :type user: User
         :return: The dictionary with the data and valid keys to the API.

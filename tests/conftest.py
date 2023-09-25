@@ -18,6 +18,7 @@ pytest_plugins = [
     "tests.mocks.internet_radio",
     "tests.mocks.bookmarks",
     "tests.mocks.searching",
+    "tests.mocks.media_retrieval",
 ]
 
 
