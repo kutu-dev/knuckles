@@ -12,7 +12,7 @@ def test_stream() -> None:
 
 
 @responses.activate
-def test_download(
+def test_download_with_a_given_filename(
     tmp_path: Path, params: dict[str, Any], subsonic: Subsonic, song: dict[str, Any]
 ) -> None:
     placeholder_text = "Lorem Ipsum"
