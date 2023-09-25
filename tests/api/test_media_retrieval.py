@@ -2,8 +2,9 @@ from pathlib import Path
 from typing import Any
 
 import responses
-from knuckles import Subsonic
 from responses import matchers
+
+from knuckles import Subsonic
 
 
 def test_stream() -> None:
@@ -29,7 +30,7 @@ def test_download(
             responses.GET,
             "https://example.com/rest/download",
             body=file.read(),
-            content_type="audio/opus",
+            content_type="audio/wav",
             match=[
                 matchers.query_param_matcher(
                     {**params, "id": song["id"]}, strict_match=False
