@@ -31,7 +31,7 @@ def mock_get_genres(mock_generator: MockGenerator, genre: dict[str, Any]) -> Res
 
 
 @pytest.fixture()
-def artist(album: dict[str, Any]) -> dict[str, Any]:
+def artist(base_url: str, album: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": "37ec820ca7193e17040c98f7da7c4b51",
         "name": "2 Mello",
@@ -39,7 +39,7 @@ def artist(album: dict[str, Any]) -> dict[str, Any]:
         "albumCount": 1,
         "userRating": 5,
         "averageRating": 4.5,
-        "artistImageUrl": "https://example.com/artist.png",
+        "artistImageUrl": f"{base_url}/artist.png",
         "starred": "2017-04-11T10:42:50.842Z",
         "album": [album],
     }
@@ -142,14 +142,14 @@ def mock_get_song(mock_generator: MockGenerator, song: dict[str, Any]) -> Respon
 
 
 @pytest.fixture
-def album_info() -> dict[str, Any]:
+def album_info(base_url: str) -> dict[str, Any]:
     return {
         "notes": "Example note",
         "musicBrainzId": "6e1d48f7-717c-416e-af35-5d2454a13af2",
-        "lastFmUrl": "https://example.com/lastfm/album",
-        "smallImageUrl": "https://example.com/album/small.png",
-        "mediumImageUrl": "https://example.com/album/medium.png",
-        "largeImageUrl": "https://example.com/album/large.png",
+        "lastFmUrl": f"{base_url}/lastfm/album",
+        "smallImageUrl": f"{base_url}/album/small.png",
+        "mediumImageUrl": f"{base_url}/album/medium.png",
+        "largeImageUrl": f"{base_url}/album/large.png",
     }
 
 

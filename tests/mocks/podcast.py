@@ -31,14 +31,14 @@ def episode() -> dict[str, Any]:
 
 
 @pytest.fixture
-def channel(episode: dict[str, Any]) -> dict[str, Any]:
+def channel(base_url: str) -> dict[str, Any]:
     return {
         "id": "1",
-        "url": "https://example.com/podcasts/rss.xml",
+        "url": f"{base_url}/podcasts/rss.xml",
         "title": "Title",
         "description": "Description",
         "coverArt": "coverArtId",
-        "originalImageUrl": "https://example.com/podcasts/image.jpg",
+        "originalImageUrl": f"{base_url}/podcasts/image.jpg",
         "status": "completed",
     }
 
