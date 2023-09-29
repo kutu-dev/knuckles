@@ -28,7 +28,7 @@ class Playlists:
         :return: A list with all the playlist of the desired user.
         :rtype: list[Playlist]
         """
-        response = self.api.request(
+        response = self.api.json_request(
             "getPlaylists",
             {"username": username} if username else {},
         )["playlists"]["playlist"]
@@ -45,7 +45,7 @@ class Playlists:
         :return: The requested playlist.
         :rtype: Playlist
         """
-        response = self.api.request("getPlaylist", {"id": id})["playlist"]
+        response = self.api.json_request("getPlaylist", {"id": id})["playlist"]
 
         return Playlist(self.subsonic, **response)
 
@@ -73,7 +73,7 @@ class Playlists:
         :return: The new created playlist.
         :rtype: Playlist
         """
-        response = self.api.request(
+        response = self.api.json_request(
             "createPlaylist", {"name": name, "songId": song_ids}
         )["playlist"]
 
@@ -117,7 +117,7 @@ class Playlists:
         :return: The updated version of the playlist.
         :rtype: Playlist
         """
-        self.api.request(
+        self.api.json_request(
             "updatePlaylist",
             {
                 "playlistId": id,
@@ -139,6 +139,6 @@ class Playlists:
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
         """
-        self.api.request("deletePlaylist", {"id": id})
+        self.api.json_request("deletePlaylist", {"id": id})
 
         return self.subsonic

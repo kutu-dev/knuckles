@@ -6,6 +6,7 @@ from .internet_radio import InternetRadio
 from .jukebox import JukeboxControl
 from .media_annotation import MediaAnnotation
 from .media_library_scanning import MediaLibraryScanning
+from .media_retrieval import MediaRetrieval
 from .playlists import Playlists
 from .podcast import Podcast
 from .searching import Searching
@@ -50,7 +51,7 @@ class Subsonic:
         self.lists = None  #! ?
         self.searching = Searching(self.api, self)
         self.playlists = Playlists(self.api, self)
-        self.media_retrieval = None
+        self.media_retrieval = MediaRetrieval(self.api)
         self.media_annotation = MediaAnnotation(self.api, self)
         self.sharing = Sharing(self.api, self)
         self.podcast = Podcast(self.api, self)

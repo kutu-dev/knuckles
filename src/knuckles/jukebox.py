@@ -26,7 +26,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "get"})[
+        response = self.api.json_request("jukeboxControl", {"action": "get"})[
             "jukeboxPlaylist"
         ]
 
@@ -40,7 +40,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "status"})[
+        response = self.api.json_request("jukeboxControl", {"action": "status"})[
             "jukeboxStatus"
         ]
 
@@ -55,7 +55,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "set", "id": id})[
+        response = self.api.json_request("jukeboxControl", {"action": "set", "id": id})[
             "jukeboxStatus"
         ]
 
@@ -70,7 +70,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "start"})[
+        response = self.api.json_request("jukeboxControl", {"action": "start"})[
             "jukeboxStatus"
         ]
 
@@ -84,7 +84,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "stop"})[
+        response = self.api.json_request("jukeboxControl", {"action": "stop"})[
             "jukeboxStatus"
         ]
 
@@ -102,7 +102,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request(
+        response = self.api.json_request(
             "jukeboxControl", {"action": "skip", "index": index, "offset": offset}
         )["jukeboxStatus"]
 
@@ -118,7 +118,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "add", "id": id})[
+        response = self.api.json_request("jukeboxControl", {"action": "add", "id": id})[
             "jukeboxStatus"
         ]
 
@@ -132,7 +132,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "clear"})[
+        response = self.api.json_request("jukeboxControl", {"action": "clear"})[
             "jukeboxStatus"
         ]
 
@@ -148,7 +148,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request(
+        response = self.api.json_request(
             "jukeboxControl", {"action": "remove", "index": index}
         )["jukeboxStatus"]
 
@@ -162,7 +162,7 @@ class JukeboxControl:
         :rtype: Jukebox
         """
 
-        response = self.api.request("jukeboxControl", {"action": "shuffle"})[
+        response = self.api.json_request("jukeboxControl", {"action": "shuffle"})[
             "jukeboxStatus"
         ]
 
@@ -182,7 +182,7 @@ class JukeboxControl:
         if not 1 > gain > 0:
             raise ValueError("The gain should be between 0 and 1 (inclusive)")
 
-        response = self.api.request(
+        response = self.api.json_request(
             "jukeboxControl", {"action": "setGain", "gain": gain}
         )["jukeboxStatus"]
 

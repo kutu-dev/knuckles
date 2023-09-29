@@ -29,9 +29,9 @@ class Podcast:
         :rtype: list[Channel]
         """
 
-        response = self.api.request("getPodcasts", {"includeEpisodes": with_episodes})[
-            "podcasts"
-        ]
+        response = self.api.json_request(
+            "getPodcasts", {"includeEpisodes": with_episodes}
+        )["podcasts"]
 
         return [Channel(self.subsonic, **channel) for channel in response]
 
@@ -48,7 +48,7 @@ class Podcast:
         :rtype: Channel
         """
 
-        response = self.api.request(
+        response = self.api.json_request(
             "getPodcasts", {"id": id, "includeEpisodes": with_episodes}
         )["podcasts"][0]
 
@@ -63,7 +63,7 @@ class Podcast:
         :rtype: list[Episode]
         """
 
-        response = self.api.request(
+        response = self.api.json_request(
             "getNewestPodcasts", {"count": number_max_episodes}
         )["newestPodcasts"]["episode"]
 
@@ -103,7 +103,7 @@ class Podcast:
         :rtype: Subsonic
         """
 
-        self.api.request("refreshPodcasts")
+        self.api.json_request("refreshPodcasts")
 
         return self.subsonic
 
@@ -116,7 +116,7 @@ class Podcast:
         :rtype: Subsonic
         """
 
-        self.api.request("createPodcastChannel", {"url": url})
+        self.api.json_request("createPodcastChannel", {"url": url})
 
         return self.subsonic
 
@@ -129,7 +129,7 @@ class Podcast:
         :rtype: Subsonic
         """
 
-        self.api.request("deletePodcastChannel", {"id": id})
+        self.api.json_request("deletePodcastChannel", {"id": id})
 
         return self.subsonic
 
@@ -142,7 +142,7 @@ class Podcast:
         :rtype: Subsonic
         """
 
-        self.api.request("downloadPodcastEpisode", {"id": id})
+        self.api.json_request("downloadPodcastEpisode", {"id": id})
 
         return self.subsonic
 
@@ -155,6 +155,6 @@ class Podcast:
         :rtype: Subsonic
         """
 
-        self.api.request("deletePodcastEpisode", {"id": id})
+        self.api.json_request("deletePodcastEpisode", {"id": id})
 
         return self.subsonic

@@ -18,6 +18,7 @@ pytest_plugins = [
     "tests.mocks.internet_radio",
     "tests.mocks.bookmarks",
     "tests.mocks.searching",
+    "tests.mocks.media_retrieval",
 ]
 
 
@@ -38,28 +39,41 @@ class MockGenerator(Protocol):
         endpoint: str,
         extra_params: dict[str, Any] = {},
         extra_data: dict[str, Any] = {},
+        headers: dict[str, str] = {},
+        content_type: str = "",
+        body: Any = None,
     ) -> Response:
         ...
 
 
 @pytest.fixture
 def mock_generator(
-    params: dict[str, str], subsonic_response: dict[str, Any]
+    base_url: str,
+    params: dict[str, str],
+    subsonic_response: dict[str, Any],
 ) -> MockGenerator:
     def inner(
         endpoint: str,
         extra_params: dict[str, Any] = {},
         extra_data: dict[str, Any] = {},
+        headers: dict[str, str] = {},
+        content_type: str = "",
+        body: Any = None,
     ) -> Response:
         return Response(
             method=GET,
-            url=f"https://example.com/rest/{endpoint}",
+            headers=headers,
+            content_type=content_type,
+            url=f"{base_url}/rest/{endpoint}",
             match=[
                 matchers.query_param_matcher(
                     {**params, **extra_params}, strict_match=False
                 )
             ],
-            json={"subsonic-response": {**subsonic_response, **extra_data}},
+            json={"subsonic-response": {**subsonic_response, **extra_data}}
+            if body is None
+            else None,
+            body=body,
             status=200,
         )
 

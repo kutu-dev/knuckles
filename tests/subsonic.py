@@ -1,6 +1,5 @@
-import pytest
-
 import knuckles
+import pytest
 from knuckles.subsonic import Subsonic
 
 
@@ -20,9 +19,14 @@ def client() -> str:
 
 
 @pytest.fixture
-def subsonic(username: str, password: str, client: str) -> Subsonic:
+def base_url() -> str:
+    return "https://example.com"
+
+
+@pytest.fixture
+def subsonic(base_url: str, username: str, password: str, client: str) -> Subsonic:
     return knuckles.Subsonic(
-        url="http://example.com",
+        url=base_url,
         user=username,
         password=password,
         client=client,

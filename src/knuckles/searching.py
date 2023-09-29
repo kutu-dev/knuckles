@@ -63,7 +63,7 @@ class Searching:
         :return:
         :rtype:
         """
-        response = self.api.request(
+        response = self.api.json_request(
             "search3",
             {
                 "query": query,

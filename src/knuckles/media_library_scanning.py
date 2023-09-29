@@ -18,7 +18,7 @@ class MediaLibraryScanning:
         :rtype: ScanStatus
         """
 
-        response = self.api.request("getScanStatus")["scanStatus"]
+        response = self.api.json_request("getScanStatus")["scanStatus"]
 
         return ScanStatus(**response)
 
@@ -29,6 +29,6 @@ class MediaLibraryScanning:
         :rtype: ScanStatus
         """
 
-        response = self.api.request("startScan")["scanStatus"]
+        response = self.api.json_request("startScan")["scanStatus"]
 
         return ScanStatus(**response)

@@ -28,7 +28,7 @@ class InternetRadio:
         :rtype: list[InternetRadioStation]
         """
 
-        response = self.api.request("getInternetRadioStations")[
+        response = self.api.json_request("getInternetRadioStations")[
             "internetRadioStations"
         ]["internetRadioStation"]
 
@@ -67,7 +67,7 @@ class InternetRadio:
         :rtype: Subsonic
         """
 
-        self.api.request(
+        self.api.json_request(
             "createInternetRadioStation",
             {"streamUrl": stream_url, "name": name, "homepageUrl": homepage_url},
         )
@@ -92,7 +92,7 @@ class InternetRadio:
         :rtype: Subsonic
         """
 
-        self.api.request(
+        self.api.json_request(
             "updateInternetRadioStation",
             {
                 "id": id,
@@ -113,6 +113,6 @@ class InternetRadio:
         :rtype: Subsonic
         """
 
-        self.api.request("deleteInternetRadioStation", {"id": id})
+        self.api.json_request("deleteInternetRadioStation", {"id": id})
 
         return self.subsonic

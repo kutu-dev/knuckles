@@ -25,7 +25,7 @@ class Bookmarks:
         :rtype: list[Bookmark]
         """
 
-        response = self.api.request("getBookmarks")["bookmarks"]["bookmark"]
+        response = self.api.json_request("getBookmarks")["bookmarks"]["bookmark"]
 
         return [Bookmark(self.subsonic, **bookmark) for bookmark in response]
 
@@ -62,7 +62,7 @@ class Bookmarks:
         :rtype: Bookmark
         """
 
-        self.api.request(
+        self.api.json_request(
             "createBookmark", {"id": id, "position": position, "comment": comment}
         )
 
@@ -97,7 +97,7 @@ class Bookmarks:
         :rtype: Subsonic
         """
 
-        self.api.request("deleteBookmark", {"id": id})
+        self.api.json_request("deleteBookmark", {"id": id})
 
         return self.subsonic
 
@@ -108,7 +108,7 @@ class Bookmarks:
         :rtype: PlayQueue
         """
 
-        response = self.api.request("getPlayQueue")["playQueue"]
+        response = self.api.json_request("getPlayQueue")["playQueue"]
 
         return PlayQueue(self.subsonic, **response)
 
@@ -132,12 +132,11 @@ class Bookmarks:
         :rtype: PlayQueue
         """
 
-        self.api.request(
+        self.api.json_request(
             "savePlayQueue",
             {"id": song_ids, "current": current_song_id, "position": position},
         )
 
-        # TODO This approach is expensive, a better one is preferred
         # Fake the song structure given by in the API.
         songs = []
         for song_id in song_ids:

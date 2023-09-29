@@ -56,7 +56,6 @@ class PlayQueue:
         :rtype: Self
         """
 
-        # TODO This should raise an exception?
         song_ids: list[str] = [song.id for song in self.songs] if self.songs else []
 
         self.__subsonic.bookmarks.save_play_queue(

@@ -8,10 +8,10 @@ from tests.conftest import MockGenerator
 
 
 @pytest.fixture
-def share(song: dict[str, Any], username: str) -> dict[str, Any]:
+def share(base_url: str, song: dict[str, Any], username: str) -> dict[str, Any]:
     return {
         "id": "12",
-        "url": "http://example.com/share/1",
+        "url": f"{base_url}/share/1",
         "description": "Forget and Remember (Comfort Fit)",
         "username": username,
         "created": "2020-04-16T04:12:09+00:00",

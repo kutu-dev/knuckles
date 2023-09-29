@@ -101,10 +101,31 @@ class Api:
 
         return {**params, "t": token, "s": salt}
 
-    def request(
+    def raw_request(self, endpoint: str, extra_params: dict[str, Any]) -> Response:
+        """Make a request to the Subsonic API.
+
+        :param endpoint: The endpoint where the request should be made,
+            only specifies the route name, without slashes.
+            E.g. "ping", "getLicense", etc.
+        :type endpoint: str
+        :param extra_params: The extra parameters required by the endpoint,
+            defaults to {}.
+        :raises code_error: Raises an exception with the format CodeErrorXX or
+            UnknownCodeError if the request fails.
+        :return: The Response object returned by the request.
+        :rtype: dict[str, Any]
+        """
+
+        return requests.get(
+            url=f"{self.url}/rest/{endpoint}",
+            params=self.generate_params(extra_params),
+        )
+
+    def json_request(
         self, endpoint: str, extra_params: dict[str, Any] = {}
     ) -> dict[str, Any]:
-        """Make a request to the Subsonic API.
+        """Make a request to the Subsonic API and returns a JSON response.
+        Don't use with binary data endpoints.
 
         :param endpoint: The endpoint where the request should be made,
             only specifies the route name, without slashes.
@@ -119,10 +140,7 @@ class Api:
         :rtype: dict[str, Any]
         """
 
-        response: Response = requests.get(
-            url=f"{self.url}/rest/{endpoint}",
-            params=self.generate_params(extra_params),
-        )
+        response = self.raw_request(endpoint, extra_params)
 
         json_response: dict[str, Any] = response.json()["subsonic-response"]
 
