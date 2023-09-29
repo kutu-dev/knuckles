@@ -27,7 +27,7 @@ class Sharing:
         :rtype: list[Share]
         """
 
-        response = self.api.request("getShares")["shares"]["share"]
+        response = self.api.json_request("getShares")["shares"]["share"]
 
         return [Share(self.subsonic, **share) for share in response]
 
@@ -67,7 +67,7 @@ class Sharing:
         :rtype: Share
         """
 
-        response = self.api.request(
+        response = self.api.json_request(
             "createShare",
             {
                 "id": songs_ids,
@@ -96,7 +96,7 @@ class Sharing:
         :rtype: Share
         """
 
-        self.api.request(
+        self.api.json_request(
             "updateShare",
             {
                 "id": share_id,
@@ -122,6 +122,6 @@ class Sharing:
         :rtype: Subsonic
         """
 
-        self.api.request("deleteShare", {"id": share_id})
+        self.api.json_request("deleteShare", {"id": share_id})
 
         return self.subsonic

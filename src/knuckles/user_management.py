@@ -54,7 +54,7 @@ class UserManagement:
         :rtype: User
         """
 
-        request = self.api.request("getUser", {"username": username})["user"]
+        request = self.api.json_request("getUser", {"username": username})["user"]
 
         return User(subsonic=self.subsonic, **request)
 
@@ -65,7 +65,7 @@ class UserManagement:
         :rtype: list[User]
         """
 
-        request = self.api.request("getUsers")["users"]["user"]
+        request = self.api.json_request("getUsers")["users"]["user"]
 
         users = [User(subsonic=self.subsonic, **user) for user in request]
 
@@ -82,7 +82,7 @@ class UserManagement:
 
         user_json_data = self.__user_properties_to_json(new_user)
 
-        self.api.request("createUser", {**user_json_data})
+        self.api.json_request("createUser", {**user_json_data})
 
         # Attach the Subsonic object
         new_user.subsonic = self.subsonic
@@ -103,7 +103,7 @@ class UserManagement:
 
         user_json_data = self.__user_properties_to_json(updated_data_user)
 
-        self.api.request("updateUser", {**user_json_data})
+        self.api.json_request("updateUser", {**user_json_data})
 
         # Attach the Subsonic object
         updated_data_user.subsonic = self.subsonic
@@ -119,7 +119,7 @@ class UserManagement:
         :rtype: Subsonic
         """
 
-        self.api.request("deleteUser", {"username": username})
+        self.api.json_request("deleteUser", {"username": username})
 
         return self.subsonic
 
@@ -134,7 +134,7 @@ class UserManagement:
         :rtype: Self
         """
 
-        self.api.request(
+        self.api.json_request(
             "changePassword", {"username": username, "password": new_password}
         )
 

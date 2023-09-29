@@ -27,7 +27,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request("star", {"id": id})
+        self.api.json_request("star", {"id": id})
 
         return self.subsonic
 
@@ -40,7 +40,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request("star", {"albumId": id})
+        self.api.json_request("star", {"albumId": id})
 
         return self.subsonic
 
@@ -53,7 +53,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request("star", {"artistId": id})
+        self.api.json_request("star", {"artistId": id})
 
         return self.subsonic
 
@@ -66,7 +66,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request("unstar", {"id": id})
+        self.api.json_request("unstar", {"id": id})
 
         return self.subsonic
 
@@ -79,7 +79,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request("unstar", {"albumId": id})
+        self.api.json_request("unstar", {"albumId": id})
 
         return self.subsonic
 
@@ -92,7 +92,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request("unstar", {"artistId": id})
+        self.api.json_request("unstar", {"artistId": id})
 
         return self.subsonic
 
@@ -118,7 +118,7 @@ class MediaAnnotation:
                 )
             )
 
-        self.api.request("setRating", {"id": id, "rating": rating})
+        self.api.json_request("setRating", {"id": id, "rating": rating})
 
         return self.subsonic
 
@@ -131,7 +131,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request("setRating", {"id": id, "rating": 0})
+        self.api.json_request("setRating", {"id": id, "rating": 0})
 
         return self.subsonic
 
@@ -151,7 +151,7 @@ class MediaAnnotation:
         :rtype: Subsonic
         """
 
-        self.api.request(
+        self.api.json_request(
             "scrobble",
             # Multiply by 1000 because the API uses
             # milliseconds instead of seconds for UNIX time

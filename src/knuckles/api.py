@@ -101,7 +101,7 @@ class Api:
 
         return {**params, "t": token, "s": salt}
 
-    def request_raw(self, endpoint: str, extra_params: dict[str, Any]) -> Response:
+    def raw_request(self, endpoint: str, extra_params: dict[str, Any]) -> Response:
         """Make a request to the Subsonic API.
 
         :param endpoint: The endpoint where the request should be made,
@@ -121,7 +121,7 @@ class Api:
             params=self.generate_params(extra_params),
         )
 
-    def request(
+    def json_request(
         self, endpoint: str, extra_params: dict[str, Any] = {}
     ) -> dict[str, Any]:
         """Make a request to the Subsonic API and returns a JSON response.
@@ -140,7 +140,7 @@ class Api:
         :rtype: dict[str, Any]
         """
 
-        response = self.request_raw(endpoint, extra_params)
+        response = self.raw_request(endpoint, extra_params)
 
         json_response: dict[str, Any] = response.json()["subsonic-response"]
 

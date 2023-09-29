@@ -28,7 +28,7 @@ class System:
         :rtype: SubsonicResponse
         """
 
-        response = self.api.request("ping")
+        response = self.api.json_request("ping")
 
         return SubsonicResponse(**response)
 
@@ -39,12 +39,12 @@ class System:
         :rtype: License
         """
 
-        response = self.api.request("getLicense")["license"]
+        response = self.api.json_request("getLicense")["license"]
 
         return License(**response)
 
     def get_open_subsonic_extensions(self) -> list[OpenSubsonicExtension]:
-        response = self.api.request("getOpenSubsonicExtensions")[
+        response = self.api.json_request("getOpenSubsonicExtensions")[
             "openSubsonicExtensions"
         ]
         return [

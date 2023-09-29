@@ -26,7 +26,7 @@ class Chat:
         :rtype: Self
         """
 
-        self.api.request("addChatMessage", {"message": message})
+        self.api.json_request("addChatMessage", {"message": message})
 
         return self.subsonic
 
@@ -37,7 +37,7 @@ class Chat:
         :rtype: list[ChatMessage]
         """
 
-        response: list[dict[str, Any]] = self.api.request("getChatMessages")[
+        response: list[dict[str, Any]] = self.api.json_request("getChatMessages")[
             "chatMessages"
         ]["chatMessage"]
 

@@ -28,7 +28,9 @@ class Browsing:
         :rtype: list[MusicFolder]
         """
 
-        response = self.api.request("getMusicFolders")["musicFolders"]["musicFolder"]
+        response = self.api.json_request("getMusicFolders")["musicFolders"][
+            "musicFolder"
+        ]
 
         return [MusicFolder(self.subsonic, **music_folder) for music_folder in response]
 
@@ -39,7 +41,7 @@ class Browsing:
         :rtype: list[Genre]
         """
 
-        response = self.api.request("getGenres")["genres"]["genre"]
+        response = self.api.json_request("getGenres")["genres"]["genre"]
 
         return [Genre(self.subsonic, **genre) for genre in response]
 
@@ -71,9 +73,9 @@ class Browsing:
         :rtype: list[Artist]
         """
 
-        response = self.api.request("getArtists", {"musicFolderId": music_folder_id})[
-            "artists"
-        ]["index"]
+        response = self.api.json_request(
+            "getArtists", {"musicFolderId": music_folder_id}
+        )["artists"]["index"]
 
         artists: list[Artist] = []
 
@@ -94,7 +96,7 @@ class Browsing:
         :rtype: Artist
         """
 
-        response = self.api.request("getArtist", {"id": id})["artist"]
+        response = self.api.json_request("getArtist", {"id": id})["artist"]
 
         return Artist(self.subsonic, **response)
 
@@ -108,7 +110,7 @@ class Browsing:
         :rtype: Album
         """
 
-        response = self.api.request("getAlbum", {"id": id})["album"]
+        response = self.api.json_request("getAlbum", {"id": id})["album"]
 
         return Album(self.subsonic, **response)
 
@@ -121,7 +123,7 @@ class Browsing:
         :rtype: AlbumInfo
         """
 
-        response = self.api.request("getAlbumInfo2", {"id": id})["albumInfo"]
+        response = self.api.json_request("getAlbumInfo2", {"id": id})["albumInfo"]
 
         return AlbumInfo(self.subsonic, id, **response)
 
@@ -135,7 +137,7 @@ class Browsing:
         :rtype: Song
         """
 
-        response = self.api.request("getSong", {"id": id})["song"]
+        response = self.api.json_request("getSong", {"id": id})["song"]
 
         return Song(self.subsonic, **response)
 

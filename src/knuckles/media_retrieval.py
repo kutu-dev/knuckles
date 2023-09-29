@@ -1,4 +1,7 @@
 from pathlib import Path
+from typing import Any
+
+from requests.models import PreparedRequest
 
 from .api import Api
 
@@ -12,8 +15,26 @@ class MediaRetrieval:
     def __init__(self, api: Api) -> None:
         self.api = api
 
-    def stream(self) -> None:
-        ...
+    def _generate_url(self, endpoint: str, params: dict[str, Any]) -> str:
+        prepared_request = PreparedRequest()
+        prepared_request.prepare_url(
+            f"{self.api.url}/rest/{endpoint}", {**self.api.generate_params(), **params}
+        )
+
+        # Ignore the error caused by the url parameter of prepared_request
+        # as the prepare_url method always set it to a string.
+        return prepared_request.url  # type: ignore [return-value]
+
+    def stream(self, id: str) -> str:
+        """Returns a valid url for streaming the requested song
+
+        :param id: The id of the song to stream
+        :type id: str
+        :return A url that points to the given song in the stream endpoint
+        :rtype str
+        """
+
+        return self._generate_url("stream", {"id": id})
 
     def download(self, id: str, file_or_directory_path: Path) -> Path:
         """Calls the "download" endpoint of the API.
@@ -28,7 +49,7 @@ class MediaRetrieval:
         :rtype Path
         """
 
-        response = self.api.request_raw("download", {"id": id})
+        response = self.api.raw_request("download", {"id": id})
         response.raise_for_status()
 
         if file_or_directory_path.is_dir():
@@ -54,8 +75,16 @@ class MediaRetrieval:
                 f.write(chunk)
         return download_path
 
-    def hls(self) -> None:
-        ...
+    def hls(self, id: str) -> str:
+        """Returns a valid url for streaming the requested song with hls.m3u8
+
+        :param id: The id of the song to stream.
+        :type id: str
+        :return A url that points to the given song in the hls.m3u8 endpoint
+        :rtype str
+        """
+
+        return self._generate_url("hls.m3u8", {"id": id})
 
     def get_captions(self) -> None:
         ...
