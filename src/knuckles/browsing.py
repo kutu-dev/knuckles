@@ -51,7 +51,7 @@ class Browsing:
         :param name: The name of the genre to get.
         :type name: str
         :return: A genre object that correspond with the given name
-            or None if if no genre found.
+            or None if is no genre found.
         :rtype: Genre | None
         """
 
@@ -144,7 +144,7 @@ class Browsing:
     def get_artist_info(
         self, id: str, count: int | None = None, include_not_present: bool | None = None
     ) -> ArtistInfo:
-        response = self.api.request(
+        response = self.api.json_request(
             "getArtistInfo2",
             {"id": id, "count": count, "includeNotPresent": include_not_present},
         )["artistInfo2"]
