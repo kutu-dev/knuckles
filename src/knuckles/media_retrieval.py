@@ -2,6 +2,7 @@ from mimetypes import guess_extension
 from pathlib import Path
 from typing import Any
 
+from requests import Response
 from requests.models import PreparedRequest
 
 from .api import Api
@@ -25,6 +26,25 @@ class MediaRetrieval:
         # Ignore the error caused by the url parameter of prepared_request
         # as the prepare_url method always set it to a string.
         return prepared_request.url  # type: ignore [return-value]
+
+    def _download_file(
+        self, response: Response, file_or_directory_path: Path, directory_filename: str
+    ) -> Path:
+        response.raise_for_status()
+
+        if file_or_directory_path.is_dir():
+            download_path = Path(
+                file_or_directory_path,
+                directory_filename,
+            )
+        else:
+            download_path = file_or_directory_path
+
+        with open(download_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+        return download_path
 
     def stream(self, id: str) -> str:
         """Returns a valid url for streaming the requested song
@@ -51,33 +71,18 @@ class MediaRetrieval:
         """
 
         response = self.api.raw_request("download", {"id": id})
-        response.raise_for_status()
 
-        if file_or_directory_path.is_dir():
-            filename = (
-                response.headers["Content-Disposition"].split("filename=")[1].strip()
-            )
+        filename = response.headers["Content-Disposition"].split("filename=")[1].strip()
 
-            # Remove leading quote char
-            if filename[0] == '"':
-                filename = filename[1:]
+        # Remove leading quote char
+        if filename[0] == '"':
+            filename = filename[1:]
 
-            # Remove trailing quote char
-            if filename[-1] == '"':
-                filename = filename[:-1]
+        # Remove trailing quote char
+        if filename[-1] == '"':
+            filename = filename[:-1]
 
-            download_path = Path(
-                file_or_directory_path,
-                filename,
-            )
-        else:
-            download_path = file_or_directory_path
-
-        with open(download_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-
-        return download_path
+        return self._download_file(response, file_or_directory_path, filename)
 
     def hls(self, id: str) -> str:
         """Returns a valid url for streaming the requested song with hls.m3u8
@@ -112,27 +117,14 @@ class MediaRetrieval:
         """
 
         response = self.api.raw_request("getCoverArt", {"id": id, "size": size})
-        response.raise_for_status()
 
-        if file_or_directory_path.is_dir():
-            file_extension = guess_extension(
-                response.headers["content-type"].partition(";")[0].strip()
-            )
+        file_extension = guess_extension(
+            response.headers["content-type"].partition(";")[0].strip()
+        )
 
-            filename = id + file_extension if file_extension else id
+        filename = id + file_extension if file_extension else id
 
-            download_path = Path(
-                file_or_directory_path,
-                filename,
-            )
-        else:
-            download_path = file_or_directory_path
-
-        with open(download_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-
-        return download_path
+        return self._download_file(response, file_or_directory_path, filename)
 
     def get_lyrics(self) -> None:
         ...
@@ -154,22 +146,10 @@ class MediaRetrieval:
         response = self.api.raw_request("getAvatar", {"username": username})
         response.raise_for_status()
 
-        if file_or_directory_path.is_dir():
-            file_extension = guess_extension(
-                response.headers["content-type"].partition(";")[0].strip()
-            )
+        file_extension = guess_extension(
+            response.headers["content-type"].partition(";")[0].strip()
+        )
 
-            filename = username + file_extension if file_extension else username
+        filename = username + file_extension if file_extension else username
 
-            download_path = Path(
-                file_or_directory_path,
-                filename,
-            )
-        else:
-            download_path = file_or_directory_path
-
-        with open(download_path, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-
-        return download_path
+        return self._download_file(response, file_or_directory_path, filename)
