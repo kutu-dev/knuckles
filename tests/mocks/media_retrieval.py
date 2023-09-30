@@ -55,6 +55,26 @@ def avatar_content_type() -> str:
 
 
 @pytest.fixture
+def default_cover_art_filename(song: dict[str, Any]) -> str:
+    return f"{song['coverArt']}.png"
+
+
+@pytest.fixture
+def output_cover_art_filename() -> str:
+    return "output.png"
+
+
+@pytest.fixture
+def cover_art_content_type() -> str:
+    return "image/png"
+
+
+@pytest.fixture
+def cover_art_size() -> int:
+    return 512
+
+
+@pytest.fixture
 def mock_download_file(
     placeholder_data: str,
     mock_generator: MockGenerator,

@@ -93,8 +93,44 @@ class MediaRetrieval:
     def get_captions(self) -> None:
         ...
 
-    def get_cover_art(self) -> None:
-        ...
+    def get_cover_art(self, id: str, file_or_directory_path: Path, size: int) -> Path:
+        """Calls the "getCoverArt" endpoint of the API.
+
+        :param id: The id of the cover art to download.
+        :type id: str
+        :param file_or_directory_path: If a directory path is passed the file will be
+        inside of it with the filename being the name of the user and
+        a guessed file extension, if not the file will be saved
+        directly in the given path.
+        :type file_or_directory_path: Path
+        :param size: The size of the image to be scale to in a square.
+        :type size: int
+        :return Returns the given path
+        :rtype Path
+        """
+
+        response = self.api.raw_request("getCoverArt", {"id": id, "size": size})
+        response.raise_for_status()
+
+        if file_or_directory_path.is_dir():
+            file_extension = guess_extension(
+                response.headers["content-type"].partition(";")[0].strip()
+            )
+
+            filename = id + file_extension if file_extension else id
+
+            download_path = Path(
+                file_or_directory_path,
+                filename,
+            )
+        else:
+            download_path = file_or_directory_path
+
+        with open(download_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+        return download_path
 
     def get_lyrics(self) -> None:
         ...
