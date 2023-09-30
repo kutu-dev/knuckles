@@ -8,6 +8,7 @@ from responses import Response
 import responses
 from knuckles import Subsonic
 
+from knuckles.media_retrieval import SubtitlesFileFormat
 from tests.mocks.media_retrieval import FileMetadata
 
 
@@ -67,6 +68,7 @@ def test_hls(subsonic: Subsonic, song: dict[str, Any]) -> None:
     assert parse.parse_qs(stream_url.query)["id"][0] == song["id"]
 
 
+@responses.activate
 def test_get_captions_with_a_given_filename(
     subsonic: Subsonic,
     mock_get_captions_vtt: Response,
@@ -88,6 +90,7 @@ def test_get_captions_with_a_given_filename(
     assert download_path == tmp_path / vtt_metadata.output_filename
 
 
+@responses.activate
 @pytest.mark.parametrize(
     "mock, metadata",
     [
@@ -119,11 +122,12 @@ def test_get_captions_without_a_given_filename(
     assert download_path == tmp_path / get_metadata.default_filename
 
 
+@responses.activate
 @pytest.mark.parametrize(
     "mock, metadata, file_format",
     [
-        ("mock_get_captions_vtt", "vtt_metadata", SubtitlesFormat.vtt),
-        ("mock_get_captions_srt", "srt_metadata", SubtitlesFormat.srt),
+        ("mock_get_captions_prefer_vtt", "vtt_metadata", SubtitlesFileFormat.VTT),
+        ("mock_get_captions_prefer_srt", "srt_metadata", SubtitlesFileFormat.SRT),
     ],
 )
 def test_get_captions_with_a_preferred_file_format(
@@ -134,7 +138,7 @@ def test_get_captions_with_a_preferred_file_format(
     placeholder_data: str,
     song: dict[str, Any],
     metadata: str,
-    file_format: SubtitlesFormat,
+    file_format: SubtitlesFileFormat,
 ):
     # Retrieve the mocks dynamically as their tests are equal
     get_mock: Response = request.getfixturevalue(mock)
@@ -142,7 +146,9 @@ def test_get_captions_with_a_preferred_file_format(
 
     responses.add(get_mock)
 
-    download_path = subsonic.media_retrieval.download(song["id"], tmp_path, file_format)
+    download_path = subsonic.media_retrieval.get_captions(
+        song["id"], tmp_path, file_format
+    )
 
     # Check if the file data has been altered
     with open(tmp_path / get_metadata.default_filename, "r") as file:

@@ -1,5 +1,4 @@
 from collections import namedtuple
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -81,14 +80,40 @@ def mock_download(
 
 
 @pytest.fixture
-def srt_metadata() -> FileMetadata:
-    # This MIME TYPE is not approved by the IANA
-    return FileMetadata("default.srt", "output.srt", "application/x-subrip")
+def vtt_metadata(song: dict[str, Any]) -> FileMetadata:
+    return FileMetadata(f"{song['id']}.vtt", "output.vtt", "text/vtt")
 
 
 @pytest.fixture
-def vtt_metadata() -> FileMetadata:
-    return FileMetadata("default.vtt", "output.vtt", "text/vtt")
+def mock_get_captions_vtt(
+    mock_download_file_generator: MockDownload,
+    song: dict[str, Any],
+    vtt_metadata: FileMetadata,
+) -> Response:
+    return mock_download_file_generator(
+        "getCaptions",
+        {"id": song["id"]},
+        vtt_metadata.content_type,
+    )
+
+
+@pytest.fixture
+def mock_get_captions_prefer_vtt(
+    mock_download_file_generator: MockDownload,
+    song: dict[str, Any],
+    vtt_metadata: FileMetadata,
+) -> Response:
+    return mock_download_file_generator(
+        "getCaptions",
+        {"id": song["id"], "format": "vtt"},
+        vtt_metadata.content_type,
+    )
+
+
+@pytest.fixture
+def srt_metadata(song: dict[str, Any]) -> FileMetadata:
+    # This MIME TYPE is not approved by the IANA
+    return FileMetadata(f"{song['id']}.srt", "output.srt", "application/x-subrip")
 
 
 @pytest.fixture
@@ -105,15 +130,15 @@ def mock_get_captions_srt(
 
 
 @pytest.fixture
-def mock_get_captions_vtt(
+def mock_get_captions_prefer_srt(
     mock_download_file_generator: MockDownload,
     song: dict[str, Any],
-    vtt_metadata: FileMetadata,
+    srt_metadata: FileMetadata,
 ) -> Response:
     return mock_download_file_generator(
         "getCaptions",
-        {"id": song["coverArt"]},
-        vtt_metadata.content_type,
+        {"id": song["id"], "format": "srt"},
+        srt_metadata.content_type,
     )
 
 
