@@ -118,11 +118,10 @@ class MediaRetrieval:
         mime_type = response.headers["content-type"].partition(";")[0].strip()
 
         # As application/x-subrip is not a valid MIME TYPE a manual check is done
-        file_extension: str | None
-        if mime_type == "application/x-subrip":
-            file_extension = ".srt"
-        else:
+        if not mime_type == "application/x-subrip":
             file_extension = guess_extension(mime_type)
+        else:
+            file_extension = ".srt"
 
         filename = id + file_extension if file_extension else id
 
