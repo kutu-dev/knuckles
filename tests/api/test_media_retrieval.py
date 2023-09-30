@@ -2,6 +2,8 @@ from urllib import parse
 from pathlib import Path
 from typing import Any
 
+import pytest
+from _pytest.fixtures import FixtureRequest
 from responses import Response
 import responses
 from knuckles import Subsonic
@@ -31,7 +33,7 @@ def test_download_with_a_given_filename(
         song["id"], tmp_path / download_metadata.output_filename
     )
 
-    # Check if the file data has been unaltered
+    # Check if the file data has been altered
     with open(tmp_path / download_metadata.output_filename, "r") as file:
         assert placeholder_data == file.read()
 
@@ -51,7 +53,7 @@ def test_download_without_a_given_filename(
 
     download_path = subsonic.media_retrieval.download(song["id"], tmp_path)
 
-    # Check if the file data has been unaltered
+    # Check if the file data has been altered
     with open(tmp_path / download_metadata.default_filename, "r") as file:
         assert placeholder_data == file.read()
 
@@ -63,6 +65,90 @@ def test_hls(subsonic: Subsonic, song: dict[str, Any]) -> None:
 
     assert stream_url.path == "/rest/hls.m3u8"
     assert parse.parse_qs(stream_url.query)["id"][0] == song["id"]
+
+
+def test_get_captions_with_a_given_filename(
+    subsonic: Subsonic,
+    mock_get_captions_vtt: Response,
+    tmp_path: Path,
+    placeholder_data: str,
+    song: dict[str, Any],
+    vtt_metadata: FileMetadata,
+):
+    responses.add(mock_get_captions_vtt)
+
+    download_path = subsonic.media_retrieval.get_captions(
+        song["id"], tmp_path / vtt_metadata.output_filename
+    )
+
+    # Check if the file data has been altered
+    with open(tmp_path / vtt_metadata.output_filename, "r") as file:
+        assert placeholder_data == file.read()
+
+    assert download_path == tmp_path / vtt_metadata.output_filename
+
+
+@pytest.mark.parametrize(
+    "mock, metadata",
+    [
+        ("mock_get_captions_vtt", "vtt_metadata"),
+        ("mock_get_captions_srt", "srt_metadata"),
+    ],
+)
+def test_get_captions_without_a_given_filename(
+    request: FixtureRequest,
+    subsonic: Subsonic,
+    mock: str,
+    tmp_path: Path,
+    placeholder_data: str,
+    song: dict[str, Any],
+    metadata: str,
+):
+    # Retrieve the mocks dynamically as their tests are equal
+    get_mock: Response = request.getfixturevalue(mock)
+    get_metadata: FileMetadata = request.getfixturevalue(metadata)
+
+    responses.add(get_mock)
+
+    download_path = subsonic.media_retrieval.get_captions(song["id"], tmp_path)
+
+    # Check if the file data has been altered
+    with open(tmp_path / get_metadata.default_filename, "r") as file:
+        assert placeholder_data == file.read()
+
+    assert download_path == tmp_path / get_metadata.default_filename
+
+
+@pytest.mark.parametrize(
+    "mock, metadata, file_format",
+    [
+        ("mock_get_captions_vtt", "vtt_metadata", SubtitlesFormat.vtt),
+        ("mock_get_captions_srt", "srt_metadata", SubtitlesFormat.srt),
+    ],
+)
+def test_get_captions_with_a_preferred_file_format(
+    request: FixtureRequest,
+    subsonic: Subsonic,
+    mock: str,
+    tmp_path: Path,
+    placeholder_data: str,
+    song: dict[str, Any],
+    metadata: str,
+    file_format: SubtitlesFormat,
+):
+    # Retrieve the mocks dynamically as their tests are equal
+    get_mock: Response = request.getfixturevalue(mock)
+    get_metadata: FileMetadata = request.getfixturevalue(metadata)
+
+    responses.add(get_mock)
+
+    download_path = subsonic.media_retrieval.download(song["id"], tmp_path, file_format)
+
+    # Check if the file data has been altered
+    with open(tmp_path / get_metadata.default_filename, "r") as file:
+        assert placeholder_data == file.read()
+
+    assert download_path == tmp_path / get_metadata.default_filename
 
 
 @responses.activate
@@ -81,7 +167,7 @@ def test_get_cover_art_with_a_given_filename(
         song["coverArt"], tmp_path / cover_art_metadata.output_filename, cover_art_size
     )
 
-    # Check if the file data has been unaltered
+    # Check if the file data has been altered
     with open(tmp_path / cover_art_metadata.output_filename, "r") as file:
         assert placeholder_data == file.read()
 
@@ -104,7 +190,7 @@ def test_get_cover_art_without_a_given_filename(
         song["coverArt"], tmp_path, cover_art_size
     )
 
-    # Check if the file data has been unaltered
+    # Check if the file data has been altered
     with open(tmp_path / cover_art_metadata.default_filename, "r") as file:
         assert placeholder_data == file.read()
 
@@ -126,7 +212,7 @@ def test_get_avatar_with_a_given_filename(
         username, tmp_path / avatar_metadata.output_filename
     )
 
-    # Check if the file data has been unaltered
+    # Check if the file data has been altered
     with open(tmp_path / avatar_metadata.output_filename, "r") as file:
         assert placeholder_data == file.read()
 
@@ -146,7 +232,7 @@ def test_get_avatar_without_a_given_filename(
 
     download_path = subsonic.media_retrieval.get_avatar(username, tmp_path)
 
-    # Check if the file data has been unaltered
+    # Check if the file data has been altered
     with open(tmp_path / avatar_metadata.default_filename, "r") as file:
         assert placeholder_data == file.read()
 
