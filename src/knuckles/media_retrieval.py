@@ -1,3 +1,4 @@
+from mimetypes import guess_extension
 from pathlib import Path
 from typing import Any
 
@@ -53,7 +54,9 @@ class MediaRetrieval:
         response.raise_for_status()
 
         if file_or_directory_path.is_dir():
-            filename = response.headers["Content-Disposition"].split("filename=")[1]
+            filename = (
+                response.headers["Content-Disposition"].split("filename=")[1].strip()
+            )
 
             # Remove leading quote char
             if filename[0] == '"':
@@ -73,6 +76,7 @@ class MediaRetrieval:
         with open(download_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
+
         return download_path
 
     def hls(self, id: str) -> str:
@@ -95,5 +99,39 @@ class MediaRetrieval:
     def get_lyrics(self) -> None:
         ...
 
-    def get_avatar(self) -> None:
-        ...
+    def get_avatar(self, username: str, file_or_directory_path: Path) -> Path:
+        """Calls the "getAvatar" endpoint of the API.
+
+        :param username: The username of the profile picture to download.
+        :type username: str
+        :param file_or_directory_path: If a directory path is passed the file will be
+        inside of it with the filename being the name of the user and
+        a guessed file extension, if not the file will be saved
+        directly in the given path.
+        :type file_or_directory_path: Path
+        :return Returns the given path
+        :rtype Path
+        """
+
+        response = self.api.raw_request("getAvatar", {"username": username})
+        response.raise_for_status()
+
+        if file_or_directory_path.is_dir():
+            file_extension = guess_extension(
+                response.headers["content-type"].partition(";")[0].strip()
+            )
+
+            filename = username + file_extension if file_extension else username
+
+            download_path = Path(
+                file_or_directory_path,
+                filename,
+            )
+        else:
+            download_path = file_or_directory_path
+
+        with open(download_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+
+        return download_path
