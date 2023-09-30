@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from collections import namedtuple
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -52,15 +52,9 @@ def mock_download_file_generator(
     return inner
 
 
-@dataclass
-class FileMetadata:
-    # The default filename that Knuckles should use if no custom one is provided
-    default_filename: str
-
-    # The custom filename given to Knuckles
-    output_filename: str
-
-    content_type: str
+FileMetadata = namedtuple(
+    "FileMetadata", ["default_filename", "output_filename", "content_type"]
+)
 
 
 @pytest.fixture
@@ -82,6 +76,69 @@ def mock_download(
             "Content-Disposition": "attachment; "
             + f'filename="{download_metadata.default_filename}"'
         },
+    )
+
+
+@pytest.fixture
+def vtt_metadata(song: dict[str, Any]) -> FileMetadata:
+    return FileMetadata(f"{song['id']}.vtt", "output.vtt", "text/vtt")
+
+
+@pytest.fixture
+def mock_get_captions_vtt(
+    mock_download_file_generator: MockDownload,
+    song: dict[str, Any],
+    vtt_metadata: FileMetadata,
+) -> Response:
+    return mock_download_file_generator(
+        "getCaptions",
+        {"id": song["id"]},
+        vtt_metadata.content_type,
+    )
+
+
+@pytest.fixture
+def mock_get_captions_prefer_vtt(
+    mock_download_file_generator: MockDownload,
+    song: dict[str, Any],
+    vtt_metadata: FileMetadata,
+) -> Response:
+    return mock_download_file_generator(
+        "getCaptions",
+        {"id": song["id"], "format": "vtt"},
+        vtt_metadata.content_type,
+    )
+
+
+@pytest.fixture
+def srt_metadata(song: dict[str, Any]) -> FileMetadata:
+    # This MIME TYPE is not approved by the IANA
+    return FileMetadata(f"{song['id']}.srt", "output.srt", "application/x-subrip")
+
+
+@pytest.fixture
+def mock_get_captions_srt(
+    mock_download_file_generator: MockDownload,
+    song: dict[str, Any],
+    srt_metadata: FileMetadata,
+) -> Response:
+    return mock_download_file_generator(
+        "getCaptions",
+        {"id": song["id"]},
+        srt_metadata.content_type,
+    )
+
+
+@pytest.fixture
+def mock_get_captions_prefer_srt(
+    mock_download_file_generator: MockDownload,
+    song: dict[str, Any],
+    srt_metadata: FileMetadata,
+) -> Response:
+    return mock_download_file_generator(
+        "getCaptions",
+        {"id": song["id"], "format": "srt"},
+        srt_metadata.content_type,
     )
 
 

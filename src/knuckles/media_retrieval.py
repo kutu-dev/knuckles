@@ -1,3 +1,4 @@
+from enum import Enum
 from mimetypes import guess_extension
 from pathlib import Path
 from typing import Any
@@ -6,6 +7,11 @@ from requests import Response
 from requests.models import PreparedRequest
 
 from .api import Api
+
+
+class SubtitlesFileFormat(Enum):
+    VTT = "vtt"
+    SRT = "srt"
 
 
 class MediaRetrieval:
@@ -95,8 +101,31 @@ class MediaRetrieval:
 
         return self._generate_url("hls.m3u8", {"id": id})
 
-    def get_captions(self) -> None:
-        ...
+    def get_captions(
+        self,
+        id: str,
+        file_or_directory_path: Path,
+        subtitles_file_format: SubtitlesFileFormat = SubtitlesFileFormat.VTT,
+    ) -> Path:
+        # Check if the given file format is a valid one
+        SubtitlesFileFormat(subtitles_file_format.value)
+
+        response = self.api.raw_request(
+            "getCaptions",
+            {"id": id, "format": subtitles_file_format.value},
+        )
+
+        mime_type = response.headers["content-type"].partition(";")[0].strip()
+
+        # As application/x-subrip is not a valid MIME TYPE a manual check is done
+        if not mime_type == "application/x-subrip":
+            file_extension = guess_extension(mime_type)
+        else:
+            file_extension = ".srt"
+
+        filename = id + file_extension if file_extension else id
+
+        return self._download_file(response, file_or_directory_path, filename)
 
     def get_cover_art(
         self, id: str, file_or_directory_path: Path, size: int | None = None
