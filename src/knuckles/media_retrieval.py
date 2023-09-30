@@ -93,7 +93,9 @@ class MediaRetrieval:
     def get_captions(self) -> None:
         ...
 
-    def get_cover_art(self, id: str, file_or_directory_path: Path, size: int) -> Path:
+    def get_cover_art(
+        self, id: str, file_or_directory_path: Path, size: int | None = None
+    ) -> Path:
         """Calls the "getCoverArt" endpoint of the API.
 
         :param id: The id of the cover art to download.
