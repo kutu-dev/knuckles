@@ -143,7 +143,7 @@ def mock_get_song(mock_generator: MockGenerator, song: dict[str, Any]) -> Respon
 
 @pytest.fixture
 def video() -> dict[str, Any]:
-    return {"id": "videoId"}
+    return {"id": "videoId", "suffix": "mpv"}
 
 
 @pytest.fixture()
