@@ -61,11 +61,32 @@ def test_download_without_a_given_filename(
     assert download_path == tmp_path / download_metadata.default_filename
 
 
-def test_hls(subsonic: Subsonic, song: dict[str, Any]) -> None:
+def test_hls_song(subsonic: Subsonic, song: dict[str, Any]) -> None:
     stream_url = parse.urlparse(subsonic.media_retrieval.hls(song["id"]))
 
     assert stream_url.path == "/rest/hls.m3u8"
     assert parse.parse_qs(stream_url.query)["id"][0] == song["id"]
+
+
+def test_hls_video(
+    subsonic: Subsonic, video: dict[str, Any], video_details: dict[str, Any]
+) -> None:
+    custom_bitrates = ["1000@480x360", "820@1920x1080"]
+
+    stream_url = parse.urlparse(
+        subsonic.media_retrieval.hls(
+            video["id"], custom_bitrates, video_details["audioTrack"][0]["id"]
+        )
+    )
+
+    assert stream_url.path == "/rest/hls.m3u8"
+    assert parse.parse_qs(stream_url.query)["id"][0] == video["id"]
+    assert custom_bitrates[0] in parse.parse_qs(stream_url.query)["bitRate"]
+    assert custom_bitrates[1] in parse.parse_qs(stream_url.query)["bitRate"]
+    assert (
+        parse.parse_qs(stream_url.query)["audioTrack"][0]
+        == video_details["audioTrack"][0]["id"]
+    )
 
 
 @responses.activate

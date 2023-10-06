@@ -90,16 +90,31 @@ class MediaRetrieval:
 
         return self._download_file(response, file_or_directory_path, filename)
 
-    def hls(self, id: str) -> str:
+    def hls(
+        self,
+        id: str,
+        custom_bitrates: list[str] | None = None,
+        audio_track_id: str | None = None,
+    ) -> str:
         """Returns a valid url for streaming the requested song with hls.m3u8
 
         :param id: The id of the song to stream.
         :type id: str
+        :param custom_bitrates: A list of bitrates to be added to the hls playlist
+        for video streaming, the resolution can also be specified with
+        this format: "bitrate@widthxheight".
+        :type custom_bitrates: list[str] | None
+        :param audio_track_id: The id of the audio track to be used
+        if the playlist is for a video.
+        :type audio_track_id: str | None
         :return A url that points to the given song in the hls.m3u8 endpoint
         :rtype str
         """
 
-        return self._generate_url("hls.m3u8", {"id": id})
+        return self._generate_url(
+            "hls.m3u8",
+            {"id": id, "bitRate": custom_bitrates, "audioTrack": audio_track_id},
+        )
 
     def get_captions(
         self,
