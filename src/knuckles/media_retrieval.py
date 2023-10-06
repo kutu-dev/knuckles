@@ -52,16 +52,52 @@ class MediaRetrieval:
 
         return download_path
 
-    def stream(self, id: str) -> str:
-        """Returns a valid url for streaming the requested song
+    def stream(
+        self,
+        id: str,
+        max_bitrate_rate: int | None = None,
+        format: str | None = None,
+        time_offset: int | None = None,
+        size: str | None = None,
+        estimate_content_length: bool | None = None,
+        converted: bool | None = None,
+    ) -> str:
+        """Returns a valid url for streaming the requested song or bideo
 
-        :param id: The id of the song to stream
+        :param id: The id of the song or video to stream
         :type id: str
+        :param max_bitrate_rate: A limit for the stream bitrate
+        :type max_bitrate_rate: int | None
+        :param format: The file format of preference to be used in the stream.
+        :type format: str | None
+        :param time_offset: Only applicable to video streaming.
+            An offset in seconds from where the video should start.
+        :type time_offset: int | None
+        :param size: Only applicable to video streaming.
+            The resolution for the streamed video, in the format of "WIDTHxHEIGHT".
+        :type size: str | None
+        :param estimate_content_length: If the response should set a
+            Content-Length HTTP header with an estimation of the duration of the media.
+        :type estimate_content_length: bool | None
+        :param converted: Only applicable to video streaming.
+            Try to retrieve from the server an optimize video in MP4 if it's available.
+        :type converted: bool | None
         :return A url that points to the given song in the stream endpoint
         :rtype str
         """
 
-        return self._generate_url("stream", {"id": id})
+        return self._generate_url(
+            "stream",
+            {
+                "id": id,
+                "maxBitRate": max_bitrate_rate,
+                "format": format,
+                "timeOffset": time_offset,
+                "size": size,
+                "estimateContentLength": estimate_content_length,
+                "converted": converted,
+            },
+        )
 
     def download(self, id: str, file_or_directory_path: Path) -> Path:
         """Calls the "download" endpoint of the API.
@@ -69,8 +105,8 @@ class MediaRetrieval:
         :param id: The id of the song or video to download.
         :type id: str
         :param file_or_directory_path: If a directory path is passed the file will be
-        inside of it with the default filename given by the API,
-        if not the file will be saved directly in the given path.
+            inside of it with the default filename given by the API,
+            if not the file will be saved directly in the given path.
         :type file_or_directory_path: Path
         :return The path of the downloaded file
         :rtype Path
@@ -90,16 +126,31 @@ class MediaRetrieval:
 
         return self._download_file(response, file_or_directory_path, filename)
 
-    def hls(self, id: str) -> str:
+    def hls(
+        self,
+        id: str,
+        custom_bitrates: list[str] | None = None,
+        audio_track_id: str | None = None,
+    ) -> str:
         """Returns a valid url for streaming the requested song with hls.m3u8
 
         :param id: The id of the song to stream.
         :type id: str
+        :param custom_bitrates: A list of bitrates to be added to the hls playlist
+            for video streaming, the resolution can also be specified with
+            this format: "BITRATE@WIDTHxHEIGHT".
+        :type custom_bitrates: list[str] | None
+        :param audio_track_id: The id of the audio track to be used
+            if the playlist is for a video.
+        :type audio_track_id: str | None
         :return A url that points to the given song in the hls.m3u8 endpoint
         :rtype str
         """
 
-        return self._generate_url("hls.m3u8", {"id": id})
+        return self._generate_url(
+            "hls.m3u8",
+            {"id": id, "bitRate": custom_bitrates, "audioTrack": audio_track_id},
+        )
 
     def get_captions(
         self,
@@ -112,8 +163,8 @@ class MediaRetrieval:
         :param id: The ID of the video to get the captions
         :type id: str
         :param file_or_directory_path: If a directory path is passed the file will be
-        inside of it with the default filename given by the API,
-        if not the file will be saved directly in the given path.
+            inside of it with the default filename given by the API,
+            if not the file will be saved directly in the given path.
         :type file_or_directory_path: Path
         :param subtitles_file_format: The preferred captions file format.
         :type subtitles_file_format: SubtitlesFileFormat

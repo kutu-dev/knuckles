@@ -142,6 +142,23 @@ def mock_get_song(mock_generator: MockGenerator, song: dict[str, Any]) -> Respon
 
 
 @pytest.fixture
+def video() -> dict[str, Any]:
+    return {"id": "videoId", "suffix": "mpv"}
+
+
+@pytest.fixture()
+def video_details() -> dict[str, Any]:
+    return {
+        "captions": {"id": "0", "name": "Planes 2.srt"},
+        "audioTrack": [
+            {"id": "1", "name": "English", "languageCode": "eng"},
+        ],
+        "conversion": {"id": "37", "bitRate": "1000"},
+        "id": "7058",
+    }
+
+
+@pytest.fixture
 def album_info(base_url: str) -> dict[str, Any]:
     return {
         "notes": "Example note",

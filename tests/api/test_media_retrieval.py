@@ -12,11 +12,35 @@ from knuckles.media_retrieval import SubtitlesFileFormat
 from tests.mocks.media_retrieval import FileMetadata
 
 
-def test_stream(subsonic: Subsonic, song: dict[str, Any]) -> None:
-    stream_url = parse.urlparse(subsonic.media_retrieval.stream(song["id"]))
+def test_stream_song(subsonic: Subsonic, song: dict[str, Any]) -> None:
+    stream_url = parse.urlparse(
+        subsonic.media_retrieval.stream(
+            song["id"], 0, song["suffix"], estimate_content_length=True
+        )
+    )
 
     assert stream_url.path == "/rest/stream"
     assert parse.parse_qs(stream_url.query)["id"][0] == song["id"]
+    assert parse.parse_qs(stream_url.query)["maxBitRate"][0] == "0"
+    assert parse.parse_qs(stream_url.query)["format"][0] == song["suffix"]
+    assert parse.parse_qs(stream_url.query)["estimateContentLength"][0] == "True"
+
+
+def test_stream_video(subsonic: Subsonic, video: dict[str, Any]) -> None:
+    stream_url = parse.urlparse(
+        subsonic.media_retrieval.stream(
+            video["id"], 0, video["suffix"], 809, "640x480", True, True
+        )
+    )
+
+    assert stream_url.path == "/rest/stream"
+    assert parse.parse_qs(stream_url.query)["id"][0] == video["id"]
+    assert parse.parse_qs(stream_url.query)["maxBitRate"][0] == "0"
+    assert parse.parse_qs(stream_url.query)["format"][0] == video["suffix"]
+    assert parse.parse_qs(stream_url.query)["timeOffset"][0] == "809"
+    assert parse.parse_qs(stream_url.query)["size"][0] == "640x480"
+    assert parse.parse_qs(stream_url.query)["estimateContentLength"][0] == "True"
+    assert parse.parse_qs(stream_url.query)["converted"][0] == "True"
 
 
 @responses.activate
@@ -61,11 +85,32 @@ def test_download_without_a_given_filename(
     assert download_path == tmp_path / download_metadata.default_filename
 
 
-def test_hls(subsonic: Subsonic, song: dict[str, Any]) -> None:
+def test_hls_song(subsonic: Subsonic, song: dict[str, Any]) -> None:
     stream_url = parse.urlparse(subsonic.media_retrieval.hls(song["id"]))
 
     assert stream_url.path == "/rest/hls.m3u8"
     assert parse.parse_qs(stream_url.query)["id"][0] == song["id"]
+
+
+def test_hls_video(
+    subsonic: Subsonic, video: dict[str, Any], video_details: dict[str, Any]
+) -> None:
+    custom_bitrates = ["1000@480x360", "820@1920x1080"]
+
+    stream_url = parse.urlparse(
+        subsonic.media_retrieval.hls(
+            video["id"], custom_bitrates, video_details["audioTrack"][0]["id"]
+        )
+    )
+
+    assert stream_url.path == "/rest/hls.m3u8"
+    assert parse.parse_qs(stream_url.query)["id"][0] == video["id"]
+    assert custom_bitrates[0] in parse.parse_qs(stream_url.query)["bitRate"]
+    assert custom_bitrates[1] in parse.parse_qs(stream_url.query)["bitRate"]
+    assert (
+        parse.parse_qs(stream_url.query)["audioTrack"][0]
+        == video_details["audioTrack"][0]["id"]
+    )
 
 
 @responses.activate
