@@ -72,7 +72,7 @@ class MediaRetrieval:
         inside of it with the default filename given by the API,
         if not the file will be saved directly in the given path.
         :type file_or_directory_path: Path
-        :return Returns the given path
+        :return The path of the downloaded file
         :rtype Path
         """
 
@@ -107,6 +107,20 @@ class MediaRetrieval:
         file_or_directory_path: Path,
         subtitles_file_format: SubtitlesFileFormat = SubtitlesFileFormat.VTT,
     ) -> Path:
+        """Calls the "getCaptions" endpoint of the API.
+
+        :param id: The ID of the video to get the captions
+        :type id: str
+        :param file_or_directory_path: If a directory path is passed the file will be
+        inside of it with the default filename given by the API,
+        if not the file will be saved directly in the given path.
+        :type file_or_directory_path: Path
+        :param subtitles_file_format: The preferred captions file format.
+        :type subtitles_file_format: SubtitlesFileFormat
+        :return: The path of the downloaded captions file.
+        :rtype:
+        """
+
         # Check if the given file format is a valid one
         SubtitlesFileFormat(subtitles_file_format.value)
 
@@ -117,8 +131,8 @@ class MediaRetrieval:
 
         mime_type = response.headers["content-type"].partition(";")[0].strip()
 
-        # As application/x-subrip is not a valid MIME TYPE a manual check is done
-        if not mime_type == "application/x-subrip":
+        # As application/x-subrip is not a valid MIME TYPE so a manual check is done
+        if mime_type != "application/x-subrip":
             file_extension = guess_extension(mime_type)
         else:
             file_extension = ".srt"
