@@ -69,6 +69,7 @@ class Searching:
                 "albumOffset": album_offset,
                 "artistCount": artist_count,
                 "artistOffset": artist_offset,
+                "musicFolderId": music_folder_id,
             },
         )["searchResult3"]
 

@@ -8,23 +8,28 @@ if TYPE_CHECKING:
 
 class InternetRadioStation:
     """Representation of all the data related to
-    a internet radio station in Subsonic.
+    an internet radio station in Subsonic.
     """
 
     def __init__(
-        self, subsonic: "Subsonic", id: str, name: str, streamUrl: str, homepageUrl: str
+        self,
+        subsonic: "Subsonic",
+        id: str,
+        name: str,
+        streamUrl: str,
+        homepageUrl: str,
     ) -> None:
         """Representation of all the data related to
-        a internet radio station in Subsonic.
+        an internet radio station in Subsonic.
 
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param streamUrl: The id of the radio station.
-        :type streamUrl: str
-        :param streamUrl: The stream url of the radio station.
+        :param id: The id of the radio station.
         :type streamUrl: str
         :param name: The name of the radio station.
         :type name: str
+        :param subsonic: The subsonic object to make all the internal requests with it.
+        :type subsonic: Subsonic
+        :param streamUrl: The stream url of the radio station.
+        :type streamUrl: str
         :param homepageUrl: The url of the homepage of the radio station.
         :type homepageUrl: str
         """

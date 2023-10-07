@@ -31,12 +31,12 @@ class Sharing:
 
         return [Share(self.subsonic, **share) for share in response]
 
-    def get_share(self, id: str) -> Share | None:
+    def get_share(self, id_: str) -> Share | None:
         """Using the "getShares" endpoint iterates over all the shares
         and find the one with the same ID.
 
-        :param id: The ID of the share to find.
-        :type id: str
+        :param id_: The ID of the share to find.
+        :type id_: str
         :return: The found share or None if no one is found.
         :rtype: Share | None
         """
@@ -44,7 +44,7 @@ class Sharing:
         shares = self.get_shares()
 
         for share in shares:
-            if share.id == id:
+            if share.id == id_:
                 return share
 
         return None
@@ -61,7 +61,7 @@ class Sharing:
         :type songs_ids: list[str]
         :param description: A description for the share, defaults to None.
         :type description: str | None, optional
-        :param expires: The time when the share should expires, defaults to None.
+        :param expires: The time when the share should expire, defaults to None.
         :type expires: datetime | None, optional
         :return: The new created share.
         :rtype: Share
@@ -90,7 +90,7 @@ class Sharing:
         :type share_id: str
         :param new_description: A new description for the share, defaults to None.
         :type new_description: str | None, optional
-        :param new_expires: A new expire date fot the share, defaults to None.
+        :param new_expires: A new expiry date fot the share, defaults to None.
         :type new_expires: datetime | None, optional
         :return: A Share object with all the updated info.
         :rtype: Share

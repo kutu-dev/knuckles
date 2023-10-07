@@ -35,12 +35,12 @@ class Podcast:
 
         return [Channel(self.subsonic, **channel) for channel in response]
 
-    def get_podcast(self, id: str, with_episodes: bool = True) -> Channel:
+    def get_podcast(self, id_: str, with_episodes: bool = True) -> Channel:
         """Calls the "getPodcasts" endpoint of the API with a specific ID
         to only return the desired podcast channel.
 
-        :param id: The ID of the channel to get.
-        :type id: str
+        :param id_: The ID of the channel to get.
+        :type id_: str
         :param with_episodes: If the channels should also have
             all the episodes inside of them, defaults to True.
         :type with_episodes: bool, optional
@@ -49,7 +49,7 @@ class Podcast:
         """
 
         response = self.api.json_request(
-            "getPodcasts", {"id": id, "includeEpisodes": with_episodes}
+            "getPodcasts", {"id": id_, "includeEpisodes": with_episodes}
         )["podcasts"][0]
 
         return Channel(self.subsonic, **response)
@@ -69,12 +69,12 @@ class Podcast:
 
         return [Episode(self.subsonic, **episode) for episode in response]
 
-    def get_episode(self, id: str) -> Episode | None:
+    def get_episode(self, id_: str) -> Episode | None:
         """Calls the "getPodcasts" endpoints of the API and search through
         all the episodes to find the one with the same ID of the provided ID.
 
-        :param id: The provided episode ID.
-        :type id: str
+        :param id_: The provided episode ID.
+        :type id_: str
         :return: The episode with the same ID
             or None if no episode with the ID are found.
         :rtype: Episode | None
@@ -91,7 +91,7 @@ class Podcast:
         ]
 
         for episode in list_of_episodes:
-            if episode.id == id:
+            if episode.id == id_:
                 return episode
 
         return None
@@ -120,41 +120,41 @@ class Podcast:
 
         return self.subsonic
 
-    def delete_podcast_channel(self, id: str) -> "Subsonic":
+    def delete_podcast_channel(self, id_: str) -> "Subsonic":
         """Calls the "deletePodcastChannel" endpoint of the API.
 
-        :param id: The ID of the channel to delete.
-        :type id: str
+        :param id_: The ID of the channel to delete.
+        :type id_: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
         """
 
-        self.api.json_request("deletePodcastChannel", {"id": id})
+        self.api.json_request("deletePodcastChannel", {"id": id_})
 
         return self.subsonic
 
-    def download_podcast_episode(self, id: str) -> "Subsonic":
+    def download_podcast_episode(self, id_: str) -> "Subsonic":
         """Calls the "downloadPodcastEpisode" endpoint of the API.
 
-        :param id: The ID of the episode to download.
-        :type id: str
+        :param id_: The ID of the episode to download.
+        :type id_: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
         """
 
-        self.api.json_request("downloadPodcastEpisode", {"id": id})
+        self.api.json_request("downloadPodcastEpisode", {"id": id_})
 
         return self.subsonic
 
-    def delete_podcast_episode(self, id: str) -> "Subsonic":
+    def delete_podcast_episode(self, id_: str) -> "Subsonic":
         """Calls the "deletePodcastEpisode" endpoint of the API.
 
-        :param id: The ID of the episode to delete.
-        :type id: str
+        :param id_: The ID of the episode to delete.
+        :type id_: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
         """
 
-        self.api.json_request("deletePodcastEpisode", {"id": id})
+        self.api.json_request("deletePodcastEpisode", {"id": id_})
 
         return self.subsonic

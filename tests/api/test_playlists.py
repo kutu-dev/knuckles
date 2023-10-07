@@ -71,9 +71,8 @@ def test_create_playlist(
     playlist: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_create_playlist)
     responses.add(mock_update_comment_and_public)
-
+    responses.add(mock_create_playlist)
     response = subsonic.playlists.create_playlist(
         playlist["name"], playlist["comment"], playlist["public"], [song["id"]]
     )

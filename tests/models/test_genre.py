@@ -23,7 +23,7 @@ def test_generate(
 
 @responses.activate
 def test_generate_nonexistent_genre(
-    subsonic: Subsonic, mock_get_genres: Response, genre: dict[str, Any]
+    subsonic: Subsonic, mock_get_genres: Response
 ) -> None:
     responses.add(mock_get_genres)
 

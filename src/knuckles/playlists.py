@@ -37,15 +37,15 @@ class Playlists:
 
         return playlists
 
-    def get_playlist(self, id: str) -> Playlist:
+    def get_playlist(self, id_: str) -> Playlist:
         """Calls to the "getPlaylist" endpoint of the API.
 
-        :param id: The ID of the playlist to get.
-        :type id: str
+        :param id_: The ID of the playlist to get.
+        :type id_: str
         :return: The requested playlist.
         :rtype: Playlist
         """
-        response = self.api.json_request("getPlaylist", {"id": id})["playlist"]
+        response = self.api.json_request("getPlaylist", {"id": id_})["playlist"]
 
         return Playlist(self.subsonic, **response)
 
@@ -79,7 +79,7 @@ class Playlists:
 
         new_playlist = Playlist(self.subsonic, **response)
 
-        # Allow modify comment and public
+        # Allow to modify comment and public
         # with a workaround using the updatePlaylist endpoint
 
         if comment or public:
@@ -91,7 +91,7 @@ class Playlists:
 
     def update_playlist(
         self,
-        id: str,
+        id_: str,
         name: str | None = None,
         comment: str | None = None,
         public: bool | None = None,
@@ -100,8 +100,8 @@ class Playlists:
     ) -> Playlist:
         """Calls the "updatePlaylist" endpoint of the API.
 
-        :param id: The ID of the playlist to update.
-        :type id: str
+        :param id_: The ID of the playlist to update.
+        :type id_: str
         :param name: A new name for the playlist, defaults to None.
         :type name: str | None, optional
         :param comment: A new comment for the playlist, defaults to None.
@@ -120,7 +120,7 @@ class Playlists:
         self.api.json_request(
             "updatePlaylist",
             {
-                "playlistId": id,
+                "playlistId": id_,
                 "name": name,
                 "comment": comment,
                 "public": public,
@@ -129,16 +129,18 @@ class Playlists:
             },
         )
 
-        return Playlist(self.subsonic, id=id, name=name, comment=comment, public=public)
+        return Playlist(
+            self.subsonic, id=id_, name=name, comment=comment, public=public
+        )
 
-    def delete_playlist(self, id: str) -> "Subsonic":
+    def delete_playlist(self, id_: str) -> "Subsonic":
         """Calls the "deletePlaylist" endpoint of the API.
 
-        :param id: The ID of the song to remove.
-        :type id: str
+        :param id_: The ID of the song to remove.
+        :type id_: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
         """
-        self.api.json_request("deletePlaylist", {"id": id})
+        self.api.json_request("deletePlaylist", {"id": id_})
 
         return self.subsonic

@@ -111,4 +111,3 @@ def get_code_error_exception(
             return CodeError70
         case _:
             return UnknownErrorCode
-            return UnknownErrorCode

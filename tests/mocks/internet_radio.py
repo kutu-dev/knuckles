@@ -11,8 +11,8 @@ def internet_radio_station() -> dict[str, Any]:
     return {
         "id": "1",
         "name": "HBR1.com - Dream Factory",
-        "streamUrl": "http://ubuntu.hbr1.com:19800/ambient.aac",
-        "homepageUrl": "http://www.hbr1.com/",
+        "streamUrl": "https://ubuntu.hbr1.com:19800/ambient.aac",
+        "homepageUrl": "https://www.hbr1.com/",
     }
 
 

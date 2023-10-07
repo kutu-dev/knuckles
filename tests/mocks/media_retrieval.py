@@ -18,7 +18,7 @@ class MockDownload(Protocol):
         endpoint: str,
         extra_params: dict[str, Any],
         content_type: str,
-        headers: dict[str, str] = {},
+        headers: dict[str, str] | None = None,
     ) -> Response:
         ...
 
@@ -31,7 +31,7 @@ def mock_download_file_generator(
         endpoint: str,
         extra_params: dict[str, Any],
         content_type: str,
-        headers: dict[str, str] = {},
+        headers: dict[str, str] | None = None,
     ):
         fake_file = tmp_path / "file.mock"
         fake_file.touch()

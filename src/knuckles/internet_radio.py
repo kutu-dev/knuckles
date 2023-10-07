@@ -34,12 +34,12 @@ class InternetRadio:
 
         return [InternetRadioStation(self.subsonic, **station) for station in response]
 
-    def get_internet_radio_station(self, id: str) -> InternetRadioStation | None:
+    def get_internet_radio_station(self, id_: str) -> InternetRadioStation | None:
         """Using the "getInternetRadioStation" endpoint iterates over all the stations
         and find the one with the same ID.
 
-        :param id: The ID of the station to find.
-        :type id: str
+        :param id_: The ID of the station to find.
+        :type id_: str
         :return: The found internet radio station or None if no one is found.
         :rtype: InternetRadioStation | None
         """
@@ -47,7 +47,7 @@ class InternetRadio:
         stations = self.get_internet_radio_stations()
 
         for station in stations:
-            if station.id == id:
+            if station.id == id_:
                 return station
 
         return None
@@ -75,12 +75,12 @@ class InternetRadio:
         return self.subsonic
 
     def update_internet_radio_station(
-        self, id: str, stream_url: str, name: str, homepage_url: str | None = None
+        self, id_: str, stream_url: str, name: str, homepage_url: str | None = None
     ) -> "Subsonic":
         """Calls the "updateInternetRadioStation" endpoint ot the API.
 
-        :param id: The ID of the station to update.
-        :type id: str
+        :param id_: The ID of the station to update.
+        :type id_: str
         :param stream_url: The new steam url of the station.
         :type stream_url: str
         :param name: The new name of the station.
@@ -95,7 +95,7 @@ class InternetRadio:
         self.api.json_request(
             "updateInternetRadioStation",
             {
-                "id": id,
+                "id": id_,
                 "streamUrl": stream_url,
                 "name": name,
                 "homepageUrl": homepage_url,
@@ -104,15 +104,15 @@ class InternetRadio:
 
         return self.subsonic
 
-    def delete_internet_radio_station(self, id: str) -> "Subsonic":
+    def delete_internet_radio_station(self, id_: str) -> "Subsonic":
         """Calls the "deleteInternetRadioStation" endpoint of the API.
 
-        :param id: The ID of the station to delete
-        :type id: str
+        :param id_: The ID of the station to delete
+        :type id_: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
         """
 
-        self.api.json_request("deleteInternetRadioStation", {"id": id})
+        self.api.json_request("deleteInternetRadioStation", {"id": id_})
 
         return self.subsonic
