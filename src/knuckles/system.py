@@ -1,11 +1,10 @@
-from dataclasses import dataclass
+from typing import NamedTuple
 
 from .api import Api
 from .models.system import License, SubsonicResponse
 
 
-@dataclass
-class OpenSubsonicExtension:
+class OpenSubsonicExtension(NamedTuple):
     name: str
     versions: list[int]
 

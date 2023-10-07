@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING, Any
 
+# Avoid circular import error
+import knuckles.models.song as song_model_module
 from dateutil import parser
 
-import knuckles.models.song as song_model
-
-from ..models.artist import Artist
-from ..models.cover_art import CoverArt
+from .artist import Artist
+from .cover_art import CoverArt
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
@@ -159,7 +159,7 @@ class Album:
         self.played = parser.parse(played) if played else None
         self.user_rating = userRating
         self.songs = (
-            [song_model.Song(self.__subsonic, **song_data) for song_data in song]
+            [song_model_module.Song(self.__subsonic, **song_data) for song_data in song]
             if song
             else None
         )

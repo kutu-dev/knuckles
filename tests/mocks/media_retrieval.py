@@ -1,6 +1,5 @@
-from collections import namedtuple
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, NamedTuple, Protocol
 
 import pytest
 from responses import Response
@@ -52,9 +51,10 @@ def mock_download_file_generator(
     return inner
 
 
-FileMetadata = namedtuple(
-    "FileMetadata", ["default_filename", "output_filename", "content_type"]
-)
+class FileMetadata(NamedTuple):
+    default_filename: str
+    output_filename: str
+    content_type: str
 
 
 @pytest.fixture
@@ -80,19 +80,19 @@ def mock_download(
 
 
 @pytest.fixture
-def vtt_metadata(song: dict[str, Any]) -> FileMetadata:
-    return FileMetadata(f"{song['id']}.vtt", "output.vtt", "text/vtt")
+def vtt_metadata(video: dict[str, Any]) -> FileMetadata:
+    return FileMetadata(f"{video['id']}.vtt", "output.vtt", "text/vtt")
 
 
 @pytest.fixture
 def mock_get_captions_vtt(
     mock_download_file_generator: MockDownload,
-    song: dict[str, Any],
+    video: dict[str, Any],
     vtt_metadata: FileMetadata,
 ) -> Response:
     return mock_download_file_generator(
         "getCaptions",
-        {"id": song["id"]},
+        {"id": video["id"]},
         vtt_metadata.content_type,
     )
 
@@ -100,31 +100,31 @@ def mock_get_captions_vtt(
 @pytest.fixture
 def mock_get_captions_prefer_vtt(
     mock_download_file_generator: MockDownload,
-    song: dict[str, Any],
+    video: dict[str, Any],
     vtt_metadata: FileMetadata,
 ) -> Response:
     return mock_download_file_generator(
         "getCaptions",
-        {"id": song["id"], "format": "vtt"},
+        {"id": video["id"], "format": "vtt"},
         vtt_metadata.content_type,
     )
 
 
 @pytest.fixture
-def srt_metadata(song: dict[str, Any]) -> FileMetadata:
+def srt_metadata(video: dict[str, Any]) -> FileMetadata:
     # This MIME TYPE is not approved by the IANA
-    return FileMetadata(f"{song['id']}.srt", "output.srt", "application/x-subrip")
+    return FileMetadata(f"{video['id']}.srt", "output.srt", "application/x-subrip")
 
 
 @pytest.fixture
 def mock_get_captions_srt(
     mock_download_file_generator: MockDownload,
-    song: dict[str, Any],
+    video: dict[str, Any],
     srt_metadata: FileMetadata,
 ) -> Response:
     return mock_download_file_generator(
         "getCaptions",
-        {"id": song["id"]},
+        {"id": video["id"]},
         srt_metadata.content_type,
     )
 
@@ -132,12 +132,12 @@ def mock_get_captions_srt(
 @pytest.fixture
 def mock_get_captions_prefer_srt(
     mock_download_file_generator: MockDownload,
-    song: dict[str, Any],
+    video: dict[str, Any],
     srt_metadata: FileMetadata,
 ) -> Response:
     return mock_download_file_generator(
         "getCaptions",
-        {"id": song["id"], "format": "srt"},
+        {"id": video["id"], "format": "srt"},
         srt_metadata.content_type,
     )
 

@@ -1,10 +1,9 @@
 from typing import Any
 
 import responses
-from responses import Response
-
 from knuckles import Subsonic
 from knuckles.models.playlist import Playlist
+from responses import Response
 
 
 @responses.activate

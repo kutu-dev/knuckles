@@ -1,10 +1,9 @@
 from typing import Any
 
 import responses
-from responses import Response
-
 from knuckles.models.internet_radio_station import InternetRadioStation
 from knuckles.subsonic import Subsonic
+from responses import Response
 
 
 @responses.activate

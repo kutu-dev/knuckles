@@ -3,9 +3,9 @@ from typing import Any
 
 import pytest
 import responses
+from knuckles import Song, Subsonic
 from responses import Response
 
-from knuckles import Song, Subsonic
 from tests.conftest import MockGenerator
 
 

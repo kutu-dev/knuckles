@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING, Any
 
-import knuckles.models.album as album_model
-from knuckles.models.cover_art import CoverArt
+# Avoid circular import error
+import knuckles.models.album as album_model_module
+
+from .cover_art import CoverArt
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
@@ -125,7 +127,10 @@ class Artist:
         self.user_rating = userRating
         self.average_rating = averageRating
         self.albums = (
-            [album_model.Album(self.__subsonic, **album_data) for album_data in album]
+            [
+                album_model_module.Album(self.__subsonic, **album_data)
+                for album_data in album
+            ]
             if album
             else None
         )

@@ -1,9 +1,8 @@
 from typing import Any
 
 import responses
-from responses import Response
-
 from knuckles.subsonic import Subsonic
+from responses import Response
 
 
 @responses.activate

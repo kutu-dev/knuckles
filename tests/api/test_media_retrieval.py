@@ -1,14 +1,14 @@
-from urllib import parse
 from pathlib import Path
 from typing import Any
+from urllib import parse
 
 import pytest
-from _pytest.fixtures import FixtureRequest
-from responses import Response
 import responses
+from _pytest.fixtures import FixtureRequest
 from knuckles import Subsonic
-
 from knuckles.media_retrieval import SubtitlesFileFormat
+from responses import Response
+
 from tests.mocks.media_retrieval import FileMetadata
 
 
@@ -119,13 +119,13 @@ def test_get_captions_with_a_given_filename(
     mock_get_captions_vtt: Response,
     tmp_path: Path,
     placeholder_data: str,
-    song: dict[str, Any],
+    video: dict[str, Any],
     vtt_metadata: FileMetadata,
 ):
     responses.add(mock_get_captions_vtt)
 
     download_path = subsonic.media_retrieval.get_captions(
-        song["id"], tmp_path / vtt_metadata.output_filename
+        video["id"], tmp_path / vtt_metadata.output_filename
     )
 
     # Check if the file data has been altered
@@ -149,7 +149,7 @@ def test_get_captions_without_a_given_filename(
     mock: str,
     tmp_path: Path,
     placeholder_data: str,
-    song: dict[str, Any],
+    video: dict[str, Any],
     metadata: str,
 ):
     # Retrieve the mocks dynamically as their tests are equal
@@ -158,7 +158,7 @@ def test_get_captions_without_a_given_filename(
 
     responses.add(get_mock)
 
-    download_path = subsonic.media_retrieval.get_captions(song["id"], tmp_path)
+    download_path = subsonic.media_retrieval.get_captions(video["id"], tmp_path)
 
     # Check if the file data has been altered
     with open(tmp_path / get_metadata.default_filename, "r") as file:
@@ -181,7 +181,7 @@ def test_get_captions_with_a_preferred_file_format(
     mock: str,
     tmp_path: Path,
     placeholder_data: str,
-    song: dict[str, Any],
+    video: dict[str, Any],
     metadata: str,
     file_format: SubtitlesFileFormat,
 ):
@@ -192,7 +192,7 @@ def test_get_captions_with_a_preferred_file_format(
     responses.add(get_mock)
 
     download_path = subsonic.media_retrieval.get_captions(
-        song["id"], tmp_path, file_format
+        video["id"], tmp_path, file_format
     )
 
     # Check if the file data has been altered
