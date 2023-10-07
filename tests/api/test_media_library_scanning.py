@@ -1,7 +1,7 @@
 from typing import Any
 
 import responses
-from knuckles import ScanStatus, Subsonic
+from knuckles import Subsonic
 from responses import Response
 
 
@@ -11,7 +11,7 @@ def test_start_scan(
 ) -> None:
     responses.add(mock_start_scan)
 
-    response: ScanStatus = subsonic.media_library_scanning.start_scan()
+    response = subsonic.media_library_scanning.start_scan()
 
     assert response.scanning == scan_status["scanning"]
     assert response.count == scan_status["count"]
@@ -23,7 +23,7 @@ def test_get_scan_status(
 ) -> None:
     responses.add(mock_get_scan_status)
 
-    response: ScanStatus = subsonic.media_library_scanning.get_scan_status()
+    response = subsonic.media_library_scanning.get_scan_status()
 
     assert response.scanning == scan_status["scanning"]
     assert response.count == scan_status["count"]

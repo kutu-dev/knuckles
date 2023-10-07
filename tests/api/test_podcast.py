@@ -153,7 +153,7 @@ def test_refresh_podcasts(subsonic: Subsonic, mock_refresh_podcasts: Response) -
 
     response = subsonic.podcast.refresh_podcasts()
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate
@@ -164,7 +164,7 @@ def test_create_podcast_channel(
 
     response = subsonic.podcast.create_podcast_channel(channel["url"])
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate
@@ -175,7 +175,7 @@ def test_delete_podcast_channel(
 
     response = subsonic.podcast.delete_podcast_channel(channel["id"])
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate
@@ -186,7 +186,7 @@ def test_download_podcast_episode(
 
     response = subsonic.podcast.download_podcast_episode(episode["id"])
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate
@@ -197,4 +197,4 @@ def test_delete_podcast_episode(
 
     response = subsonic.podcast.delete_podcast_episode(episode["id"])
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic

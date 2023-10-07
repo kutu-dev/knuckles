@@ -54,7 +54,7 @@ def test_download_with_a_given_filename(
 ) -> None:
     responses.add(mock_download)
 
-    download_path = subsonic.media_retrieval.download(
+    response = subsonic.media_retrieval.download(
         song["id"], tmp_path / download_metadata.output_filename
     )
 
@@ -62,7 +62,7 @@ def test_download_with_a_given_filename(
     with open(tmp_path / download_metadata.output_filename, "r") as file:
         assert placeholder_data == file.read()
 
-    assert download_path == tmp_path / download_metadata.output_filename
+    assert response == tmp_path / download_metadata.output_filename
 
 
 @responses.activate
@@ -76,13 +76,13 @@ def test_download_without_a_given_filename(
 ) -> None:
     responses.add(mock_download)
 
-    download_path = subsonic.media_retrieval.download(song["id"], tmp_path)
+    response = subsonic.media_retrieval.download(song["id"], tmp_path)
 
     # Check if the file data has been altered
     with open(tmp_path / download_metadata.default_filename, "r") as file:
         assert placeholder_data == file.read()
 
-    assert download_path == tmp_path / download_metadata.default_filename
+    assert response == tmp_path / download_metadata.default_filename
 
 
 def test_hls_song(subsonic: Subsonic, song: dict[str, Any]) -> None:
@@ -124,7 +124,7 @@ def test_get_captions_with_a_given_filename(
 ):
     responses.add(mock_get_captions_vtt)
 
-    download_path = subsonic.media_retrieval.get_captions(
+    response = subsonic.media_retrieval.get_captions(
         video["id"], tmp_path / vtt_metadata.output_filename
     )
 
@@ -132,7 +132,7 @@ def test_get_captions_with_a_given_filename(
     with open(tmp_path / vtt_metadata.output_filename, "r") as file:
         assert placeholder_data == file.read()
 
-    assert download_path == tmp_path / vtt_metadata.output_filename
+    assert response == tmp_path / vtt_metadata.output_filename
 
 
 @responses.activate

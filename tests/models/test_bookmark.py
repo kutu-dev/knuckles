@@ -35,7 +35,7 @@ def test_create(
     requested_bookmark = subsonic.bookmarks.get_bookmark(song["id"])
     requested_bookmark = requested_bookmark.create()
 
-    assert type(requested_bookmark) == Bookmark
+    assert type(requested_bookmark) is Bookmark
 
 
 @responses.activate
@@ -51,7 +51,7 @@ def test_update(
     requested_bookmark = subsonic.bookmarks.get_bookmark(song["id"])
     requested_bookmark = requested_bookmark.update()
 
-    assert type(requested_bookmark) == Bookmark
+    assert type(requested_bookmark) is Bookmark
 
 
 @responses.activate
@@ -67,4 +67,4 @@ def test_delete(
     requested_bookmark = subsonic.bookmarks.get_bookmark(song["id"])
     requested_bookmark = requested_bookmark.delete()
 
-    assert type(requested_bookmark) == Bookmark
+    assert type(requested_bookmark) is Bookmark

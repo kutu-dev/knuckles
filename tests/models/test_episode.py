@@ -51,7 +51,7 @@ def test_download(
     requested_episode = subsonic.podcast.get_episode(episode["id"])
     requested_episode = requested_episode.download()
 
-    assert type(requested_episode) == Episode
+    assert type(requested_episode) is Episode
 
 
 @responses.activate
@@ -67,4 +67,4 @@ def test_delete(
     requested_episode = subsonic.podcast.get_episode(episode["id"])
     requested_episode = requested_episode.delete()
 
-    assert type(requested_episode) == Episode
+    assert type(requested_episode) is Episode

@@ -76,7 +76,7 @@ def test_delete_bookmark(
 
     response = subsonic.bookmarks.delete_bookmark(song["id"])
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate

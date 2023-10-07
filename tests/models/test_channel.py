@@ -34,7 +34,7 @@ def test_create(
     requested_channel = subsonic.podcast.get_podcast(channel["id"])
     requested_channel = requested_channel.create()
 
-    assert type(requested_channel) == Channel
+    assert type(requested_channel) is Channel
 
 
 @responses.activate
@@ -50,4 +50,4 @@ def test_delete(
     requested_channel = subsonic.podcast.get_podcast(channel["id"])
     requested_channel = requested_channel.delete()
 
-    assert type(requested_channel) == Channel
+    assert type(requested_channel) is Channel

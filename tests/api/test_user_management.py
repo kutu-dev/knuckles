@@ -70,7 +70,7 @@ def test_delete_user(
 
     response = subsonic.user_management.delete_user(username)
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate
@@ -81,4 +81,4 @@ def test_change_password(
 
     response = subsonic.user_management.change_password(username, new_password)
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic

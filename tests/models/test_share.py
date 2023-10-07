@@ -52,7 +52,7 @@ def test_create(
     requested_share = subsonic.sharing.get_share(share["id"])
     requested_share = requested_share.create()
 
-    assert type(requested_share) == Share
+    assert type(requested_share) is Share
 
 
 @responses.activate
@@ -114,7 +114,7 @@ def test_update(
     requested_share = subsonic.sharing.get_share(share["id"])
     requested_share.update()
 
-    assert type(requested_share) == Share
+    assert type(requested_share) is Share
 
 
 @responses.activate
@@ -130,4 +130,4 @@ def test_delete(
     requested_share = subsonic.sharing.get_share(share["id"])
     requested_share.delete()
 
-    assert type(requested_share) == Share
+    assert type(requested_share) is Share

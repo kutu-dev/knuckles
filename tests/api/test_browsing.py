@@ -79,8 +79,8 @@ def test_get_artist(
     assert response.average_rating == artist["averageRating"]
     assert response.average_rating == artist["averageRating"]
     assert response.album_count == artist["albumCount"]
-    assert type(response.albums) == list
-    assert type(response.albums[0].songs) == list
+    assert type(response.albums) is list
+    assert type(response.albums[0].songs) is list
     assert response.albums[0].songs[0].title == song["title"]
     assert response.cover_art.id == artist["coverArt"]
 
@@ -111,7 +111,7 @@ def test_get_album(
     assert response.artist.name == album["artist"]
     assert response.year == album["year"]
     assert response.genre == album["genre"]
-    assert type(response.songs) == list
+    assert type(response.songs) is list
     assert response.songs[0].id == song["id"]
     assert response.played == parser.parse(album["played"])
     assert response.user_rating == album["userRating"]
