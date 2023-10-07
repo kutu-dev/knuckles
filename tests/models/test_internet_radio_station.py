@@ -14,13 +14,13 @@ def test_generate(
 ) -> None:
     responses.add(mock_get_internet_radio_stations)
 
-    requested_station = subsonic.internet_radio.get_internet_radio_station(
+    response = subsonic.internet_radio.get_internet_radio_station(
         internet_radio_station["id"]
     )
-    requested_station.name = "Foo"
-    requested_station = requested_station.generate()
+    response.name = "Foo"
+    response = response.generate()
 
-    assert requested_station.name == internet_radio_station["name"]
+    assert response.name == internet_radio_station["name"]
 
 
 @responses.activate
@@ -33,12 +33,12 @@ def test_create(
     responses.add(mock_get_internet_radio_stations)
     responses.add(mock_create_internet_radio_station)
 
-    requested_station = subsonic.internet_radio.get_internet_radio_station(
+    response = subsonic.internet_radio.get_internet_radio_station(
         internet_radio_station["id"]
     )
-    requested_station = requested_station.create()
+    response = response.create()
 
-    assert type(requested_station) is InternetRadioStation
+    assert type(response) is InternetRadioStation
 
 
 @responses.activate
@@ -51,12 +51,12 @@ def test_update(
     responses.add(mock_get_internet_radio_stations)
     responses.add(mock_update_internet_radio_station)
 
-    requested_station = subsonic.internet_radio.get_internet_radio_station(
+    response = subsonic.internet_radio.get_internet_radio_station(
         internet_radio_station["id"]
     )
-    requested_station = requested_station.update()
+    response = response.update()
 
-    assert type(requested_station) is InternetRadioStation
+    assert type(response) is InternetRadioStation
 
 
 @responses.activate
@@ -69,9 +69,9 @@ def test_delete(
     responses.add(mock_get_internet_radio_stations)
     responses.add(mock_delete_internet_radio_station)
 
-    requested_station = subsonic.internet_radio.get_internet_radio_station(
+    response = subsonic.internet_radio.get_internet_radio_station(
         internet_radio_station["id"]
     )
-    requested_station = requested_station.delete()
+    response = response.delete()
 
-    assert type(requested_station) is InternetRadioStation
+    assert type(response) is InternetRadioStation

@@ -13,8 +13,8 @@ def test_generate(
 ) -> None:
     responses.add(mock_get_music_folders)
 
-    requested_folder = subsonic.browsing.get_music_folders()[0]
-    requested_folder.name = "Foo"
-    requested_folder = requested_folder.generate()
+    response = subsonic.browsing.get_music_folders()[0]
+    response.name = "Foo"
+    response = response.generate()
 
-    assert requested_folder.name == music_folders[0]["name"]
+    assert response.name == music_folders[0]["name"]

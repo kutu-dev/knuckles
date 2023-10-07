@@ -17,11 +17,11 @@ def test_generate(
 ) -> None:
     responses.add(mock_get_song)
 
-    requested_song = subsonic.browsing.get_song(song["id"])
-    requested_song.title = "Foo"
-    requested_song = requested_song.generate()
+    response = subsonic.browsing.get_song(song["id"])
+    response.title = "Foo"
+    response = response.generate()
 
-    assert requested_song.title == song["title"]
+    assert response.title == song["title"]
 
 
 @responses.activate
@@ -34,9 +34,9 @@ def test_song_star(
     responses.add(mock_get_song)
     responses.add(mock_star_song)
 
-    requested_song = subsonic.browsing.get_song(song["id"])
+    response = subsonic.browsing.get_song(song["id"]).star()
 
-    assert type(requested_song.star()) is Song
+    assert type(response) is Song
 
 
 @responses.activate
@@ -49,9 +49,9 @@ def test_song_unstar(
     responses.add(mock_get_song)
     responses.add(mock_unstar_song)
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
+    response: Song = subsonic.browsing.get_song(song["id"]).unstar()
 
-    assert type(requested_song.unstar()) is Song
+    assert type(response) is Song
 
 
 @pytest.mark.parametrize("rating", [1, 2, 3, 4, 5])
@@ -66,9 +66,9 @@ def test_song_set_rating(
     responses.add(mock_get_song)
     responses.add(mock_generator("setRating", {"id": song["id"], "rating": rating}))
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
+    response: Song = subsonic.browsing.get_song(song["id"]).set_rating(rating)
 
-    assert type(requested_song.set_rating(rating)) is Song
+    assert type(response) is Song
 
 
 @responses.activate
@@ -81,9 +81,9 @@ def test_song_remove_rating(
     responses.add(mock_get_song)
     responses.add(mock_set_rating_zero)
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
+    response: Song = subsonic.browsing.get_song(song["id"]).remove_rating()
 
-    assert type(requested_song.remove_rating()) is Song
+    assert type(response) is Song
 
 
 @responses.activate
@@ -97,12 +97,12 @@ def test_song_default_scrobble(
     responses.add(mock_get_song)
     responses.add(mock_scrobble_submission)
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
-    datetime_time: datetime = datetime.fromtimestamp(scrobble_time / 1000)
+    scrobble_in_datetime = datetime.fromtimestamp(scrobble_time / 1000)
+    response: Song = subsonic.browsing.get_song(song["id"]).scrobble(
+        scrobble_in_datetime
+    )
 
-    scrobble_response: Song = requested_song.scrobble(datetime_time)
-
-    assert type(scrobble_response) is Song
+    assert type(response) is Song
 
 
 @responses.activate
@@ -116,12 +116,12 @@ def test_song_submission_scrobble(
     responses.add(mock_get_song)
     responses.add(mock_scrobble_submission)
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
-    datetime_time: datetime = datetime.fromtimestamp(scrobble_time / 1000)
+    scrobble_in_datetime = datetime.fromtimestamp(scrobble_time / 1000)
+    response: Song = subsonic.browsing.get_song(song["id"]).scrobble(
+        scrobble_in_datetime, True
+    )
 
-    scrobble_response: Song = requested_song.scrobble(datetime_time, True)
-
-    assert type(scrobble_response) is Song
+    assert type(response) is Song
 
 
 @responses.activate
@@ -135,9 +135,9 @@ def test_song_now_playing_scrobble(
     responses.add(mock_get_song)
     responses.add(mock_scrobble_now_playing)
 
-    requested_song: Song = subsonic.browsing.get_song(song["id"])
-    datetime_time: datetime = datetime.fromtimestamp(scrobble_time / 1000)
+    scrobble_in_datetime = datetime.fromtimestamp(scrobble_time / 1000)
+    response: Song = subsonic.browsing.get_song(song["id"]).scrobble(
+        scrobble_in_datetime, False
+    )
 
-    scrobble_response: Song = requested_song.scrobble(datetime_time, False)
-
-    assert type(scrobble_response) is Song
+    assert type(response) is Song

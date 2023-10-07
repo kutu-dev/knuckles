@@ -16,12 +16,12 @@ def test_generate(
     responses.add(mock_get_album)
     responses.add(mock_get_album_info)
 
-    requested_album = subsonic.browsing.get_album(album["id"])
-    requested_album.title = "Foo"
-    requested_album = requested_album.generate()
+    response = subsonic.browsing.get_album(album["id"])
+    response.title = "Foo"
+    response = response.generate()
 
-    assert requested_album.title == album["title"]
-    assert requested_album.info.notes == album_info["notes"]
+    assert response.title == album["title"]
+    assert response.info.notes == album_info["notes"]
 
 
 @responses.activate
@@ -35,8 +35,8 @@ def test_get_album_info(
     responses.add(mock_get_album)
     responses.add(mock_get_album_info)
 
-    requested_album = subsonic.browsing.get_album(album["id"])
-    get_album_info = requested_album.get_album_info()
+    response = subsonic.browsing.get_album(album["id"])
+    get_album_info = response.get_album_info()
 
     assert get_album_info.notes == album_info["notes"]
-    assert requested_album.info.notes == album_info["notes"]
+    assert response.info.notes == album_info["notes"]
