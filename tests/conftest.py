@@ -37,9 +37,9 @@ class MockGenerator(Protocol):
     def __call__(
         self,
         endpoint: str,
-        extra_params: dict[str, Any] = {},
-        extra_data: dict[str, Any] = {},
-        headers: dict[str, str] = {},
+        extra_params: dict[str, Any] | None = None,
+        extra_data: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
         content_type: str = "",
         body: Any = None,
     ) -> Response:
@@ -54,25 +54,27 @@ def mock_generator(
 ) -> MockGenerator:
     def inner(
         endpoint: str,
-        extra_params: dict[str, Any] = {},
-        extra_data: dict[str, Any] = {},
-        headers: dict[str, str] = {},
+        extra_params: dict[str, Any] | None = None,
+        extra_data: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
         content_type: str = "",
         body: Any = None,
     ) -> Response:
+        mocked_params = params.copy()
+        if extra_params is not None:
+            mocked_params.update(extra_params)
+
+        mocked_data = {"subsonic-response": {**subsonic_response}}
+        if extra_data is not None:
+            mocked_data["subsonic-response"].update(extra_data)
+
         return Response(
             method=GET,
             headers=headers,
             content_type=content_type,
             url=f"{base_url}/rest/{endpoint}",
-            match=[
-                matchers.query_param_matcher(
-                    {**params, **extra_params}, strict_match=False
-                )
-            ],
-            json={"subsonic-response": {**subsonic_response, **extra_data}}
-            if body is None
-            else None,
+            match=[matchers.query_param_matcher(mocked_params, strict_match=False)],
+            json=mocked_data if body is None else None,
             body=body,
             status=200,
         )

@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING, Any, Self
 
 from dateutil import parser
 
-from ..models.song import CoverArt, Song
-from ..models.user import User
+from .song import CoverArt, Song
+from .user import User
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic

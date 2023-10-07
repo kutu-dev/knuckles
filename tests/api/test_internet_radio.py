@@ -1,9 +1,8 @@
 from typing import Any
 
 import responses
-from responses import Response
-
 from knuckles.subsonic import Subsonic
+from responses import Response
 
 
 @responses.activate
@@ -51,7 +50,7 @@ def test_create_internet_radio_station(
         internet_radio_station["homepageUrl"],
     )
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate
@@ -69,7 +68,7 @@ def test_update_internet_radio_station(
         internet_radio_station["homepageUrl"],
     )
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic
 
 
 @responses.activate
@@ -84,4 +83,4 @@ def test_delete_internet_radio_station(
         internet_radio_station["id"],
     )
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic

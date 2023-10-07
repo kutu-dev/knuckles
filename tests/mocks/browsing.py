@@ -48,7 +48,7 @@ def artist(base_url: str, album: dict[str, Any]) -> dict[str, Any]:
 @pytest.fixture()
 def artists(artist: dict[str, Any]) -> dict[str, Any]:
     return {
-        "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
+        "ignoredArticles": "The An A Die Das Ein Les Le La",
         "index": [
             {
                 "name": "#",

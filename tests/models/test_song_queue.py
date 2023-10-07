@@ -14,11 +14,11 @@ def test_generate(
 ) -> None:
     responses.add(mock_get_play_queue)
 
-    requested_queue = subsonic.bookmarks.get_play_queue()
-    requested_queue.username = "Foo"
-    requested_queue = requested_queue.generate()
+    response = subsonic.bookmarks.get_play_queue()
+    response.username = "Foo"
+    response = response.generate()
 
-    assert requested_queue.user.username == username
+    assert response.user.username == username
 
 
 @responses.activate
@@ -30,7 +30,7 @@ def test_save(
     responses.add(mock_get_play_queue)
     responses.add(mock_save_play_queue)
 
-    requested_queue = subsonic.bookmarks.get_play_queue()
-    requested_queue = requested_queue.save()
+    response = subsonic.bookmarks.get_play_queue()
+    response = response.save()
 
-    assert type(requested_queue) is PlayQueue
+    assert type(response) is PlayQueue

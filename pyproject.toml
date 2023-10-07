@@ -25,6 +25,9 @@ sphinx = "^7.1.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.ruff]
+select = ["E", "F", "I001"]
+
 [tool.mypy]
 disallow_untyped_defs = true
 warn_unused_ignores = true

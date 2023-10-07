@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NamedTuple
 
 from .api import Api
 from .models.album import Album
@@ -10,10 +9,7 @@ if TYPE_CHECKING:
     from .subsonic import Subsonic
 
 
-# Use a plain dataclass as it only stores lists
-# and doesn't have any sort of method to be generated
-@dataclass
-class SearchResult:
+class SearchResult(NamedTuple):
     songs: list[Song] | None = None
     albums: list[Album] | None = None
     artists: list[Artist] | None = None
@@ -73,6 +69,7 @@ class Searching:
                 "albumOffset": album_offset,
                 "artistCount": artist_count,
                 "artistOffset": artist_offset,
+                "musicFolderId": music_folder_id,
             },
         )["searchResult3"]
 

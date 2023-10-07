@@ -86,67 +86,82 @@ class Browsing:
 
         return artists
 
-    def get_artist(self, id: str) -> Artist:
+    def get_artist(self, id_: str) -> Artist:
         """Calls the "getArtist" endpoint of the API.
 
-        :param id: The ID of the artist to get.
-        :type id: str
+        :param id_: The ID of the artist to get.
+        :type id_: str
         :return: An object with all the information
             that the server has given about the album.
         :rtype: Artist
         """
 
-        response = self.api.json_request("getArtist", {"id": id})["artist"]
+        response = self.api.json_request("getArtist", {"id": id_})["artist"]
 
         return Artist(self.subsonic, **response)
 
-    def get_album(self, id: str) -> Album:
+    def get_album(self, id_: str) -> Album:
         """Calls the "getAlbum" endpoint of the API.
 
-        :param id: The ID of the album to get.
-        :type id: str
+        :param id_: The ID of the album to get.
+        :type id_: str
         :return: An object with all the information
             that the server has given about the album.
         :rtype: Album
         """
 
-        response = self.api.json_request("getAlbum", {"id": id})["album"]
+        response = self.api.json_request("getAlbum", {"id": id_})["album"]
 
         return Album(self.subsonic, **response)
 
-    def get_album_info(self, id: str) -> AlbumInfo:
+    def get_album_info(self, id_: str) -> AlbumInfo:
         """Calls to the "getAlbumInfo2" endpoint of the API.
 
-        :param id: The ID of the album to get its info.
-        :type id: str
+        :param id_: The ID of the album to get its info.
+        :type id_: str
         :return: An object with all the extra info given by the server about the album.
         :rtype: AlbumInfo
         """
 
-        response = self.api.json_request("getAlbumInfo2", {"id": id})["albumInfo"]
+        response = self.api.json_request("getAlbumInfo2", {"id": id_})["albumInfo"]
 
-        return AlbumInfo(self.subsonic, id, **response)
+        return AlbumInfo(self.subsonic, id_, **response)
 
-    def get_song(self, id: str) -> Song:
+    def get_song(self, id_: str) -> Song:
         """Calls to the "getSong" endpoint of the API.
 
-        :param id: The ID of the song to get.
-        :type id: str
+        :param id_: The ID of the song to get.
+        :type id_: str
         :return: An object with all the information
             that the server has given about the song.
         :rtype: Song
         """
 
-        response = self.api.json_request("getSong", {"id": id})["song"]
+        response = self.api.json_request("getSong", {"id": id_})["song"]
 
         return Song(self.subsonic, **response)
 
     def get_artist_info(
-        self, id: str, count: int | None = None, include_not_present: bool | None = None
+        self,
+        id_: str,
+        count: int | None = None,
+        include_not_present: bool | None = None,
     ) -> ArtistInfo:
+        """Calls the "getArtistInfo" endpoint of the API.
+
+        :param id_: The id of the artist to get its info
+        :type id_:
+        :param count:
+        :type count:
+        :param include_not_present:
+        :type include_not_present:
+        :return:
+        :rtype:
+        """
+
         response = self.api.json_request(
             "getArtistInfo2",
-            {"id": id, "count": count, "includeNotPresent": include_not_present},
+            {"id": id_, "count": count, "includeNotPresent": include_not_present},
         )["artistInfo2"]
 
-        return ArtistInfo(self.subsonic, id, **response)
+        return ArtistInfo(self.subsonic, id_, **response)

@@ -56,10 +56,10 @@ def test_get_playlist(
     assert response.changed == parser.parse(playlist["changed"])
     assert response.song_count == playlist["songCount"]
     assert response.duration == playlist["duration"]
-    assert type(response.songs) == list
+    assert type(response.songs) is list
     assert response.songs[0].id == song["id"]
     assert response.cover_art.id == song["coverArt"]
-    assert type(response.allowed_users) == list
+    assert type(response.allowed_users) is list
     assert response.allowed_users[0].username == username
 
 
@@ -71,9 +71,8 @@ def test_create_playlist(
     playlist: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_create_playlist)
     responses.add(mock_update_comment_and_public)
-
+    responses.add(mock_create_playlist)
     response = subsonic.playlists.create_playlist(
         playlist["name"], playlist["comment"], playlist["public"], [song["id"]]
     )
@@ -116,4 +115,4 @@ def test_delete_playlist(
 
     response = subsonic.playlists.delete_playlist(playlist["id"])
 
-    assert type(response) == Subsonic
+    assert type(response) is Subsonic

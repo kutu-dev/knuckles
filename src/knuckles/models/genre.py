@@ -16,7 +16,7 @@ class Genre:
         songCount: int | None = None,
         albumCount: int | None = None,
     ) -> None:
-        """Representation of all the data related a to genre in Subsonic.
+        """Representation of all the data related to a genre in Subsonic.
 
         :param subsonic: The subsonic object to make all the internal requests with it.
         :type subsonic: Subsonic

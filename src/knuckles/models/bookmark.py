@@ -70,7 +70,7 @@ class Bookmark:
 
     def update(self) -> Self:
         """Calls the "createBookmark" endpoint of the API, as creating and updating
-        a bookmark uses the same endpoint. Useful for having more self descriptive code.
+        a bookmark uses the same endpoint. Useful for having more self-descriptive code.
 
         :return: The object itself to allow method chaining.
         :rtype: Self

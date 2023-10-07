@@ -29,12 +29,12 @@ class Bookmarks:
 
         return [Bookmark(self.subsonic, **bookmark) for bookmark in response]
 
-    def get_bookmark(self, id: str) -> Bookmark | None:
+    def get_bookmark(self, id_: str) -> Bookmark | None:
         """Using the "getBookmarks" endpoint iterates over all the bookmarks
         and find the one with the same ID.
 
-        :param id: The ID of the song of the bookmark to find.
-        :type id: str
+        :param id_: The ID of the song of the bookmark to find.
+        :type id_: str
         :return: The found bookmark or None if no one is found.
         :rtype: Bookmark | None
         """
@@ -42,18 +42,18 @@ class Bookmarks:
         bookmarks = self.get_bookmarks()
 
         for bookmark in bookmarks:
-            if bookmark.song.id == id:
+            if bookmark.song.id == id_:
                 return bookmark
 
         return None
 
     def create_bookmark(
-        self, id: str, position: int, comment: str | None = None
+        self, id_: str, position: int, comment: str | None = None
     ) -> Bookmark:
         """Calls the "createBookmark" endpoint of the API.
 
-        :param id: The ID of the song of the bookmark.
-        :type id: str
+        :param id_: The ID of the song of the bookmark.
+        :type id_: str
         :param position: The position in seconds of the bookmark.
         :type position: int
         :param comment: The comment of the bookmark, defaults to None.
@@ -63,21 +63,21 @@ class Bookmarks:
         """
 
         self.api.json_request(
-            "createBookmark", {"id": id, "position": position, "comment": comment}
+            "createBookmark", {"id": id_, "position": position, "comment": comment}
         )
 
         # Fake the song structure given by in the API.
-        return Bookmark(self.subsonic, {"id": id}, position=position, comment=comment)
+        return Bookmark(self.subsonic, {"id": id_}, position=position, comment=comment)
 
     def update_bookmark(
-        self, id: str, position: int, comment: str | None = None
+        self, id_: str, position: int, comment: str | None = None
     ) -> Bookmark:
         """Method that internally calls the create_bookmark method
         as creating and updating a bookmark uses the same endpoint. Useful for having
         more self-descriptive code.
 
-        :param id: The ID of the song of the bookmark.
-        :type id: str
+        :param id_: The ID of the song of the bookmark.
+        :type id_: str
         :param position: The position in seconds of the bookmark.
         :type position: int
         :param comment: The comment of the bookmark, defaults to None.
@@ -86,18 +86,18 @@ class Bookmarks:
         :rtype: Bookmark
         """
 
-        return self.create_bookmark(id, position, comment)
+        return self.create_bookmark(id_, position, comment)
 
-    def delete_bookmark(self, id: str) -> "Subsonic":
+    def delete_bookmark(self, id_: str) -> "Subsonic":
         """Calls the "deleteBookmark" endpoint of the API.
 
-        :param id: The ID of the song of the bookmark to delete.
-        :type id: str
+        :param id_: The ID of the song of the bookmark to delete.
+        :type id_: str
         :return: The object itself to allow method chaining.
         :rtype: Subsonic
         """
 
-        self.api.json_request("deleteBookmark", {"id": id})
+        self.api.json_request("deleteBookmark", {"id": id_})
 
         return self.subsonic
 

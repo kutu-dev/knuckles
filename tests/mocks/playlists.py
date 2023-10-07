@@ -10,7 +10,7 @@ from tests.conftest import MockGenerator
 def playlist(song: dict[str, Any], username: str) -> dict[str, Any]:
     return {
         "id": "800000075",
-        "name": "testcreate",
+        "name": "Chill",
         "comment": "comment",
         "owner": username,
         "public": True,

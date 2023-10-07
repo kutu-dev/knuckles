@@ -15,11 +15,11 @@ def test_generate(
 ) -> None:
     responses.add(mock_get_bookmarks)
 
-    requested_bookmark = subsonic.bookmarks.get_bookmark(song["id"])
-    requested_bookmark.position = 0
-    requested_bookmark = requested_bookmark.generate()
+    response = subsonic.bookmarks.get_bookmark(song["id"])
+    response.position = 0
+    response = response.generate()
 
-    assert requested_bookmark.position == bookmark["position"]
+    assert response.position == bookmark["position"]
 
 
 @responses.activate
@@ -32,10 +32,10 @@ def test_create(
     responses.add(mock_get_bookmarks)
     responses.add(mock_create_bookmark)
 
-    requested_bookmark = subsonic.bookmarks.get_bookmark(song["id"])
-    requested_bookmark = requested_bookmark.create()
+    response = subsonic.bookmarks.get_bookmark(song["id"])
+    response = response.create()
 
-    assert type(requested_bookmark) == Bookmark
+    assert type(response) is Bookmark
 
 
 @responses.activate
@@ -48,10 +48,10 @@ def test_update(
     responses.add(mock_get_bookmarks)
     responses.add(mock_create_bookmark)
 
-    requested_bookmark = subsonic.bookmarks.get_bookmark(song["id"])
-    requested_bookmark = requested_bookmark.update()
+    response = subsonic.bookmarks.get_bookmark(song["id"])
+    response = response.update()
 
-    assert type(requested_bookmark) == Bookmark
+    assert type(response) is Bookmark
 
 
 @responses.activate
@@ -64,7 +64,7 @@ def test_delete(
     responses.add(mock_get_bookmarks)
     responses.add(mock_delete_bookmark)
 
-    requested_bookmark = subsonic.bookmarks.get_bookmark(song["id"])
-    requested_bookmark = requested_bookmark.delete()
+    response = subsonic.bookmarks.get_bookmark(song["id"])
+    response = response.delete()
 
-    assert type(requested_bookmark) == Bookmark
+    assert type(response) is Bookmark

@@ -103,7 +103,7 @@ def test_jukebox_shuffle(
     response = response.shuffle()
 
     assert type(response) is Jukebox
-    # Ignore the error as in normal conditions it should exists
+    # Ignore the error as in normal conditions it should exist
     assert response.playlist[0].id == song["id"]  # type: ignore[index]
 
 
@@ -152,7 +152,7 @@ def test_jukebox_set(
     response = response.set(song["id"])
 
     assert type(response) is Jukebox
-    # Ignore the error as in normal conditions it should exists
+    # Ignore the error as in normal conditions it should exist
     assert response.playlist[0].id == song["id"]  # type: ignore[index]
 
 
@@ -186,7 +186,7 @@ def test_jukebox_add_with_a_populated_playlist(
     response = response.add(song["id"])
 
     assert type(response) is Jukebox
-    # Ignore the error as in normal conditions it should exists
+    # Ignore the error as in normal conditions it should exist
     assert response.playlist[1].id == song["id"]  # type: ignore[index]
 
 
@@ -206,5 +206,5 @@ def test_jukebox_add_without_a_populated_playlist(
     response = response.add(song["id"])
 
     assert type(response) is Jukebox
-    # Ignore the error as in normal conditions it should exists
+    # Ignore the error as in normal conditions it should exist
     assert response.playlist[0].id == song["id"]  # type: ignore[index]

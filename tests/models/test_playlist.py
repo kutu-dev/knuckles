@@ -1,10 +1,9 @@
 from typing import Any
 
 import responses
-from responses import Response
-
 from knuckles import Subsonic
 from knuckles.models.playlist import Playlist
+from responses import Response
 
 
 @responses.activate
@@ -19,7 +18,7 @@ def test_generate(
     response.name = "Foo"
     response = response.generate()
 
-    assert type(response) == Playlist
+    assert type(response) is Playlist
     assert response.name == playlist["name"]
 
 
@@ -38,7 +37,7 @@ def test_create(
     response = subsonic.playlists.get_playlist(playlist["id"])
     response = response.create()
 
-    assert type(response) == Playlist
+    assert type(response) is Playlist
 
 
 @responses.activate
@@ -54,7 +53,7 @@ def test_update(
     response = subsonic.playlists.get_playlist(playlist["id"])
     response = response.update()
 
-    assert type(response) == Playlist
+    assert type(response) is Playlist
 
 
 @responses.activate
@@ -70,4 +69,4 @@ def test_delete(
     response = subsonic.playlists.get_playlist(playlist["id"])
     response = response.delete()
 
-    assert type(response) == Playlist
+    assert type(response) is Playlist

@@ -37,7 +37,7 @@ class Subsonic:
         :type password: str
         :param client: A unique string identifying the client application.
         :type client: str
-        :param use_https: If the requests should be sended using HTTPS,
+        :param use_https: If the requests should be sent using HTTPS,
             defaults to True
         :type use_https: bool, optional
         :param use_token: If the connection should send to the server the clean password
@@ -48,7 +48,7 @@ class Subsonic:
         self.api = Api(url, user, password, client, use_https, use_token)
         self.system = System(self.api)
         self.browsing = Browsing(self.api, self)
-        self.lists = None  #! ?
+        self.lists = None  # !!
         self.searching = Searching(self.api, self)
         self.playlists = Playlists(self.api, self)
         self.media_retrieval = MediaRetrieval(self.api)

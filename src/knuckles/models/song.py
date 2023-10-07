@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Self
 
+# Avoid circular import error
 from knuckles.models.genre import Genre
 
 from ..exceptions import AlbumOrArtistArgumentsInSong, VideoArgumentsInSong

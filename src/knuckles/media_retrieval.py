@@ -44,7 +44,8 @@ class MediaRetrieval:
         # as the prepare_url method always set it to a string.
         return prepared_request.url  # type: ignore [return-value]
 
-    def _download_file(self, response: Response, downloaded_file_path: Path) -> Path:
+    @staticmethod
+    def _download_file(response: Response, downloaded_file_path: Path) -> Path:
         """Downloads a file attached to a Response object.
 
         :param response: The response to get the download binary data.
@@ -65,27 +66,27 @@ class MediaRetrieval:
 
     def stream(
         self,
-        id: str,
+        id_: str,
         max_bitrate_rate: int | None = None,
-        format: str | None = None,
+        format_: str | None = None,
         time_offset: int | None = None,
         size: str | None = None,
         estimate_content_length: bool | None = None,
         converted: bool | None = None,
     ) -> str:
-        """Returns a valid url for streaming the requested song or bideo
+        """Returns a valid url for streaming the requested song or video
 
-        :param id: The id of the song or video to stream
-        :type id: str
+        :param id_: The id of the song or video to stream
+        :type id_: str
         :param max_bitrate_rate: A limit for the stream bitrate
         :type max_bitrate_rate: int | None
-        :param format: The file format of preference to be used in the stream.
-        :type format: str | None
+        :param format_: The file format of preference to be used in the stream.
+        :type format_: str | None
         :param time_offset: Only applicable to video streaming.
             An offset in seconds from where the video should start.
         :type time_offset: int | None
         :param size: Only applicable to video streaming.
-            The resolution for the streamed video, in the format of "WIDTHxHEIGHT".
+            The resolution for the streamed video, in the format of "WIDTHHxHEIGHT".
         :type size: str | None
         :param estimate_content_length: If the response should set a
             Content-Length HTTP header with an estimation of the duration of the media.
@@ -100,9 +101,9 @@ class MediaRetrieval:
         return self._generate_url(
             "stream",
             {
-                "id": id,
+                "id": id_,
                 "maxBitRate": max_bitrate_rate,
-                "format": format,
+                "format": format_,
                 "timeOffset": time_offset,
                 "size": size,
                 "estimateContentLength": estimate_content_length,
@@ -110,11 +111,11 @@ class MediaRetrieval:
             },
         )
 
-    def download(self, id: str, file_or_directory_path: Path) -> Path:
+    def download(self, id_: str, file_or_directory_path: Path) -> Path:
         """Calls the "download" endpoint of the API.
 
-        :param id: The id of the song or video to download.
-        :type id: str
+        :param id_: The id of the song or video to download.
+        :type id_: str
         :param file_or_directory_path: If a directory path is passed the file will be
             inside of it with the default filename given by the API,
             if not the file will be saved directly in the given path.
@@ -123,7 +124,7 @@ class MediaRetrieval:
         :rtype Path
         """
 
-        response = self.api.raw_request("download", {"id": id})
+        response = self.api.raw_request("download", {"id": id_})
 
         if not file_or_directory_path.is_dir():
             return self._download_file(response, file_or_directory_path)
@@ -142,14 +143,14 @@ class MediaRetrieval:
 
     def hls(
         self,
-        id: str,
+        id_: str,
         custom_bitrates: list[str] | None = None,
         audio_track_id: str | None = None,
     ) -> str:
         """Returns a valid url for streaming the requested song with hls.m3u8
 
-        :param id: The id of the song to stream.
-        :type id: str
+        :param id_: The id of the song to stream.
+        :type id_: str
         :param custom_bitrates: A list of bitrates to be added to the hls playlist
             for video streaming, the resolution can also be specified with
             this format: "BITRATE@WIDTHxHEIGHT".
@@ -163,19 +164,19 @@ class MediaRetrieval:
 
         return self._generate_url(
             "hls.m3u8",
-            {"id": id, "bitRate": custom_bitrates, "audioTrack": audio_track_id},
+            {"id": id_, "bitRate": custom_bitrates, "audioTrack": audio_track_id},
         )
 
     def get_captions(
         self,
-        id: str,
+        id_: str,
         file_or_directory_path: Path,
         subtitles_file_format: SubtitlesFileFormat = SubtitlesFileFormat.VTT,
     ) -> Path:
         """Calls the "getCaptions" endpoint of the API.
 
-        :param id: The ID of the video to get the captions
-        :type id: str
+        :param id_: The ID of the video to get the captions
+        :type id_: str
         :param file_or_directory_path: If a directory path is passed the file will be
             inside of it with the default filename given by the API,
             if not the file will be saved directly in the given path.
@@ -191,7 +192,7 @@ class MediaRetrieval:
 
         response = self.api.raw_request(
             "getCaptions",
-            {"id": id, "format": subtitles_file_format.value},
+            {"id": id_, "format": subtitles_file_format.value},
         )
 
         if not file_or_directory_path.is_dir():
@@ -205,17 +206,17 @@ class MediaRetrieval:
         else:
             file_extension = ".srt"
 
-        filename = id + file_extension if file_extension else id
+        filename = id_ + file_extension if file_extension else id_
 
         return self._download_file(response, file_or_directory_path / filename)
 
     def get_cover_art(
-        self, id: str, file_or_directory_path: Path, size: int | None = None
+        self, id_: str, file_or_directory_path: Path, size: int | None = None
     ) -> Path:
         """Calls the "getCoverArt" endpoint of the API.
 
-        :param id: The id of the cover art to download.
-        :type id: str
+        :param id_: The id of the cover art to download.
+        :type id_: str
         :param file_or_directory_path: If a directory path is passed the file will be
         inside of it with the filename being the name of the user and
         a guessed file extension, if not the file will be saved
@@ -227,7 +228,7 @@ class MediaRetrieval:
         :rtype Path
         """
 
-        response = self.api.raw_request("getCoverArt", {"id": id, "size": size})
+        response = self.api.raw_request("getCoverArt", {"id": id_, "size": size})
 
         if not file_or_directory_path.is_dir():
             return self._download_file(response, file_or_directory_path)
@@ -236,7 +237,7 @@ class MediaRetrieval:
             response.headers["content-type"].partition(";")[0].strip()
         )
 
-        filename = id + file_extension if file_extension else id
+        filename = id_ + file_extension if file_extension else id_
 
         return self._download_file(response, file_or_directory_path / filename)
 

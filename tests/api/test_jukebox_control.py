@@ -20,7 +20,7 @@ def test_jukebox_get(
     assert response.playing == jukebox_playlist["playing"]
     assert response.gain == jukebox_playlist["gain"]
     assert response.position == jukebox_playlist["position"]
-    assert type(response.playlist) == list
+    assert type(response.playlist) is list
     assert response.playlist[0].id == jukebox_playlist["entry"][0]["id"]
 
 
@@ -56,7 +56,7 @@ def test_jukebox_set(
     assert response.playing == jukebox_status["playing"]
     assert response.gain == jukebox_status["gain"]
     assert response.position == jukebox_status["position"]
-    assert type(response.playlist) == list
+    assert type(response.playlist) is list
     assert response.playlist[0].id == song["id"]
 
 

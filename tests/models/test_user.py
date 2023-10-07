@@ -2,11 +2,10 @@ from typing import Any
 
 import pytest
 import responses
-from responses import Response
-
 from knuckles import Subsonic
 from knuckles.exceptions import NoApiAccess
 from knuckles.models.user import User
+from responses import Response
 
 
 @responses.activate
@@ -30,7 +29,7 @@ def test_user_create(
     response = subsonic.user_management.get_user(user["username"])
     response = response.create()
 
-    assert type(response) == User
+    assert type(response) is User
 
 
 @responses.activate
@@ -43,7 +42,7 @@ def test_user_update(
     response = subsonic.user_management.get_user(user["username"])
     response.update()
 
-    assert type(response) == User
+    assert type(response) is User
 
 
 @responses.activate
@@ -56,7 +55,7 @@ def test_user_delete(
     response = subsonic.user_management.get_user(user["username"])
     response.delete()
 
-    assert type(response) == User
+    assert type(response) is User
 
 
 @responses.activate

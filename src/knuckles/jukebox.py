@@ -46,21 +46,21 @@ class JukeboxControl:
 
         return Jukebox(self.subsonic, **response)
 
-    def set(self, id: str) -> Jukebox:
+    def set(self, id_: str) -> Jukebox:
         """Calls the "jukeboxControl" endpoint of the API with the action "set".
 
-        :param id: The ID of a song to set it in the jukebox.
-        :type id: str
+        :param id_: The ID of a song to set it in the jukebox.
+        :type id_: str
         :return: An object with all the given information about the jukebox.
         :rtype: Jukebox
         """
 
-        response = self.api.json_request("jukeboxControl", {"action": "set", "id": id})[
-            "jukeboxStatus"
-        ]
+        response = self.api.json_request(
+            "jukeboxControl", {"action": "set", "id": id_}
+        )["jukeboxStatus"]
 
         # Preset the song list as this call changes it in a predictable way
-        return Jukebox(self.subsonic, **response, entry=[{"id": id}])
+        return Jukebox(self.subsonic, **response, entry=[{"id": id_}])
 
     def start(self) -> Jukebox:
         """Calls the "jukeboxControl" endpoint of the API with the action "start".
@@ -108,19 +108,19 @@ class JukeboxControl:
 
         return Jukebox(self.subsonic, **response)
 
-    def add(self, id: str) -> Jukebox:
+    def add(self, id_: str) -> Jukebox:
         """Calls the "jukeboxControl" endpoint of the API with the action "add".
 
-        :param id: The ID of a song to add it in the jukebox.
-        :type id: str
+        :param id_: The ID of a song to add it in the jukebox.
+        :type id_: str
         :return: An object with all the given information about the jukebox.
         Except the jukebox playlist.
         :rtype: Jukebox
         """
 
-        response = self.api.json_request("jukeboxControl", {"action": "add", "id": id})[
-            "jukeboxStatus"
-        ]
+        response = self.api.json_request(
+            "jukeboxControl", {"action": "add", "id": id_}
+        )["jukeboxStatus"]
 
         return Jukebox(self.subsonic, **response)
 

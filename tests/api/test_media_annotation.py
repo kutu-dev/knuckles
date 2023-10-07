@@ -16,7 +16,7 @@ def test_star_song(
 ) -> None:
     responses.add(mock_star_song)
 
-    response: Subsonic = subsonic.media_annotation.star_song(song["id"])
+    response = subsonic.media_annotation.star_song(song["id"])
 
     assert type(response) is Subsonic
 
@@ -27,7 +27,7 @@ def test_star_album(
 ) -> None:
     responses.add(mock_star_album)
 
-    response: Subsonic = subsonic.media_annotation.star_album(album["id"])
+    response = subsonic.media_annotation.star_album(album["id"])
 
     assert type(response) is Subsonic
 
@@ -38,7 +38,7 @@ def test_star_artist(
 ) -> None:
     responses.add(mock_star_artist)
 
-    response: Subsonic = subsonic.media_annotation.star_artist(artist["id"])
+    response = subsonic.media_annotation.star_artist(artist["id"])
 
     assert type(response) is Subsonic
 
@@ -49,7 +49,7 @@ def test_unstar_song(
 ) -> None:
     responses.add(mock_unstar_song)
 
-    response: Subsonic = subsonic.media_annotation.unstar_song(song["id"])
+    response = subsonic.media_annotation.unstar_song(song["id"])
 
     assert type(response) is Subsonic
 
@@ -60,7 +60,7 @@ def test_unstar_album(
 ) -> None:
     responses.add(mock_unstar_album)
 
-    response: Subsonic = subsonic.media_annotation.unstar_album(album["id"])
+    response = subsonic.media_annotation.unstar_album(album["id"])
 
     assert type(response) is Subsonic
 
@@ -71,7 +71,7 @@ def test_unstar_artist(
 ) -> None:
     responses.add(mock_unstar_artist)
 
-    response: Subsonic = subsonic.media_annotation.unstar_artist(artist["id"])
+    response = subsonic.media_annotation.unstar_artist(artist["id"])
 
     assert type(response) is Subsonic
 
@@ -86,7 +86,7 @@ def test_set_rating(
 ) -> None:
     responses.add(mock_generator("setRating", {"id": song["id"], "rating": rating}))
 
-    response: Subsonic = subsonic.media_annotation.set_rating(song["id"], rating)
+    response = subsonic.media_annotation.set_rating(song["id"], rating)
 
     assert type(response) is Subsonic
 
@@ -99,7 +99,7 @@ def test_remove_rating(
 ) -> None:
     responses.add(mock_set_rating_zero)
 
-    response: Subsonic = subsonic.media_annotation.remove_rating(song["id"])
+    response = subsonic.media_annotation.remove_rating(song["id"])
 
     assert type(response) is Subsonic
 
@@ -129,7 +129,7 @@ def test_default_scrobble(
 ) -> None:
     responses.add(mock_scrobble_submission)
 
-    response: Subsonic = subsonic.media_annotation.scrobble(
+    response = subsonic.media_annotation.scrobble(
         [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
         datetime.fromtimestamp(1678935707000 / 1000),
@@ -147,7 +147,7 @@ def test_submission_scrobble(
 ) -> None:
     responses.add(mock_scrobble_submission)
 
-    response: Subsonic = subsonic.media_annotation.scrobble(
+    response = subsonic.media_annotation.scrobble(
         [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
         datetime.fromtimestamp(scrobble_time / 1000),
@@ -166,7 +166,7 @@ def test_now_playing_scrobble(
 ) -> None:
     responses.add(mock_scrobble_now_playing)
 
-    response: Subsonic = subsonic.media_annotation.scrobble(
+    response = subsonic.media_annotation.scrobble(
         [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
         datetime.fromtimestamp(scrobble_time / 1000),

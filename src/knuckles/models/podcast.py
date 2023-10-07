@@ -217,7 +217,7 @@ class Channel:
         """
 
         # Ignore the None type error as the server
-        # should return a Error Code 10 in response
+        # should return an Error Code 10 in response
         self.__subsonic.podcast.create_podcast_channel(
             self.url  # type: ignore[arg-type]
         )

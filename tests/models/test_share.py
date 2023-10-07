@@ -16,11 +16,11 @@ def test_generate(
 ) -> None:
     responses.add(mock_get_shares)
 
-    requested_share = subsonic.sharing.get_share(share["id"])
-    requested_share.description = "Foo"
-    requested_share = requested_share.generate()
+    response = subsonic.sharing.get_share(share["id"])
+    response.description = "Foo"
+    response = response.generate()
 
-    assert requested_share.description == share["description"]
+    assert response.description == share["description"]
 
 
 @responses.activate
@@ -49,10 +49,10 @@ def test_create(
     responses.add(mock_get_shares)
     responses.add(mock_create_share)
 
-    requested_share = subsonic.sharing.get_share(share["id"])
-    requested_share = requested_share.create()
+    response = subsonic.sharing.get_share(share["id"])
+    response = response.create()
 
-    assert type(requested_share) == Share
+    assert type(response) is Share
 
 
 @responses.activate
@@ -65,8 +65,8 @@ def test_create_none_song_list(
     responses.add(mock_get_shares)
     responses.add(mock_create_share)
 
-    requested_share = subsonic.sharing.get_share(share["id"])
-    requested_share.songs = None
+    response = subsonic.sharing.get_share(share["id"])
+    response.songs = None
 
     with pytest.raises(
         ShareInvalidSongList,
@@ -75,7 +75,7 @@ def test_create_none_song_list(
             + "is necessary to create a share"
         ),
     ):
-        requested_share.create()
+        response.create()
 
 
 @responses.activate
@@ -88,8 +88,8 @@ def test_create_empty_song_list(
     responses.add(mock_get_shares)
     responses.add(mock_create_share)
 
-    requested_share = subsonic.sharing.get_share(share["id"])
-    requested_share.songs = []
+    response = subsonic.sharing.get_share(share["id"])
+    response.songs = []
 
     with pytest.raises(
         ShareInvalidSongList,
@@ -98,7 +98,7 @@ def test_create_empty_song_list(
             + "is necessary to create a share"
         ),
     ):
-        requested_share.create()
+        response.create()
 
 
 @responses.activate
@@ -111,10 +111,10 @@ def test_update(
     responses.add(mock_get_shares)
     responses.add(mock_update_share)
 
-    requested_share = subsonic.sharing.get_share(share["id"])
-    requested_share.update()
+    response = subsonic.sharing.get_share(share["id"])
+    response.update()
 
-    assert type(requested_share) == Share
+    assert type(response) is Share
 
 
 @responses.activate
@@ -127,7 +127,7 @@ def test_delete(
     responses.add(mock_get_shares)
     responses.add(mock_delete_share)
 
-    requested_share = subsonic.sharing.get_share(share["id"])
-    requested_share.delete()
+    response = subsonic.sharing.get_share(share["id"])
+    response.delete()
 
-    assert type(requested_share) == Share
+    assert type(response) is Share

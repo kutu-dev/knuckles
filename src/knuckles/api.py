@@ -38,7 +38,7 @@ class Api:
         :type password: str
         :param client: A unique string identifying the client application.
         :type client: str
-        :param use_https: If the requests should be sended using HTTPS,
+        :param use_https: If the requests should be sent using HTTPS,
             defaults to True
         :type use_https: bool, optional
         :param use_token: If the connection should send to the server the clean password
@@ -64,7 +64,9 @@ class Api:
         else:
             self.url = f"http://{base_url}"
 
-    def generate_params(self, extra_params: dict[str, Any] = {}) -> dict[str, Any]:
+    def generate_params(
+        self, extra_params: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """Generate the parameters for any request to the API.
 
         This allows the user to change any variable in any time without issues.
@@ -84,8 +86,10 @@ class Api:
             "v": "1.16.1",
             "c": self.client,
             "f": "json",
-            **extra_params,
         }
+
+        if extra_params is not None:
+            params.update(extra_params)
 
         # Add authentication based in the method selected by the user
         if not self.use_token:
@@ -101,7 +105,9 @@ class Api:
 
         return {**params, "t": token, "s": salt}
 
-    def raw_request(self, endpoint: str, extra_params: dict[str, Any]) -> Response:
+    def raw_request(
+        self, endpoint: str, extra_params: dict[str, Any] | None = None
+    ) -> Response:
         """Make a request to the Subsonic API.
 
         :param endpoint: The endpoint where the request should be made,
@@ -122,7 +128,7 @@ class Api:
         )
 
     def json_request(
-        self, endpoint: str, extra_params: dict[str, Any] = {}
+        self, endpoint: str, extra_params: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """Make a request to the Subsonic API and returns a JSON response.
         Don't use with binary data endpoints.

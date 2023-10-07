@@ -26,7 +26,7 @@ class JukeboxStatusGenerator(Protocol):
     def __call__(
         self,
         action: str,
-        extra_params: dict[str, Any] = {},
+        extra_params: dict[str, Any] | None = None,
     ) -> Response:
         ...
 
@@ -43,10 +43,15 @@ def jukebox_status_generator(
     """A factory function to generate all the Response objects
     that returns jukebox_status as their data."""
 
-    def inner(action: str, extra_params: dict[str, Any] = {}) -> Response:
+    def inner(action: str, extra_params: dict[str, Any] | None = None) -> Response:
+        mocked_params = {"action": action}
+
+        if extra_params is not None:
+            mocked_params.update(extra_params)
+
         return mock_generator(
             "jukeboxControl",
-            {"action": action, **extra_params},
+            mocked_params,
             {"jukeboxStatus": jukebox_status},
         )
 
