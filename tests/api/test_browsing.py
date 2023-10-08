@@ -21,6 +21,20 @@ def test_get_music_folders(
 
 
 @responses.activate
+def test_get_music_folder(
+    subsonic: Subsonic,
+    mock_get_music_folders: Response,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    responses.add(mock_get_music_folders)
+
+    response = subsonic.browsing.get_music_folder(music_folders[0]["id"])
+
+    assert response.id == music_folders[0]["id"]
+    assert response.name == music_folders[0]["name"]
+
+
+@responses.activate
 def test_get_genres(
     subsonic: Subsonic, mock_get_genres: Response, genre: dict[str, Any]
 ) -> None:
