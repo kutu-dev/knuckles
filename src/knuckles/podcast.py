@@ -35,7 +35,7 @@ class Podcast:
 
         return [Channel(self.subsonic, **channel) for channel in response]
 
-    def get_podcast(self, id_: str, with_episodes: bool = True) -> Channel:
+    def get_podcast(self, id_: str, with_episodes: bool | None = None) -> Channel:
         """Calls the "getPodcasts" endpoint of the API with a specific ID
         to only return the desired podcast channel.
 

@@ -64,6 +64,17 @@ def mock_get_podcasts_without_episodes(
 
 
 @pytest.fixture
+def mock_get_podcast_default(
+    mock_generator: MockGenerator, channel: dict[str, Any], episode: dict[str, Any]
+) -> Response:
+    return mock_generator(
+        "getPodcasts",
+        {"id": channel["id"]},
+        {"podcasts": [{**channel, "episode": [episode]}]},
+    )
+
+
+@pytest.fixture
 def mock_get_podcast_with_episodes(
     mock_generator: MockGenerator, channel: dict[str, Any], episode: dict[str, Any]
 ) -> Response:

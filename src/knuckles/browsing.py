@@ -34,6 +34,24 @@ class Browsing:
 
         return [MusicFolder(self.subsonic, **music_folder) for music_folder in response]
 
+    def get_music_folder(self, id_: str) -> MusicFolder | None:
+        """Get a desired music folder.
+
+        :param id_: The id of the music folder to get.
+        :type id_: str
+        :return: A music folder object that correspond with the given id
+            or None if is no music folder is found.
+        :rtype: Genre | None
+        """
+
+        music_folders = self.get_music_folders()
+
+        for music_folder in music_folders:
+            if music_folder.id == id_:
+                return music_folder
+
+        return None
+
     def get_genres(self) -> list[Genre]:
         """Calls the "getGenres" endpoint of the API.
 
@@ -51,7 +69,7 @@ class Browsing:
         :param name: The name of the genre to get.
         :type name: str
         :return: A genre object that correspond with the given name
-            or None if is no genre found.
+            or None if is no genre is found.
         :rtype: Genre | None
         """
 
