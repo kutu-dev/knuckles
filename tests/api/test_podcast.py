@@ -55,11 +55,11 @@ def test_get_podcasts_without_episodes(
 @responses.activate
 def test_get_podcast_default(
     subsonic: Subsonic,
-    mock_get_podcast_with_episodes: Response,
+    mock_get_podcast_default: Response,
     channel: dict[str, Any],
     episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_with_episodes)
+    responses.add(mock_get_podcast_default)
 
     response = subsonic.podcast.get_podcast(channel["id"])
 
@@ -70,6 +70,20 @@ def test_get_podcast_default(
     assert response.cover_art.id == channel["coverArt"]
     assert response.original_image_url == channel["originalImageUrl"]
     assert response.status == channel["status"]
+
+
+@responses.activate
+def test_get_podcast_with_episodes(
+    subsonic: Subsonic,
+    mock_get_podcast_with_episodes: Response,
+    channel: dict[str, Any],
+    episode: dict[str, Any],
+) -> None:
+    responses.add(mock_get_podcast_with_episodes)
+
+    response = subsonic.podcast.get_podcast(channel["id"], True)
+
+    assert response.id == channel["id"]
     assert type(response.episodes) is list
     assert response.episodes[0].id == episode["id"]
     assert response.episodes[0].stream_id == episode["streamId"]
@@ -88,22 +102,6 @@ def test_get_podcast_default(
     assert response.episodes[0].duration == episode["duration"]
     assert response.episodes[0].bit_rate == episode["bitRate"]
     assert response.episodes[0].path == episode["path"]
-
-
-@responses.activate
-def test_get_podcast_with_episodes(
-    subsonic: Subsonic,
-    mock_get_podcast_with_episodes: Response,
-    channel: dict[str, Any],
-    episode: dict[str, Any],
-) -> None:
-    responses.add(mock_get_podcast_with_episodes)
-
-    response = subsonic.podcast.get_podcast(channel["id"], True)
-
-    assert response.id == channel["id"]
-    assert type(response.episodes) is list
-    assert response.episodes[0].id == episode["id"]
 
 
 @responses.activate

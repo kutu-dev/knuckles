@@ -9,10 +9,10 @@ from responses import Response
 @responses.activate
 def test_generate(
     subsonic: Subsonic,
-    mock_get_podcast_with_episodes: Response,
+    mock_get_podcast_default: Response,
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_with_episodes)
+    responses.add(mock_get_podcast_default)
 
     response = subsonic.podcast.get_podcast(channel["id"])
     response.title = "Foo"
@@ -24,11 +24,11 @@ def test_generate(
 @responses.activate
 def test_create(
     subsonic: Subsonic,
-    mock_get_podcast_with_episodes: Response,
+    mock_get_podcast_default: Response,
     mock_create_podcast_channel: Response,
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_with_episodes)
+    responses.add(mock_get_podcast_default)
     responses.add(mock_create_podcast_channel)
 
     response = subsonic.podcast.get_podcast(channel["id"])
@@ -40,11 +40,11 @@ def test_create(
 @responses.activate
 def test_delete(
     subsonic: Subsonic,
-    mock_get_podcast_with_episodes: Response,
+    mock_get_podcast_default: Response,
     mock_delete_podcast_channel: Response,
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_with_episodes)
+    responses.add(mock_get_podcast_default)
     responses.add(mock_delete_podcast_channel)
 
     response = subsonic.podcast.get_podcast(channel["id"])
