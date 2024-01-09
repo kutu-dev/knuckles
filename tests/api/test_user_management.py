@@ -15,20 +15,23 @@ def test_get_user(
     response = subsonic.user_management.get_user(user["username"])
 
     assert response.username == user["username"]
+    assert response.password == user["password"]
     assert response.email == user["email"]
-    assert response.scrobbling_enabled == user["scrobblingEnabled"]
+    assert response.ldap_authenticated == user["ldapAuthenticated"]
     assert response.admin_role == user["adminRole"]
     assert response.settings_role == user["settingsRole"]
+    assert response.stream_role == user["streamRole"]
+    assert response.jukebox_role == user["jukeboxRole"]
     assert response.download_role == user["downloadRole"]
     assert response.upload_role == user["uploadRole"]
     assert response.playlist_role == user["playlistRole"]
     assert response.cover_art_role == user["coverArtRole"]
     assert response.comment_role == user["commentRole"]
     assert response.podcast_role == user["podcastRole"]
-    assert response.stream_role == user["streamRole"]
-    assert response.jukebox_role == user["jukeboxRole"]
     assert response.share_role == user["shareRole"]
     assert response.video_conversion_role == user["videoConversionRole"]
+    assert response.music_folder_id == user["musicFolderId"]
+    assert response.max_bit_rate == user["maxBitRate"]
 
 
 @responses.activate
@@ -46,7 +49,26 @@ def test_create_user(
 ) -> None:
     responses.add(mock_create_user)
 
-    response = subsonic.user_management.create_user(User(**user))
+    response = subsonic.user_management.create_user(
+        user["username"],
+        user["password"],
+        user["email"],
+        user["ldapAuthenticated"],
+        user["adminRole"],
+        user["settingsRole"],
+        user["streamRole"],
+        user["jukeboxRole"],
+        user["downloadRole"],
+        user["uploadRole"],
+        user["playlistRole"],
+        user["coverArtRole"],
+        user["commentRole"],
+        user["podcastRole"],
+        user["shareRole"],
+        user["videoConversionRole"],
+        user["musicFolderId"],
+        user["maxBitRate"],
+    )
 
     assert response.username == user["username"]
 
@@ -57,7 +79,26 @@ def test_update_user(
 ) -> None:
     responses.add(mock_update_user)
 
-    response = subsonic.user_management.update_user(User(**user))
+    response = subsonic.user_management.update_user(
+        user["username"],
+        user["password"],
+        user["email"],
+        user["ldapAuthenticated"],
+        user["adminRole"],
+        user["settingsRole"],
+        user["streamRole"],
+        user["jukeboxRole"],
+        user["downloadRole"],
+        user["uploadRole"],
+        user["playlistRole"],
+        user["coverArtRole"],
+        user["commentRole"],
+        user["podcastRole"],
+        user["shareRole"],
+        user["videoConversionRole"],
+        user["musicFolderId"],
+        user["maxBitRate"],
+    )
 
     assert response.username == user["username"]
 

@@ -25,7 +25,7 @@ class PlayQueue:
         self.__subsonic = subsonic
         self.current = Song(self.__subsonic, current) if current else None
         self.position = position
-        self.user = User(username) if username else None
+        self.user = User(self.__subsonic, username) if username else None
         self.changed = parser.parse(changed) if changed else None
         self.changed_by = changedBy
         self.songs = (

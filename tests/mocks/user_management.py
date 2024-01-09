@@ -10,20 +10,23 @@ from tests.conftest import MockGenerator
 def user(username: str) -> dict[str, Any]:
     return {
         "username": username,
+        "password": "password",
         "email": f"{username}@example.com",
-        "scrobblingEnabled": True,
+        "ldapAuthenticated": False,
         "adminRole": False,
         "settingsRole": False,
+        "streamRole": True,
+        "jukeboxRole": False,
         "downloadRole": True,
         "uploadRole": False,
         "playlistRole": False,
         "coverArtRole": False,
         "commentRole": False,
         "podcastRole": False,
-        "streamRole": True,
-        "jukeboxRole": False,
         "shareRole": True,
         "videoConversionRole": False,
+        "musicFolderId": ["0", "1"],
+        "maxBitRate": 0,
     }
 
 

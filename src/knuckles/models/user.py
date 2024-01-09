@@ -11,87 +11,47 @@ class User:
 
     def __init__(
         self,
+        # Internal
+        subsonic: "Subsonic",
         # Subsonic fields
         username: str,
+        password: str | None = None,
         email: str | None = None,
-        scrobblingEnabled: bool = False,
-        adminRole: bool = False,
-        settingsRole: bool = False,
-        downloadRole: bool = False,
-        uploadRole: bool = False,
-        playlistRole: bool = False,
-        coverArtRole: bool = False,
-        commentRole: bool = False,
-        podcastRole: bool = False,
-        streamRole: bool = False,
-        jukeboxRole: bool = False,
-        shareRole: bool = False,
-        videoConversionRole: bool = False,
-        # Internal
-        subsonic: "Subsonic | None" = None,
+        ldap_authenticated: bool | None = None,
+        admin_role: bool | None = None,
+        settings_role: bool | None = None,
+        stream_role: bool | None = None,
+        jukebox_role: bool | None = None,
+        download_role: bool | None = None,
+        upload_role: bool | None = None,
+        playlist_role: bool | None = None,
+        cover_art_role: bool | None = None,
+        comment_role: bool | None = None,
+        podcast_role: bool | None = None,
+        share_role: bool | None = None,
+        video_conversion_role: bool | None = None,
+        music_folder_id: list[str] | None = None,
+        max_bit_rate: int | None = None,
     ) -> None:
-        """Representation of all the data related to a user in Subsonic.
-
-        :param username: The username of the user
-        :type username: str
-        :param email: The email of the user
-        :type email: str
-        :param scrobblingEnabled: If the user can do scrobbling,
-            defaults to False.
-        :type scrobblingEnabled: bool, optional
-        :param adminRole: If the user has admin privileges,
-            overrides all the rest of roles,defaults to False.
-        :type adminRole: bool, optional
-        :param settingsRole: If the user can modify global settings,
-            defaults to False.
-        :type settingsRole: bool, optional
-        :param downloadRole: If the user can download songs, defaults to False.
-        :type downloadRole: bool, optional
-        :param uploadRole: If the user can upload data to the server,
-            defaults to False.
-        :type uploadRole: bool, optional
-        :param playlistRole: If the user can use playlist, defaults to False.
-        :type playlistRole: bool, optional
-        :param coverArtRole: If the user can access cover arts,
-            defaults to False.
-        :type coverArtRole: bool, optional
-        :param commentRole: If the user can do comments, defaults to False.
-        :type commentRole: bool, optional
-        :param podcastRole: If the user can listen to podcasts,
-            defaults to False.
-        :type podcastRole: bool, optional
-        :param streamRole: If the user can listen media with streaming,
-            defaults to False.
-        :type streamRole: bool, optional
-        :param jukeboxRole: If the user can use the jukebox, defaults to False
-        :type jukeboxRole: bool, optional
-        :param shareRole: If the user can use sharing capabilities,
-            defaults to False
-        :type shareRole: bool, optional
-        :param videoConversionRole: If the user can do video conversion,
-            defaults to False
-        :type videoConversionRole: bool, optional
-        :param subsonic: The subsonic object to make all the internal requests with it,
-            defaults to None
-        :type subsonic: Subsonic | None, optional
-        """
-
         self.subsonic = subsonic
         self.username = username
+        self.password = password
         self.email = email
-        self.scrobbling_enabled = scrobblingEnabled
-        self.admin_role = adminRole
-        self.settings_role = settingsRole
-        self.download_role = downloadRole
-        self.upload_role = uploadRole
-        self.playlist_role = playlistRole
-        self.cover_art_role = coverArtRole
-        self.comment_role = commentRole
-        self.podcast_role = podcastRole
-        self.stream_role = streamRole
-        self.jukebox_role = jukeboxRole
-        self.share_role = shareRole
-        self.video_conversion_role = videoConversionRole
+        self.ldap_authenticated = ldap_authenticated
+        self.admin_role = admin_role
+        self.settings_role = settings_role
+        self.stream_role = stream_role
+        self.jukebox_role = jukebox_role
+        self.download_role = download_role
+        self.upload_role = upload_role
+        self.playlist_role = playlist_role
+        self.cover_art_role = cover_art_role
+        self.comment_role = comment_role
+        self.podcast_role = podcast_role
+        self.share_role = share_role
+        self.video_conversion_role = video_conversion_role
+        self.music_folder_id = music_folder_id
+        self.max_bit_rate = max_bit_rate
 
     def __check_api_access(self) -> None:
         """Check if the object has a valid subsonic property
@@ -135,7 +95,30 @@ class User:
 
         self.__check_api_access()
 
-        self.subsonic.user_management.create_user(self)  # type: ignore[union-attr]
+        #! TODO This is bad
+        if not self.password or not self.email:
+            raise NoApiAccess()
+
+        self.subsonic.user_management.create_user(
+            self.username,
+            self.password,
+            self.email,
+            self.ldap_authenticated,
+            self.admin_role,
+            self.settings_role,
+            self.stream_role,
+            self.jukebox_role,
+            self.download_role,
+            self.upload_role,
+            self.playlist_role,
+            self.cover_art_role,
+            self.comment_role,
+            self.podcast_role,
+            self.share_role,
+            self.video_conversion_role,
+            self.music_folder_id,
+            self.max_bit_rate,
+        )  # type: ignore[union-attr]
 
         return self
 
@@ -152,7 +135,26 @@ class User:
 
         self.__check_api_access()
 
-        self.subsonic.user_management.update_user(self)  # type: ignore[union-attr]
+        self.subsonic.user_management.update_user(
+            self.username,
+            self.password,
+            self.email,
+            self.ldap_authenticated,
+            self.admin_role,
+            self.settings_role,
+            self.stream_role,
+            self.jukebox_role,
+            self.download_role,
+            self.upload_role,
+            self.playlist_role,
+            self.cover_art_role,
+            self.comment_role,
+            self.podcast_role,
+            self.share_role,
+            self.video_conversion_role,
+            self.music_folder_id,
+            self.max_bit_rate,
+        )  # type: ignore[union-attr]
 
         return self
 

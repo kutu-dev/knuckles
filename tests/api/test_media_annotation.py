@@ -132,7 +132,7 @@ def test_default_scrobble(
     response = subsonic.media_annotation.scrobble(
         [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
-        datetime.fromtimestamp(1678935707000 / 1000),
+        [datetime.fromtimestamp(1678935707000 / 1000)],
     )
 
     assert type(response) is Subsonic
@@ -150,7 +150,7 @@ def test_submission_scrobble(
     response = subsonic.media_annotation.scrobble(
         [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
-        datetime.fromtimestamp(scrobble_time / 1000),
+        [datetime.fromtimestamp(scrobble_time / 1000)],
         True,
     )
 
@@ -169,7 +169,7 @@ def test_now_playing_scrobble(
     response = subsonic.media_annotation.scrobble(
         [song["id"]],
         # Divide by 1000 because messages are saved in milliseconds instead of seconds
-        datetime.fromtimestamp(scrobble_time / 1000),
+        [datetime.fromtimestamp(scrobble_time / 1000)],
         False,
     )
 

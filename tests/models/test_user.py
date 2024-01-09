@@ -13,10 +13,10 @@ def test_user_generate(subsonic: Subsonic, mock_get_user, user: dict[str, Any]) 
     responses.add(mock_get_user)
 
     response = subsonic.user_management.get_user(user["username"])
-    response.scrobbling_enabled = False
+    response.admin_role = not user["adminRole"]
     response = response.generate()
 
-    assert response.scrobbling_enabled is True
+    assert response.admin_role == user["adminRole"]
 
 
 @responses.activate
@@ -73,18 +73,3 @@ def test_user_change_password(
     response = response.change_password(new_password)
 
     assert type(response) is User
-
-
-def test_user_without_api_access(user: dict[str, Any]) -> None:
-    no_api_user = User(**user)
-
-    no_api_access_message = (
-        "This user isn't associated with a Subsonic object."
-        + "A non None value in the subsonic property is required"
-    )
-
-    with pytest.raises(
-        NoApiAccess,
-        match=no_api_access_message,
-    ):
-        no_api_user.generate()

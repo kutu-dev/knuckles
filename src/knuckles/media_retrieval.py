@@ -1,7 +1,7 @@
 from enum import Enum
 from mimetypes import guess_extension
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from requests import Response
 from requests.models import PreparedRequest
@@ -63,6 +63,20 @@ class MediaRetrieval:
                 f.write(chunk)
 
         return downloaded_file_path
+
+    @classmethod
+    def _handle_download(
+        cls,
+        response: Response,
+        file_or_directory_path: Path,
+        determinate_filename: Callable[[Response], str],
+    ) -> Path:
+        if not file_or_directory_path.is_dir():
+            return cls._download_file(response, file_or_directory_path)
+
+        filename = determinate_filename(response)
+
+        return cls._download_file(response, file_or_directory_path / filename)
 
     def stream(
         self,
@@ -126,20 +140,26 @@ class MediaRetrieval:
 
         response = self.api.raw_request("download", {"id": id_})
 
-        if not file_or_directory_path.is_dir():
-            return self._download_file(response, file_or_directory_path)
+        def determinate_filename(file_response: Response) -> str:
+            filename = (
+                file_response.headers["Content-Disposition"]
+                .split("filename=")[1]
+                .strip()
+            )
 
-        filename = response.headers["Content-Disposition"].split("filename=")[1].strip()
+            # Remove leading quote char
+            if filename[0] == '"':
+                filename = filename[1:]
 
-        # Remove leading quote char
-        if filename[0] == '"':
-            filename = filename[1:]
+            # Remove trailing quote char
+            if filename[-1] == '"':
+                filename = filename[:-1]
 
-        # Remove trailing quote char
-        if filename[-1] == '"':
-            filename = filename[:-1]
+            return filename
 
-        return self._download_file(response, file_or_directory_path / filename)
+        return self._handle_download(
+            response, file_or_directory_path, determinate_filename
+        )
 
     def hls(
         self,
@@ -195,20 +215,21 @@ class MediaRetrieval:
             {"id": id_, "format": subtitles_file_format.value},
         )
 
-        if not file_or_directory_path.is_dir():
-            return self._download_file(response, file_or_directory_path)
+        def determinate_filename(file_response: Response) -> str:
+            mime_type = file_response.headers["content-type"].partition(";")[0].strip()
 
-        mime_type = response.headers["content-type"].partition(";")[0].strip()
+            # application/x-subrip is not a valid MIME TYPE so a manual check is needed
+            file_extension: str | None = None
+            if mime_type == "application/x-subrip":
+                file_extension = ".srt"
+            else:
+                file_extension = guess_extension(mime_type)
 
-        # As application/x-subrip is not a valid MIME TYPE so a manual check is done
-        if mime_type != "application/x-subrip":
-            file_extension = guess_extension(mime_type)
-        else:
-            file_extension = ".srt"
+            return id_ + file_extension if file_extension else id_
 
-        filename = id_ + file_extension if file_extension else id_
-
-        return self._download_file(response, file_or_directory_path / filename)
+        return self._handle_download(
+            response, file_or_directory_path, determinate_filename
+        )
 
     def get_cover_art(
         self, id_: str, file_or_directory_path: Path, size: int | None = None
@@ -230,16 +251,16 @@ class MediaRetrieval:
 
         response = self.api.raw_request("getCoverArt", {"id": id_, "size": size})
 
-        if not file_or_directory_path.is_dir():
-            return self._download_file(response, file_or_directory_path)
+        def determinate_filename(file_response: Response) -> str:
+            file_extension = guess_extension(
+                file_response.headers["content-type"].partition(";")[0].strip()
+            )
 
-        file_extension = guess_extension(
-            response.headers["content-type"].partition(";")[0].strip()
+            return id_ + file_extension if file_extension else id_
+
+        return self._handle_download(
+            response, file_or_directory_path, determinate_filename
         )
-
-        filename = id_ + file_extension if file_extension else id_
-
-        return self._download_file(response, file_or_directory_path / filename)
 
     def get_lyrics(self) -> None:
         ...
@@ -260,13 +281,13 @@ class MediaRetrieval:
 
         response = self.api.raw_request("getAvatar", {"username": username})
 
-        if not file_or_directory_path.is_dir():
-            return self._download_file(response, file_or_directory_path)
+        def determinate_filename(file_response: Response) -> str:
+            file_extension = guess_extension(
+                file_response.headers["content-type"].partition(";")[0].strip()
+            )
 
-        file_extension = guess_extension(
-            response.headers["content-type"].partition(";")[0].strip()
+            return username + file_extension if file_extension else username
+
+        return self._handle_download(
+            response, file_or_directory_path, determinate_filename
         )
-
-        filename = username + file_extension if file_extension else username
-
-        return self._download_file(response, file_or_directory_path / filename)

@@ -58,7 +58,7 @@ class Share:
         self.id = id
         self.url = url
         self.description = description
-        self.user = User(username) if username else None
+        self.user = User(self.__subsonic, username) if username else None
         self.created = parser.parse(created) if created else None
         self.expires = parser.parse(expires) if expires else None
         self.last_visited = parser.parse(lastVisited) if lastVisited else None

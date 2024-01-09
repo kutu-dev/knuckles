@@ -69,11 +69,11 @@ class Playlist:
         self.created = parser.parse(created) if created else None
         self.changed = parser.parse(changed) if changed else None
         self.comment = comment
-        self.owner = User(owner, subsonic=self.__subsonic) if owner else None
+        self.owner = User(self.__subsonic, owner) if owner else None
         self.public = public
         self.cover_art = CoverArt(coverArt) if coverArt else None
         self.allowed_users = (
-            [User(username) for username in allowedUser] if allowedUser else None
+            [User(self.__subsonic, username) for username in allowedUser] if allowedUser else None
         )
         self.songs = (
             [Song(self.__subsonic, **song) for song in entry] if entry else None

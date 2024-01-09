@@ -17,34 +17,6 @@ class UserManagement:
         self.api = api
         self.subsonic = subsonic
 
-    @staticmethod
-    def __user_properties_to_json(user: User) -> dict[str, Any]:
-        """Converts the data in a User object to a dictionary
-        with the keys used in all the user related calls to the API.
-
-        :param user: The user to convert to a dictionary
-        :type user: User
-        :return: The dictionary with the data and valid keys to the API.
-        :rtype: dict[str, Any]"""
-
-        return {
-            "username": user.username,
-            "email": user.email,
-            "scrobblingEnabled": user.scrobbling_enabled,
-            "adminRole": user.admin_role,
-            "settingsRole": user.settings_role,
-            "downloadRole": user.download_role,
-            "uploadRole": user.upload_role,
-            "playlistRole": user.playlist_role,
-            "coverArtRole": user.cover_art_role,
-            "commentRole": user.comment_role,
-            "podcastRole": user.podcast_role,
-            "streamRole": user.stream_role,
-            "jukeboxRole": user.jukebox_role,
-            "shareRole": user.share_role,
-            "videoConversionRole": user.video_conversion_role,
-        }
-
     def get_user(self, username: str) -> User:
         """Calls the "getUser" endpoint of the API.
 
@@ -56,7 +28,27 @@ class UserManagement:
 
         request = self.api.json_request("getUser", {"username": username})["user"]
 
-        return User(subsonic=self.subsonic, **request)
+        return User(
+            self.subsonic,
+            request["username"],
+            request["password"],
+            request["email"],
+            request["ldapAuthenticated"],
+            request["adminRole"],
+            request["settingsRole"],
+            request["streamRole"],
+            request["jukeboxRole"],
+            request["downloadRole"],
+            request["uploadRole"],
+            request["playlistRole"],
+            request["coverArtRole"],
+            request["commentRole"],
+            request["podcastRole"],
+            request["shareRole"],
+            request["videoConversionRole"],
+            request["musicFolderId"],
+            request["maxBitRate"],
+        )
 
     def get_users(self) -> list[User]:
         """Calls the "getUsers" endpoint of the API.
@@ -67,29 +59,123 @@ class UserManagement:
 
         request = self.api.json_request("getUsers")["users"]["user"]
 
-        users = [User(subsonic=self.subsonic, **user) for user in request]
+        users: list[User] = []
+        for user in request:
+            users.append(User(
+                self.subsonic,
+                user["username"],
+                user["password"],
+                user["email"],
+                user["ldapAuthenticated"],
+                user["adminRole"],
+                user["settingsRole"],
+                user["streamRole"],
+                user["jukeboxRole"],
+                user["downloadRole"],
+                user["uploadRole"],
+                user["playlistRole"],
+                user["coverArtRole"],
+                user["commentRole"],
+                user["podcastRole"],
+                user["shareRole"],
+                user["videoConversionRole"],
+                user["musicFolderId"],
+                user["maxBitRate"],
+            ))
 
         return users
 
-    def create_user(self, new_user: User) -> User:
-        """Calls the "createUser" endpoint of the API.
-
-        :param new_user: A user object with all the data for the new user.
-        :type new_user: User
-        :return: The object itself to allow method chaining.
-        :rtype: User
-        """
-
-        user_json_data = self.__user_properties_to_json(new_user)
-
-        self.api.json_request("createUser", {**user_json_data})
+    def create_user(
+        self,
+        username: str,
+        password: str,
+        email: str,
+        ldap_authenticated: bool | None = None,
+        admin_role: bool | None = None,
+        settings_role: bool | None = None,
+        stream_role: bool | None = None,
+        jukebox_role: bool | None = None,
+        download_role: bool | None = None,
+        upload_role: bool | None = None,
+        playlist_role: bool | None = None,
+        cover_art_role: bool | None = None,
+        comment_role: bool | None = None,
+        podcast_role: bool | None = None,
+        share_role: bool | None = None,
+        video_conversion_role: bool | None = None,
+        music_folder_id: list[str] | None = None,
+        max_bit_rate: int | None = None,
+    ) -> User:
+        self.api.json_request(
+            "createUser",
+            {
+                "username": username,
+                "password": password,
+                "email": email,
+                "ldapAuthenticated": ldap_authenticated,
+                "adminRole": admin_role,
+                "settingsRole": settings_role,
+                "streamRole": stream_role,
+                "jukeboxRole": jukebox_role,
+                "downloadRole": download_role,
+                "uploadRole": upload_role,
+                "playlistRole": playlist_role,
+                "coverArtRole": cover_art_role,
+                "commentRole": comment_role,
+                "podcastRole": podcast_role,
+                "shareRole": share_role,
+                "videoConversionRole": video_conversion_role,
+                "musicFolderId": music_folder_id,
+                "maxBitRate": max_bit_rate,
+            },
+        )
 
         # Attach the Subsonic object
-        new_user.subsonic = self.subsonic
+        new_user = User(
+            self.subsonic,
+            username,
+            password,
+            email,
+            ldap_authenticated,
+            admin_role,
+            settings_role,
+            stream_role,
+            jukebox_role,
+            download_role,
+            upload_role,
+            playlist_role,
+            cover_art_role,
+            comment_role,
+            podcast_role,
+            share_role,
+            video_conversion_role,
+            music_folder_id,
+            max_bit_rate,
+        )
 
         return new_user
 
-    def update_user(self, updated_data_user: User) -> User:
+    def update_user(
+        self,
+        username: str,
+        password: str | None = None,
+        email: str | None = None,
+        ldap_authenticated: bool | None = None,
+        admin_role: bool | None = None,
+        settings_role: bool | None = None,
+        stream_role: bool | None = None,
+        jukebox_role: bool | None = None,
+        download_role: bool | None = None,
+        upload_role: bool | None = None,
+        playlist_role: bool | None = None,
+        cover_art_role: bool | None = None,
+        comment_role: bool | None = None,
+        podcast_role: bool | None = None,
+        share_role: bool | None = None,
+        video_conversion_role: bool | None = None,
+        music_folder_id: list[str] | None = None,
+        max_bit_rate: int | None = None,
+    ) -> User:
         """Calls the "updateUser" endpoint of the API.
 
         The user to update with the new data will be
@@ -101,14 +187,50 @@ class UserManagement:
         :rtype: User
         """
 
-        user_json_data = self.__user_properties_to_json(updated_data_user)
+        self.api.json_request("updateUser", {
+                "username": username,
+                "password": password,
+                "email": email,
+                "ldapAuthenticated": ldap_authenticated,
+                "adminRole": admin_role,
+                "settingsRole": settings_role,
+                "streamRole": stream_role,
+                "jukeboxRole": jukebox_role,
+                "downloadRole": download_role,
+                "uploadRole": upload_role,
+                "playlistRole": playlist_role,
+                "coverArtRole": cover_art_role,
+                "commentRole": comment_role,
+                "podcastRole": podcast_role,
+                "shareRole": share_role,
+                "videoConversionRole": video_conversion_role,
+                "musicFolderId": music_folder_id,
+                "maxBitRate": max_bit_rate,
+            })
 
-        self.api.json_request("updateUser", {**user_json_data})
+        updated_user = User(
+            self.subsonic,
+            username,
+            password,
+            email,
+            ldap_authenticated,
+            admin_role,
+            settings_role,
+            stream_role,
+            jukebox_role,
+            download_role,
+            upload_role,
+            playlist_role,
+            cover_art_role,
+            comment_role,
+            podcast_role,
+            share_role,
+            video_conversion_role,
+            music_folder_id,
+            max_bit_rate,
+        )
 
-        # Attach the Subsonic object
-        updated_data_user.subsonic = self.subsonic
-
-        return updated_data_user
+        return updated_user
 
     def delete_user(self, username: str) -> "Subsonic":
         """Calls the "deleteUser" endpoint of the API.

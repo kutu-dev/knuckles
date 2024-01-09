@@ -136,7 +136,7 @@ class MediaAnnotation:
         return self.subsonic
 
     def scrobble(
-        self, id_: list[str], time: datetime, submission: bool = True
+        self, id_: list[str], time: list[datetime], submission: bool = True
     ) -> "Subsonic":
         """Calls to the "scrobble" endpoint of the API
 
@@ -155,7 +155,11 @@ class MediaAnnotation:
             "scrobble",
             # Multiply by 1000 because the API uses
             # milliseconds instead of seconds for UNIX time
-            {"id": id_, "time": int(time.timestamp() * 1000), "submission": submission},
+            {
+                "id": id_,
+                "time": [int(seconds.timestamp()) * 1000 for seconds in time],
+                "submission": submission,
+            },
         )
 
         return self.subsonic
