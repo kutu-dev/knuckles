@@ -73,7 +73,9 @@ class Playlist:
         self.public = public
         self.cover_art = CoverArt(coverArt) if coverArt else None
         self.allowed_users = (
-            [User(self.__subsonic, username) for username in allowedUser] if allowedUser else None
+            [User(self.__subsonic, username) for username in allowedUser]
+            if allowedUser
+            else None
         )
         self.songs = (
             [Song(self.__subsonic, **song) for song in entry] if entry else None

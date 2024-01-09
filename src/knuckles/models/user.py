@@ -81,9 +81,7 @@ class User:
 
         self.__check_api_access()
 
-        return self.subsonic.user_management.get_user(  # type: ignore[union-attr]
-            self.username
-        )
+        return self.subsonic.user_management.get_user(self.username)
 
     def create(self) -> Self:
         """Calls the "createUser" endpoint of the API.
@@ -118,7 +116,7 @@ class User:
             self.video_conversion_role,
             self.music_folder_id,
             self.max_bit_rate,
-        )  # type: ignore[union-attr]
+        )
 
         return self
 
@@ -154,7 +152,7 @@ class User:
             self.video_conversion_role,
             self.music_folder_id,
             self.max_bit_rate,
-        )  # type: ignore[union-attr]
+        )
 
         return self
 
@@ -168,9 +166,7 @@ class User:
 
         self.__check_api_access()
 
-        self.subsonic.user_management.delete_user(  # type: ignore[union-attr]
-            self.username
-        )
+        self.subsonic.user_management.delete_user(self.username)
 
         return self
 
@@ -189,8 +185,6 @@ class User:
 
         self.__check_api_access()
 
-        self.subsonic.user_management.change_password(  # type: ignore[union-attr]
-            self.username, new_password
-        )
+        self.subsonic.user_management.change_password(self.username, new_password)
 
         return self

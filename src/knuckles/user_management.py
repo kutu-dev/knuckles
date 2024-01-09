@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from .api import Api
 from .models.user import User
@@ -61,27 +61,29 @@ class UserManagement:
 
         users: list[User] = []
         for user in request:
-            users.append(User(
-                self.subsonic,
-                user["username"],
-                user["password"],
-                user["email"],
-                user["ldapAuthenticated"],
-                user["adminRole"],
-                user["settingsRole"],
-                user["streamRole"],
-                user["jukeboxRole"],
-                user["downloadRole"],
-                user["uploadRole"],
-                user["playlistRole"],
-                user["coverArtRole"],
-                user["commentRole"],
-                user["podcastRole"],
-                user["shareRole"],
-                user["videoConversionRole"],
-                user["musicFolderId"],
-                user["maxBitRate"],
-            ))
+            users.append(
+                User(
+                    self.subsonic,
+                    user["username"],
+                    user["password"],
+                    user["email"],
+                    user["ldapAuthenticated"],
+                    user["adminRole"],
+                    user["settingsRole"],
+                    user["streamRole"],
+                    user["jukeboxRole"],
+                    user["downloadRole"],
+                    user["uploadRole"],
+                    user["playlistRole"],
+                    user["coverArtRole"],
+                    user["commentRole"],
+                    user["podcastRole"],
+                    user["shareRole"],
+                    user["videoConversionRole"],
+                    user["musicFolderId"],
+                    user["maxBitRate"],
+                )
+            )
 
         return users
 
@@ -187,7 +189,9 @@ class UserManagement:
         :rtype: User
         """
 
-        self.api.json_request("updateUser", {
+        self.api.json_request(
+            "updateUser",
+            {
                 "username": username,
                 "password": password,
                 "email": email,
@@ -206,7 +210,8 @@ class UserManagement:
                 "videoConversionRole": video_conversion_role,
                 "musicFolderId": music_folder_id,
                 "maxBitRate": max_bit_rate,
-            })
+            },
+        )
 
         updated_user = User(
             self.subsonic,

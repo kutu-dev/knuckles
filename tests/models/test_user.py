@@ -1,9 +1,7 @@
 from typing import Any
 
-import pytest
 import responses
 from knuckles import Subsonic
-from knuckles.exceptions import NoApiAccess
 from knuckles.models.user import User
 from responses import Response
 
