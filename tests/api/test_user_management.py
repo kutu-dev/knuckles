@@ -2,7 +2,6 @@ from typing import Any
 
 import responses
 from knuckles import Subsonic
-from knuckles.models.user import User
 from responses import Response
 
 
