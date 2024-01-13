@@ -70,3 +70,45 @@ def test_delete(
     response = response.delete()
 
     assert type(response) is Playlist
+
+
+@responses.activate
+def test_add(
+    subsonic: Subsonic,
+    mock_get_playlist: Response,
+    mock_add_song_to_playlist: Response,
+    playlist: dict[str, Any],
+    song: dict[str, Any],
+) -> None:
+    responses.add(mock_get_playlist)
+    responses.add(mock_add_song_to_playlist)
+
+    response = subsonic.playlists.get_playlist(playlist["id"])
+    # Remove the default songs from the mock_get_playlist mock
+    response.songs = []
+    response.song_count = 0
+
+    response = response.add_songs([song["id"]])
+
+    assert response.songs is not None
+    assert response.songs[0].id == song["id"]
+    assert response.song_count == 1
+
+
+@responses.activate
+def test_remove(
+    subsonic: Subsonic,
+    mock_get_playlist: Response,
+    mock_remove_song_to_playlist: Response,
+    playlist: dict[str, Any],
+) -> None:
+    responses.add(mock_get_playlist)
+    responses.add(mock_remove_song_to_playlist)
+
+    response = subsonic.playlists.get_playlist(playlist["id"])
+
+    response = response.remove_songs([0])
+
+    assert response.songs is not None
+    assert response.songs == []
+    assert response.song_count == 0

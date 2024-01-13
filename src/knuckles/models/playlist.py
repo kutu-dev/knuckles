@@ -120,6 +120,9 @@ class Playlist:
         Updates the name, comment and public state of the playlist with the ones
         in the parameters of the object.
 
+        NOT the playlist list, please use TODO (add_songs)
+        and TODO (remove_songs) to reflect it in the model.
+
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
@@ -138,5 +141,57 @@ class Playlist:
         :rtype: Self
         """
         self.__subsonic.playlists.delete_playlist(self.id)
+
+        return self
+
+    def add_songs(self, song_ids: list[str]) -> Self:
+        """Add any number of new songs to the playlist
+        It's reflected in the songs list in the model.
+
+        :param song_ids: A list with the IDs of the songs to add.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        self.__subsonic.playlists.update_playlist(self.id, song_ids_to_add=song_ids)
+
+        if not self.songs:
+            self.songs = []
+
+        for id_ in song_ids:
+            self.songs.append(Song(self.__subsonic, id_))
+
+        if not self.song_count:
+            self.song_count = 0
+
+        self.song_count += len(song_ids)
+
+        return self
+
+    def remove_songs(self, songs_indexes: list[int]) -> Self:
+        """Remove any number of new songs to the playlist
+        It's reflected in the songs list in the model.
+
+        :param song_indexes: A list with the indexes of the songs to remove.
+
+        :return: The object itself to allow method chaining.
+        :rtype: Self
+        """
+
+        self.__subsonic.playlists.update_playlist(
+            self.id, song_indexes_to_remove=songs_indexes
+        )
+
+        if not self.songs:
+            self.songs = []
+
+        for index in songs_indexes:
+            del self.songs[index]
+
+        if not self.song_count:
+            self.song_count = 0
+
+        self.song_count -= len(songs_indexes)
 
         return self
