@@ -99,3 +99,30 @@ def mock_delete_playlist(
     mock_generator: MockGenerator, playlist: dict[str, Any]
 ) -> Response:
     return mock_generator("deletePlaylist", {"id": playlist["id"]})
+
+
+@pytest.fixture
+def mock_add_song_to_playlist(
+    mock_generator: MockGenerator,
+    playlist: dict[str, Any],
+    song: dict[str, Any],
+) -> Response:
+    return mock_generator(
+        "updatePlaylist",
+        {"playlistId": playlist["id"], "songIdToAdd": song["id"]},
+    )
+
+
+@pytest.fixture
+def mock_remove_song_to_playlist(
+    mock_generator: MockGenerator,
+    playlist: dict[str, Any],
+    song: dict[str, Any],
+) -> Response:
+    return mock_generator(
+        "updatePlaylist",
+        {
+            "playlistId": playlist["id"],
+            "songIndexToRemove": 0,
+        },
+    )
