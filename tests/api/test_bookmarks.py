@@ -5,12 +5,17 @@ from dateutil import parser
 from knuckles import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_get_bookmarks(
-    subsonic: Subsonic, mock_get_bookmarks: Response, song: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_bookmarks: list[Response],
+    song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_bookmarks)
+    add_responses(mock_get_bookmarks)
 
     response = subsonic.bookmarks.get_bookmarks()
 
@@ -19,12 +24,13 @@ def test_get_bookmarks(
 
 @responses.activate
 def test_get_bookmark(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_bookmarks: Response,
+    mock_get_bookmarks: list[Response],
     song: dict[str, Any],
     bookmark: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_bookmarks)
+    add_responses(mock_get_bookmarks)
 
     response = subsonic.bookmarks.get_bookmark(song["id"])
 
@@ -38,12 +44,13 @@ def test_get_bookmark(
 
 @responses.activate
 def test_create_bookmark(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_create_bookmark: Response,
+    mock_create_bookmark: list[Response],
     song: dict[str, Any],
     bookmark: dict[str, Any],
 ) -> None:
-    responses.add(mock_create_bookmark)
+    add_responses(mock_create_bookmark)
 
     response = subsonic.bookmarks.create_bookmark(
         song["id"], bookmark["position"], bookmark["comment"]
@@ -54,12 +61,13 @@ def test_create_bookmark(
 
 @responses.activate
 def test_update_bookmark(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_create_bookmark: Response,
+    mock_create_bookmark: list[Response],
     song: dict[str, Any],
     bookmark: dict[str, Any],
 ) -> None:
-    responses.add(mock_create_bookmark)
+    add_responses(mock_create_bookmark)
 
     response = subsonic.bookmarks.update_bookmark(
         song["id"], bookmark["position"], bookmark["comment"]
@@ -70,9 +78,12 @@ def test_update_bookmark(
 
 @responses.activate
 def test_delete_bookmark(
-    subsonic: Subsonic, mock_delete_bookmark: Response, song: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_delete_bookmark: list[Response],
+    song: dict[str, Any],
 ) -> None:
-    responses.add(mock_delete_bookmark)
+    add_responses(mock_delete_bookmark)
 
     response = subsonic.bookmarks.delete_bookmark(song["id"])
 
@@ -81,14 +92,15 @@ def test_delete_bookmark(
 
 @responses.activate
 def test_get_play_queue(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_play_queue: Response,
+    mock_get_play_queue: list[Response],
     username: str,
     song: dict[str, Any],
     play_queue: dict[str, Any],
     client: str,
 ) -> None:
-    responses.add(mock_get_play_queue)
+    add_responses(mock_get_play_queue)
 
     response = subsonic.bookmarks.get_play_queue()
 
@@ -102,12 +114,13 @@ def test_get_play_queue(
 
 @responses.activate
 def test_save_play_queue(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_save_play_queue: Response,
+    mock_save_play_queue: list[Response],
     song: dict[str, Any],
     play_queue: dict[str, Any],
 ) -> None:
-    responses.add(mock_save_play_queue)
+    add_responses(mock_save_play_queue)
 
     response = subsonic.bookmarks.save_play_queue(
         [song["id"]], song["id"], play_queue["position"]

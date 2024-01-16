@@ -5,7 +5,7 @@ import pytest
 import responses
 from knuckles import Subsonic
 
-from tests.conftest import MockGenerator
+from tests.conftest import AddResponses, MockGenerator
 
 code_errors = [
     (0, "A generic error.", knuckles.exceptions.CodeError0),
@@ -48,13 +48,14 @@ code_errors = [
 @pytest.mark.parametrize("code, message, exception", code_errors)
 @responses.activate
 def test_code_errors(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     mock_generator: MockGenerator,
     code: int,
     message: str,
     exception: Type[Exception],
 ) -> None:
-    responses.add(
+    add_responses(
         mock_generator(
             "ping",
             {},

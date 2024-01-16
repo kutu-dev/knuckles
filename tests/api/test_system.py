@@ -5,11 +5,18 @@ from dateutil import parser
 from knuckles import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
-def test_ping(subsonic: Subsonic, subsonic_response, mock_ping: Response) -> None:
-    responses.add(mock_ping)
+def test_ping(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    subsonic_response,
+    mock_ping: list[Response],
+) -> None:
 
+    add_responses(mock_ping)
     response = subsonic.system.ping()
 
     assert bool(response) is True
@@ -22,10 +29,13 @@ def test_ping(subsonic: Subsonic, subsonic_response, mock_ping: Response) -> Non
 
 @responses.activate
 def test_get_license(
-    subsonic: Subsonic, license: dict[str, Any], mock_get_license: Response
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    license: dict[str, Any],
+    mock_get_license: list[Response],
 ) -> None:
-    responses.add(mock_get_license)
 
+    add_responses(mock_get_license)
     response = subsonic.system.get_license()
 
     assert bool(response) is True
@@ -37,23 +47,26 @@ def test_get_license(
 
 @responses.activate
 def test_auth_without_token(
-    subsonic: Subsonic, mock_auth_without_token: Response
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_auth_without_token: list[Response],
 ) -> None:
-    responses.add(mock_auth_without_token)
 
+    add_responses(mock_auth_without_token)
     subsonic.api.use_token = False
     assert subsonic.system.ping().status == "ok"
 
 
 @responses.activate
 def test_get_open_subsonic_extensions(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_open_subsonic_extensions: Response,
+    mock_get_open_subsonic_extensions: list[Response],
     open_subsonic_extension_name: str,
     open_subsonic_extension_versions: list[int],
 ) -> None:
-    responses.add(mock_get_open_subsonic_extensions)
 
+    add_responses(mock_get_open_subsonic_extensions)
     response = subsonic.system.get_open_subsonic_extensions()
 
     assert response[0].name == open_subsonic_extension_name

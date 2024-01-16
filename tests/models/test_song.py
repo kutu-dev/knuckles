@@ -6,16 +6,17 @@ import responses
 from knuckles import Song, Subsonic
 from responses import Response
 
-from tests.conftest import MockGenerator
+from tests.conftest import AddResponses, MockGenerator
 
 
 @responses.activate
 def test_generate(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_song: Response,
+    mock_get_song: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
+    add_responses(mock_get_song)
 
     response = subsonic.browsing.get_song(song["id"])
     response.title = "Foo"

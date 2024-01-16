@@ -5,14 +5,17 @@ from dateutil import parser
 from knuckles import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_get_shares(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
+    mock_get_shares: list[Response],
     share: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_shares)
+    add_responses(mock_get_shares)
 
     response = subsonic.sharing.get_shares()
 
@@ -21,13 +24,14 @@ def test_get_shares(
 
 @responses.activate
 def test_get_share(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
+    mock_get_shares: list[Response],
     share: dict[str, Any],
     song: dict[str, Any],
     username: str,
 ) -> None:
-    responses.add(mock_get_shares)
+    add_responses(mock_get_shares)
 
     response = subsonic.sharing.get_share(share["id"])
 
@@ -45,12 +49,13 @@ def test_get_share(
 
 @responses.activate
 def test_create_share(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_create_share: Response,
+    mock_create_share: list[Response],
     share: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_create_share)
+    add_responses(mock_create_share)
 
     response = subsonic.sharing.create_share(
         [song["id"]], share["description"], parser.parse(share["expires"])
@@ -61,9 +66,12 @@ def test_create_share(
 
 @responses.activate
 def test_update_share(
-    subsonic: Subsonic, mock_update_share: Response, share: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_update_share: list[Response],
+    share: dict[str, Any],
 ) -> None:
-    responses.add(mock_update_share)
+    add_responses(mock_update_share)
 
     response = subsonic.sharing.update_share(
         share["id"], share["description"], parser.parse(share["expires"])
@@ -74,9 +82,12 @@ def test_update_share(
 
 @responses.activate
 def test_delete_share(
-    subsonic: Subsonic, mock_delete_share: Response, share: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_delete_share: list[Response],
+    share: dict[str, Any],
 ) -> None:
-    responses.add(mock_delete_share)
+    add_responses(mock_delete_share)
 
     response = subsonic.sharing.delete_share(share["id"])
 

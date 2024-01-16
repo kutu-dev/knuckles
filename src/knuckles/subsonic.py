@@ -1,4 +1,4 @@
-from .api import Api
+from .api import Api, RequestMethod
 from .bookmarks import Bookmarks
 from .browsing import Browsing
 from .chat import Chat
@@ -26,6 +26,7 @@ class Subsonic:
         client: str,
         use_https: bool = True,
         use_token: bool = True,
+        request_method: RequestMethod = RequestMethod.POST,
     ) -> None:
         """The main class of the package, is used to interact with a Subsonic API.
 
@@ -45,7 +46,9 @@ class Subsonic:
         :type use_token: bool, optional
         """
 
-        self.api = Api(url, user, password, client, use_https, use_token)
+        self.api = Api(
+            url, user, password, client, use_https, use_token, request_method
+        )
         self.system = System(self.api)
         self.browsing = Browsing(self.api, self)
         self.lists = None  # !!

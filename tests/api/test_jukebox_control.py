@@ -5,14 +5,17 @@ import responses
 from knuckles.subsonic import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_jukebox_get(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_playlist: dict[str, Any],
-    mock_jukebox_control_get: Response,
+    mock_jukebox_control_get: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_get)
+    add_responses(mock_jukebox_control_get)
 
     response = subsonic.jukebox.get()
 
@@ -26,11 +29,12 @@ def test_jukebox_get(
 
 @responses.activate
 def test_jukebox_status(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_status: Response,
+    mock_jukebox_control_status: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_status)
 
     response = subsonic.jukebox.status()
 
@@ -43,12 +47,13 @@ def test_jukebox_status(
 
 @responses.activate
 def test_jukebox_set(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     song: dict[str, Any],
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_set: Response,
+    mock_jukebox_control_set: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_set)
+    add_responses(mock_jukebox_control_set)
 
     response = subsonic.jukebox.set(song["id"])
 
@@ -62,11 +67,12 @@ def test_jukebox_set(
 
 @responses.activate
 def test_jukebox_start(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_start: Response,
+    mock_jukebox_control_start: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_start)
+    add_responses(mock_jukebox_control_start)
 
     response = subsonic.jukebox.start()
 
@@ -79,11 +85,12 @@ def test_jukebox_start(
 
 @responses.activate
 def test_jukebox_stop(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_stop: Response,
+    mock_jukebox_control_stop: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_stop)
+    add_responses(mock_jukebox_control_stop)
 
     response = subsonic.jukebox.stop()
 
@@ -96,11 +103,12 @@ def test_jukebox_stop(
 
 @responses.activate
 def test_jukebox_skip_without_offset(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_skip_without_offset: Response,
+    mock_jukebox_control_skip_without_offset: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_skip_without_offset)
+    add_responses(mock_jukebox_control_skip_without_offset)
 
     response = subsonic.jukebox.skip(0)
 
@@ -113,12 +121,13 @@ def test_jukebox_skip_without_offset(
 
 @responses.activate
 def test_jukebox_skip_with_offset(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_skip_with_offset: Response,
+    mock_jukebox_control_skip_with_offset: list[Response],
     offset_time: int,
 ) -> None:
-    responses.add(mock_jukebox_control_skip_with_offset)
+    add_responses(mock_jukebox_control_skip_with_offset)
 
     response = subsonic.jukebox.skip(0, offset_time)
 
@@ -131,12 +140,13 @@ def test_jukebox_skip_with_offset(
 
 @responses.activate
 def test_jukebox_add(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     song: dict[str, Any],
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_add: Response,
+    mock_jukebox_control_add: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_add)
+    add_responses(mock_jukebox_control_add)
 
     response = subsonic.jukebox.add(song["id"])
 
@@ -149,11 +159,12 @@ def test_jukebox_add(
 
 @responses.activate
 def test_jukebox_clear(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_clear: Response,
+    mock_jukebox_control_clear: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_clear)
+    add_responses(mock_jukebox_control_clear)
 
     response = subsonic.jukebox.clear()
 
@@ -166,11 +177,12 @@ def test_jukebox_clear(
 
 @responses.activate
 def test_jukebox_remove(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_remove: Response,
+    mock_jukebox_control_remove: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_remove)
+    add_responses(mock_jukebox_control_remove)
 
     response = subsonic.jukebox.remove(0)
 
@@ -183,11 +195,12 @@ def test_jukebox_remove(
 
 @responses.activate
 def test_jukebox_shuffle(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_shuffle: Response,
+    mock_jukebox_control_shuffle: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_shuffle)
+    add_responses(mock_jukebox_control_shuffle)
 
     response = subsonic.jukebox.shuffle()
 
@@ -200,11 +213,12 @@ def test_jukebox_shuffle(
 
 @responses.activate
 def test_jukebox_set_gain(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     jukebox_status: dict[str, Any],
-    mock_jukebox_control_set_gain: Response,
+    mock_jukebox_control_set_gain: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_set_gain)
+    add_responses(mock_jukebox_control_set_gain)
 
     response = subsonic.jukebox.set_gain(jukebox_status["gain"])
 

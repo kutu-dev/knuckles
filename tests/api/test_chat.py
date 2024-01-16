@@ -5,12 +5,17 @@ import responses
 from knuckles import ChatMessage, Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_add_chat_messages(
-    subsonic: Subsonic, message: dict[str, Any], mock_add_chat_message: Response
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    message: dict[str, Any],
+    mock_add_chat_message: list[Response],
 ) -> None:
-    responses.add(mock_add_chat_message)
+    add_responses(mock_add_chat_message)
 
     response: Subsonic = subsonic.chat.add_chat_message(message["message"])
 
@@ -19,9 +24,12 @@ def test_add_chat_messages(
 
 @responses.activate
 def test_get_chat_messages(
-    subsonic: Subsonic, message: dict[str, Any], mock_get_chat_messages: Response
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    message: dict[str, Any],
+    mock_get_chat_messages: list[Response],
 ) -> None:
-    responses.add(mock_get_chat_messages)
+    add_responses(mock_get_chat_messages)
 
     response: list[ChatMessage] = subsonic.chat.get_chat_messages()
 
