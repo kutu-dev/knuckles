@@ -7,7 +7,7 @@ from tests.conftest import MockGenerator
 
 
 @pytest.fixture
-def mock_ping(mock_generator: MockGenerator) -> Response:
+def mock_ping(mock_generator: MockGenerator) -> list[Response]:
     return mock_generator("ping")
 
 
@@ -24,12 +24,14 @@ def license() -> dict[str, Any]:
 @pytest.fixture
 def mock_get_license(
     mock_generator: MockGenerator, license: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("getLicense", {}, {"license": license})
 
 
 @pytest.fixture
-def mock_auth_without_token(mock_generator: MockGenerator, password: str) -> Response:
+def mock_auth_without_token(
+    mock_generator: MockGenerator, password: str
+) -> list[Response]:
     return mock_generator("ping", {"p": password})
 
 
@@ -53,7 +55,7 @@ def open_subsonic_extensions(
 @pytest.fixture
 def mock_get_open_subsonic_extensions(
     mock_generator: MockGenerator, open_subsonic_extensions: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getOpenSubsonicExtensions",
         {},

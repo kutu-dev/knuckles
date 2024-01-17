@@ -18,7 +18,7 @@ def message() -> dict[str, Any]:
 @pytest.fixture
 def mock_add_chat_message(
     mock_generator: MockGenerator, message: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("addChatMessage", {"message": message["message"]})
 
 
@@ -30,5 +30,5 @@ def messages(message: dict[str, Any]) -> dict[str, Any]:
 @pytest.fixture
 def mock_get_chat_messages(
     mock_generator: MockGenerator, messages: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("getChatMessages", {}, {"chatMessages": messages})

@@ -14,7 +14,7 @@ def music_folders() -> list[dict[str, Any]]:
 @pytest.fixture
 def mock_get_music_folders(
     mock_generator: MockGenerator, music_folders: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getMusicFolders", {}, {"musicFolders": {"musicFolder": music_folders}}
     )
@@ -26,7 +26,9 @@ def genre() -> dict[str, Any]:
 
 
 @pytest.fixture
-def mock_get_genres(mock_generator: MockGenerator, genre: dict[str, Any]) -> Response:
+def mock_get_genres(
+    mock_generator: MockGenerator, genre: dict[str, Any]
+) -> list[Response]:
     return mock_generator("getGenres", {}, {"genres": {"genre": [genre]}})
 
 
@@ -63,14 +65,16 @@ def mock_get_artists(
     mock_generator: MockGenerator,
     artists: dict[str, Any],
     music_folders: list[dict[str, Any]],
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getArtists", {"musicFolderId": music_folders[0]["id"]}, {"artists": artists}
     )
 
 
 @pytest.fixture()
-def mock_get_artist(mock_generator: MockGenerator, artist: dict[str, Any]) -> Response:
+def mock_get_artist(
+    mock_generator: MockGenerator, artist: dict[str, Any]
+) -> list[Response]:
     return mock_generator("getArtist", {"id": artist["id"]}, {"artist": artist})
 
 
@@ -99,7 +103,9 @@ def album(song: dict[str, Any]) -> dict[str, Any]:
 
 
 @pytest.fixture
-def mock_get_album(mock_generator: MockGenerator, album: dict[str, Any]) -> Response:
+def mock_get_album(
+    mock_generator: MockGenerator, album: dict[str, Any]
+) -> list[Response]:
     return mock_generator("getAlbum", {"id": album["id"]}, {"album": album})
 
 
@@ -137,7 +143,9 @@ def song(genre: dict[str, Any]) -> dict[str, Any]:
 
 
 @pytest.fixture
-def mock_get_song(mock_generator: MockGenerator, song: dict[str, Any]) -> Response:
+def mock_get_song(
+    mock_generator: MockGenerator, song: dict[str, Any]
+) -> list[Response]:
     return mock_generator("getSong", {"id": song["id"]}, {"song": song})
 
 
@@ -173,7 +181,7 @@ def album_info(base_url: str) -> dict[str, Any]:
 @pytest.fixture
 def mock_get_album_info(
     mock_generator: MockGenerator, album: dict[str, Any], album_info: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getAlbumInfo2", {"id": album["id"]}, {"albumInfo": album_info}
     )
@@ -195,7 +203,7 @@ def artist_info(artist: dict[str, Any]) -> dict[str, Any]:
 @pytest.fixture
 def mock_get_artist_info(
     mock_generator: MockGenerator, artist: dict[str, Any], artist_info: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getArtistInfo2",
         {
@@ -208,7 +216,7 @@ def mock_get_artist_info(
 @pytest.fixture
 def mock_get_artist_info_with_all_optional_params(
     mock_generator: MockGenerator, artist: dict[str, Any], artist_info: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getArtistInfo2",
         {

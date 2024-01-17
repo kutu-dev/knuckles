@@ -11,7 +11,7 @@ def mock_search_song(
     mock_generator: MockGenerator,
     music_folders: list[dict[str, Any]],
     song: dict[str, Any],
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "search3",
         {"songCount": 1, "songOffset": 0},
@@ -22,7 +22,7 @@ def mock_search_song(
 @pytest.fixture
 def mock_search_album(
     mock_generator: MockGenerator, music_folders, album: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "search3",
         {"albumCount": 1, "albumOffset": 0},
@@ -33,7 +33,7 @@ def mock_search_album(
 @pytest.fixture
 def mock_search_artist(
     mock_generator: MockGenerator, music_folders, artist: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "search3",
         {"artistCount": 1, "artistOffset": 0},

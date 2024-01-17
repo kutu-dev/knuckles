@@ -27,14 +27,14 @@ def playlist(song: dict[str, Any], username: str) -> dict[str, Any]:
 @pytest.fixture
 def mock_get_playlists(
     mock_generator: MockGenerator, playlist: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("getPlaylists", {}, {"playlists": {"playlist": [playlist]}})
 
 
 @pytest.fixture
 def mock_get_playlists_with_a_selected_user(
     mock_generator: MockGenerator, playlist: dict[str, Any], username: str
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getPlaylists", {"username": username}, {"playlists": {"playlist": [playlist]}}
     )
@@ -43,7 +43,7 @@ def mock_get_playlists_with_a_selected_user(
 @pytest.fixture
 def mock_get_playlist(
     mock_generator: MockGenerator, playlist: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("getPlaylist", {"id": playlist["id"]}, {"playlist": playlist})
 
 
@@ -52,7 +52,7 @@ def mock_create_playlist(
     mock_generator: MockGenerator,
     playlist: dict[str, Any],
     song: dict[str, Any],
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "createPlaylist",
         {"name": playlist["name"], "songId": song["id"]},
@@ -65,7 +65,7 @@ def mock_update_playlist(
     mock_generator: MockGenerator,
     playlist: dict[str, Any],
     song: dict[str, Any],
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "updatePlaylist",
         {
@@ -83,7 +83,7 @@ def mock_update_playlist(
 def mock_update_comment_and_public(
     mock_generator: MockGenerator,
     playlist: dict[str, Any],
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "updatePlaylist",
         {
@@ -97,7 +97,7 @@ def mock_update_comment_and_public(
 @pytest.fixture
 def mock_delete_playlist(
     mock_generator: MockGenerator, playlist: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("deletePlaylist", {"id": playlist["id"]})
 
 
@@ -106,7 +106,7 @@ def mock_add_song_to_playlist(
     mock_generator: MockGenerator,
     playlist: dict[str, Any],
     song: dict[str, Any],
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "updatePlaylist",
         {"playlistId": playlist["id"], "songIdToAdd": song["id"]},
@@ -118,7 +118,7 @@ def mock_remove_song_to_playlist(
     mock_generator: MockGenerator,
     playlist: dict[str, Any],
     song: dict[str, Any],
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "updatePlaylist",
         {

@@ -21,14 +21,14 @@ def bookmark(song: dict[str, Any], username: str) -> dict[str, Any]:
 @pytest.fixture
 def mock_get_bookmarks(
     mock_generator: MockGenerator, bookmark: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("getBookmarks", {}, {"bookmarks": {"bookmark": [bookmark]}})
 
 
 @pytest.fixture
 def mock_create_bookmark(
     mock_generator: MockGenerator, song: dict[str, Any], bookmark: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "createBookmark",
         {
@@ -42,7 +42,7 @@ def mock_create_bookmark(
 @pytest.fixture
 def mock_delete_bookmark(
     mock_generator: MockGenerator, song: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("deleteBookmark", {"id": song["id"]})
 
 
@@ -61,14 +61,14 @@ def play_queue(song: dict[str, Any], username: str, client: str) -> dict[str, An
 @pytest.fixture
 def mock_get_play_queue(
     mock_generator: MockGenerator, play_queue: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("getPlayQueue", {}, {"playQueue": play_queue})
 
 
 @pytest.fixture
 def mock_save_play_queue(
     mock_generator: MockGenerator, song: dict[str, Any], play_queue: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "savePlayQueue",
         {"id": song["id"], "current": song["id"], "position": play_queue["position"]},
