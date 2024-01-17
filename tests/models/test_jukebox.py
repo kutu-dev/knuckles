@@ -25,7 +25,7 @@ def test_jukebox_generate(
 
     jukebox = response.generate()
 
-    assert jukebox.playlist is not None
+    assert type(jukebox.playlist) is list
     assert jukebox.playlist[0].id == song["id"]
 
 
@@ -100,7 +100,7 @@ def test_jukebox_shuffle(
     subsonic: Subsonic,
     mock_jukebox_control_status: list[Response],
     mock_jukebox_control_shuffle: list[Response],
-    mock_jukebox_control_get: Response,
+    mock_jukebox_control_get: list[Response],
     song: dict[str, Any],
 ) -> None:
     add_responses(mock_jukebox_control_status)
@@ -111,7 +111,7 @@ def test_jukebox_shuffle(
     response = response.shuffle()
 
     assert type(response) is Jukebox
-    assert response.playlist is list
+    assert type(response.playlist) is list
     assert response.playlist[0].id == song["id"]
 
 
@@ -163,7 +163,7 @@ def test_jukebox_set(
     response = response.set(song["id"])
 
     assert type(response) is Jukebox
-    assert response.playlist is list
+    assert type(response.playlist) is list
     assert response.playlist[0].id == song["id"]
 
 
@@ -181,7 +181,7 @@ def test_jukebox_remove_with_populated_playlist(
     response = response.remove(0)
 
     assert type(response) is Jukebox
-    assert response.playlist is list
+    assert type(response.playlist) is list
     assert len(response.playlist) == 0
 
 
@@ -200,7 +200,7 @@ def test_jukebox_add_with_a_populated_playlist(
     response = response.add(song["id"])
 
     assert type(response) is Jukebox
-    assert response.playlist is list
+    assert type(response.playlist) is list
     assert response.playlist[1].id == song["id"]
 
 
@@ -222,5 +222,5 @@ def test_jukebox_add_without_a_populated_playlist(
 
     assert type(response) is Jukebox
     # Ignore the error as in normal conditions it should exist
-    assert response.playlist is list
+    assert type(response.playlist) is list
     assert response.playlist[0].id == song["id"]

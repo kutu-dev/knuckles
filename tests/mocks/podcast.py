@@ -113,7 +113,7 @@ def mock_get_newest_podcasts(
 
 
 @pytest.fixture
-def mock_refresh_podcasts(mock_generator: MockGenerator) -> Response:
+def mock_refresh_podcasts(mock_generator: MockGenerator) -> list[Response]:
     return mock_generator("refreshPodcasts")
 
 

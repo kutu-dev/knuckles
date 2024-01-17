@@ -75,7 +75,7 @@ def test_create_playlist(
     add_responses: AddResponses,
     subsonic: Subsonic,
     mock_create_playlist: list[Response],
-    mock_update_comment_and_public: Response,
+    mock_update_comment_and_public: list[Response],
     playlist: dict[str, Any],
     song: dict[str, Any],
 ) -> None:

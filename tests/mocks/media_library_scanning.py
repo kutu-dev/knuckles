@@ -14,12 +14,12 @@ def scan_status() -> dict[str, Any]:
 @pytest.fixture
 def mock_start_scan(
     mock_generator: MockGenerator, scan_status: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("startScan", {}, {"scanStatus": scan_status})
 
 
 @pytest.fixture
 def mock_get_scan_status(
     mock_generator: MockGenerator, scan_status: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("getScanStatus", {}, {"scanStatus": scan_status})
