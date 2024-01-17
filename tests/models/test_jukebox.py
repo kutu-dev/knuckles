@@ -5,16 +5,19 @@ from knuckles import Jukebox
 from knuckles.subsonic import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_jukebox_generate(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_get: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_get: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_get)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_get)
 
     response = subsonic.jukebox.status()
 
@@ -28,12 +31,13 @@ def test_jukebox_generate(
 
 @responses.activate
 def test_jukebox_start(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_start: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_start: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_start)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_start)
 
     response = subsonic.jukebox.status()
     response = response.start()
@@ -43,12 +47,13 @@ def test_jukebox_start(
 
 @responses.activate
 def test_jukebox_stop(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_stop: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_stop: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_stop)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_stop)
 
     response = subsonic.jukebox.status()
     response = response.stop()
@@ -58,12 +63,13 @@ def test_jukebox_stop(
 
 @responses.activate
 def test_jukebox_skip_without_offset(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_skip_without_offset: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_skip_without_offset: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_skip_without_offset)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_skip_without_offset)
 
     response: Jukebox = subsonic.jukebox.status()
     response = response.skip(0)
@@ -73,13 +79,14 @@ def test_jukebox_skip_without_offset(
 
 @responses.activate
 def test_jukebox_skip_with_offset(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_skip_without_offset: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_skip_without_offset: list[Response],
     offset_time: int,
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_skip_without_offset)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_skip_without_offset)
 
     response: Jukebox = subsonic.jukebox.status()
     response = response.skip(0, offset_time)
@@ -89,33 +96,35 @@ def test_jukebox_skip_with_offset(
 
 @responses.activate
 def test_jukebox_shuffle(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_shuffle: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_shuffle: list[Response],
     mock_jukebox_control_get: Response,
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_shuffle)
-    responses.add(mock_jukebox_control_get)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_shuffle)
+    add_responses(mock_jukebox_control_get)
 
     response = subsonic.jukebox.status()
     response = response.shuffle()
 
     assert type(response) is Jukebox
     # Ignore the error as in normal conditions it should exist
-    assert response.playlist[0].id == song["id"]  # type: ignore[index]
+    assert response.playlist[0].id == song["id"]
 
 
 @responses.activate
 def test_jukebox_set_gain(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_set_gain: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_set_gain: list[Response],
     jukebox_status: dict[str, Any],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_set_gain)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_set_gain)
 
     response: Jukebox = subsonic.jukebox.status()
     response = response.set_gain(jukebox_status["gain"])
@@ -125,12 +134,13 @@ def test_jukebox_set_gain(
 
 @responses.activate
 def test_jukebox_clear(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_clear: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_clear: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_clear)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_clear)
 
     response = subsonic.jukebox.status()
     response = response.clear()
@@ -140,30 +150,32 @@ def test_jukebox_clear(
 
 @responses.activate
 def test_jukebox_set(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_set: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_set: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_set)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_set)
 
     response: Jukebox = subsonic.jukebox.status()
     response = response.set(song["id"])
 
     assert type(response) is Jukebox
     # Ignore the error as in normal conditions it should exist
-    assert response.playlist[0].id == song["id"]  # type: ignore[index]
+    assert response.playlist[0].id == song["id"]
 
 
 @responses.activate
 def test_jukebox_remove_with_populated_playlist(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_get: Response,
-    mock_jukebox_control_remove: Response,
+    mock_jukebox_control_get: list[Response],
+    mock_jukebox_control_remove: list[Response],
 ) -> None:
-    responses.add(mock_jukebox_control_get)
-    responses.add(mock_jukebox_control_remove)
+    add_responses(mock_jukebox_control_get)
+    add_responses(mock_jukebox_control_remove)
 
     response: Jukebox = subsonic.jukebox.get()
     response = response.remove(0)
@@ -174,37 +186,39 @@ def test_jukebox_remove_with_populated_playlist(
 
 @responses.activate
 def test_jukebox_add_with_a_populated_playlist(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_get: Response,
-    mock_jukebox_control_add: Response,
+    mock_jukebox_control_get: list[Response],
+    mock_jukebox_control_add: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_jukebox_control_get)
-    responses.add(mock_jukebox_control_add)
+    add_responses(mock_jukebox_control_get)
+    add_responses(mock_jukebox_control_add)
 
     response: Jukebox = subsonic.jukebox.get()
     response = response.add(song["id"])
 
     assert type(response) is Jukebox
     # Ignore the error as in normal conditions it should exist
-    assert response.playlist[1].id == song["id"]  # type: ignore[index]
+    assert response.playlist[1].id == song["id"]
 
 
 @responses.activate
 def test_jukebox_add_without_a_populated_playlist(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_jukebox_control_status: Response,
-    mock_jukebox_control_get: Response,
-    mock_jukebox_control_add: Response,
+    mock_jukebox_control_status: list[Response],
+    mock_jukebox_control_get: list[Response],
+    mock_jukebox_control_add: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_jukebox_control_status)
-    responses.add(mock_jukebox_control_get)
-    responses.add(mock_jukebox_control_add)
+    add_responses(mock_jukebox_control_status)
+    add_responses(mock_jukebox_control_get)
+    add_responses(mock_jukebox_control_add)
 
     response: Jukebox = subsonic.jukebox.status()
     response = response.add(song["id"])
 
     assert type(response) is Jukebox
     # Ignore the error as in normal conditions it should exist
-    assert response.playlist[0].id == song["id"]  # type: ignore[index]
+    assert response.playlist[0].id == song["id"]

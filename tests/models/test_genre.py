@@ -7,12 +7,17 @@ from knuckles.exceptions import ResourceNotFound
 from knuckles.models.genre import Genre
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_generate(
-    subsonic: Subsonic, mock_get_genres: Response, genre: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_genres: list[Response],
+    genre: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_genres)
+    add_responses(mock_get_genres)
 
     response = subsonic.browsing.get_genre(genre["value"])
     response.song_count = 20
@@ -23,9 +28,9 @@ def test_generate(
 
 @responses.activate
 def test_generate_nonexistent_genre(
-    subsonic: Subsonic, mock_get_genres: Response
+    add_responses: AddResponses, subsonic: Subsonic, mock_get_genres: list[Response]
 ) -> None:
-    responses.add(mock_get_genres)
+    add_responses(mock_get_genres)
 
     nonexistent_genre = Genre(subsonic, "Foo")
 

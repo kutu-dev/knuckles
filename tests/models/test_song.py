@@ -27,13 +27,14 @@ def test_generate(
 
 @responses.activate
 def test_song_star(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_song: Response,
-    mock_star_song: Response,
+    mock_get_song: list[Response],
+    mock_star_song: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
-    responses.add(mock_star_song)
+    add_responses(mock_get_song)
+    add_responses(mock_star_song)
 
     response = subsonic.browsing.get_song(song["id"]).star()
 
@@ -42,13 +43,14 @@ def test_song_star(
 
 @responses.activate
 def test_song_unstar(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_song: Response,
-    mock_unstar_song: Response,
+    mock_get_song: list[Response],
+    mock_unstar_song: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
-    responses.add(mock_unstar_song)
+    add_responses(mock_get_song)
+    add_responses(mock_unstar_song)
 
     response: Song = subsonic.browsing.get_song(song["id"]).unstar()
 
@@ -58,14 +60,15 @@ def test_song_unstar(
 @pytest.mark.parametrize("rating", [1, 2, 3, 4, 5])
 @responses.activate
 def test_song_set_rating(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     mock_generator: MockGenerator,
-    mock_get_song: Response,
+    mock_get_song: list[Response],
     song: dict[str, Any],
     rating: int,
 ) -> None:
-    responses.add(mock_get_song)
-    responses.add(mock_generator("setRating", {"id": song["id"], "rating": rating}))
+    add_responses(mock_get_song)
+    add_responses(mock_generator("setRating", {"id": song["id"], "rating": rating}))
 
     response: Song = subsonic.browsing.get_song(song["id"]).set_rating(rating)
 
@@ -74,13 +77,14 @@ def test_song_set_rating(
 
 @responses.activate
 def test_song_remove_rating(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_song: Response,
-    mock_set_rating_zero: Response,
+    mock_get_song: list[Response],
+    mock_set_rating_zero: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
-    responses.add(mock_set_rating_zero)
+    add_responses(mock_get_song)
+    add_responses(mock_set_rating_zero)
 
     response: Song = subsonic.browsing.get_song(song["id"]).remove_rating()
 
@@ -89,14 +93,15 @@ def test_song_remove_rating(
 
 @responses.activate
 def test_song_default_scrobble(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_song: Response,
-    mock_scrobble_submission: Response,
+    mock_get_song: list[Response],
+    mock_scrobble_submission: list[Response],
     scrobble_time: int,
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
-    responses.add(mock_scrobble_submission)
+    add_responses(mock_get_song)
+    add_responses(mock_scrobble_submission)
 
     scrobble_in_datetime = datetime.fromtimestamp(scrobble_time / 1000)
     response: Song = subsonic.browsing.get_song(song["id"]).scrobble(
@@ -108,14 +113,15 @@ def test_song_default_scrobble(
 
 @responses.activate
 def test_song_submission_scrobble(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_song: Response,
-    mock_scrobble_submission: Response,
+    mock_get_song: list[Response],
+    mock_scrobble_submission: list[Response],
     scrobble_time: int,
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
-    responses.add(mock_scrobble_submission)
+    add_responses(mock_get_song)
+    add_responses(mock_scrobble_submission)
 
     scrobble_in_datetime = datetime.fromtimestamp(scrobble_time / 1000)
     response: Song = subsonic.browsing.get_song(song["id"]).scrobble(
@@ -127,14 +133,15 @@ def test_song_submission_scrobble(
 
 @responses.activate
 def test_song_now_playing_scrobble(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_song: Response,
-    mock_scrobble_now_playing: Response,
+    mock_get_song: list[Response],
+    mock_scrobble_now_playing: list[Response],
     scrobble_time: int,
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
-    responses.add(mock_scrobble_now_playing)
+    add_responses(mock_get_song)
+    add_responses(mock_scrobble_now_playing)
 
     scrobble_in_datetime = datetime.fromtimestamp(scrobble_time / 1000)
     response: Song = subsonic.browsing.get_song(song["id"]).scrobble(

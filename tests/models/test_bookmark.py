@@ -5,15 +5,18 @@ from knuckles import Subsonic
 from knuckles.models.bookmark import Bookmark
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_generate(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_bookmarks: Response,
+    mock_get_bookmarks: list[Response],
     song: dict[str, Any],
     bookmark: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_bookmarks)
+    add_responses(mock_get_bookmarks)
 
     response = subsonic.bookmarks.get_bookmark(song["id"])
     response.position = 0
@@ -24,13 +27,14 @@ def test_generate(
 
 @responses.activate
 def test_create(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_bookmarks: Response,
-    mock_create_bookmark: Response,
+    mock_get_bookmarks: list[Response],
+    mock_create_bookmark: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_bookmarks)
-    responses.add(mock_create_bookmark)
+    add_responses(mock_get_bookmarks)
+    add_responses(mock_create_bookmark)
 
     response = subsonic.bookmarks.get_bookmark(song["id"])
     response = response.create()
@@ -40,13 +44,14 @@ def test_create(
 
 @responses.activate
 def test_update(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_bookmarks: Response,
-    mock_create_bookmark: Response,
+    mock_get_bookmarks: list[Response],
+    mock_create_bookmark: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_bookmarks)
-    responses.add(mock_create_bookmark)
+    add_responses(mock_get_bookmarks)
+    add_responses(mock_create_bookmark)
 
     response = subsonic.bookmarks.get_bookmark(song["id"])
     response = response.update()
@@ -56,13 +61,14 @@ def test_update(
 
 @responses.activate
 def test_delete(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_bookmarks: Response,
-    mock_delete_bookmark: Response,
+    mock_get_bookmarks: list[Response],
+    mock_delete_bookmark: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_bookmarks)
-    responses.add(mock_delete_bookmark)
+    add_responses(mock_get_bookmarks)
+    add_responses(mock_delete_bookmark)
 
     response = subsonic.bookmarks.get_bookmark(song["id"])
     response = response.delete()

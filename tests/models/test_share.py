@@ -7,14 +7,17 @@ from knuckles.exceptions import ResourceNotFound, ShareInvalidSongList
 from knuckles.models.share import Share
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_generate(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
+    mock_get_shares: list[Response],
     share: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_shares)
+    add_responses(mock_get_shares)
 
     response = subsonic.sharing.get_share(share["id"])
     response.description = "Foo"
@@ -25,10 +28,11 @@ def test_generate(
 
 @responses.activate
 def test_generate_nonexistent_genre(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
+    mock_get_shares: list[Response],
 ) -> None:
-    responses.add(mock_get_shares)
+    add_responses(mock_get_shares)
 
     nonexistent_share = Share(subsonic, "Foo")
 
@@ -41,13 +45,14 @@ def test_generate_nonexistent_genre(
 
 @responses.activate
 def test_create(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
-    mock_create_share: Response,
+    mock_get_shares: list[Response],
+    mock_create_share: list[Response],
     share: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_shares)
-    responses.add(mock_create_share)
+    add_responses(mock_get_shares)
+    add_responses(mock_create_share)
 
     response = subsonic.sharing.get_share(share["id"])
     response = response.create()
@@ -57,13 +62,14 @@ def test_create(
 
 @responses.activate
 def test_create_none_song_list(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
-    mock_create_share: Response,
+    mock_get_shares: list[Response],
+    mock_create_share: list[Response],
     share: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_shares)
-    responses.add(mock_create_share)
+    add_responses(mock_get_shares)
+    add_responses(mock_create_share)
 
     response = subsonic.sharing.get_share(share["id"])
     response.songs = None
@@ -80,13 +86,14 @@ def test_create_none_song_list(
 
 @responses.activate
 def test_create_empty_song_list(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
-    mock_create_share: Response,
+    mock_get_shares: list[Response],
+    mock_create_share: list[Response],
     share: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_shares)
-    responses.add(mock_create_share)
+    add_responses(mock_get_shares)
+    add_responses(mock_create_share)
 
     response = subsonic.sharing.get_share(share["id"])
     response.songs = []
@@ -103,13 +110,14 @@ def test_create_empty_song_list(
 
 @responses.activate
 def test_update(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
-    mock_update_share: Response,
+    mock_get_shares: list[Response],
+    mock_update_share: list[Response],
     share: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_shares)
-    responses.add(mock_update_share)
+    add_responses(mock_get_shares)
+    add_responses(mock_update_share)
 
     response = subsonic.sharing.get_share(share["id"])
     response.update()
@@ -119,13 +127,14 @@ def test_update(
 
 @responses.activate
 def test_delete(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_shares: Response,
-    mock_delete_share: Response,
+    mock_get_shares: list[Response],
+    mock_delete_share: list[Response],
     share: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_shares)
-    responses.add(mock_delete_share)
+    add_responses(mock_get_shares)
+    add_responses(mock_delete_share)
 
     response = subsonic.sharing.get_share(share["id"])
     response.delete()

@@ -5,14 +5,17 @@ from knuckles import Subsonic
 from knuckles.models.podcast import Channel
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_generate(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcast_default: Response,
+    mock_get_podcast_default: list[Response],
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_default)
+    add_responses(mock_get_podcast_default)
 
     response = subsonic.podcast.get_podcast(channel["id"])
     response.title = "Foo"
@@ -23,13 +26,14 @@ def test_generate(
 
 @responses.activate
 def test_create(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcast_default: Response,
-    mock_create_podcast_channel: Response,
+    mock_get_podcast_default: list[Response],
+    mock_create_podcast_channel: list[Response],
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_default)
-    responses.add(mock_create_podcast_channel)
+    add_responses(mock_get_podcast_default)
+    add_responses(mock_create_podcast_channel)
 
     response = subsonic.podcast.get_podcast(channel["id"])
     response = response.create()
@@ -39,13 +43,14 @@ def test_create(
 
 @responses.activate
 def test_delete(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcast_default: Response,
-    mock_delete_podcast_channel: Response,
+    mock_get_podcast_default: list[Response],
+    mock_delete_podcast_channel: list[Response],
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_default)
-    responses.add(mock_delete_podcast_channel)
+    add_responses(mock_get_podcast_default)
+    add_responses(mock_delete_podcast_channel)
 
     response = subsonic.podcast.get_podcast(channel["id"])
     response = response.delete()
