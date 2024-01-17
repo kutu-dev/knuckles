@@ -120,14 +120,17 @@ def match_json(
             if key not in mocked_data:
                 continue
 
-            # TODO This is prone to error with objects and lists inside the value
-            # TODO Maybe this function should be tested as well ;)
-
+            # When the passed value is a list different checks should be made,
+            # this happens when the same parameters is in the request multiple times,
+            # this happens for example when using
+            # the parameter "songId" in the endpoint "createPlaylist".
             if (
                 type(value) is list
                 and type(mocked_data[key]) is str
                 and (
                     mocked_data[key] in value
+                    # The values inside the list "value" can sometimes be integers,
+                    # so a extra check is needed for them.
                     or (
                         str.isdigit(mocked_data[key]) and int(mocked_data[key]) in value
                     )
