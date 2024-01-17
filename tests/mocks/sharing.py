@@ -23,14 +23,16 @@ def share(base_url: str, song: dict[str, Any], username: str) -> dict[str, Any]:
 
 
 @pytest.fixture
-def mock_get_shares(mock_generator: MockGenerator, share: dict[str, Any]) -> Response:
+def mock_get_shares(
+    mock_generator: MockGenerator, share: dict[str, Any]
+) -> list[Response]:
     return mock_generator("getShares", {}, {"shares": {"share": [share]}})
 
 
 @pytest.fixture
 def mock_create_share(
     mock_generator: MockGenerator, share: dict[str, Any], song: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "createShare",
         {
@@ -43,7 +45,9 @@ def mock_create_share(
 
 
 @pytest.fixture
-def mock_update_share(mock_generator: MockGenerator, share: dict[str, Any]) -> Response:
+def mock_update_share(
+    mock_generator: MockGenerator, share: dict[str, Any]
+) -> list[Response]:
     return mock_generator(
         "updateShare",
         {
@@ -55,5 +59,7 @@ def mock_update_share(mock_generator: MockGenerator, share: dict[str, Any]) -> R
 
 
 @pytest.fixture
-def mock_delete_share(mock_generator: MockGenerator, share: dict[str, Any]) -> Response:
+def mock_delete_share(
+    mock_generator: MockGenerator, share: dict[str, Any]
+) -> list[Response]:
     return mock_generator("deleteShare", {"id": share["id"]})

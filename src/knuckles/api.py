@@ -1,5 +1,7 @@
 import hashlib
+import json
 import secrets
+from enum import Enum
 from typing import Any
 from urllib.parse import ParseResult, urlparse
 
@@ -7,6 +9,11 @@ import requests
 from requests import Response
 
 from .exceptions import CODE_ERROR_EXCEPTIONS, get_code_error_exception
+
+
+class RequestMethod(Enum):
+    GET = "get"
+    POST = "post"
 
 
 class Api:
@@ -22,8 +29,9 @@ class Api:
         user: str,
         password: str,
         client: str,
-        use_https: bool = True,
-        use_token: bool = True,
+        use_https: bool,
+        use_token: bool,
+        request_method: RequestMethod,
     ) -> None:
         """Class used to internally access and interacts with the Subsonic API.
 
@@ -52,6 +60,7 @@ class Api:
         self.password = password
         self.client = client
         self.use_token = use_token
+        self.request_method = request_method
 
         # Sanitize url and ensure the correct protocol is used
         parsed_url: ParseResult = urlparse(url)
@@ -122,10 +131,18 @@ class Api:
         :rtype: dict[str, Any]
         """
 
-        return requests.get(
-            url=f"{self.url}/rest/{endpoint}",
-            params=self.generate_params(extra_params),
-        )
+        match self.request_method:
+            case RequestMethod.POST:
+                return requests.post(
+                    url=f"{self.url}/rest/{endpoint}",
+                    data=json.dumps(self.generate_params(extra_params)),
+                )
+
+            case RequestMethod.GET | _:
+                return requests.get(
+                    url=f"{self.url}/rest/{endpoint}",
+                    params=self.generate_params(extra_params),
+                )
 
     def json_request(
         self, endpoint: str, extra_params: dict[str, Any] | None = None

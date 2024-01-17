@@ -46,7 +46,7 @@ def channel(base_url: str) -> dict[str, Any]:
 @pytest.fixture
 def mock_get_podcasts_with_episodes(
     mock_generator: MockGenerator, channel: dict[str, Any], episode: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getPodcasts",
         {"includeEpisodes": True},
@@ -57,7 +57,7 @@ def mock_get_podcasts_with_episodes(
 @pytest.fixture
 def mock_get_podcasts_without_episodes(
     mock_generator: MockGenerator, channel: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getPodcasts", {"includeEpisodes": False}, {"podcasts": [channel]}
     )
@@ -66,7 +66,7 @@ def mock_get_podcasts_without_episodes(
 @pytest.fixture
 def mock_get_podcast_default(
     mock_generator: MockGenerator, channel: dict[str, Any], episode: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getPodcasts",
         {"id": channel["id"]},
@@ -77,7 +77,7 @@ def mock_get_podcast_default(
 @pytest.fixture
 def mock_get_podcast_with_episodes(
     mock_generator: MockGenerator, channel: dict[str, Any], episode: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getPodcasts",
         {"id": channel["id"], "includeEpisodes": True},
@@ -88,7 +88,7 @@ def mock_get_podcast_with_episodes(
 @pytest.fixture
 def mock_get_podcast_without_episodes(
     mock_generator: MockGenerator, channel: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getPodcasts",
         {"id": channel["id"], "includeEpisodes": False},
@@ -104,7 +104,7 @@ def number_of_new_episodes() -> int:
 @pytest.fixture()
 def mock_get_newest_podcasts(
     mock_generator: MockGenerator, number_of_new_episodes: int, episode: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator(
         "getNewestPodcasts",
         {"count": number_of_new_episodes},
@@ -113,33 +113,33 @@ def mock_get_newest_podcasts(
 
 
 @pytest.fixture
-def mock_refresh_podcasts(mock_generator: MockGenerator) -> Response:
+def mock_refresh_podcasts(mock_generator: MockGenerator) -> list[Response]:
     return mock_generator("refreshPodcasts")
 
 
 @pytest.fixture
 def mock_create_podcast_channel(
     mock_generator: MockGenerator, channel: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("createPodcastChannel", {"url": channel["url"]})
 
 
 @pytest.fixture
 def mock_delete_podcast_channel(
     mock_generator: MockGenerator, channel: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("deletePodcastChannel", {"id": channel["id"]})
 
 
 @pytest.fixture
 def mock_download_podcast_episode(
     mock_generator: MockGenerator, episode: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("downloadPodcastEpisode", {"id": episode["id"]})
 
 
 @pytest.fixture
 def mock_delete_podcast_episode(
     mock_generator: MockGenerator, episode: dict[str, Any]
-) -> Response:
+) -> list[Response]:
     return mock_generator("deletePodcastEpisode", {"id": episode["id"]})

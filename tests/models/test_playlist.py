@@ -5,14 +5,17 @@ from knuckles import Subsonic
 from knuckles.models.playlist import Playlist
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_generate(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_playlist: Response,
+    mock_get_playlist: list[Response],
     playlist: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_playlist)
+    add_responses(mock_get_playlist)
 
     response = subsonic.playlists.get_playlist(playlist["id"])
     response.name = "Foo"
@@ -24,15 +27,16 @@ def test_generate(
 
 @responses.activate
 def test_create(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_playlist: Response,
-    mock_create_playlist: Response,
-    mock_update_comment_and_public: Response,
+    mock_get_playlist: list[Response],
+    mock_create_playlist: list[Response],
+    mock_update_comment_and_public: list[Response],
     playlist: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_playlist)
-    responses.add(mock_create_playlist)
-    responses.add(mock_update_comment_and_public)
+    add_responses(mock_get_playlist)
+    add_responses(mock_create_playlist)
+    add_responses(mock_update_comment_and_public)
 
     response = subsonic.playlists.get_playlist(playlist["id"])
     response = response.create()
@@ -42,13 +46,14 @@ def test_create(
 
 @responses.activate
 def test_update(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_playlist: Response,
-    mock_update_comment_and_public: Response,
+    mock_get_playlist: list[Response],
+    mock_update_comment_and_public: list[Response],
     playlist: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_playlist)
-    responses.add(mock_update_comment_and_public)
+    add_responses(mock_get_playlist)
+    add_responses(mock_update_comment_and_public)
 
     response = subsonic.playlists.get_playlist(playlist["id"])
     response = response.update()
@@ -58,13 +63,14 @@ def test_update(
 
 @responses.activate
 def test_delete(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_playlist: Response,
-    mock_delete_playlist: Response,
+    mock_get_playlist: list[Response],
+    mock_delete_playlist: list[Response],
     playlist: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_playlist)
-    responses.add(mock_delete_playlist)
+    add_responses(mock_get_playlist)
+    add_responses(mock_delete_playlist)
 
     response = subsonic.playlists.get_playlist(playlist["id"])
     response = response.delete()
@@ -74,14 +80,15 @@ def test_delete(
 
 @responses.activate
 def test_add(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_playlist: Response,
-    mock_add_song_to_playlist: Response,
+    mock_get_playlist: list[Response],
+    mock_add_song_to_playlist: list[Response],
     playlist: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_playlist)
-    responses.add(mock_add_song_to_playlist)
+    add_responses(mock_get_playlist)
+    add_responses(mock_add_song_to_playlist)
 
     response = subsonic.playlists.get_playlist(playlist["id"])
     # Remove the default songs from the mock_get_playlist mock
@@ -97,13 +104,14 @@ def test_add(
 
 @responses.activate
 def test_remove(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_playlist: Response,
-    mock_remove_song_to_playlist: Response,
+    mock_get_playlist: list[Response],
+    mock_remove_song_to_playlist: list[Response],
     playlist: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_playlist)
-    responses.add(mock_remove_song_to_playlist)
+    add_responses(mock_get_playlist)
+    add_responses(mock_remove_song_to_playlist)
 
     response = subsonic.playlists.get_playlist(playlist["id"])
 

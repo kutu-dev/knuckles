@@ -9,6 +9,7 @@ from knuckles import Subsonic
 from knuckles.media_retrieval import SubtitlesFileFormat
 from responses import Response
 
+from tests.conftest import AddResponses
 from tests.mocks.media_retrieval import FileMetadata
 
 
@@ -34,25 +35,29 @@ def test_stream_video(subsonic: Subsonic, video: dict[str, Any]) -> None:
     )
 
     assert stream_url.path == "/rest/stream"
-    assert parse.parse_qs(stream_url.query)["id"][0] == video["id"]
-    assert parse.parse_qs(stream_url.query)["maxBitRate"][0] == "0"
-    assert parse.parse_qs(stream_url.query)["format"][0] == video["suffix"]
-    assert parse.parse_qs(stream_url.query)["timeOffset"][0] == "809"
-    assert parse.parse_qs(stream_url.query)["size"][0] == "640x480"
-    assert parse.parse_qs(stream_url.query)["estimateContentLength"][0] == "True"
-    assert parse.parse_qs(stream_url.query)["converted"][0] == "True"
+
+    parsed_query = parse.parse_qs(stream_url.query)
+
+    assert parsed_query["id"][0] == video["id"]
+    assert parsed_query["maxBitRate"][0] == "0"
+    assert parsed_query["format"][0] == video["suffix"]
+    assert parsed_query["timeOffset"][0] == "809"
+    assert parsed_query["size"][0] == "640x480"
+    assert parsed_query["estimateContentLength"][0] == "True"
+    assert parsed_query["converted"][0] == "True"
 
 
 @responses.activate
 def test_download_with_a_given_filename(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_download: Response,
+    mock_download: list[Response],
     tmp_path: Path,
     placeholder_data: str,
     song: dict[str, Any],
     download_metadata: FileMetadata,
 ) -> None:
-    responses.add(mock_download)
+    add_responses(mock_download)
 
     response = subsonic.media_retrieval.download(
         song["id"], tmp_path / download_metadata.output_filename
@@ -67,14 +72,15 @@ def test_download_with_a_given_filename(
 
 @responses.activate
 def test_download_without_a_given_filename(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_download: Response,
+    mock_download: list[Response],
     tmp_path: Path,
     placeholder_data: str,
     song: dict[str, Any],
     download_metadata: FileMetadata,
 ) -> None:
-    responses.add(mock_download)
+    add_responses(mock_download)
 
     response = subsonic.media_retrieval.download(song["id"], tmp_path)
 
@@ -115,14 +121,15 @@ def test_hls_video(
 
 @responses.activate
 def test_get_captions_with_a_given_filename(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_captions_vtt: Response,
+    mock_get_captions_vtt: list[Response],
     tmp_path: Path,
     placeholder_data: str,
     video: dict[str, Any],
     vtt_metadata: FileMetadata,
 ):
-    responses.add(mock_get_captions_vtt)
+    add_responses(mock_get_captions_vtt)
 
     response = subsonic.media_retrieval.get_captions(
         video["id"], tmp_path / vtt_metadata.output_filename
@@ -145,6 +152,7 @@ def test_get_captions_with_a_given_filename(
 )
 def test_get_captions_without_a_given_filename(
     request: FixtureRequest,
+    add_responses: AddResponses,
     subsonic: Subsonic,
     mock: str,
     tmp_path: Path,
@@ -153,10 +161,10 @@ def test_get_captions_without_a_given_filename(
     metadata: str,
 ):
     # Retrieve the mocks dynamically as their tests are equal
-    get_mock: Response = request.getfixturevalue(mock)
+    get_mock: list[Response] = request.getfixturevalue(mock)
     get_metadata: FileMetadata = request.getfixturevalue(metadata)
 
-    responses.add(get_mock)
+    add_responses(get_mock)
 
     download_path = subsonic.media_retrieval.get_captions(video["id"], tmp_path)
 
@@ -177,6 +185,7 @@ def test_get_captions_without_a_given_filename(
 )
 def test_get_captions_with_a_preferred_file_format(
     request: FixtureRequest,
+    add_responses: AddResponses,
     subsonic: Subsonic,
     mock: str,
     tmp_path: Path,
@@ -186,10 +195,10 @@ def test_get_captions_with_a_preferred_file_format(
     file_format: SubtitlesFileFormat,
 ):
     # Retrieve the mocks dynamically as their tests are equal
-    get_mock: Response = request.getfixturevalue(mock)
+    get_mock: list[Response] = request.getfixturevalue(mock)
     get_metadata: FileMetadata = request.getfixturevalue(metadata)
 
-    responses.add(get_mock)
+    add_responses(get_mock)
 
     download_path = subsonic.media_retrieval.get_captions(
         video["id"], tmp_path, file_format
@@ -204,15 +213,16 @@ def test_get_captions_with_a_preferred_file_format(
 
 @responses.activate
 def test_get_cover_art_with_a_given_filename(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_cover_art: Response,
+    mock_cover_art: list[Response],
     tmp_path: Path,
     placeholder_data: str,
     song: dict[str, Any],
     cover_art_metadata: FileMetadata,
     cover_art_size: int,
 ) -> None:
-    responses.add(mock_cover_art)
+    add_responses(mock_cover_art)
 
     download_path = subsonic.media_retrieval.get_cover_art(
         song["coverArt"], tmp_path / cover_art_metadata.output_filename, cover_art_size
@@ -227,15 +237,16 @@ def test_get_cover_art_with_a_given_filename(
 
 @responses.activate
 def test_get_cover_art_without_a_given_filename(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_cover_art: Response,
+    mock_cover_art: list[Response],
     tmp_path: Path,
     placeholder_data: str,
     song: dict[str, Any],
     cover_art_size: int,
     cover_art_metadata: FileMetadata,
 ) -> None:
-    responses.add(mock_cover_art)
+    add_responses(mock_cover_art)
 
     download_path = subsonic.media_retrieval.get_cover_art(
         song["coverArt"], tmp_path, cover_art_size
@@ -250,14 +261,15 @@ def test_get_cover_art_without_a_given_filename(
 
 @responses.activate
 def test_get_avatar_with_a_given_filename(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_avatar: Response,
+    mock_avatar: list[Response],
     tmp_path: Path,
     placeholder_data: str,
     username: str,
     avatar_metadata: FileMetadata,
 ) -> None:
-    responses.add(mock_avatar)
+    add_responses(mock_avatar)
 
     download_path = subsonic.media_retrieval.get_avatar(
         username, tmp_path / avatar_metadata.output_filename
@@ -272,14 +284,15 @@ def test_get_avatar_with_a_given_filename(
 
 @responses.activate
 def test_get_avatar_without_a_given_filename(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_avatar: Response,
+    mock_avatar: list[Response],
     tmp_path: Path,
     placeholder_data: str,
     username: str,
     avatar_metadata: FileMetadata,
 ) -> None:
-    responses.add(mock_avatar)
+    add_responses(mock_avatar)
 
     download_path = subsonic.media_retrieval.get_avatar(username, tmp_path)
 

@@ -5,14 +5,17 @@ from dateutil import parser
 from knuckles import CoverArt, Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_get_music_folders(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_music_folders: Response,
+    mock_get_music_folders: list[Response],
     music_folders: list[dict[str, Any]],
 ) -> None:
-    responses.add(mock_get_music_folders)
+    add_responses(mock_get_music_folders)
 
     response = subsonic.browsing.get_music_folders()
 
@@ -22,11 +25,12 @@ def test_get_music_folders(
 
 @responses.activate
 def test_get_music_folder(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_music_folders: Response,
+    mock_get_music_folders: list[Response],
     music_folders: list[dict[str, Any]],
 ) -> None:
-    responses.add(mock_get_music_folders)
+    add_responses(mock_get_music_folders)
 
     response = subsonic.browsing.get_music_folder(music_folders[0]["id"])
 
@@ -36,9 +40,12 @@ def test_get_music_folder(
 
 @responses.activate
 def test_get_genres(
-    subsonic: Subsonic, mock_get_genres: Response, genre: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_genres: list[Response],
+    genre: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_genres)
+    add_responses(mock_get_genres)
 
     response = subsonic.browsing.get_genres()
 
@@ -49,9 +56,12 @@ def test_get_genres(
 
 @responses.activate
 def test_get_genre(
-    subsonic: Subsonic, mock_get_genres: Response, genre: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_genres: list[Response],
+    genre: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_genres)
+    add_responses(mock_get_genres)
 
     response = subsonic.browsing.get_genre(genre["value"])
 
@@ -62,12 +72,13 @@ def test_get_genre(
 
 @responses.activate
 def test_get_artists(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_artists: Response,
+    mock_get_artists: list[Response],
     artist: dict[str, Any],
     music_folders: list[dict[str, Any]],
 ) -> None:
-    responses.add(mock_get_artists)
+    add_responses(mock_get_artists)
 
     response = subsonic.browsing.get_artists(music_folders[0]["id"])
 
@@ -76,12 +87,13 @@ def test_get_artists(
 
 @responses.activate
 def test_get_artist(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_artist: Response,
+    mock_get_artist: list[Response],
     artist: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_artist)
+    add_responses(mock_get_artist)
 
     response = subsonic.browsing.get_artist(artist["id"])
 
@@ -101,12 +113,13 @@ def test_get_artist(
 
 @responses.activate
 def test_get_album(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_album: Response,
+    mock_get_album: list[Response],
     album: dict[str, Any],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_album)
+    add_responses(mock_get_album)
 
     response = subsonic.browsing.get_album(album["id"])
 
@@ -133,9 +146,12 @@ def test_get_album(
 
 @responses.activate
 def test_get_song(
-    subsonic: Subsonic, mock_get_song: Response, song: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_song: list[Response],
+    song: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_song)
+    add_responses(mock_get_song)
 
     response = subsonic.browsing.get_song(song["id"])
 
@@ -172,12 +188,13 @@ def test_get_song(
 
 @responses.activate
 def test_get_album_info(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_album_info: Response,
+    mock_get_album_info: list[Response],
     album: dict[str, Any],
     album_info: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_album_info)
+    add_responses(mock_get_album_info)
 
     response = subsonic.browsing.get_album_info(album["id"])
 
@@ -192,12 +209,13 @@ def test_get_album_info(
 
 @responses.activate
 def test_get_artist_info(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_artist_info_with_all_optional_params: Response,
+    mock_get_artist_info_with_all_optional_params: list[Response],
     artist: dict[str, Any],
     artist_info: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_artist_info_with_all_optional_params)
+    add_responses(mock_get_artist_info_with_all_optional_params)
 
     response = subsonic.browsing.get_artist_info(
         artist["id"], len(artist_info["similarArtist"]), False

@@ -1,3 +1,4 @@
+from .api import RequestMethod
 from .models.chat_message import ChatMessage
 from .models.jukebox import Jukebox
 from .models.scan_status import ScanStatus
@@ -16,4 +17,5 @@ __all__ = [
     "Song",
     "SubsonicResponse",
     "Jukebox",
+    "RequestMethod",
 ]

@@ -19,7 +19,7 @@ class MockDownload(Protocol):
         extra_params: dict[str, Any],
         content_type: str,
         headers: dict[str, str] | None = None,
-    ) -> Response:
+    ) -> list[Response]:
         ...
 
 
@@ -32,7 +32,7 @@ def mock_download_file_generator(
         extra_params: dict[str, Any],
         content_type: str,
         headers: dict[str, str] | None = None,
-    ):
+    ) -> list[Response]:
         fake_file = tmp_path / "file.mock"
         fake_file.touch()
 
@@ -67,7 +67,7 @@ def mock_download(
     mock_download_file_generator: MockDownload,
     song: dict[str, Any],
     download_metadata: FileMetadata,
-) -> Response:
+) -> list[Response]:
     return mock_download_file_generator(
         "download",
         {"id": song["id"]},
@@ -89,7 +89,7 @@ def mock_get_captions_vtt(
     mock_download_file_generator: MockDownload,
     video: dict[str, Any],
     vtt_metadata: FileMetadata,
-) -> Response:
+) -> list[Response]:
     return mock_download_file_generator(
         "getCaptions",
         {"id": video["id"]},
@@ -102,7 +102,7 @@ def mock_get_captions_prefer_vtt(
     mock_download_file_generator: MockDownload,
     video: dict[str, Any],
     vtt_metadata: FileMetadata,
-) -> Response:
+) -> list[Response]:
     return mock_download_file_generator(
         "getCaptions",
         {"id": video["id"], "format": "vtt"},
@@ -121,7 +121,7 @@ def mock_get_captions_srt(
     mock_download_file_generator: MockDownload,
     video: dict[str, Any],
     srt_metadata: FileMetadata,
-) -> Response:
+) -> list[Response]:
     return mock_download_file_generator(
         "getCaptions",
         {"id": video["id"]},
@@ -134,7 +134,7 @@ def mock_get_captions_prefer_srt(
     mock_download_file_generator: MockDownload,
     video: dict[str, Any],
     srt_metadata: FileMetadata,
-) -> Response:
+) -> list[Response]:
     return mock_download_file_generator(
         "getCaptions",
         {"id": video["id"], "format": "srt"},
@@ -158,7 +158,7 @@ def mock_cover_art(
     song: dict[str, Any],
     cover_art_metadata: FileMetadata,
     cover_art_size: int,
-) -> Response:
+) -> list[Response]:
     return mock_download_file_generator(
         "getCoverArt",
         {"id": song["coverArt"], "size": cover_art_size},
@@ -176,7 +176,7 @@ def mock_avatar(
     mock_download_file_generator: MockDownload,
     username: str,
     avatar_metadata: FileMetadata,
-) -> Response:
+) -> list[Response]:
     return mock_download_file_generator(
         "getAvatar",
         {"username": username},

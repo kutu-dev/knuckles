@@ -4,12 +4,17 @@ import responses
 from knuckles import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_start_scan(
-    subsonic: Subsonic, scan_status: dict[str, Any], mock_start_scan: Response
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    scan_status: dict[str, Any],
+    mock_start_scan: list[Response],
 ) -> None:
-    responses.add(mock_start_scan)
+    add_responses(mock_start_scan)
 
     response = subsonic.media_library_scanning.start_scan()
 
@@ -19,9 +24,12 @@ def test_start_scan(
 
 @responses.activate
 def test_get_scan_status(
-    subsonic: Subsonic, scan_status: dict[str, Any], mock_get_scan_status: Response
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    scan_status: dict[str, Any],
+    mock_get_scan_status: list[Response],
 ) -> None:
-    responses.add(mock_get_scan_status)
+    add_responses(mock_get_scan_status)
 
     response = subsonic.media_library_scanning.get_scan_status()
 

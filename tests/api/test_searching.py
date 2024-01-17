@@ -4,15 +4,18 @@ import responses
 from knuckles import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_search_song(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_search_song: Response,
+    mock_search_song: list[Response],
     song: dict[str, Any],
     music_folders: list[dict[str, Any]],
 ) -> None:
-    responses.add(mock_search_song)
+    add_responses(mock_search_song)
 
     response = subsonic.searching.search(
         song["title"], 1, 0, 0, 0, 0, 0, music_folders[0]["id"]
@@ -26,12 +29,13 @@ def test_search_song(
 
 @responses.activate
 def test_search_album(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_search_album: Response,
+    mock_search_album: list[Response],
     album: dict[str, Any],
     music_folders: list[dict[str, Any]],
 ) -> None:
-    responses.add(mock_search_album)
+    add_responses(mock_search_album)
 
     response = subsonic.searching.search(
         album["title"], 0, 0, 1, 0, 0, 0, music_folders[0]["id"]
@@ -45,12 +49,13 @@ def test_search_album(
 
 @responses.activate
 def test_search_artist(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_search_artist: Response,
+    mock_search_artist: list[Response],
     artist: dict[str, Any],
     music_folders: list[dict[str, Any]],
 ) -> None:
-    responses.add(mock_search_artist)
+    add_responses(mock_search_artist)
 
     response = subsonic.searching.search(
         artist["name"], 0, 0, 0, 0, 1, 0, music_folders[0]["id"]

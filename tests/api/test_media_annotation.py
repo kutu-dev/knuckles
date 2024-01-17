@@ -7,14 +7,17 @@ from knuckles import Subsonic
 from knuckles.exceptions import InvalidRatingNumber
 from responses import Response
 
-from tests.conftest import MockGenerator
+from tests.conftest import AddResponses, MockGenerator
 
 
 @responses.activate
 def test_star_song(
-    subsonic: Subsonic, mock_star_song: Response, song: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_star_song: list[Response],
+    song: dict[str, Any],
 ) -> None:
-    responses.add(mock_star_song)
+    add_responses(mock_star_song)
 
     response = subsonic.media_annotation.star_song(song["id"])
 
@@ -23,9 +26,12 @@ def test_star_song(
 
 @responses.activate
 def test_star_album(
-    subsonic: Subsonic, mock_star_album: Response, album: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_star_album: list[Response],
+    album: dict[str, Any],
 ) -> None:
-    responses.add(mock_star_album)
+    add_responses(mock_star_album)
 
     response = subsonic.media_annotation.star_album(album["id"])
 
@@ -34,9 +40,12 @@ def test_star_album(
 
 @responses.activate
 def test_star_artist(
-    subsonic: Subsonic, mock_star_artist: Response, artist: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_star_artist: list[Response],
+    artist: dict[str, Any],
 ) -> None:
-    responses.add(mock_star_artist)
+    add_responses(mock_star_artist)
 
     response = subsonic.media_annotation.star_artist(artist["id"])
 
@@ -45,9 +54,12 @@ def test_star_artist(
 
 @responses.activate
 def test_unstar_song(
-    subsonic: Subsonic, mock_unstar_song: Response, song: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_unstar_song: list[Response],
+    song: dict[str, Any],
 ) -> None:
-    responses.add(mock_unstar_song)
+    add_responses(mock_unstar_song)
 
     response = subsonic.media_annotation.unstar_song(song["id"])
 
@@ -56,9 +68,12 @@ def test_unstar_song(
 
 @responses.activate
 def test_unstar_album(
-    subsonic: Subsonic, mock_unstar_album: Response, album: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_unstar_album: list[Response],
+    album: dict[str, Any],
 ) -> None:
-    responses.add(mock_unstar_album)
+    add_responses(mock_unstar_album)
 
     response = subsonic.media_annotation.unstar_album(album["id"])
 
@@ -67,9 +82,12 @@ def test_unstar_album(
 
 @responses.activate
 def test_unstar_artist(
-    subsonic: Subsonic, mock_unstar_artist: Response, artist: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_unstar_artist: list[Response],
+    artist: dict[str, Any],
 ) -> None:
-    responses.add(mock_unstar_artist)
+    add_responses(mock_unstar_artist)
 
     response = subsonic.media_annotation.unstar_artist(artist["id"])
 
@@ -79,12 +97,13 @@ def test_unstar_artist(
 @pytest.mark.parametrize("rating", [1, 2, 3, 4, 5])
 @responses.activate
 def test_set_rating(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     mock_generator: MockGenerator,
     song: dict[str, Any],
     rating: int,
 ) -> None:
-    responses.add(mock_generator("setRating", {"id": song["id"], "rating": rating}))
+    add_responses(mock_generator("setRating", {"id": song["id"], "rating": rating}))
 
     response = subsonic.media_annotation.set_rating(song["id"], rating)
 
@@ -93,11 +112,12 @@ def test_set_rating(
 
 @responses.activate
 def test_remove_rating(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_set_rating_zero: Response,
+    mock_set_rating_zero: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_set_rating_zero)
+    add_responses(mock_set_rating_zero)
 
     response = subsonic.media_annotation.remove_rating(song["id"])
 
@@ -107,6 +127,7 @@ def test_remove_rating(
 @pytest.mark.parametrize("rating", [-1, 0, 6])
 @responses.activate
 def test_set_invalid_rating(
+    add_responses: AddResponses,
     subsonic: Subsonic,
     song: dict[str, Any],
     rating: int,
@@ -123,11 +144,12 @@ def test_set_invalid_rating(
 
 @responses.activate
 def test_default_scrobble(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_scrobble_submission: Response,
+    mock_scrobble_submission: list[Response],
     song: dict[str, Any],
 ) -> None:
-    responses.add(mock_scrobble_submission)
+    add_responses(mock_scrobble_submission)
 
     response = subsonic.media_annotation.scrobble(
         [song["id"]],
@@ -140,12 +162,13 @@ def test_default_scrobble(
 
 @responses.activate
 def test_submission_scrobble(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_scrobble_submission: Response,
+    mock_scrobble_submission: list[Response],
     song: dict[str, Any],
     scrobble_time: int,
 ) -> None:
-    responses.add(mock_scrobble_submission)
+    add_responses(mock_scrobble_submission)
 
     response = subsonic.media_annotation.scrobble(
         [song["id"]],
@@ -159,12 +182,13 @@ def test_submission_scrobble(
 
 @responses.activate
 def test_now_playing_scrobble(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_scrobble_now_playing: Response,
+    mock_scrobble_now_playing: list[Response],
     song: dict[str, Any],
     scrobble_time: int,
 ) -> None:
-    responses.add(mock_scrobble_now_playing)
+    add_responses(mock_scrobble_now_playing)
 
     response = subsonic.media_annotation.scrobble(
         [song["id"]],

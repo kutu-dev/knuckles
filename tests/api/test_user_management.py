@@ -4,12 +4,17 @@ import responses
 from knuckles import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_get_user(
-    subsonic: Subsonic, mock_get_user: Response, user: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_user: list[Response],
+    user: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_user)
+    add_responses(mock_get_user)
 
     response = subsonic.user_management.get_user(user["username"])
 
@@ -34,8 +39,13 @@ def test_get_user(
 
 
 @responses.activate
-def test_get_users(subsonic: Subsonic, mock_get_users: Response, username: str) -> None:
-    responses.add(mock_get_users)
+def test_get_users(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_users: list[Response],
+    username: str,
+) -> None:
+    add_responses(mock_get_users)
 
     response = subsonic.user_management.get_users()
 
@@ -44,9 +54,12 @@ def test_get_users(subsonic: Subsonic, mock_get_users: Response, username: str) 
 
 @responses.activate
 def test_create_user(
-    subsonic: Subsonic, mock_create_user: Response, user: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_create_user: list[Response],
+    user: dict[str, Any],
 ) -> None:
-    responses.add(mock_create_user)
+    add_responses(mock_create_user)
 
     response = subsonic.user_management.create_user(
         user["username"],
@@ -74,9 +87,12 @@ def test_create_user(
 
 @responses.activate
 def test_update_user(
-    subsonic: Subsonic, mock_update_user: Response, user: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_update_user: list[Response],
+    user: dict[str, Any],
 ) -> None:
-    responses.add(mock_update_user)
+    add_responses(mock_update_user)
 
     response = subsonic.user_management.update_user(
         user["username"],
@@ -104,9 +120,12 @@ def test_update_user(
 
 @responses.activate
 def test_delete_user(
-    subsonic: Subsonic, mock_delete_user: Response, username: str
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_delete_user: list[Response],
+    username: str,
 ) -> None:
-    responses.add(mock_delete_user)
+    add_responses(mock_delete_user)
 
     response = subsonic.user_management.delete_user(username)
 
@@ -115,9 +134,13 @@ def test_delete_user(
 
 @responses.activate
 def test_change_password(
-    subsonic: Subsonic, mock_change_password: Response, username: str, new_password: str
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_change_password: list[Response],
+    username: str,
+    new_password: str,
 ) -> None:
-    responses.add(mock_change_password)
+    add_responses(mock_change_password)
 
     response = subsonic.user_management.change_password(username, new_password)
 

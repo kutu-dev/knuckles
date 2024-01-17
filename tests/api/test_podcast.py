@@ -5,15 +5,18 @@ from dateutil import parser
 from knuckles import Subsonic
 from responses import Response
 
+from tests.conftest import AddResponses
+
 
 @responses.activate
 def test_get_podcasts_default(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcasts_with_episodes: Response,
+    mock_get_podcasts_with_episodes: list[Response],
     channel: dict[str, Any],
     episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcasts_with_episodes)
+    add_responses(mock_get_podcasts_with_episodes)
 
     response = subsonic.podcast.get_podcasts()
 
@@ -24,12 +27,13 @@ def test_get_podcasts_default(
 
 @responses.activate
 def test_get_podcasts_with_episodes(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcasts_with_episodes: Response,
+    mock_get_podcasts_with_episodes: list[Response],
     channel: dict[str, Any],
     episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcasts_with_episodes)
+    add_responses(mock_get_podcasts_with_episodes)
 
     response = subsonic.podcast.get_podcasts(True)
 
@@ -40,11 +44,12 @@ def test_get_podcasts_with_episodes(
 
 @responses.activate
 def test_get_podcasts_without_episodes(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcasts_without_episodes,
+    mock_get_podcasts_without_episodes: list[Response],
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcasts_without_episodes)
+    add_responses(mock_get_podcasts_without_episodes)
 
     response = subsonic.podcast.get_podcasts(False)
 
@@ -54,12 +59,13 @@ def test_get_podcasts_without_episodes(
 
 @responses.activate
 def test_get_podcast_default(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcast_default: Response,
+    mock_get_podcast_default: list[Response],
     channel: dict[str, Any],
     episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_default)
+    add_responses(mock_get_podcast_default)
 
     response = subsonic.podcast.get_podcast(channel["id"])
 
@@ -74,12 +80,13 @@ def test_get_podcast_default(
 
 @responses.activate
 def test_get_podcast_with_episodes(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcast_with_episodes: Response,
+    mock_get_podcast_with_episodes: list[Response],
     channel: dict[str, Any],
     episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_with_episodes)
+    add_responses(mock_get_podcast_with_episodes)
 
     response = subsonic.podcast.get_podcast(channel["id"], True)
 
@@ -106,11 +113,12 @@ def test_get_podcast_with_episodes(
 
 @responses.activate
 def test_get_podcast_without_episodes(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcast_without_episodes: Response,
+    mock_get_podcast_without_episodes: list[Response],
     channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcast_without_episodes)
+    add_responses(mock_get_podcast_without_episodes)
 
     response = subsonic.podcast.get_podcast(channel["id"], False)
 
@@ -120,12 +128,13 @@ def test_get_podcast_without_episodes(
 
 @responses.activate
 def test_get_newest_podcasts(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_newest_podcasts: Response,
+    mock_get_newest_podcasts: list[Response],
     number_of_new_episodes: int,
     episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_newest_podcasts)
+    add_responses(mock_get_newest_podcasts)
 
     response = subsonic.podcast.get_newest_podcasts(number_of_new_episodes)
 
@@ -134,11 +143,12 @@ def test_get_newest_podcasts(
 
 @responses.activate
 def test_get_episode(
+    add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_podcasts_with_episodes: Response,
+    mock_get_podcasts_with_episodes: list[Response],
     episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_get_podcasts_with_episodes)
+    add_responses(mock_get_podcasts_with_episodes)
 
     response = subsonic.podcast.get_episode(episode["id"])
 
@@ -146,8 +156,12 @@ def test_get_episode(
 
 
 @responses.activate
-def test_refresh_podcasts(subsonic: Subsonic, mock_refresh_podcasts: Response) -> None:
-    responses.add(mock_refresh_podcasts)
+def test_refresh_podcasts(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_refresh_podcasts: list[Response],
+) -> None:
+    add_responses(mock_refresh_podcasts)
 
     response = subsonic.podcast.refresh_podcasts()
 
@@ -156,9 +170,12 @@ def test_refresh_podcasts(subsonic: Subsonic, mock_refresh_podcasts: Response) -
 
 @responses.activate
 def test_create_podcast_channel(
-    subsonic: Subsonic, mock_create_podcast_channel: Response, channel: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_create_podcast_channel: list[Response],
+    channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_create_podcast_channel)
+    add_responses(mock_create_podcast_channel)
 
     response = subsonic.podcast.create_podcast_channel(channel["url"])
 
@@ -167,9 +184,12 @@ def test_create_podcast_channel(
 
 @responses.activate
 def test_delete_podcast_channel(
-    subsonic: Subsonic, mock_delete_podcast_channel: Response, channel: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_delete_podcast_channel: list[Response],
+    channel: dict[str, Any],
 ) -> None:
-    responses.add(mock_delete_podcast_channel)
+    add_responses(mock_delete_podcast_channel)
 
     response = subsonic.podcast.delete_podcast_channel(channel["id"])
 
@@ -178,9 +198,12 @@ def test_delete_podcast_channel(
 
 @responses.activate
 def test_download_podcast_episode(
-    subsonic: Subsonic, mock_download_podcast_episode: Response, episode: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_download_podcast_episode: list[Response],
+    episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_download_podcast_episode)
+    add_responses(mock_download_podcast_episode)
 
     response = subsonic.podcast.download_podcast_episode(episode["id"])
 
@@ -189,9 +212,12 @@ def test_download_podcast_episode(
 
 @responses.activate
 def test_delete_podcast_episode(
-    subsonic: Subsonic, mock_delete_podcast_episode: Response, episode: dict[str, Any]
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_delete_podcast_episode: list[Response],
+    episode: dict[str, Any],
 ) -> None:
-    responses.add(mock_delete_podcast_episode)
+    add_responses(mock_delete_podcast_episode)
 
     response = subsonic.podcast.delete_podcast_episode(episode["id"])
 
