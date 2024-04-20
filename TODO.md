@@ -1,5 +1,5 @@
 # TODO
-- [ ] Add missing model properties.
+- [ ] Add .
 - [ ] Make a `model` class and add the following methods to it:
   - [ ] `_check_api_access()`
   - [ ] `_resource_not_found()`
@@ -11,6 +11,7 @@
 - [ ] Add the `subsonic.system.check_subsonic_extension()` method.
 - [ ] Check and rewrite all docstrings taking care about raising exceptions.
 - [ ] Spin up a `MkDocs` documentation.
+  - [ ] Add the URL in the GitHub page.
 
 ## Implementation status
 The final objetive of Knuckles to be a fully compatible implementation wrapper around the [OpenSubsonic API Spec](https://opensubsonic.netlify.app/), a superset of the [Subsonic API Spec](https://subsonic.org/pages/api.jsp) that tries to improve and extend the API without breaking changes.
@@ -139,38 +140,3 @@ The final objetive of Knuckles to be a fully compatible implementation wrapper a
 #### Media library scanning
 - [x] `getScanStatus`
 - [x] `startScan`
-
-### Missing model properties
-#### Album
-- [ ] `recordLabels`
-- [ ] `musicBrainzId`
-- [ ] `genres`
-- [ ] `artists`
-- [ ] `displayArtist`
-- [ ] `releaseTypes`
-- [ ] `moods`
-- [ ] `sortName`
-- [ ] `originalReleaseDate`
-- [ ] `releaseDate`
-- [ ] `isCompilation`
-- [ ] `discTitles`
-
-#### Artist
-- [ ] `musicBrainzId`
-- [ ] `sortName`
-- [ ] `roles`
-
-#### Song
-- [ ] `bmp`
-- [ ] `comment`
-- [ ] `sortName`
-- [ ] `musicBrainzId`
-- [ ] `genres`
-- [ ] `artists`
-- [ ] `displayArtist`
-- [ ] `albumArtists`
-- [ ] `displayAlbumArtist`
-- [ ] `contributors`
-- [ ] `displayComposer`
-- [ ] `moods`
-- [ ] `replayGain`

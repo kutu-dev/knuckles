@@ -44,6 +44,9 @@ def artist(base_url: str, album: dict[str, Any]) -> dict[str, Any]:
         "artistImageUrl": f"{base_url}/artist.png",
         "starred": "2017-04-11T10:42:50.842Z",
         "album": [album],
+        "musicBrainzId": "189002e7-3285-4e2e-92a3-7f6c30d407a2",
+        "sortName": "Mello (2)",
+        "roles": ["artist", "albumartist", "composer"],
     }
 
 
@@ -99,6 +102,24 @@ def album(song: dict[str, Any]) -> dict[str, Any]:
         "song": [song],
         "played": "2023-03-26T22:27:46Z",
         "userRating": 4,
+        "recordLabels": [{"name": "Sony"}],
+        "musicBrainzId": "189002e7-3285-4e2e-92a3-7f6c30d407a2",
+        "genres": [{"name": "Hip-Hop"}, {"name": "East coast"}],
+        "artists": [
+            {"id": "ar-1", "name": "Artist 1"},
+            {"id": "ar-2", "name": "Artist 2"},
+        ],
+        "displayArtist": "Artist 1 feat. Artist 2",
+        "releaseTypes": ["Album", "Remixes"],
+        "moods": ["slow", "cool"],
+        "sortName": "lagerfeuer (8-bit)",
+        "originalReleaseDate": {"year": 2001, "month": 3, "day": 10},
+        "releaseDate": {"year": 2001, "month": 3, "day": 10},
+        "isCompilation": False,
+        "discTitles": [
+            {"disc": 0, "title": "Disc 0 title"},
+            {"disc": 2, "title": "Disc 1 title"},
+        ],
     }
 
 
@@ -139,6 +160,40 @@ def song(genre: dict[str, Any]) -> dict[str, Any]:
         "isVideo": False,
         "userRating": 5,
         "averageRating": 4.8,
+        "bpm": 134,
+        "comment": "This is a song comment",
+        "sortName": "Polar expedition",
+        "musicBrainzId": "189002e7-3285-4e2e-92a3-7f6c30d407a2",
+        "genres": [{"name": "Hip-Hop"}, {"name": "East coast"}],
+        "artists": [
+            {"id": "ar-1", "name": "Artist 1"},
+            {"id": "ar-2", "name": "Artist 2"},
+        ],
+        "displayArtist": "Artist 1 feat. Artist 2",
+        "albumArtists": [
+            {"id": "ar-6", "name": "Artist 6"},
+            {"id": "ar-7", "name": "Artist 7"},
+        ],
+        "displayAlbumArtist": "Artist 6 & Artist 7",
+        "contributors": [
+            {"role": "composer", "artist": {"id": "ar-3", "name": "Artist 3"}},
+            {"role": "composer", "artist": {"id": "ar-4", "name": "Artist 4"}},
+            {"role": "lyricist", "artist": {"id": "ar-5", "name": "Artist 5"}},
+            {
+                "role": "performer",
+                "subRole": "Bass",
+                "artist": {"id": "ar-5", "name": "Artist 5"},
+            },
+        ],
+        "displayComposer": "Artist 3, Artist 4",
+        "moods": ["slow", "cool"],
+        "replayGain": {
+            "trackGain": 0.1,
+            "albumGain": 1.1,
+            "trackPeak": 9.2,
+            "albumPeak": 9,
+            "baseGain": 0,
+        },
     }
 
 

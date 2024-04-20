@@ -6,9 +6,33 @@ from dateutil import parser
 
 from .artist import Artist
 from .cover_art import CoverArt
+from .genre import ItemGenre
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
+
+
+class RecordLabel:
+    def __init__(self, name: str) -> None:
+        self.name = name
+
+
+class Disc:
+    def __init__(self, disc: int, title: str) -> None:
+        self.disc_number = disc
+        self.title = title
+
+
+class ReleaseDate:
+    def __init__(
+        self,
+        year: int,
+        month: int,
+        day: int,
+    ) -> None:
+        self.year = year
+        self.month = month
+        self.day = day
 
 
 class AlbumInfo:
@@ -94,12 +118,18 @@ class Album:
         played: str | None = None,
         userRating: int | None = None,
         song: list[dict[str, Any]] | None = None,
-        # TODO WTF
-        # genres=None,
-        # isVideo=None,
-        # bpm=None,
-        # comment=None,
-        # musicBrainzId=None,
+        recordLabels: list[dict[str, Any]] | None = None,
+        musicBrainzId: str | None = None,
+        genres: list[dict[str, Any]] | None = None,
+        artists: list[dict[str, Any]] | None = None,
+        displayArtist: str | None = None,
+        releaseTypes: list[str] | None = None,
+        moods: list[str] | None = None,
+        sortName: str | None = None,
+        originalReleaseDate: dict[str, Any] | None = None,
+        releaseDate: dict[str, Any] | None = None,
+        isCompilation: bool | None = None,
+        discTitles: list[dict[str, Any]] | None = None,
     ) -> None:
         """Representation of all the data related to an album in Subsonic.
 
@@ -170,6 +200,28 @@ class Album:
             else None
         )
         self.info: AlbumInfo | None = None
+        self.record_labels = (
+            [RecordLabel(**record_label) for record_label in recordLabels]
+            if recordLabels
+            else None
+        )
+        self.music_brainz_id = musicBrainzId
+        self.genres = [ItemGenre(**genre) for genre in genres] if genres else None
+        self.artists = (
+            [Artist(self.__subsonic, **artist) for artist in artists]
+            if artists
+            else None
+        )
+        self.display_artist = displayArtist
+        self.release_types = releaseTypes
+        self.moods = moods
+        self.sort_name = sortName
+        self.original_release_date = (
+            ReleaseDate(**originalReleaseDate) if originalReleaseDate else None
+        )
+        self.release_date = ReleaseDate(**releaseDate) if releaseDate else None
+        self.is_compilation = isCompilation
+        self.discs = [Disc(**disc) for disc in discTitles] if discTitles else None
 
     def generate(self) -> "Album":
         """Return a new album with all the data updated from the API,

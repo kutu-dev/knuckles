@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Any, Self
 
 # Avoid circular import error
-from knuckles.models.genre import Genre
+from knuckles.models.genre import Genre, ItemGenre
 
 from ..exceptions import AlbumOrArtistArgumentsInSong, VideoArgumentsInSong
 from .album import Album
@@ -16,14 +16,40 @@ from datetime import datetime
 from dateutil import parser
 
 
+class Contributor:
+    def __init__(
+        self,
+        role: str,
+        artist: Artist,
+        subRole: str | None = None,
+    ) -> None:
+        self.role = role
+        self.subrole = subRole
+        self.artist = artist
+
+
+class ReplayGain:
+    def __init__(
+        self,
+        trackGain: str | None = None,
+        albumGain: str | None = None,
+        trackPeak: str | None = None,
+        albumPeak: str | None = None,
+        baseGain: str | None = None,
+    ) -> None:
+        self.track_gain = trackGain
+        self.album_gain = albumGain
+        self.track_peak = trackPeak
+        self.album_peak = albumPeak
+        self.base_gain = baseGain
+
+
 class Song:
     """Representation of all the data related to a song in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         id: str,
         title: str | None = None,
         isDir: bool = False,
@@ -55,11 +81,20 @@ class Song:
         bookmarkPosition: int | None = None,
         originalWidth: None = None,
         originalHeight: None = None,
-        # OpenSubsonic fields
         played: str | None = None,
-        # genres=None,
-        # bpm=None,
-        # comment=None,
+        bpm: int | None = None,
+        comment: str | None = None,
+        sortName: str | None = None,
+        musicBrainzId: str | None = None,
+        genres: list[dict[str, Any]] | None = None,
+        artists: list[dict[str, Any]] | None = None,
+        displayArtist: str | None = None,
+        albumArtists: list[dict[str, Any]] | None = None,
+        displayAlbumArtist: str | None = None,
+        contributors: list[dict[str, Any]] | None = None,
+        displayComposer: str | None = None,
+        moods: list[str] | None = None,
+        replayGain: dict[str, Any] | None = None,
     ) -> None:
         """Representation of all the data related to song in Subsonic.
 
@@ -180,6 +215,31 @@ class Song:
         self.created = parser.parse(created) if created else None
         self.starred = parser.parse(starred) if starred else None
         self.played = parser.parse(played) if played else None
+        self.bpm = bpm
+        self.comment = comment
+        self.sort_name = sortName
+        self.music_brainz_id = musicBrainzId
+        self.genres = [ItemGenre(**genre) for genre in genres] if genres else None
+        self.artists = (
+            [Artist(self.__subsonic, **artist) for artist in artists]
+            if artists
+            else None
+        )
+        self.display_artist = displayArtist
+        self.album_artists = (
+            [Artist(self.__subsonic, **artist) for artist in albumArtists]
+            if albumArtists
+            else None
+        )
+        self.display_album_artist = displayAlbumArtist
+        self.contributors = (
+            [Contributor(**contributor) for contributor in contributors]
+            if contributors
+            else None
+        )
+        self.display_composer = displayComposer
+        self.moods = moods
+        self.replay_gain = ReplayGain(**replayGain) if replayGain else None
 
     def generate(self) -> "Song":
         """Return a new song with all the data updated from the API,

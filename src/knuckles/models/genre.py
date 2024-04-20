@@ -6,6 +6,11 @@ if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
+class ItemGenre:
+    def __init__(self, name: str) -> None:
+        self.name = name
+
+
 class Genre:
     """Representation of all the data related to a genre in Subsonic."""
 

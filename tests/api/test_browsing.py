@@ -109,6 +109,9 @@ def test_get_artist(
     assert type(response.albums[0].songs) is list
     assert response.albums[0].songs[0].title == song["title"]
     assert response.cover_art.id == artist["coverArt"]
+    assert response.music_brainz_id == artist["musicBrainzId"]
+    assert response.sort_name == artist["sortName"]
+    assert response.roles == artist["roles"]
 
 
 @responses.activate
@@ -142,6 +145,22 @@ def test_get_album(
     assert response.songs[0].id == song["id"]
     assert response.played == parser.parse(album["played"])
     assert response.user_rating == album["userRating"]
+    assert type(response.record_labels) is list
+    assert response.record_labels[0].name == album["recordLabels"][0]["name"]
+    assert response.music_brainz_id == album["musicBrainzId"]
+    assert type(response.genres) is list
+    assert response.genres[0].name == album["genres"][0]["name"]
+    assert type(response.artists) is list
+    assert response.artists[0].id == album["artists"][0]["id"]
+    assert response.display_artist == album["displayArtist"]
+    assert response.release_types == album["releaseTypes"]
+    assert response.moods == album["moods"]
+    assert response.sort_name == album["sortName"]
+    assert response.original_release_date.year == album["originalReleaseDate"]["year"]
+    assert response.release_date.year == album["releaseDate"]["year"]
+    assert response.is_compilation == album["isCompilation"]
+    assert type(response.discs) is list
+    assert response.discs[0].disc_number == album["discTitles"][0]["disc"]
 
 
 @responses.activate
@@ -184,6 +203,24 @@ def test_get_song(
     assert response.type == "music"
     assert response.bookmark_position is None
     assert response.played == parser.parse(song["played"])
+    assert response.bpm == song["bpm"]
+    assert response.comment == song["comment"]
+    assert response.sort_name == song["sortName"]
+    assert response.music_brainz_id == song["musicBrainzId"]
+    assert type(response.genres) is list
+    assert response.genres[0].name == song["genres"][0]["name"]
+    assert type(response.artists) is list
+    assert response.artists[0].id == song["artists"][0]["id"]
+    assert response.display_artist == song["displayArtist"]
+    assert type(response.album_artists) is list
+    assert response.album_artists[0].name == song["albumArtists"][0]["name"]
+    assert response.display_album_artist == song["displayAlbumArtist"]
+    assert type(response.contributors) is list
+    assert response.contributors[0].role == song["contributors"][0]["role"]
+    assert response.display_composer == song["displayComposer"]
+    assert type(response.moods) is list
+    assert response.moods[0] == song["moods"][0]
+    assert response.replay_gain.track_gain == song["replayGain"]["trackGain"]
 
 
 @responses.activate

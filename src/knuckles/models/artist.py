@@ -92,6 +92,9 @@ class Artist:
         userRating: int | None = None,
         averageRating: float | None = None,
         album: list[dict[str, Any]] | None = None,
+        musicBrainzId: str | None = None,
+        sortName: str | None = None,
+        roles: list[str] | None = None,
     ) -> None:
         """Representation of all the data related to an artist in Subsonic.
 
@@ -135,6 +138,9 @@ class Artist:
             else None
         )
         self.info: ArtistInfo | None = None
+        self.music_brainz_id = musicBrainzId
+        self.sort_name = sortName
+        self.roles = roles
 
     def generate(self) -> "Artist":
         """Return a new artist with all the data updated from the API,
