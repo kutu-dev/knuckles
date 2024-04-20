@@ -121,8 +121,8 @@ class Artist:
         self.id = id
         self.name = name
         self.cover_art = CoverArt(coverArt) if coverArt else None
-        self.album_count = albumCount
         self.artist_image_url = artistImageUrl
+        self.album_count = albumCount
         self.starred = parser.parse(starred) if starred else None
         self.user_rating = userRating
         self.average_rating = averageRating

@@ -94,6 +94,12 @@ class Album:
         played: str | None = None,
         userRating: int | None = None,
         song: list[dict[str, Any]] | None = None,
+        # TODO WTF
+        # genres=None,
+        # isVideo=None,
+        # bpm=None,
+        # comment=None,
+        # musicBrainzId=None,
     ) -> None:
         """Representation of all the data related to an album in Subsonic.
 

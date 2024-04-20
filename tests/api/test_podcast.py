@@ -197,20 +197,6 @@ def test_delete_podcast_channel(
 
 
 @responses.activate
-def test_download_podcast_episode(
-    add_responses: AddResponses,
-    subsonic: Subsonic,
-    mock_download_podcast_episode: list[Response],
-    episode: dict[str, Any],
-) -> None:
-    add_responses(mock_download_podcast_episode)
-
-    response = subsonic.podcast.download_podcast_episode(episode["id"])
-
-    assert type(response) is Subsonic
-
-
-@responses.activate
 def test_delete_podcast_episode(
     add_responses: AddResponses,
     subsonic: Subsonic,
@@ -220,5 +206,19 @@ def test_delete_podcast_episode(
     add_responses(mock_delete_podcast_episode)
 
     response = subsonic.podcast.delete_podcast_episode(episode["id"])
+
+    assert type(response) is Subsonic
+
+
+@responses.activate
+def test_download_podcast_episode(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_download_podcast_episode: list[Response],
+    episode: dict[str, Any],
+) -> None:
+    add_responses(mock_download_podcast_episode)
+
+    response = subsonic.podcast.download_podcast_episode(episode["id"])
 
     assert type(response) is Subsonic

@@ -57,6 +57,9 @@ class Song:
         originalHeight: None = None,
         # OpenSubsonic fields
         played: str | None = None,
+        # genres=None,
+        # bpm=None,
+        # comment=None,
     ) -> None:
         """Representation of all the data related to song in Subsonic.
 
