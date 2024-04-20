@@ -1,9 +1,8 @@
 # TODO
-- [ ] Add missing model properties
+- [ ] Add missing model properties.
 - [ ] Make a `model` class and add the following methods to it:
   - [ ] `_check_api_access()`
   - [ ] `_resource_not_found()`
-- [ ] Test `XML` support.
 - [ ] Should `CoverArt` be removed?
 - [ ] Determine if video and non-ID3 endpoints will be supported.
   -  [ ] If not the Video and NonID3 checks in the `Song` model should be removed.
