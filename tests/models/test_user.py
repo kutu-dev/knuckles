@@ -79,7 +79,7 @@ def test_user_delete(
 def test_user_change_password(
     add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_user,
+    mock_get_user: list[Response],
     mock_change_password: list[Response],
     user: dict[str, Any],
     new_password: str,

@@ -21,7 +21,9 @@ def mock_search_song(
 
 @pytest.fixture
 def mock_search_album(
-    mock_generator: MockGenerator, music_folders, album: dict[str, Any]
+    mock_generator: MockGenerator,
+    music_folders: list[dict[str, Any]],
+    album: dict[str, Any],
 ) -> list[Response]:
     return mock_generator(
         "search3",
@@ -32,7 +34,9 @@ def mock_search_album(
 
 @pytest.fixture
 def mock_search_artist(
-    mock_generator: MockGenerator, music_folders, artist: dict[str, Any]
+    mock_generator: MockGenerator,
+    music_folders: list[dict[str, Any]],
+    artist: dict[str, Any],
 ) -> list[Response]:
     return mock_generator(
         "search3",

@@ -128,7 +128,7 @@ def test_get_captions_with_a_given_filename(
     placeholder_data: str,
     video: dict[str, Any],
     vtt_metadata: FileMetadata,
-):
+) -> None:
     add_responses(mock_get_captions_vtt)
 
     response = subsonic.media_retrieval.get_captions(
@@ -159,7 +159,7 @@ def test_get_captions_without_a_given_filename(
     placeholder_data: str,
     video: dict[str, Any],
     metadata: str,
-):
+) -> None:
     # Retrieve the mocks dynamically as their tests are equal
     get_mock: list[Response] = request.getfixturevalue(mock)
     get_metadata: FileMetadata = request.getfixturevalue(metadata)
@@ -193,7 +193,7 @@ def test_get_captions_with_a_preferred_file_format(
     video: dict[str, Any],
     metadata: str,
     file_format: SubtitlesFileFormat,
-):
+) -> None:
     # Retrieve the mocks dynamically as their tests are equal
     get_mock: list[Response] = request.getfixturevalue(mock)
     get_metadata: FileMetadata = request.getfixturevalue(metadata)

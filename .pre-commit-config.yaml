@@ -21,4 +21,4 @@ repos:
     rev: v1.4.1
     hooks:
       - id: mypy
-        additional_dependencies: [types-requests, types-python-dateutil]
+        additional_dependencies: [types-requests, types-python-dateutil, pytest, responses]

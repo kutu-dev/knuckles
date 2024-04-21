@@ -2,8 +2,9 @@ from typing import TYPE_CHECKING, Any, Self
 
 from dateutil import parser
 
+from .cover_art import CoverArt
 from .model import Model
-from .song import CoverArt, Song
+from .song import Song
 from .user import User
 
 if TYPE_CHECKING:

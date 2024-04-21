@@ -18,7 +18,7 @@ def internet_radio_station() -> dict[str, Any]:
 
 @pytest.fixture
 def mock_get_internet_radio_stations(
-    mock_generator: MockGenerator, internet_radio_station
+    mock_generator: MockGenerator, internet_radio_station: dict[str, Any]
 ) -> list[Response]:
     return mock_generator(
         "getInternetRadioStations",
@@ -29,7 +29,7 @@ def mock_get_internet_radio_stations(
 
 @pytest.fixture
 def mock_create_internet_radio_station(
-    mock_generator: MockGenerator, internet_radio_station
+    mock_generator: MockGenerator, internet_radio_station: dict[str, Any]
 ) -> list[Response]:
     return mock_generator(
         "createInternetRadioStation",
@@ -43,7 +43,7 @@ def mock_create_internet_radio_station(
 
 @pytest.fixture
 def mock_update_internet_radio_station(
-    mock_generator: MockGenerator, internet_radio_station
+    mock_generator: MockGenerator, internet_radio_station: dict[str, Any]
 ) -> list[Response]:
     return mock_generator(
         "updateInternetRadioStation",
@@ -58,7 +58,7 @@ def mock_update_internet_radio_station(
 
 @pytest.fixture
 def mock_delete_internet_radio_station(
-    mock_generator: MockGenerator, internet_radio_station
+    mock_generator: MockGenerator, internet_radio_station: dict[str, Any]
 ) -> list[Response]:
     return mock_generator(
         "deleteInternetRadioStation",

@@ -28,10 +28,7 @@ build-backend = "poetry.core.masonry.api"
 select = ["E", "F", "I001"]
 
 [tool.mypy]
-disallow_untyped_defs = true
-warn_unused_ignores = true
-warn_return_any = true
-warn_unused_configs = true
+strict = true
 
 [[tool.mypy.overrides]]
 module = "tests.*"

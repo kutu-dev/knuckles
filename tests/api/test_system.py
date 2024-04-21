@@ -12,7 +12,7 @@ from tests.conftest import AddResponses
 def test_ping(
     add_responses: AddResponses,
     subsonic: Subsonic,
-    subsonic_response,
+    subsonic_response: dict[str, Any],
     mock_ping: list[Response],
 ) -> None:
 
