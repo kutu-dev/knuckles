@@ -49,7 +49,7 @@ class Subsonic:
         self.api = Api(
             url, user, password, client, use_https, use_token, request_method
         )
-        self.system = System(self.api)
+        self.system = System(self.api, self)
         self.browsing = Browsing(self.api, self)
         self.lists = None  # !!
         self.searching = Searching(self.api, self)
@@ -63,5 +63,4 @@ class Subsonic:
         self.chat = Chat(self.api, self)
         self.user_management = UserManagement(self.api, self)
         self.bookmarks = Bookmarks(self.api, self)
-        self.media_library_scanning = MediaLibraryScanning(self.api)
-        self.media_library_scanning = MediaLibraryScanning(self.api)
+        self.media_library_scanning = MediaLibraryScanning(self.api, self)

@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING, Self
 
 from ..exceptions import ResourceNotFound
+from .model import Model
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
-class InternetRadioStation:
+class InternetRadioStation(Model):
     """Representation of all the data related to
     an internet radio station in Subsonic.
     """
@@ -34,7 +35,8 @@ class InternetRadioStation:
         :type homepageUrl: str
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.id = id
         self.name = name
         self.stream_url = streamUrl
@@ -51,7 +53,7 @@ class InternetRadioStation:
         :rtype: InternetRadioStation
         """
 
-        get_station = self.__subsonic.internet_radio.get_internet_radio_station(self.id)
+        get_station = self._subsonic.internet_radio.get_internet_radio_station(self.id)
 
         if get_station is None:
             raise ResourceNotFound(
@@ -70,7 +72,7 @@ class InternetRadioStation:
         :rtype: Self
         """
 
-        self.__subsonic.internet_radio.create_internet_radio_station(
+        self._subsonic.internet_radio.create_internet_radio_station(
             self.stream_url, self.name, self.homepage_url
         )
 
@@ -83,7 +85,7 @@ class InternetRadioStation:
         :rtype: Self
         """
 
-        self.__subsonic.internet_radio.update_internet_radio_station(
+        self._subsonic.internet_radio.update_internet_radio_station(
             self.id, self.stream_url, self.name, self.homepage_url
         )
 
@@ -96,6 +98,6 @@ class InternetRadioStation:
         :rtype: Self
         """
 
-        self.__subsonic.internet_radio.delete_internet_radio_station(self.id)
+        self._subsonic.internet_radio.delete_internet_radio_station(self.id)
 
         return self

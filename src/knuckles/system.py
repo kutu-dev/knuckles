@@ -1,7 +1,10 @@
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
 from .api import Api
 from .models.system import License, SubsonicResponse
+
+if TYPE_CHECKING:
+    from .subsonic import Subsonic
 
 
 class OpenSubsonicExtension(NamedTuple):
@@ -15,8 +18,11 @@ class System:
     <https://opensubsonic.netlify.app/categories/system/>
     """
 
-    def __init__(self, api: Api) -> None:
+    def __init__(self, api: Api, subsonic: "Subsonic") -> None:
         self.api = api
+
+        # Only to pass it to the models
+        self.subsonic = subsonic
 
     def ping(self) -> SubsonicResponse:
         """Calls to the "ping" endpoint of the API.
@@ -29,7 +35,7 @@ class System:
 
         response = self.api.json_request("ping")
 
-        return SubsonicResponse(**response)
+        return SubsonicResponse(self.subsonic, **response)
 
     def get_license(self) -> License:
         """Calls to the "getLicense" endpoint of the API.
@@ -40,7 +46,7 @@ class System:
 
         response = self.api.json_request("getLicense")["license"]
 
-        return License(**response)
+        return License(self.subsonic, **response)
 
     def get_open_subsonic_extensions(self) -> list[OpenSubsonicExtension]:
         response = self.api.json_request("getOpenSubsonicExtensions")[

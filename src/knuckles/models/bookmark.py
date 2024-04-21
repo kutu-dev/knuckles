@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Self
 
 from ..exceptions import ResourceNotFound
+from .model import Model
 from .song import Song
 from .user import User
 
@@ -10,14 +11,12 @@ if TYPE_CHECKING:
 from dateutil import parser
 
 
-class Bookmark:
+class Bookmark(Model):
     """Representation of all the data related to a bookmark in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         entry: dict[str, Any],
         position: int,
         username: str | None = None,
@@ -25,11 +24,13 @@ class Bookmark:
         changed: str | None = None,
         comment: str | None = None,
     ) -> None:
-        self.__subsonic = subsonic
-        self.song = Song(self.__subsonic, **entry)
+
+        super().__init__(subsonic)
+
+        self.song = Song(self._subsonic, **entry)
         self.position = position
         self.user = (
-            User(subsonic=self.__subsonic, username=username) if username else None
+            User(subsonic=self._subsonic, username=username) if username else None
         )
         self.comment = comment
         self.created = parser.parse(created) if created else None
@@ -46,12 +47,10 @@ class Bookmark:
         :rtype: Bookmark
         """
 
-        get_bookmark = self.__subsonic.bookmarks.get_bookmark(self.song.id)
+        get_bookmark = self._subsonic.bookmarks.get_bookmark(self.song.id)
 
         if get_bookmark is None:
-            raise ResourceNotFound(
-                "Unable to generate episode as it does not exist in the server"
-            )
+            raise ResourceNotFound()
 
         return get_bookmark
 
@@ -62,7 +61,7 @@ class Bookmark:
         :rtype: Self
         """
 
-        self.__subsonic.bookmarks.create_bookmark(
+        self._subsonic.bookmarks.create_bookmark(
             self.song.id, self.position, self.comment
         )
 
@@ -76,7 +75,7 @@ class Bookmark:
         :rtype: Self
         """
 
-        self.__subsonic.bookmarks.update_bookmark(
+        self._subsonic.bookmarks.update_bookmark(
             self.song.id, self.position, self.comment
         )
 
@@ -89,6 +88,6 @@ class Bookmark:
         :rtype: Self
         """
 
-        self.__subsonic.bookmarks.delete_bookmark(self.song.id)
+        self._subsonic.bookmarks.delete_bookmark(self.song.id)
 
         return self

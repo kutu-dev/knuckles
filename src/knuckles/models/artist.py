@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 import knuckles.models.album as album_model_module
 
 from .cover_art import CoverArt
+from .model import Model
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
@@ -11,15 +12,13 @@ if TYPE_CHECKING:
 from dateutil import parser
 
 
-class ArtistInfo:
+class ArtistInfo(Model):
     """Representation of all the data related to an artist info in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
         artist_id: str,
-        # Subsonic fields
         biography: str,
         musicBrainzId: str | None,
         lastFmUrl: str | None,
@@ -47,7 +46,8 @@ class ArtistInfo:
         :type similarArtist: list[str, Any]
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.artist_id = artist_id
         self.biography = biography
         self.music_brainz_id = musicBrainzId
@@ -56,7 +56,7 @@ class ArtistInfo:
         self.medium_image_url = mediumImageUrl
         self.large_image_url = largeImageUrl
         self.similar_artists = (
-            [Artist(self.__subsonic, **artist) for artist in similarArtist]
+            [Artist(self._subsonic, **artist) for artist in similarArtist]
             if similarArtist
             else None
         )
@@ -72,17 +72,15 @@ class ArtistInfo:
         :rtype: ArtistInfo
         """
 
-        return self.__subsonic.browsing.get_artist_info(self.artist_id)
+        return self._subsonic.browsing.get_artist_info(self.artist_id)
 
 
-class Artist:
+class Artist(Model):
     """Representation of all the data related to an artist in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         id: str,
         name: str | None = None,
         coverArt: str | None = None,
@@ -120,10 +118,11 @@ class Artist:
         :type album: list[dict[str, Any]]
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.id = id
         self.name = name
-        self.cover_art = CoverArt(coverArt) if coverArt else None
+        self.cover_art = CoverArt(self._subsonic, coverArt) if coverArt else None
         self.artist_image_url = artistImageUrl
         self.album_count = albumCount
         self.starred = parser.parse(starred) if starred else None
@@ -131,7 +130,7 @@ class Artist:
         self.average_rating = averageRating
         self.albums = (
             [
-                album_model_module.Album(self.__subsonic, **album_data)
+                album_model_module.Album(self._subsonic, **album_data)
                 for album_data in album
             ]
             if album
@@ -153,7 +152,7 @@ class Artist:
         :rtype: Artist
         """
 
-        new_artist = self.__subsonic.browsing.get_artist(self.id)
+        new_artist = self._subsonic.browsing.get_artist(self.id)
         new_artist.get_artist_info()
 
         return new_artist
@@ -166,6 +165,6 @@ class Artist:
         :rtype: AlbumInfo
         """
 
-        self.info = self.__subsonic.browsing.get_artist_info(self.id)
+        self.info = self._subsonic.browsing.get_artist_info(self.id)
 
         return self.info

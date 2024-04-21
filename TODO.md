@@ -1,15 +1,8 @@
 # TODO
-- [ ] Add .
-- [ ] Make a `model` class and add the following methods to it:
-  - [ ] `_check_api_access()`
-  - [ ] `_resource_not_found()`
-- [ ] Should `CoverArt` be removed?
-- [ ] Determine if video and non-ID3 endpoints will be supported.
-  -  [ ] If not the Video and NonID3 checks in the `Song` model should be removed.
 - [ ] Implement missing endpoints.
-- [ ] Improve error handling:
 - [ ] Add the `subsonic.system.check_subsonic_extension()` method.
-- [ ] Check and rewrite all docstrings taking care about raising exceptions.
+- [ ] Improve error handling:
+  - [ ] Check and rewrite all docstrings taking care about raising exceptions.
 - [ ] Spin up a `MkDocs` documentation.
   - [ ] Add the URL in the GitHub page.
 

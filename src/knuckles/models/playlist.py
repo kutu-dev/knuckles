@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Self
 
 from dateutil import parser
 
+from .model import Model
 from .song import CoverArt, Song
 from .user import User
 
@@ -9,14 +10,12 @@ if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
-class Playlist:
+class Playlist(Model):
     """Representation of all the data related to a playlist in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         id: str,
         name: str | None = None,
         songCount: int | None = None,
@@ -61,7 +60,8 @@ class Playlist:
         :type entry: list[dict[str, Any]] | None, optional
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.id = id
         self.name = name
         self.song_count = songCount
@@ -69,17 +69,15 @@ class Playlist:
         self.created = parser.parse(created) if created else None
         self.changed = parser.parse(changed) if changed else None
         self.comment = comment
-        self.owner = User(self.__subsonic, owner) if owner else None
+        self.owner = User(self._subsonic, owner) if owner else None
         self.public = public
-        self.cover_art = CoverArt(coverArt) if coverArt else None
+        self.cover_art = CoverArt(self._subsonic, coverArt) if coverArt else None
         self.allowed_users = (
-            [User(self.__subsonic, username) for username in allowedUser]
+            [User(self._subsonic, username) for username in allowedUser]
             if allowedUser
             else None
         )
-        self.songs = (
-            [Song(self.__subsonic, **song) for song in entry] if entry else None
-        )
+        self.songs = [Song(self._subsonic, **song) for song in entry] if entry else None
 
     def generate(self) -> "Playlist":
         """Return a new playlist with all the data updated from the API,
@@ -89,7 +87,7 @@ class Playlist:
         :rtype: Playlist
         """
 
-        return self.__subsonic.playlists.get_playlist(self.id)
+        return self._subsonic.playlists.get_playlist(self.id)
 
     def create(self) -> "Playlist":
         """Calls the "createPlaylist" endpoint of the API.
@@ -103,7 +101,7 @@ class Playlist:
         # Create a list of Song IDs if songs is not None
         songs_ids = [song.id for song in self.songs] if self.songs else None
 
-        new_playlist = self.__subsonic.playlists.create_playlist(
+        new_playlist = self._subsonic.playlists.create_playlist(
             # Ignore the None type error as the server
             # should return an Error Code 10 in response
             self.name,  # type: ignore[arg-type]
@@ -126,7 +124,7 @@ class Playlist:
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
-        self.__subsonic.playlists.update_playlist(
+        self._subsonic.playlists.update_playlist(
             self.id, self.name, self.comment, self.public
         )
 
@@ -140,7 +138,7 @@ class Playlist:
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
-        self.__subsonic.playlists.delete_playlist(self.id)
+        self._subsonic.playlists.delete_playlist(self.id)
 
         return self
 
@@ -154,13 +152,13 @@ class Playlist:
         :rtype: Self
         """
 
-        self.__subsonic.playlists.update_playlist(self.id, song_ids_to_add=song_ids)
+        self._subsonic.playlists.update_playlist(self.id, song_ids_to_add=song_ids)
 
         if not self.songs:
             self.songs = []
 
         for id_ in song_ids:
-            self.songs.append(Song(self.__subsonic, id_))
+            self.songs.append(Song(self._subsonic, id_))
 
         if not self.song_count:
             self.song_count = 0
@@ -179,7 +177,7 @@ class Playlist:
         :rtype: Self
         """
 
-        self.__subsonic.playlists.update_playlist(
+        self._subsonic.playlists.update_playlist(
             self.id, song_indexes_to_remove=songs_indexes
         )
 

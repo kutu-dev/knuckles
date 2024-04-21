@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Any, Self
 
 from ..exceptions import ResourceNotFound
 from .cover_art import CoverArt
+from .model import Model
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
@@ -9,14 +10,12 @@ if TYPE_CHECKING:
 from dateutil import parser
 
 
-class Episode:
+class Episode(Model):
     """Representation of all the data related to a podcast episode in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         id: str,
         streamId: str | None = None,
         channelId: str | None = None,
@@ -79,10 +78,11 @@ class Episode:
         :type path: str | None, optional
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.id = id
         self.stream_id = streamId
-        self.channel = Channel(self.__subsonic, channelId) if channelId else None
+        self.channel = Channel(self._subsonic, channelId) if channelId else None
         self.title = title
         self.description = description
         self.publish_date = parser.parse(publishDate) if publishDate else None
@@ -91,7 +91,7 @@ class Episode:
         self.is_dir = isDir
         self.year = year
         self.genre = genre
-        self.cover_art = CoverArt(coverArt) if coverArt else None
+        self.cover_art = CoverArt(self._subsonic, coverArt) if coverArt else None
         self.size = size
         self.content_type = contentType
         self.suffix = suffix
@@ -110,7 +110,7 @@ class Episode:
         :rtype: Episode
         """
 
-        get_episode = self.__subsonic.podcast.get_episode(self.id)
+        get_episode = self._subsonic.podcast.get_episode(self.id)
 
         if get_episode is None:
             raise ResourceNotFound(
@@ -126,7 +126,7 @@ class Episode:
         :rtype: Self
         """
 
-        self.__subsonic.podcast.download_podcast_episode(self.id)
+        self._subsonic.podcast.download_podcast_episode(self.id)
 
         return self
 
@@ -137,19 +137,17 @@ class Episode:
         :rtype: Self
         """
 
-        self.__subsonic.podcast.delete_podcast_episode(self.id)
+        self._subsonic.podcast.delete_podcast_episode(self.id)
 
         return self
 
 
-class Channel:
+class Channel(Model):
     """Representation of all the data related to a podcast channel in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         id: str,
         url: str | None = None,
         title: str | None = None,
@@ -182,16 +180,17 @@ class Channel:
         :type episode: list[dict[str, Any]] | None, optional
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.id = id
         self.url = url
         self.title = title
         self.description = description
-        self.cover_art = CoverArt(coverArt) if coverArt else None
+        self.cover_art = CoverArt(self._subsonic, coverArt) if coverArt else None
         self.original_image_url = originalImageUrl
         self.status = status
         self.episodes = (
-            [Episode(self.__subsonic, **episode_data) for episode_data in episode]
+            [Episode(self._subsonic, **episode_data) for episode_data in episode]
             if episode
             else None
         )
@@ -207,7 +206,7 @@ class Channel:
         :rtype: Channel
         """
 
-        return self.__subsonic.podcast.get_podcast(self.id)
+        return self._subsonic.podcast.get_podcast(self.id)
 
     def create(self) -> Self:
         """Calls the "createPodcastChannel" endpoint of the API.
@@ -218,7 +217,7 @@ class Channel:
 
         # Ignore the None type error as the server
         # should return an Error Code 10 in response
-        self.__subsonic.podcast.create_podcast_channel(
+        self._subsonic.podcast.create_podcast_channel(
             self.url  # type: ignore[arg-type]
         )
 
@@ -231,6 +230,6 @@ class Channel:
         :rtype: Self
         """
 
-        self.__subsonic.podcast.delete_podcast_channel(self.id)
+        self._subsonic.podcast.delete_podcast_channel(self.id)
 
         return self

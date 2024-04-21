@@ -1,19 +1,19 @@
 from typing import TYPE_CHECKING, Self
 
+from .model import Model
+
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
-from ..exceptions import NoApiAccess
+from ..exceptions import MissingRequiredProperty
 
 
-class User:
+class User(Model):
     """Representation of all the data related to a user in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         username: str,
         password: str | None = None,
         email: str | None = None,
@@ -33,7 +33,9 @@ class User:
         music_folder_id: list[str] | None = None,
         max_bit_rate: int | None = None,
     ) -> None:
-        self.subsonic = subsonic
+
+        super().__init__(subsonic)
+
         self.username = username
         self.password = password
         self.email = email
@@ -53,20 +55,6 @@ class User:
         self.music_folder_id = music_folder_id
         self.max_bit_rate = max_bit_rate
 
-    def __check_api_access(self) -> None:
-        """Check if the object has a valid subsonic property
-
-        :raises NoApiAccess: _description_
-        """
-
-        if self.subsonic is None:
-            raise NoApiAccess(
-                (
-                    "This user isn't associated with a Subsonic object."
-                    + "A non None value in the subsonic property is required"
-                )
-            )
-
     def generate(self) -> "User":
         """Returns the function to the same user with the maximum possible
         information from the Subsonic API.
@@ -79,9 +67,7 @@ class User:
         :rtype: User
         """
 
-        self.__check_api_access()
-
-        return self.subsonic.user_management.get_user(self.username)
+        return self._subsonic.user_management.get_user(self.username)
 
     def create(self) -> Self:
         """Calls the "createUser" endpoint of the API.
@@ -91,13 +77,17 @@ class User:
         :rtype: Self
         """
 
-        self.__check_api_access()
+        if not self.email:
+            raise MissingRequiredProperty(
+                "You must provide an email in the email property of the model"
+            )
 
-        #! TODO This is bad
-        if not self.password or not self.email:
-            raise NoApiAccess()
+        if not self.password:
+            raise MissingRequiredProperty(
+                "You must provide an password in the password property of the model"
+            )
 
-        self.subsonic.user_management.create_user(
+        self._subsonic.user_management.create_user(
             self.username,
             self.password,
             self.email,
@@ -131,9 +121,7 @@ class User:
         :rtype: Self
         """
 
-        self.__check_api_access()
-
-        self.subsonic.user_management.update_user(
+        self._subsonic.user_management.update_user(
             self.username,
             self.password,
             self.email,
@@ -164,9 +152,7 @@ class User:
         :rtype: Self
         """
 
-        self.__check_api_access()
-
-        self.subsonic.user_management.delete_user(self.username)
+        self._subsonic.user_management.delete_user(self.username)
 
         return self
 
@@ -182,9 +168,6 @@ class User:
         :return: The object itself to allow method chaining.
         :rtype: Self
         """
-
-        self.__check_api_access()
-
-        self.subsonic.user_management.change_password(self.username, new_password)
+        self._subsonic.user_management.change_password(self.username, new_password)
 
         return self

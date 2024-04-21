@@ -1,7 +1,7 @@
 from typing import Type
 
 
-class NoApiAccess(Exception):
+class MissingRequiredProperty(Exception):
     pass
 
 
@@ -9,16 +9,15 @@ class InvalidRatingNumber(ValueError):
     pass
 
 
-class VideoArgumentsInSong(ValueError):
-    pass
-
-
 class ResourceNotFound(Exception):
-    pass
-
-
-class AlbumOrArtistArgumentsInSong(ValueError):
-    pass
+    def __init__(
+        self,
+        message: str = (
+            "Unable to generate the model as it does not exist in the server"
+        ),
+        *args: str
+    ) -> None:
+        super().__init__(message, *args)
 
 
 class ShareInvalidSongList(ValueError):

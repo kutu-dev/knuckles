@@ -38,7 +38,7 @@ def test_generate_nonexistent_genre(
 
     with pytest.raises(
         ResourceNotFound,
-        match="Unable to generate share as it does not exist in the server",
+        match="Unable to generate the model as it does not exist in the server",
     ):
         nonexistent_share.generate()
 

@@ -1,17 +1,21 @@
 from typing import TYPE_CHECKING
 
 from ..exceptions import ResourceNotFound
+from .model import Model
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
-class ItemGenre:
-    def __init__(self, name: str) -> None:
+class ItemGenre(Model):
+    def __init__(self, subsonic: "Subsonic", name: str) -> None:
+
+        super().__init__(subsonic)
+
         self.name = name
 
 
-class Genre:
+class Genre(Model):
     """Representation of all the data related to a genre in Subsonic."""
 
     def __init__(
@@ -33,7 +37,8 @@ class Genre:
         :type albumCount: int | None, optional
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.value = value
         self.song_count = songCount
         self.album_count = albumCount
@@ -48,7 +53,7 @@ class Genre:
         :return: A new genre object with all the data updated.
         :rtype: Genre
         """
-        get_genre = self.__subsonic.browsing.get_genre(self.value)
+        get_genre = self._subsonic.browsing.get_genre(self.value)
 
         if get_genre is None:
             raise ResourceNotFound(

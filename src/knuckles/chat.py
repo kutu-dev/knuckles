@@ -41,6 +41,6 @@ class Chat:
             "chatMessages"
         ]["chatMessage"]
 
-        messages = [ChatMessage(**message) for message in response]
+        messages = [ChatMessage(self.subsonic, **message) for message in response]
 
         return messages

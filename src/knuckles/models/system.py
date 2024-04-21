@@ -1,15 +1,21 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from dateutil import parser
+from knuckles.models.model import Model
+
+if TYPE_CHECKING:
+    from ..subsonic import Subsonic
 
 
-class SubsonicResponse:
+class SubsonicResponse(Model):
     """Representation of the generic successful response data
     in a request to the API.
     """
 
     def __init__(
         self,
+        subsonic: "Subsonic",
         status: str,
         version: str,
         type: str | None = None,
@@ -34,6 +40,8 @@ class SubsonicResponse:
         :type openSubsonic: bool, optional
         """
 
+        super().__init__(subsonic)
+
         self.status: str = status
         self.version: str = version
         self.type: str | None = type
@@ -41,11 +49,12 @@ class SubsonicResponse:
         self.open_subsonic: bool = openSubsonic
 
 
-class License:
+class License(Model):
     """Representation of the license related data in Subsonic."""
 
     def __init__(
         self,
+        subsonic: "Subsonic",
         valid: bool,
         email: str | None = None,
         licenseExpires: str | None = None,
@@ -62,6 +71,8 @@ class License:
         :param trialExpires: End of trial date., defaults to None
         :type trialExpires: str | None, optional
         """
+
+        super().__init__(subsonic)
 
         self.valid: bool = valid
         self.email: str | None = email

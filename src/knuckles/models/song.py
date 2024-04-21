@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING, Any, Self
 # Avoid circular import error
 from knuckles.models.genre import Genre, ItemGenre
 
-from ..exceptions import AlbumOrArtistArgumentsInSong, VideoArgumentsInSong
 from .album import Album
 from .artist import Artist
 from .cover_art import CoverArt
+from .model import Model
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
@@ -16,27 +16,35 @@ from datetime import datetime
 from dateutil import parser
 
 
-class Contributor:
+class Contributor(Model):
     def __init__(
         self,
+        subsonic: "Subsonic",
         role: str,
         artist: Artist,
         subRole: str | None = None,
     ) -> None:
+
+        super().__init__(subsonic)
+
         self.role = role
         self.subrole = subRole
         self.artist = artist
 
 
-class ReplayGain:
+class ReplayGain(Model):
     def __init__(
         self,
+        subsonic: "Subsonic",
         trackGain: str | None = None,
         albumGain: str | None = None,
         trackPeak: str | None = None,
         albumPeak: str | None = None,
         baseGain: str | None = None,
     ) -> None:
+
+        super().__init__(subsonic)
+
         self.track_gain = trackGain
         self.album_gain = albumGain
         self.track_peak = trackPeak
@@ -44,7 +52,7 @@ class ReplayGain:
         self.base_gain = baseGain
 
 
-class Song:
+class Song(Model):
     """Representation of all the data related to a song in Subsonic."""
 
     def __init__(
@@ -175,26 +183,14 @@ class Song:
             for albums or artists are passed in.
         """
 
-        if isVideo or originalWidth is not None or originalHeight is not None:
-            raise VideoArgumentsInSong(
-                (
-                    "A song shouldn't contain values valid for videos."
-                    + "Did you mean: Video()?"
-                )
-            )
+        super().__init__(subsonic)
 
-        if isDir:
-            raise AlbumOrArtistArgumentsInSong(
-                "'isDir' shouldn't be True. Did you mean: Album() or Artist()?"
-            )
-
-        self.__subsonic = subsonic
         self.id: str = id
         self.title: str | None = title
         self.parent: str | None = parent
         self.track: int | None = track
         self.year: int | None = year
-        self.genre = Genre(self.__subsonic, genre) if genre else None
+        self.genre = Genre(self._subsonic, genre) if genre else None
         self.size: int | None = size
         self.content_type: str | None = contentType
         self.suffix: str | None = suffix
@@ -209,9 +205,9 @@ class Song:
         self.disc_number: int | None = discNumber
         self.type: str | None = type
         self.bookmark_position: int | None = bookmarkPosition
-        self.album = Album(self.__subsonic, albumId, name=album) if albumId else None
-        self.artist = Artist(self.__subsonic, artistId, artist) if artistId else None
-        self.cover_art = CoverArt(coverArt) if coverArt else None
+        self.album = Album(self._subsonic, albumId, name=album) if albumId else None
+        self.artist = Artist(self._subsonic, artistId, artist) if artistId else None
+        self.cover_art = CoverArt(self._subsonic, coverArt) if coverArt else None
         self.created = parser.parse(created) if created else None
         self.starred = parser.parse(starred) if starred else None
         self.played = parser.parse(played) if played else None
@@ -219,27 +215,31 @@ class Song:
         self.comment = comment
         self.sort_name = sortName
         self.music_brainz_id = musicBrainzId
-        self.genres = [ItemGenre(**genre) for genre in genres] if genres else None
+        self.genres = (
+            [ItemGenre(self._subsonic, **genre) for genre in genres] if genres else None
+        )
         self.artists = (
-            [Artist(self.__subsonic, **artist) for artist in artists]
+            [Artist(self._subsonic, **artist) for artist in artists]
             if artists
             else None
         )
         self.display_artist = displayArtist
         self.album_artists = (
-            [Artist(self.__subsonic, **artist) for artist in albumArtists]
+            [Artist(self._subsonic, **artist) for artist in albumArtists]
             if albumArtists
             else None
         )
         self.display_album_artist = displayAlbumArtist
         self.contributors = (
-            [Contributor(**contributor) for contributor in contributors]
+            [Contributor(self._subsonic, **contributor) for contributor in contributors]
             if contributors
             else None
         )
         self.display_composer = displayComposer
         self.moods = moods
-        self.replay_gain = ReplayGain(**replayGain) if replayGain else None
+        self.replay_gain = (
+            ReplayGain(self._subsonic, **replayGain) if replayGain else None
+        )
 
     def generate(self) -> "Song":
         """Return a new song with all the data updated from the API,
@@ -252,7 +252,7 @@ class Song:
         :rtype: Song
         """
 
-        return self.__subsonic.browsing.get_song(self.id)
+        return self._subsonic.browsing.get_song(self.id)
 
     def star(self) -> Self:
         """Calls the "star" endpoint of the API.
@@ -261,7 +261,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.media_annotation.star_song(self.id)
+        self._subsonic.media_annotation.star_song(self.id)
 
         return self
 
@@ -272,7 +272,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.media_annotation.unstar_song(self.id)
+        self._subsonic.media_annotation.unstar_song(self.id)
 
         return self
 
@@ -285,7 +285,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.media_annotation.set_rating(self.id, rating)
+        self._subsonic.media_annotation.set_rating(self.id, rating)
 
         return self
 
@@ -296,7 +296,7 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.media_annotation.remove_rating(self.id)
+        self._subsonic.media_annotation.remove_rating(self.id)
 
         return self
 
@@ -307,6 +307,6 @@ class Song:
         :rtype: Self
         """
 
-        self.__subsonic.media_annotation.scrobble([self.id], [time], submission)
+        self._subsonic.media_annotation.scrobble([self.id], [time], submission)
 
         return self

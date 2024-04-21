@@ -1,19 +1,18 @@
 from typing import TYPE_CHECKING, Any, Self
 
+from .model import Model
 from .song import Song
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
-class Jukebox:
+class Jukebox(Model):
     """Representation of all the data related to the jukebox in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         currentIndex: int,
         playing: bool,
         gain: float,
@@ -36,7 +35,8 @@ class Jukebox:
         :type entry: list[dict[str, Any]] | None, optional
         """
 
-        self.__subsonic: "Subsonic" = subsonic
+        super().__init__(subsonic)
+
         self.current_index: int = currentIndex
         self.playing: bool = playing
         self.gain: float = gain
@@ -49,7 +49,7 @@ class Jukebox:
         self.playlist = []
 
         for song in entry:
-            self.playlist.append(Song(subsonic=self.__subsonic, **song))
+            self.playlist.append(Song(subsonic=self._subsonic, **song))
 
     def generate(self) -> "Jukebox":
         """Return a new jukebox with all the data updated from the API,
@@ -62,7 +62,7 @@ class Jukebox:
         :rtype: Jukebox
         """
 
-        return self.__subsonic.jukebox.get()
+        return self._subsonic.jukebox.get()
 
     def start(self) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "start".
@@ -71,7 +71,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox.start()
+        self._subsonic.jukebox.start()
 
         return self
 
@@ -82,7 +82,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox.stop()
+        self._subsonic.jukebox.stop()
 
         return self
 
@@ -97,7 +97,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox.skip(index, offset)
+        self._subsonic.jukebox.skip(index, offset)
 
         return self
 
@@ -108,11 +108,11 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox.shuffle()
+        self._subsonic.jukebox.shuffle()
 
         # The shuffle is server side so a call to the API is necessary
         # to get the new order of the playlist
-        self.playlist = self.__subsonic.jukebox.get().playlist
+        self.playlist = self._subsonic.jukebox.get().playlist
 
         return self
 
@@ -125,7 +125,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox.set_gain(gain)
+        self._subsonic.jukebox.set_gain(gain)
         self.gain = gain
 
         return self
@@ -137,7 +137,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox.clear()
+        self._subsonic.jukebox.clear()
         self.playlist = []
 
         return self
@@ -152,9 +152,9 @@ class Jukebox:
         :rtype: Self
         """
 
-        song_to_set: Song = Song(self.__subsonic, id)
+        song_to_set: Song = Song(self._subsonic, id)
 
-        self.__subsonic.jukebox.set(song_to_set.id)
+        self._subsonic.jukebox.set(song_to_set.id)
         self.playlist = [song_to_set]
 
         return self
@@ -170,9 +170,9 @@ class Jukebox:
         :rtype: Self
         """
 
-        song_to_add: Song = Song(self.__subsonic, id)
+        song_to_add: Song = Song(self._subsonic, id)
 
-        self.__subsonic.jukebox.add(song_to_add.id)
+        self._subsonic.jukebox.add(song_to_add.id)
 
         if self.playlist is not None:
             self.playlist.append(song_to_add)
@@ -192,7 +192,7 @@ class Jukebox:
         :rtype: Self
         """
 
-        self.__subsonic.jukebox.remove(index)
+        self._subsonic.jukebox.remove(index)
 
         if self.playlist is not None:
             del self.playlist[index]

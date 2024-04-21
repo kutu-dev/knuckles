@@ -1,10 +1,12 @@
 from typing import TYPE_CHECKING
 
+from .model import Model
+
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
-class MusicFolder:
+class MusicFolder(Model):
     """Representation of all the data related to a music folder in Subsonic."""
 
     def __init__(self, subsonic: "Subsonic", id: str, name: str | None = None) -> None:
@@ -18,7 +20,8 @@ class MusicFolder:
         :type name: str | None, optional
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.id = id
         self.name = name
 
@@ -33,7 +36,7 @@ class MusicFolder:
         :rtype: MusicFolder
         """
 
-        music_folders = self.__subsonic.browsing.get_music_folders()
+        music_folders = self._subsonic.browsing.get_music_folders()
 
         # Get the first element with the same ID
         music_folder = next(

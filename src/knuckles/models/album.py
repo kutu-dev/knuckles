@@ -7,43 +7,49 @@ from dateutil import parser
 from .artist import Artist
 from .cover_art import CoverArt
 from .genre import ItemGenre
+from .model import Model
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
 
 
-class RecordLabel:
-    def __init__(self, name: str) -> None:
+class RecordLabel(Model):
+    def __init__(self, subsonic: "Subsonic", name: str) -> None:
+        super().__init__(subsonic)
+
         self.name = name
 
 
-class Disc:
-    def __init__(self, disc: int, title: str) -> None:
+class Disc(Model):
+    def __init__(self, subsonic: "Subsonic", disc: int, title: str) -> None:
+        super().__init__(subsonic)
+
         self.disc_number = disc
         self.title = title
 
 
-class ReleaseDate:
+class ReleaseDate(Model):
     def __init__(
         self,
+        subsonic: "Subsonic",
         year: int,
         month: int,
         day: int,
     ) -> None:
+        super().__init__(subsonic)
+
         self.year = year
         self.month = month
         self.day = day
 
 
-class AlbumInfo:
+class AlbumInfo(Model):
     """Representation of all the data related to an album info in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
         album_id: str,
-        # Subsonic fields
         notes: str,
         musicBrainzId: str | None,
         lastFmUrl: str | None,
@@ -68,7 +74,8 @@ class AlbumInfo:
         :type largeImageUrl: str
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.album_id = album_id
         self.notes = notes
         self.music_brainz_id = musicBrainzId
@@ -88,17 +95,15 @@ class AlbumInfo:
         :rtype: AlbumInfo
         """
 
-        return self.__subsonic.browsing.get_album_info(self.album_id)
+        return self._subsonic.browsing.get_album_info(self.album_id)
 
 
-class Album:
+class Album(Model):
     """Representation of all the data related to an album in Subsonic."""
 
     def __init__(
         self,
-        # Internal
         subsonic: "Subsonic",
-        # Subsonic fields
         id: str,
         parent: str | None = None,
         album: str | None = None,
@@ -176,15 +181,16 @@ class Album:
         :type song: list[dict[str, Any]]
         """
 
-        self.__subsonic = subsonic
+        super().__init__(subsonic)
+
         self.id = id
         self.parent = parent
         self.album = album
         self.name = name
         self.is_dir = isDir
         self.title = title
-        self.artist = Artist(self.__subsonic, artistId, artist) if artistId else None
-        self.cover_art = CoverArt(coverArt) if coverArt else None
+        self.artist = Artist(self._subsonic, artistId, artist) if artistId else None
+        self.cover_art = CoverArt(self._subsonic, coverArt) if coverArt else None
         self.song_count = songCount
         self.duration = duration
         self.play_count = playCount
@@ -195,20 +201,25 @@ class Album:
         self.played = parser.parse(played) if played else None
         self.user_rating = userRating
         self.songs = (
-            [song_model_module.Song(self.__subsonic, **song_data) for song_data in song]
+            [song_model_module.Song(self._subsonic, **song_data) for song_data in song]
             if song
             else None
         )
         self.info: AlbumInfo | None = None
         self.record_labels = (
-            [RecordLabel(**record_label) for record_label in recordLabels]
+            [
+                RecordLabel(self._subsonic, **record_label)
+                for record_label in recordLabels
+            ]
             if recordLabels
             else None
         )
         self.music_brainz_id = musicBrainzId
-        self.genres = [ItemGenre(**genre) for genre in genres] if genres else None
+        self.genres = (
+            [ItemGenre(self._subsonic, **genre) for genre in genres] if genres else None
+        )
         self.artists = (
-            [Artist(self.__subsonic, **artist) for artist in artists]
+            [Artist(self._subsonic, **artist) for artist in artists]
             if artists
             else None
         )
@@ -217,11 +228,19 @@ class Album:
         self.moods = moods
         self.sort_name = sortName
         self.original_release_date = (
-            ReleaseDate(**originalReleaseDate) if originalReleaseDate else None
+            ReleaseDate(self._subsonic, **originalReleaseDate)
+            if originalReleaseDate
+            else None
         )
-        self.release_date = ReleaseDate(**releaseDate) if releaseDate else None
+        self.release_date = (
+            ReleaseDate(self._subsonic, **releaseDate) if releaseDate else None
+        )
         self.is_compilation = isCompilation
-        self.discs = [Disc(**disc) for disc in discTitles] if discTitles else None
+        self.discs = (
+            [Disc(self._subsonic, **disc) for disc in discTitles]
+            if discTitles
+            else None
+        )
 
     def generate(self) -> "Album":
         """Return a new album with all the data updated from the API,
@@ -234,7 +253,7 @@ class Album:
         :rtype: Album
         """
 
-        new_album = self.__subsonic.browsing.get_album(self.id)
+        new_album = self._subsonic.browsing.get_album(self.id)
         new_album.get_album_info()
 
         return new_album
@@ -247,6 +266,6 @@ class Album:
         :rtype: AlbumInfo
         """
 
-        self.info = self.__subsonic.browsing.get_album_info(self.id)
+        self.info = self._subsonic.browsing.get_album_info(self.id)
 
         return self.info
