@@ -8,6 +8,7 @@ from .models.index import Index
 from .models.music_directory import MusicDirectory
 from .models.music_folder import MusicFolder
 from .models.song import Song
+from .models.video import Video, VideoInfo
 
 if TYPE_CHECKING:
     from .subsonic import Subsonic
@@ -175,6 +176,25 @@ class Browsing:
         response = self.api.json_request("getSong", {"id": id_})["song"]
 
         return Song(self.subsonic, **response)
+
+    def get_videos(self) -> list[Video]:
+        response = self.api.json_request("getVideos")["videos"]["video"]
+
+        return [Video(self.subsonic, **video) for video in response]
+
+    def get_video(self, video_id: str) -> Video | None:
+        videos = self.get_videos()
+
+        for video in videos:
+            if video.id == video_id:
+                return video
+
+        return None
+
+    def get_video_info(self, video_id: str) -> VideoInfo:
+        response = self.api.json_request("getVideoInfo", {"id": video_id})["videoInfo"]
+
+        return VideoInfo(self.subsonic, **response)
 
     def get_artist_info(
         self,

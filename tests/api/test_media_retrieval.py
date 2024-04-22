@@ -99,13 +99,13 @@ def test_hls_song(subsonic: Subsonic, song: dict[str, Any]) -> None:
 
 
 def test_hls_video(
-    subsonic: Subsonic, video: dict[str, Any], video_details: dict[str, Any]
+    subsonic: Subsonic, video: dict[str, Any], video_info: dict[str, Any]
 ) -> None:
     custom_bitrates = ["1000@480x360", "820@1920x1080"]
 
     stream_url = parse.urlparse(
         subsonic.media_retrieval.hls(
-            video["id"], custom_bitrates, video_details["audioTrack"][0]["id"]
+            video["id"], custom_bitrates, video_info["audioTrack"][0]["id"]
         )
     )
 
@@ -115,7 +115,7 @@ def test_hls_video(
     assert custom_bitrates[1] in parse.parse_qs(stream_url.query)["bitRate"]
     assert (
         parse.parse_qs(stream_url.query)["audioTrack"][0]
-        == video_details["audioTrack"][0]["id"]
+        == video_info["audioTrack"][0]["id"]
     )
 
 

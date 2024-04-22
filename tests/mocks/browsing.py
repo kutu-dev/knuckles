@@ -290,8 +290,16 @@ def video() -> dict[str, Any]:
     return {"id": "videoId", "suffix": "mpv"}
 
 
-@pytest.fixture()
-def video_details() -> dict[str, Any]:
+@pytest.fixture
+def mock_get_videos(
+    mock_generator: MockGenerator,
+    video: dict[str, Any],
+) -> list[Response]:
+    return mock_generator("getVideos", {}, {"videos": {"video": [video]}})
+
+
+@pytest.fixture
+def video_info() -> dict[str, Any]:
     return {
         "captions": {"id": "0", "name": "Planes 2.srt"},
         "audioTrack": [
@@ -300,6 +308,15 @@ def video_details() -> dict[str, Any]:
         "conversion": {"id": "37", "bitRate": "1000"},
         "id": "7058",
     }
+
+
+@pytest.fixture
+def mock_get_video_info(
+    mock_generator: MockGenerator, video: dict[str, Any], video_info: dict[str, Any]
+) -> list[Response]:
+    return mock_generator(
+        "getVideoInfo", {"id": video["id"]}, {"videoInfo": video_info}
+    )
 
 
 @pytest.fixture

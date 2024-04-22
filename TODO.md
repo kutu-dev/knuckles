@@ -2,8 +2,11 @@
 - [ ] Implement missing endpoints.
 - [ ] indexes mock data should use mock artist data.
 - [ ] Add the `subsonic.system.check_subsonic_extension()` method.
+- [ ] Add the `subsonic.system.check_compatibility()` method.
+- [ ] Make all modules private (leading underscore).
 - [ ] Improve error handling:
   - [ ] Check and rewrite all docstrings taking care about raising exceptions.
+- [ ] Decide if `raw_request()` and `json_request` should be public, if not `self.api` should be `self._api`,
 - [ ] Remove unnecessary packages installed in GitHub Actions `tests` job.
 - [ ] Spin up a `MkDocs` documentation.
   - [ ] Add the URL in the GitHub page.
@@ -43,8 +46,8 @@ The final objetive of Knuckles to be a fully compatible implementation wrapper a
 - [x] `getArtist`
 - [x] `getAlbum`
 - [x] `getSong`
-- [ ] `getVideos` **[VIDEO]**
-- [ ] `getVideoInfo` **[VIDEO]**
+- [x] `getVideos`
+- [x] `getVideoInfo`
 - [ ] `getArtistInfo` **[No ID3]**
 - [x] `getArtistInfo2`
 - [ ] `getAlbumInfo` **[No ID3]**
@@ -55,12 +58,12 @@ The final objetive of Knuckles to be a fully compatible implementation wrapper a
 
 #### Album/song lists
 - [ ] `getAlbumList` **[No ID3]**
-- [ ] `getAlbumList2` **[MISSING]**
-- [ ] `getRandomSongs` **[MISSING]**
-- [ ] `getSongsByGenre` **[MISSING]**
-- [ ] `getNowPlaying` **[MISSING]**
+- [x] `getAlbumList2`
+- [x] `getRandomSongs`
+- [x] `getSongsByGenre`
+- [x] `getNowPlaying`
 - [ ] `getStarred` **[No ID3]**
-- [ ] `getStarred2` **[MISSING]**
+- [x] `getStarred2`
 
 #### Searching
 - [x] `search` _(Will never be implemented, deprecated)_

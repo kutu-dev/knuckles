@@ -230,3 +230,91 @@ def mock_get_album_list_by_genre(
         },
         {"albumList2": {"album": [album]}},
     )
+
+
+@pytest.fixture
+def num_of_songs() -> int:
+    return 125
+
+
+@pytest.fixture
+def mock_get_random_songs(
+    mock_generator: MockGenerator,
+    num_of_songs: int,
+    genre: dict[str, Any],
+    from_year: int,
+    to_year: int,
+    music_folders: list[dict[str, Any]],
+    song: dict[str, Any],
+) -> list[Response]:
+    return mock_generator(
+        "getRandomSongs",
+        {
+            "genre": genre["value"],
+            "fromYear": from_year,
+            "toYear": to_year,
+            "musicFolderId": music_folders[0]["id"],
+        },
+        {"randomSongs": {"song": [song]}},
+    )
+
+
+@pytest.fixture
+def song_list_offset() -> int:
+    return 27
+
+
+@pytest.fixture
+def mock_get_songs_by_genre(
+    mock_generator: MockGenerator,
+    genre: dict[str, Any],
+    songs_count: int,
+    song_list_offset: int,
+    music_folders: list[dict[str, Any]],
+    song: dict[str, Any],
+) -> list[Response]:
+    return mock_generator(
+        "getSongsByGenre",
+        {
+            "genre": genre["value"],
+            "count": songs_count,
+            "offset": song_list_offset,
+            "musicFolderId": music_folders[0]["id"],
+        },
+        {"songsByGenre": {"song": [song]}},
+    )
+
+
+@pytest.fixture
+def now_playing_entry(username: str, song: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "username": username,
+        "minutesAgo": 79,
+        "playerId": 25565,
+        "playerName": "dorothy",
+        **song,
+    }
+
+
+@pytest.fixture
+def mock_get_now_playing(
+    mock_generator: MockGenerator, now_playing_entry: dict[str, Any]
+) -> list[Response]:
+    return mock_generator(
+        "getNowPlaying", {}, {"nowPlaying": {"entry": [now_playing_entry]}}
+    )
+
+
+@pytest.fixture
+def mock_get_starred(
+    mock_generator: MockGenerator,
+    music_folders: list[dict[str, Any]],
+    song: dict[str, Any],
+    album: dict[str, Any],
+    artist: dict[str, Any],
+) -> list[Response]:
+    return mock_generator(
+        "getStarred2",
+        {"musicFolderId": music_folders[0]["id"]},
+        {"starred2": {"song": [song], "album": [album], "artist": [artist]}},
+    )

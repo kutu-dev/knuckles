@@ -5,8 +5,10 @@ import knuckles.models.album as album_model_module
 from knuckles.models.genre import Genre, ItemGenre
 
 from .artist import Artist
+from .contributor import Contributor
 from .cover_art import CoverArt
 from .model import Model
+from .replay_gain import ReplayGain
 
 if TYPE_CHECKING:
     from ..subsonic import Subsonic
@@ -14,40 +16,6 @@ if TYPE_CHECKING:
 from datetime import datetime
 
 from dateutil import parser
-
-
-class Contributor(Model):
-    def __init__(
-        self,
-        subsonic: "Subsonic",
-        role: str,
-        artist: Artist,
-        subRole: str | None = None,
-    ) -> None:
-        super().__init__(subsonic)
-
-        self.role = role
-        self.subrole = subRole
-        self.artist = artist
-
-
-class ReplayGain(Model):
-    def __init__(
-        self,
-        subsonic: "Subsonic",
-        trackGain: str | None = None,
-        albumGain: str | None = None,
-        trackPeak: str | None = None,
-        albumPeak: str | None = None,
-        baseGain: str | None = None,
-    ) -> None:
-        super().__init__(subsonic)
-
-        self.track_gain = trackGain
-        self.album_gain = albumGain
-        self.track_peak = trackPeak
-        self.album_peak = albumPeak
-        self.base_gain = baseGain
 
 
 class Song(Model):
@@ -58,8 +26,9 @@ class Song(Model):
         subsonic: "Subsonic",
         id: str,
         title: str | None = None,
-        isDir: bool = False,
         parent: str | None = None,
+        isDir: bool | None = None,
+        isVideo: bool | None = None,
         album: str | None = None,
         artist: str | None = None,
         track: int | None = None,
@@ -74,7 +43,6 @@ class Song(Model):
         duration: int | None = None,
         bitRate: int | None = None,
         path: str | None = None,
-        isVideo: bool = False,
         userRating: int | None = None,
         averageRating: float | None = None,
         playCount: int | None = None,

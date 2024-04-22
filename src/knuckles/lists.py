@@ -2,6 +2,9 @@ from typing import TYPE_CHECKING, Any
 
 from .api import Api
 from .models.album import Album
+from .models.now_playing_entry import NowPlayingEntry
+from .models.song import Song
+from .models.starred_content import StarredContent
 
 if TYPE_CHECKING:
     from .subsonic import Subsonic
@@ -146,3 +149,55 @@ class Lists:
             music_folder_id,
             genre=genre_name,
         )
+
+    def get_random_songs(
+        self,
+        num_of_songs: int | None = None,
+        genre_name: str | None = None,
+        from_year: int | None = None,
+        to_year: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Song]:
+        response = self.api.json_request(
+            "getRandomSongs",
+            {
+                "size": num_of_songs,
+                "genre": genre_name,
+                "fromYear": from_year,
+                "toYear": to_year,
+                "musicFolderId": music_folder_id,
+            },
+        )["randomSongs"]["song"]
+
+        return [Song(subsonic=self.subsonic, **song) for song in response]
+
+    def get_songs_by_genre(
+        self,
+        genre_name: str,
+        num_of_songs: int | None = None,
+        song_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Song]:
+        response = self.api.json_request(
+            "getSongsByGenre",
+            {
+                "genre": genre_name,
+                "count": num_of_songs,
+                "offset": song_list_offset,
+                "musicFolderId": music_folder_id,
+            },
+        )["songsByGenre"]["song"]
+
+        return [Song(subsonic=self.subsonic, **song) for song in response]
+
+    def get_now_playing(self) -> list[NowPlayingEntry]:
+        response = self.api.json_request("getNowPlaying")["nowPlaying"]["entry"]
+
+        return [NowPlayingEntry(subsonic=self.subsonic, **entry) for entry in response]
+
+    def get_starred(self, music_folder_id: str | None = None) -> StarredContent:
+        response = self.api.json_request(
+            "getStarred2", {"musicFolderId": music_folder_id}
+        )["starred2"]
+
+        return StarredContent(subsonic=self.subsonic, **response)

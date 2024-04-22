@@ -269,6 +269,57 @@ def test_get_song(
 
 
 @responses.activate
+def test_get_videos(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_videos: list[Response],
+    video: dict[str, Any],
+) -> None:
+    add_responses(mock_get_videos)
+
+    response = subsonic.browsing.get_videos()
+
+    assert isinstance(response, list)
+    assert response[0].id == video["id"]
+
+
+@responses.activate
+def test_get_video(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_videos: list[Response],
+    video: dict[str, Any],
+) -> None:
+    add_responses(mock_get_videos)
+
+    response = subsonic.browsing.get_video(video["id"])
+
+    assert response.id == video["id"]
+
+
+@responses.activate
+def test_get_video_info(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_video_info: list[Response],
+    video: dict[str, Any],
+    video_info: dict[str, Any],
+) -> None:
+    add_responses(mock_get_video_info)
+
+    response = subsonic.browsing.get_video_info(video["id"])
+
+    assert response.id == video_info["id"]
+    assert response.conversion.id == video_info["conversion"]["id"]
+    assert response.captions.id == video_info["captions"]["id"]
+    assert isinstance(response.audio_tracks, dict)
+    assert (
+        response.audio_tracks[video_info["audioTrack"][0]["languageCode"]].id
+        == video_info["audioTrack"][0]["id"]
+    )
+
+
+@responses.activate
 def test_get_album_info(
     add_responses: AddResponses,
     subsonic: Subsonic,

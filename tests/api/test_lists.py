@@ -198,3 +198,87 @@ def test_get_album_list_by_genre(
     )
 
     assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_random_songs(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_random_songs: list[Response],
+    num_of_songs: int,
+    genre: dict[str, Any],
+    from_year: int,
+    to_year: int,
+    music_folders: list[dict[str, Any]],
+    song: dict[str, Any],
+) -> None:
+    add_responses(mock_get_random_songs)
+
+    response = subsonic.lists.get_random_songs(
+        num_of_songs, genre["value"], from_year, to_year, music_folders[0]["id"]
+    )
+
+    assert isinstance(response, list)
+    assert response[0].id == song["id"]
+
+
+@responses.activate
+def test_get_songs_by_genre(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_songs_by_genre: list[Response],
+    genre: dict[str, Any],
+    songs_count: int,
+    song_list_offset: int,
+    music_folders: list[dict[str, Any]],
+    song: dict[str, Any],
+) -> None:
+    add_responses(mock_get_songs_by_genre)
+
+    response = subsonic.lists.get_songs_by_genre(
+        genre["value"], songs_count, song_list_offset, music_folders[0]["id"]
+    )
+
+    assert isinstance(response, list)
+    assert response[0].id == song["id"]
+
+
+@responses.activate
+def test_get_now_playing(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_now_playing: list[Response],
+    now_playing_entry: dict[str, Any],
+) -> None:
+    add_responses(mock_get_now_playing)
+
+    response = subsonic.lists.get_now_playing()
+
+    assert isinstance(response, list)
+    assert response[0].user.username == now_playing_entry["username"]
+    assert response[0].minutes_ago == now_playing_entry["minutesAgo"]
+    assert response[0].player_id == now_playing_entry["playerId"]
+    assert response[0].player_name == now_playing_entry["playerName"]
+    assert response[0].song.id == now_playing_entry["id"]
+
+
+@responses.activate
+def test_get_starred(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_starred: list[Response],
+    music_folders: list[dict[str, Any]],
+    song: dict[str, Any],
+    album: dict[str, Any],
+    artist: dict[str, Any],
+) -> None:
+    add_responses(mock_get_starred)
+
+    response = subsonic.lists.get_starred(music_folders[0]["id"])
+
+    assert isinstance(response.songs, list)
+    assert response.songs[0].id == song["id"]
+    assert isinstance(response.albums, list)
+    assert response.albums[0].id == album["id"]
+    assert isinstance(response.artists, list)
+    assert response.artists[0].id == artist["id"]
