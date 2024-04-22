@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Any, Self
 
 # Avoid circular import error
+import knuckles.models.album as album_model_module
 from knuckles.models.genre import Genre, ItemGenre
 
-from .album import Album
 from .artist import Artist
 from .cover_art import CoverArt
 from .model import Model
@@ -24,7 +24,6 @@ class Contributor(Model):
         artist: Artist,
         subRole: str | None = None,
     ) -> None:
-
         super().__init__(subsonic)
 
         self.role = role
@@ -42,7 +41,6 @@ class ReplayGain(Model):
         albumPeak: str | None = None,
         baseGain: str | None = None,
     ) -> None:
-
         super().__init__(subsonic)
 
         self.track_gain = trackGain
@@ -205,7 +203,11 @@ class Song(Model):
         self.disc_number: int | None = discNumber
         self.type: str | None = type
         self.bookmark_position: int | None = bookmarkPosition
-        self.album = Album(self._subsonic, albumId, name=album) if albumId else None
+        self.album = (
+            album_model_module.Album(self._subsonic, albumId, name=album)
+            if albumId
+            else None
+        )
         self.artist = Artist(self._subsonic, artistId, artist) if artistId else None
         self.cover_art = CoverArt(self._subsonic, coverArt) if coverArt else None
         self.created = parser.parse(created) if created else None

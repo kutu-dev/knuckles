@@ -24,7 +24,6 @@ class Bookmark(Model):
         changed: str | None = None,
         comment: str | None = None,
     ) -> None:
-
         super().__init__(subsonic)
 
         self.song = Song(self._subsonic, **entry)

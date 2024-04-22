@@ -24,6 +24,51 @@ def test_get_music_folders(
 
 
 @responses.activate
+def test_get_indexes(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_indexes: list[Response],
+    music_folders: list[dict[str, Any]],
+    modified_date: int,
+    indexes: dict[str, Any],
+) -> None:
+    add_responses(mock_get_indexes)
+
+    response = subsonic.browsing.get_indexes(music_folders[0]["id"], modified_date)
+
+    print(response.index)
+
+    assert response.ignored_articles == indexes["ignoredArticles"]
+    assert isinstance(response.index, dict)
+    assert (
+        response.index[indexes["index"][0]["name"]][0].name
+        == indexes["index"][0]["artist"][0]["name"]
+    )
+
+
+@responses.activate
+def test_get_music_directory(
+    add_responses: AddResponses,
+    mock_get_music_directory: list[Response],
+    subsonic: Subsonic,
+    music_directory: dict[str, Any],
+) -> None:
+    add_responses(mock_get_music_directory)
+
+    response = subsonic.browsing.get_music_directory(music_directory["id"])
+
+    assert response.id == music_directory["id"]
+    assert response.parent == music_directory["parent"]
+    assert response.name == music_directory["name"]
+    assert response.starred == parser.parse(music_directory["starred"])
+    assert response.user_rating == music_directory["userRating"]
+    assert response.average_rating == music_directory["averageRating"]
+    assert response.play_count == music_directory["playCount"]
+    assert isinstance(response.songs, list)
+    assert response.songs[0].id == music_directory["child"][0]["id"]
+
+
+@responses.activate
 def test_get_music_folder(
     add_responses: AddResponses,
     subsonic: Subsonic,
@@ -105,8 +150,8 @@ def test_get_artist(
     assert response.average_rating == artist["averageRating"]
     assert response.average_rating == artist["averageRating"]
     assert response.album_count == artist["albumCount"]
-    assert type(response.albums) is list
-    assert type(response.albums[0].songs) is list
+    assert isinstance(response.albums, list)
+    assert isinstance(response.albums[0].songs, list)
     assert response.albums[0].songs[0].title == song["title"]
     assert response.cover_art.id == artist["coverArt"]
     assert response.music_brainz_id == artist["musicBrainzId"]
@@ -141,16 +186,16 @@ def test_get_album(
     assert response.artist.name == album["artist"]
     assert response.year == album["year"]
     assert response.genre == album["genre"]
-    assert type(response.songs) is list
+    assert isinstance(response.songs, list)
     assert response.songs[0].id == song["id"]
     assert response.played == parser.parse(album["played"])
     assert response.user_rating == album["userRating"]
-    assert type(response.record_labels) is list
+    assert isinstance(response.record_labels, list)
     assert response.record_labels[0].name == album["recordLabels"][0]["name"]
     assert response.music_brainz_id == album["musicBrainzId"]
-    assert type(response.genres) is list
+    assert isinstance(response.genres, list)
     assert response.genres[0].name == album["genres"][0]["name"]
-    assert type(response.artists) is list
+    assert isinstance(response.artists, list)
     assert response.artists[0].id == album["artists"][0]["id"]
     assert response.display_artist == album["displayArtist"]
     assert response.release_types == album["releaseTypes"]
@@ -159,7 +204,7 @@ def test_get_album(
     assert response.original_release_date.year == album["originalReleaseDate"]["year"]
     assert response.release_date.year == album["releaseDate"]["year"]
     assert response.is_compilation == album["isCompilation"]
-    assert type(response.discs) is list
+    assert isinstance(response.discs, list)
     assert response.discs[0].disc_number == album["discTitles"][0]["disc"]
 
 
@@ -184,7 +229,7 @@ def test_get_song(
     assert response.track == song["track"]
     assert response.year == song["year"]
     assert response.genre.value == song["genre"]
-    assert type(response.cover_art) is CoverArt
+    assert isinstance(response.cover_art, CoverArt)
     assert response.cover_art.id == song["coverArt"]
     assert response.size == song["size"]
     assert response.content_type == song["contentType"]
@@ -193,7 +238,7 @@ def test_get_song(
     assert response.transcoded_suffix is None
     assert response.duration == song["duration"]
     assert response.bit_rate == song["bitRate"]
-    assert type(response.path) is not None
+    assert isinstance(response.path, str)
     assert response.user_rating == song["userRating"]
     assert response.average_rating == song["averageRating"]
     assert response.play_count == song["playCount"]
@@ -207,18 +252,18 @@ def test_get_song(
     assert response.comment == song["comment"]
     assert response.sort_name == song["sortName"]
     assert response.music_brainz_id == song["musicBrainzId"]
-    assert type(response.genres) is list
+    assert isinstance(response.genres, list)
     assert response.genres[0].name == song["genres"][0]["name"]
-    assert type(response.artists) is list
+    assert isinstance(response.artists, list)
     assert response.artists[0].id == song["artists"][0]["id"]
     assert response.display_artist == song["displayArtist"]
-    assert type(response.album_artists) is list
+    assert isinstance(response.album_artists, list)
     assert response.album_artists[0].name == song["albumArtists"][0]["name"]
     assert response.display_album_artist == song["displayAlbumArtist"]
-    assert type(response.contributors) is list
+    assert isinstance(response.contributors, list)
     assert response.contributors[0].role == song["contributors"][0]["role"]
     assert response.display_composer == song["displayComposer"]
-    assert type(response.moods) is list
+    assert isinstance(response.moods, list)
     assert response.moods[0] == song["moods"][0]
     assert response.replay_gain.track_gain == song["replayGain"]["trackGain"]
 
@@ -268,3 +313,34 @@ def test_get_artist_info(
     assert response.similar_artists is not None
     assert len(response.similar_artists) == len(artist_info["similarArtist"])
     assert response.similar_artists[0].name == artist["name"]
+
+
+@responses.activate
+def test_get_similar_songs(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_similar_songs: list[Response],
+    song: dict[str, Any],
+    songs_count: int,
+) -> None:
+    add_responses(mock_get_similar_songs)
+
+    response = subsonic.browsing.get_similar_songs(song["id"], songs_count)
+
+    assert response[0].id == song["id"]
+
+
+@responses.activate
+def test_get_top_songs(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_top_songs: list[Response],
+    song: dict[str, Any],
+    artist: dict[str, Any],
+    songs_count: int,
+) -> None:
+    add_responses(mock_get_top_songs)
+
+    response = subsonic.browsing.get_top_songs(artist["name"], songs_count)
+
+    assert response[0].id == song["id"]

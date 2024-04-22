@@ -15,7 +15,6 @@ def test_ping(
     subsonic_response: dict[str, Any],
     mock_ping: list[Response],
 ) -> None:
-
     add_responses(mock_ping)
     response = subsonic.system.ping()
 
@@ -34,7 +33,6 @@ def test_get_license(
     license: dict[str, Any],
     mock_get_license: list[Response],
 ) -> None:
-
     add_responses(mock_get_license)
     response = subsonic.system.get_license()
 
@@ -51,7 +49,6 @@ def test_auth_without_token(
     subsonic: Subsonic,
     mock_auth_without_token: list[Response],
 ) -> None:
-
     add_responses(mock_auth_without_token)
     subsonic.api.use_token = False
     assert subsonic.system.ping().status == "ok"
@@ -65,7 +62,6 @@ def test_get_open_subsonic_extensions(
     open_subsonic_extension_name: str,
     open_subsonic_extension_versions: list[int],
 ) -> None:
-
     add_responses(mock_get_open_subsonic_extensions)
     response = subsonic.system.get_open_subsonic_extensions()
 

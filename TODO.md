@@ -1,8 +1,10 @@
 # TODO
 - [ ] Implement missing endpoints.
+- [ ] indexes mock data should use mock artist data.
 - [ ] Add the `subsonic.system.check_subsonic_extension()` method.
 - [ ] Improve error handling:
   - [ ] Check and rewrite all docstrings taking care about raising exceptions.
+- [ ] Remove unnecessary packages installed in GitHub Actions `tests` job.
 - [ ] Spin up a `MkDocs` documentation.
   - [ ] Add the URL in the GitHub page.
 
@@ -33,36 +35,36 @@ The final objetive of Knuckles to be a fully compatible implementation wrapper a
 - [x] `getOpenSubsonicExtensions`
 
 #### Browsing
-- [x] `getMusicFolders` REMOVE?
-- [ ] `getIndexes` **[MISSING]**
-- [ ] `getMusicDirectory` **[MISSING]**
+- [x] `getMusicFolders`
+- [x] `getIndexes`
+- [x] `getMusicDirectory`
 - [x] `getGenres`
 - [x] `getArtists`
 - [x] `getArtist`
 - [x] `getAlbum`
 - [x] `getSong`
-- [ ] `getVideos` **[MISSING]**
-- [ ] `getVideoInfo` **[MISSING]**
-- [ ] `getArtistInfo` **[MISSING]**
+- [ ] `getVideos` **[VIDEO]**
+- [ ] `getVideoInfo` **[VIDEO]**
+- [ ] `getArtistInfo` **[No ID3]**
 - [x] `getArtistInfo2`
-- [ ] `getAlbumInfo` **[MISSING]**
+- [ ] `getAlbumInfo` **[No ID3]**
 - [x] `getAlbumInfo2`
-- [ ] `getSimilarSongs` **[MISSING]**
-- [ ] `getSimilarSongs2` **[MISSING]**
-- [ ] `getTopSongs` **[MISSING]**
+- [ ] `getSimilarSongs` **[No ID3]**
+- [x] `getSimilarSongs2`
+- [x] `getTopSongs`
 
 #### Album/song lists
-- [ ] `getAlbumList` **[MISSING]**
+- [ ] `getAlbumList` **[No ID3]**
 - [ ] `getAlbumList2` **[MISSING]**
 - [ ] `getRandomSongs` **[MISSING]**
 - [ ] `getSongsByGenre` **[MISSING]**
 - [ ] `getNowPlaying` **[MISSING]**
-- [ ] `getStarred` **[MISSING]**
+- [ ] `getStarred` **[No ID3]**
 - [ ] `getStarred2` **[MISSING]**
 
 #### Searching
-- [x] `search` (Will never be implemented, deprecated)
-- [ ] `search2` **[MISSING]**
+- [x] `search` _(Will never be implemented, deprecated)_
+- [ ] `search2` **[No ID3]**
 - [x] `search3`
 
 #### Playlists
@@ -73,12 +75,12 @@ The final objetive of Knuckles to be a fully compatible implementation wrapper a
 - [x] `deletePlaylist`
 
 #### Media retrieval
-- [x] `stream` *(Only URL handling)*
+- [x] `stream` _(Only URL handling)_
 - [x] `download`
-- [x] `hls` *(Only URL handling)*
+- [x] `hls` _(Only URL handling)_
 - [x] `getCaptions`
 - [x] `getCoverArt`
-- [ ] `getLyrics` **[MISSING]**
+- [x] `getLyrics`
 - [x] `getAvatar`
 
 #### Media annotation

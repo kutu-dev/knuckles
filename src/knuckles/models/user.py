@@ -33,7 +33,6 @@ class User(Model):
         music_folder_id: list[str] | None = None,
         max_bit_rate: int | None = None,
     ) -> None:
-
         super().__init__(subsonic)
 
         self.username = username

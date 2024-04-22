@@ -13,10 +13,91 @@ def music_folders() -> list[dict[str, Any]]:
 
 @pytest.fixture
 def mock_get_music_folders(
-    mock_generator: MockGenerator, music_folders: dict[str, Any]
+    mock_generator: MockGenerator, music_folders: list[dict[str, Any]]
 ) -> list[Response]:
     return mock_generator(
         "getMusicFolders", {}, {"musicFolders": {"musicFolder": music_folders}}
+    )
+
+
+@pytest.fixture
+def modified_date() -> int:
+    return 117
+
+
+@pytest.fixture
+def indexes() -> dict[str, Any]:
+    return {
+        "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
+        "index": [
+            {
+                "name": "C",
+                "artist": [
+                    {
+                        "id": "100000016",
+                        "name": "CARNÚN",
+                        "coverArt": "ar-100000016",
+                        "albumCount": 1,
+                    },
+                    {
+                        "id": "100000027",
+                        "name": "Chi.Otic",
+                        "coverArt": "ar-100000027",
+                        "albumCount": 0,
+                    },
+                ],
+            },
+            {
+                "name": "I",
+                "artist": [
+                    {
+                        "id": "100000013",
+                        "name": "IOK-1",
+                        "coverArt": "ar-100000013",
+                        "albumCount": 1,
+                    }
+                ],
+            },
+        ],
+    }
+
+
+@pytest.fixture
+def mock_get_indexes(
+    mock_generator: MockGenerator,
+    music_folders: list[dict[str, Any]],
+    modified_date: int,
+    indexes: dict[str, Any],
+) -> list[Response]:
+    return mock_generator(
+        "getIndexes",
+        {"musicFolderId": music_folders[0]["id"], "ifModifiedSince": modified_date},
+        {"indexes": indexes},
+    )
+
+
+@pytest.fixture
+def music_directory(song: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": "1",
+        "parent": "0",
+        "name": "music",
+        "starred": "2023-03-16T03:18:41+00:00",
+        "userRating": 1,
+        "averageRating": 1.6,
+        "playCount": 360,
+        "child": [song],
+    }
+
+
+@pytest.fixture
+def mock_get_music_directory(
+    mock_generator: MockGenerator, music_directory: dict[str, Any]
+) -> list[Response]:
+    return mock_generator(
+        "getMusicDirectory",
+        {"id": music_directory["id"]},
+        {"directory": music_directory},
     )
 
 
@@ -280,4 +361,34 @@ def mock_get_artist_info_with_all_optional_params(
             "includeNotPresent": False,
         },
         {"artistInfo2": artist_info},
+    )
+
+
+@pytest.fixture
+def songs_count() -> int:
+    return 125
+
+
+@pytest.fixture
+def mock_get_similar_songs(
+    mock_generator: MockGenerator, song: dict[str, Any], songs_count: int
+) -> list[Response]:
+    return mock_generator(
+        "getSimilarSongs2",
+        {"id": song["id"], "count": songs_count},
+        {"similarSongs2": {"song": [song]}},
+    )
+
+
+@pytest.fixture
+def mock_get_top_songs(
+    mock_generator: MockGenerator,
+    artist: dict[str, Any],
+    songs_count: int,
+    song: dict[str, Any],
+) -> list[Response]:
+    return mock_generator(
+        "getTopSongs",
+        {"artist": artist["name"], "count": songs_count},
+        {"topSongs": {"song": [song]}},
     )

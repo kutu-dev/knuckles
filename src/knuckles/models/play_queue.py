@@ -23,7 +23,6 @@ class PlayQueue(Model):
         changed: str | None = None,
         changedBy: str | None = None,
     ) -> None:
-
         super().__init__(subsonic)
 
         self.current = Song(self._subsonic, current) if current else None

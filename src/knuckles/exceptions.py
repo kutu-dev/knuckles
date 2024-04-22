@@ -15,7 +15,7 @@ class ResourceNotFound(Exception):
         message: str = (
             "Unable to generate the model as it does not exist in the server"
         ),
-        *args: str
+        *args: str,
     ) -> None:
         super().__init__(message, *args)
 

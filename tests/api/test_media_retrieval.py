@@ -260,6 +260,22 @@ def test_get_cover_art_without_a_given_filename(
 
 
 @responses.activate
+def test_get_lyrics(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_lyrics: list[Response],
+    lyrics: dict[str, Any],
+) -> None:
+    add_responses(mock_get_lyrics)
+
+    response = subsonic.media_retrieval.get_lyrics(lyrics["artist"], lyrics["title"])
+
+    assert response.artist_name == lyrics["artist"]
+    assert response.song_title == lyrics["title"]
+    assert response.lyrics == lyrics["value"]
+
+
+@responses.activate
 def test_get_avatar_with_a_given_filename(
     add_responses: AddResponses,
     subsonic: Subsonic,

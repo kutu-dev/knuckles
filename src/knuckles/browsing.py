@@ -4,6 +4,8 @@ from .api import Api
 from .models.album import Album, AlbumInfo
 from .models.artist import Artist, ArtistInfo
 from .models.genre import Genre
+from .models.index import Index
+from .models.music_directory import MusicDirectory
 from .models.music_folder import MusicFolder
 from .models.song import Song
 
@@ -51,6 +53,21 @@ class Browsing:
                 return music_folder
 
         return None
+
+    def get_indexes(self, music_folder_id: str, modified_since: int) -> Index:
+        response = self.api.json_request(
+            "getIndexes",
+            {"musicFolderId": music_folder_id, "ifModifiedSince": modified_since},
+        )["indexes"]
+
+        return Index(subsonic=self.subsonic, **response)
+
+    def get_music_directory(self, music_directory_id: str) -> MusicDirectory:
+        response = self.api.json_request(
+            "getMusicDirectory", {"id": music_directory_id}
+        )["directory"]
+
+        return MusicDirectory(subsonic=self.subsonic, **response)
 
     def get_genres(self) -> list[Genre]:
         """Calls the "getGenres" endpoint of the API.
@@ -183,3 +200,17 @@ class Browsing:
         )["artistInfo2"]
 
         return ArtistInfo(self.subsonic, id_, **response)
+
+    def get_similar_songs(self, song_id: str, count: int | None = None) -> list[Song]:
+        response = self.api.json_request(
+            "getSimilarSongs2", {"id": song_id, "count": count}
+        )["similarSongs2"]["song"]
+
+        return [Song(subsonic=self.subsonic, **song) for song in response]
+
+    def get_top_songs(self, artist_name: str, max_num_of_songs: int) -> list[Song]:
+        response = self.api.json_request(
+            "getTopSongs", {"artist": artist_name, "count": max_num_of_songs}
+        )["topSongs"]["song"]
+
+        return [Song(subsonic=self.subsonic, **song) for song in response]

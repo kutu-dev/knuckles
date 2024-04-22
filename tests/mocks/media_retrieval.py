@@ -19,8 +19,7 @@ class MockDownload(Protocol):
         extra_params: dict[str, Any],
         content_type: str,
         headers: dict[str, str] | None = None,
-    ) -> list[Response]:
-        ...
+    ) -> list[Response]: ...
 
 
 @pytest.fixture
@@ -163,6 +162,26 @@ def mock_cover_art(
         "getCoverArt",
         {"id": song["coverArt"], "size": cover_art_size},
         cover_art_metadata.content_type,
+    )
+
+
+@pytest.fixture
+def lyrics() -> dict[str, Any]:
+    return {
+        "artist": "Miracle Musical",
+        "title": "Introduction to the Snow",
+        "value": "Alone at the edge of a universe humming a tune",
+    }
+
+
+@pytest.fixture
+def mock_get_lyrics(
+    mock_generator: MockGenerator, lyrics: dict[str, Any]
+) -> list[Response]:
+    return mock_generator(
+        "getLyrics",
+        {"artist": lyrics["artist"], "title": lyrics["title"]},
+        {"lyrics": lyrics},
     )
 
 

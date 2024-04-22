@@ -4,6 +4,7 @@ from .browsing import Browsing
 from .chat import Chat
 from .internet_radio import InternetRadio
 from .jukebox import JukeboxControl
+from .lists import Lists
 from .media_annotation import MediaAnnotation
 from .media_library_scanning import MediaLibraryScanning
 from .media_retrieval import MediaRetrieval
@@ -51,10 +52,10 @@ class Subsonic:
         )
         self.system = System(self.api, self)
         self.browsing = Browsing(self.api, self)
-        self.lists = None  # !!
+        self.lists = Lists(self.api, self)
         self.searching = Searching(self.api, self)
         self.playlists = Playlists(self.api, self)
-        self.media_retrieval = MediaRetrieval(self.api)
+        self.media_retrieval = MediaRetrieval(self.api, self)
         self.media_annotation = MediaAnnotation(self.api, self)
         self.sharing = Sharing(self.api, self)
         self.podcast = Podcast(self.api, self)

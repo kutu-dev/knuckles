@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 class ItemGenre(Model):
     def __init__(self, subsonic: "Subsonic", name: str) -> None:
-
         super().__init__(subsonic)
 
         self.name = name

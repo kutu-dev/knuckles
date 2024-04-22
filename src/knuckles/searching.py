@@ -1,18 +1,13 @@
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING
 
 from .api import Api
 from .models.album import Album
 from .models.artist import Artist
+from .models.search_result import SearchResult
 from .models.song import Song
 
 if TYPE_CHECKING:
     from .subsonic import Subsonic
-
-
-class SearchResult(NamedTuple):
-    songs: list[Song] | None = None
-    albums: list[Album] | None = None
-    artists: list[Artist] | None = None
 
 
 class Searching:
@@ -90,7 +85,8 @@ class Searching:
         )
 
         return SearchResult(
-            songs=search_result_songs,
-            albums=search_result_albums,
-            artists=search_result_artists,
+            self.subsonic,
+            search_result_songs,
+            search_result_albums,
+            search_result_artists,
         )

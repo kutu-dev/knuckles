@@ -24,6 +24,7 @@ pytest_plugins = [
     "tests.mocks.bookmarks",
     "tests.mocks.searching",
     "tests.mocks.media_retrieval",
+    "tests.mocks.lists",
 ]
 
 
@@ -95,12 +96,11 @@ class MockGenerator(Protocol):
         headers: dict[str, str] | None = None,
         content_type: str = "",
         body: Any = None,
-    ) -> list[Response]:
-        ...
+    ) -> list[Response]: ...
 
 
 def match_json(
-    mocked_data: dict[str, Any]
+    mocked_data: dict[str, Any],
 ) -> Callable[[requests.PreparedRequest], tuple[bool, str]]:
     def inner(
         response: requests.PreparedRequest,
@@ -108,7 +108,7 @@ def match_json(
         print(response.body)
         print(mocked_data)
 
-        if type(response.body) is not str:
+        if not isinstance(response.body, str):
             return (
                 False,
                 "The request body wasn't a string",
@@ -125,8 +125,8 @@ def match_json(
             # this happens for example when using
             # the parameter "songId" in the endpoint "createPlaylist".
             if (
-                type(value) is list
-                and type(mocked_data[key]) is str
+                isinstance(value, list)
+                and isinstance(mocked_data[key], str)
                 and (
                     mocked_data[key] in value
                     # The values inside the list "value" can sometimes be integers,
@@ -145,7 +145,7 @@ def match_json(
                     + f"not equal to '{mocked_data[key]}'",
                 )
 
-        return (True, "")
+        return True, ""
 
     return inner
 
@@ -199,8 +199,7 @@ def mock_generator(
 
 
 class AddResponses(Protocol):
-    def __call__(self, responses_list: list[Response]) -> None:
-        ...
+    def __call__(self, responses_list: list[Response]) -> None: ...
 
 
 @pytest.fixture

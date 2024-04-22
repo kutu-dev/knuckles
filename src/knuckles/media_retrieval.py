@@ -1,12 +1,16 @@
 from enum import Enum
 from mimetypes import guess_extension
 from pathlib import Path
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any, Callable
 
 from requests import Response
 from requests.models import PreparedRequest
 
+if TYPE_CHECKING:
+    from .subsonic import Subsonic
+
 from .api import Api
+from .models.lyrics import Lyrics
 
 
 class SubtitlesFileFormat(Enum):
@@ -20,8 +24,9 @@ class MediaRetrieval:
     <https://opensubsonic.netlify.app/categories/media-retrieval/>
     """
 
-    def __init__(self, api: Api) -> None:
+    def __init__(self, api: Api, subsonic: "Subsonic") -> None:
         self.api = api
+        self.subsonic = subsonic
 
     def _generate_url(self, endpoint: str, params: dict[str, Any]) -> str:
         """Using the PreparedRequest object of the Requests request package generates a
@@ -262,8 +267,14 @@ class MediaRetrieval:
             response, file_or_directory_path, determinate_filename
         )
 
-    def get_lyrics(self) -> None:
-        ...
+    def get_lyrics(
+        self, artist_name: str | None = None, song_title: str | None = None
+    ) -> Lyrics:
+        response = self.api.json_request(
+            "getLyrics", {"artist": artist_name, "title": song_title}
+        )["lyrics"]
+
+        return Lyrics(subsonic=self.subsonic, **response)
 
     def get_avatar(self, username: str, file_or_directory_path: Path) -> Path:
         """Calls the "getAvatar" endpoint of the API.
