@@ -23,5 +23,5 @@ jobs:
         run: |
           python -m venv create venv
           source venv/bin/activate
-          python -m pip install -r requirements-tests.txt
+          python -m pip install . -r requirements-tests.txt
           python -m pytest
