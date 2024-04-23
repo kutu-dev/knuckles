@@ -14,11 +14,20 @@ dev = [
     "mypy>=1.4.1",
     "types-requests>=2.31.0.1",
     "types-python-dateutil>=2.8.19.14",
-    "pre-commit>=3.7.0"
+    "pre-commit>=3.7.0",
+    "pip-tools>=7.4.1"
 ]
 tests = [
     "pytest>=7.4.0",
     "responses>=0.23.1",
+]
+docs = [
+    "mkdocs==1.5.3",
+    "mkdocs-material==9.5.18",
+    "mkdocstrings[python]==0.24.3",
+    "mkdocs-gen-files==0.5.0",
+    "pymdown-extensions==10.8.0",
+    "mkdocs-literate-nav==0.6.1"
 ]
 
 [build-system]

@@ -2,6 +2,7 @@
 - [ ] Check and rewrite all docstrings taking care about raising exceptions.
 - [ ] Spin up a `MkDocs` documentation.
   - [ ] Add the URL in the GitHub page.
+- [ ] Decide if use `Subsonic/OpenSubsonic`, `(Open)Subsonic` or `OpenSubsonic`.
 
 ## Implementation status
 The final objetive of Knuckles to be a fully compatible implementation wrapper around the [OpenSubsonic API Spec](https://opensubsonic.netlify.app/), a superset of the [Subsonic API Spec](https://subsonic.org/pages/api.jsp) that tries to improve and extend the API without breaking changes.

@@ -17,7 +17,7 @@ from ._user_management import UserManagement
 
 
 class Subsonic:
-    """The main class of the package, is used to interact with a Subsonic API."""
+    """Container of all the methods to interact with the OpenSubsonic API"""
 
     def __init__(
         self,
@@ -29,22 +29,16 @@ class Subsonic:
         use_token: bool = True,
         request_method: RequestMethod = RequestMethod.POST,
     ) -> None:
-        """The main class of the package, is used to interact with a Subsonic API.
+        """FF
 
-        :param url: The url of the Subsonic server.
-        :type url: str
-        :param user: The user to authenticate with
-        :type user: str
-        :param password: The password to authenticate with
-        :type password: str
-        :param client: A unique string identifying the client application.
-        :type client: str
-        :param use_https: If the requests should be sent using HTTPS,
-            defaults to True
-        :type use_https: bool, optional
-        :param use_token: If the connection should send to the server the clean password
-            or encode it in a token with a random salt, defaults to True
-        :type use_token: bool, optional
+        Args:
+            url: The URL of the Subsonic server to connect to.
+            user: The name of the user
+            password: asd
+            client: sad
+            use_https: d a
+            use_token: as
+            request_method: as
         """
 
         self.api = Api(
