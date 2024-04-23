@@ -150,6 +150,19 @@ class Browsing:
 
         return Album(self.subsonic, **response)
 
+    def get_album_info_non_id3(self, id_: str) -> AlbumInfo:
+        """Calls to the "getAlbumInfo2" endpoint of the API.
+
+        :param id_: The ID of the album to get its info.
+        :type id_: str
+        :return: An object with all the extra info given by the server about the album.
+        :rtype: AlbumInfo
+        """
+
+        response = self.api.json_request("getAlbumInfo", {"id": id_})["albumInfo"]
+
+        return AlbumInfo(self.subsonic, id_, **response)
+
     def get_album_info(self, id_: str) -> AlbumInfo:
         """Calls to the "getAlbumInfo2" endpoint of the API.
 
@@ -194,7 +207,32 @@ class Browsing:
     def get_video_info(self, video_id: str) -> VideoInfo:
         response = self.api.json_request("getVideoInfo", {"id": video_id})["videoInfo"]
 
-        return VideoInfo(self.subsonic, **response)
+        return VideoInfo(self.subsonic, video_id=video_id, **response)
+
+    def get_artist_info_non_id3(
+        self,
+        artist_id: str,
+        count: int | None = None,
+        include_not_present: bool | None = None,
+    ) -> ArtistInfo:
+        """Calls the "getArtistInfo" endpoint of the API.
+
+        :param artist_id: The id of the artist to get its info
+        :type artist_id:
+        :param count:
+        :type count:
+        :param include_not_present:
+        :type include_not_present:
+        :return:
+        :rtype:
+        """
+
+        response = self.api.json_request(
+            "getArtistInfo",
+            {"id": artist_id, "count": count, "includeNotPresent": include_not_present},
+        )["artistInfo"]
+
+        return ArtistInfo(self.subsonic, artist_id, **response)
 
     def get_artist_info(
         self,
@@ -220,6 +258,15 @@ class Browsing:
         )["artistInfo2"]
 
         return ArtistInfo(self.subsonic, id_, **response)
+
+    def get_similar_songs_non_id3(
+        self, song_id: str, count: int | None = None
+    ) -> list[Song]:
+        response = self.api.json_request(
+            "getSimilarSongs", {"id": song_id, "count": count}
+        )["similarSongs"]["song"]
+
+        return [Song(subsonic=self.subsonic, **song) for song in response]
 
     def get_similar_songs(self, song_id: str, count: int | None = None) -> list[Song]:
         response = self.api.json_request(

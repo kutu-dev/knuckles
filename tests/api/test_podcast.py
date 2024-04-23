@@ -21,7 +21,7 @@ def test_get_podcasts_default(
     response = subsonic.podcast.get_podcasts()
 
     assert response[0].id == channel["id"]
-    assert type(response[0].episodes) is list
+    assert isinstance(response[0].episodes, list)
     assert response[0].episodes[0].id == episode["id"]
 
 
@@ -38,7 +38,7 @@ def test_get_podcasts_with_episodes(
     response = subsonic.podcast.get_podcasts(True)
 
     assert response[0].id == channel["id"]
-    assert type(response[0].episodes) is list
+    assert isinstance(response[0].episodes, list)
     assert response[0].episodes[0].id == episode["id"]
 
 
@@ -91,7 +91,7 @@ def test_get_podcast_with_episodes(
     response = subsonic.podcast.get_podcast(channel["id"], True)
 
     assert response.id == channel["id"]
-    assert type(response.episodes) is list
+    assert isinstance(response.episodes, list)
     assert response.episodes[0].id == episode["id"]
     assert response.episodes[0].stream_id == episode["streamId"]
     assert response.episodes[0].channel.id == episode["channelId"]
@@ -165,7 +165,7 @@ def test_refresh_podcasts(
 
     response = subsonic.podcast.refresh_podcasts()
 
-    assert type(response) is Subsonic
+    assert isinstance(response, Subsonic)
 
 
 @responses.activate
@@ -179,7 +179,7 @@ def test_create_podcast_channel(
 
     response = subsonic.podcast.create_podcast_channel(channel["url"])
 
-    assert type(response) is Subsonic
+    assert isinstance(response, Subsonic)
 
 
 @responses.activate
@@ -193,7 +193,7 @@ def test_delete_podcast_channel(
 
     response = subsonic.podcast.delete_podcast_channel(channel["id"])
 
-    assert type(response) is Subsonic
+    assert isinstance(response, Subsonic)
 
 
 @responses.activate
@@ -207,7 +207,7 @@ def test_delete_podcast_episode(
 
     response = subsonic.podcast.delete_podcast_episode(episode["id"])
 
-    assert type(response) is Subsonic
+    assert isinstance(response, Subsonic)
 
 
 @responses.activate
@@ -221,4 +221,4 @@ def test_download_podcast_episode(
 
     response = subsonic.podcast.download_podcast_episode(episode["id"])
 
-    assert type(response) is Subsonic
+    assert isinstance(response, Subsonic)

@@ -8,6 +8,199 @@ from tests.conftest import AddResponses
 
 
 @responses.activate
+def test_get_album_list_random_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_random_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_random_non_id3)
+
+    response = subsonic.lists.get_album_list_random_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_newest_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_newest_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_newest_non_id3)
+
+    response = subsonic.lists.get_album_list_newest_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_highest_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_highest_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_highest_non_id3)
+
+    response = subsonic.lists.get_album_list_highest_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_frequent_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_frequent_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_frequent_non_id3)
+
+    response = subsonic.lists.get_album_list_frequent_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_recent_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_recent_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_recent_non_id3)
+
+    response = subsonic.lists.get_album_list_recent_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_alphabetical_by_name_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_alphabetical_by_name_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_alphabetical_by_name_non_id3)
+
+    response = subsonic.lists.get_album_list_alphabetical_by_name_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_alphabetical_by_artist_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_alphabetical_by_artist_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_alphabetical_by_artist_non_id3)
+
+    response = subsonic.lists.get_album_list_alphabetical_by_artist_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_starred_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_starred_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_starred_non_id3)
+
+    response = subsonic.lists.get_album_list_starred_non_id3(
+        num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_by_year_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_by_year_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    from_year: int,
+    to_year: int,
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_by_year_non_id3)
+
+    response = subsonic.lists.get_album_list_by_year_non_id3(
+        from_year, to_year, num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
+def test_get_album_list_by_genre_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_list_by_genre_non_id3: list[Response],
+    album: dict[str, Any],
+    num_of_album: int,
+    genre: dict[str, Any],
+    album_list_offset: int,
+    music_folders: list[dict[str, Any]],
+) -> None:
+    add_responses(mock_get_album_list_by_genre_non_id3)
+
+    response = subsonic.lists.get_album_list_by_genre_non_id3(
+        genre["value"], num_of_album, album_list_offset, music_folders[0]["id"]
+    )
+
+    assert response[0].id == album["id"]
+
+
+@responses.activate
 def test_get_album_list_random(
     add_responses: AddResponses,
     subsonic: Subsonic,
@@ -260,6 +453,28 @@ def test_get_now_playing(
     assert response[0].player_id == now_playing_entry["playerId"]
     assert response[0].player_name == now_playing_entry["playerName"]
     assert response[0].song.id == now_playing_entry["id"]
+
+
+@responses.activate
+def test_get_starred_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_starred_non_id3: list[Response],
+    music_folders: list[dict[str, Any]],
+    song: dict[str, Any],
+    album: dict[str, Any],
+    artist: dict[str, Any],
+) -> None:
+    add_responses(mock_get_starred_non_id3)
+
+    response = subsonic.lists.get_starred_non_id3(music_folders[0]["id"])
+
+    assert isinstance(response.songs, list)
+    assert response.songs[0].id == song["id"]
+    assert isinstance(response.albums, list)
+    assert response.albums[0].id == album["id"]
+    assert isinstance(response.artists, list)
+    assert response.artists[0].id == artist["id"]
 
 
 @responses.activate

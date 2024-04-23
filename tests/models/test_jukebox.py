@@ -25,7 +25,7 @@ def test_jukebox_generate(
 
     jukebox = response.generate()
 
-    assert type(jukebox.playlist) is list
+    assert isinstance(jukebox.playlist, list)
     assert jukebox.playlist[0].id == song["id"]
 
 
@@ -42,7 +42,7 @@ def test_jukebox_start(
     response = subsonic.jukebox.status()
     response = response.start()
 
-    assert type(response) is Jukebox
+    assert isinstance(response, Jukebox)
 
 
 @responses.activate
@@ -58,7 +58,7 @@ def test_jukebox_stop(
     response = subsonic.jukebox.status()
     response = response.stop()
 
-    assert type(response) is Jukebox
+    assert isinstance(response, Jukebox)
 
 
 @responses.activate
@@ -74,7 +74,7 @@ def test_jukebox_skip_without_offset(
     response: Jukebox = subsonic.jukebox.status()
     response = response.skip(0)
 
-    assert type(response) is Jukebox
+    assert isinstance(response, Jukebox)
 
 
 @responses.activate
@@ -91,7 +91,7 @@ def test_jukebox_skip_with_offset(
     response: Jukebox = subsonic.jukebox.status()
     response = response.skip(0, offset_time)
 
-    assert type(response) is Jukebox
+    assert isinstance(response, Jukebox)
 
 
 @responses.activate
@@ -110,8 +110,8 @@ def test_jukebox_shuffle(
     response = subsonic.jukebox.status()
     response = response.shuffle()
 
-    assert type(response) is Jukebox
-    assert type(response.playlist) is list
+    assert isinstance(response, Jukebox)
+    assert isinstance(response.playlist, list)
     assert response.playlist[0].id == song["id"]
 
 
@@ -129,7 +129,7 @@ def test_jukebox_set_gain(
     response: Jukebox = subsonic.jukebox.status()
     response = response.set_gain(jukebox_status["gain"])
 
-    assert type(response) is Jukebox
+    assert isinstance(response, Jukebox)
 
 
 @responses.activate
@@ -145,7 +145,7 @@ def test_jukebox_clear(
     response = subsonic.jukebox.status()
     response = response.clear()
 
-    assert type(response) is Jukebox
+    assert isinstance(response, Jukebox)
 
 
 @responses.activate
@@ -162,8 +162,8 @@ def test_jukebox_set(
     response: Jukebox = subsonic.jukebox.status()
     response = response.set(song["id"])
 
-    assert type(response) is Jukebox
-    assert type(response.playlist) is list
+    assert isinstance(response, Jukebox)
+    assert isinstance(response.playlist, list)
     assert response.playlist[0].id == song["id"]
 
 
@@ -180,8 +180,8 @@ def test_jukebox_remove_with_populated_playlist(
     response: Jukebox = subsonic.jukebox.get()
     response = response.remove(0)
 
-    assert type(response) is Jukebox
-    assert type(response.playlist) is list
+    assert isinstance(response, Jukebox)
+    assert isinstance(response.playlist, list)
     assert len(response.playlist) == 0
 
 
@@ -199,8 +199,8 @@ def test_jukebox_add_with_a_populated_playlist(
     response: Jukebox = subsonic.jukebox.get()
     response = response.add(song["id"])
 
-    assert type(response) is Jukebox
-    assert type(response.playlist) is list
+    assert isinstance(response, Jukebox)
+    assert isinstance(response.playlist, list)
     assert response.playlist[1].id == song["id"]
 
 
@@ -220,7 +220,7 @@ def test_jukebox_add_without_a_populated_playlist(
     response: Jukebox = subsonic.jukebox.status()
     response = response.add(song["id"])
 
-    assert type(response) is Jukebox
+    assert isinstance(response, Jukebox)
     # Ignore the error as in normal conditions it should exist
-    assert type(response.playlist) is list
+    assert isinstance(response.playlist, list)
     assert response.playlist[0].id == song["id"]

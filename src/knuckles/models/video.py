@@ -45,6 +45,7 @@ class VideoInfo(Model):
     def __init__(
         self,
         subsonic: "Subsonic",
+        video_id: str,
         id: str,
         captions: dict[str, Any] | None = None,
         audioTrack: list[dict[str, Any]] | None = None,
@@ -52,6 +53,7 @@ class VideoInfo(Model):
     ) -> None:
         super().__init__(subsonic)
 
+        self.video_id = video_id
         self.id = id
         self.captions = (
             Captions(subsonic=self._subsonic, **captions) if captions else None
@@ -73,6 +75,9 @@ class VideoInfo(Model):
             self.audio_tracks[language_code] = AudioTrack(
                 subsonic=self._subsonic, **track
             )
+
+    def generate(self) -> "VideoInfo":
+        return self._subsonic.browsing.get_video_info(self.video_id)
 
 
 class Video(Model):

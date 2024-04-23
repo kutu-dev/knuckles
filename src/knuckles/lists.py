@@ -23,10 +23,11 @@ class Lists:
         num_of_albums: int | None = None,
         album_list_offset: int | None = None,
         music_folder_id: str | None = None,
+        id3: bool = True,
         **extra_params: Any,
     ) -> list[Album]:
         response = self.api.json_request(
-            "getAlbumList2",
+            "getAlbumList2" if id3 else "getAlbumList",
             {
                 "type": type,
                 "size": num_of_albums,
@@ -34,9 +35,131 @@ class Lists:
                 "musicFolderId": music_folder_id,
                 **extra_params,
             },
-        )["albumList2"]["album"]
+        )["albumList2" if id3 else "albumList"]["album"]
 
         return [Album(subsonic=self.subsonic, **album) for album in response]
+
+    def get_album_list_random_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "random", num_of_albums, album_list_offset, music_folder_id, False
+        )
+
+    def get_album_list_newest_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "newest", num_of_albums, album_list_offset, music_folder_id, False
+        )
+
+    def get_album_list_highest_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "highest", num_of_albums, album_list_offset, music_folder_id, False
+        )
+
+    def get_album_list_frequent_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "frequent", num_of_albums, album_list_offset, music_folder_id, False
+        )
+
+    def get_album_list_recent_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "recent", num_of_albums, album_list_offset, music_folder_id, False
+        )
+
+    def get_album_list_alphabetical_by_name_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "alphabeticalByName",
+            num_of_albums,
+            album_list_offset,
+            music_folder_id,
+            False,
+        )
+
+    def get_album_list_alphabetical_by_artist_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "alphabeticalByArtist",
+            num_of_albums,
+            album_list_offset,
+            music_folder_id,
+            False,
+        )
+
+    def get_album_list_starred_non_id3(
+        self,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "starred", num_of_albums, album_list_offset, music_folder_id, False
+        )
+
+    def get_album_list_by_year_non_id3(
+        self,
+        from_year: int,
+        to_year: int,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "byYear",
+            num_of_albums,
+            album_list_offset,
+            music_folder_id,
+            False,
+            fromYear=from_year,
+            toYear=to_year,
+        )
+
+    def get_album_list_by_genre_non_id3(
+        self,
+        genre_name: str,
+        num_of_albums: int | None = None,
+        album_list_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> list[Album]:
+        return self._get_album_list_generic(
+            "byGenre",
+            num_of_albums,
+            album_list_offset,
+            music_folder_id,
+            False,
+            genre=genre_name,
+        )
 
     def get_album_list_random(
         self,
@@ -194,6 +317,13 @@ class Lists:
         response = self.api.json_request("getNowPlaying")["nowPlaying"]["entry"]
 
         return [NowPlayingEntry(subsonic=self.subsonic, **entry) for entry in response]
+
+    def get_starred_non_id3(self, music_folder_id: str | None = None) -> StarredContent:
+        response = self.api.json_request(
+            "getStarred", {"musicFolderId": music_folder_id}
+        )["starred"]
+
+        return StarredContent(subsonic=self.subsonic, **response)
 
     def get_starred(self, music_folder_id: str | None = None) -> StarredContent:
         response = self.api.json_request(

@@ -43,7 +43,7 @@ def test_get_share(
     assert response.expires == parser.parse(share["expires"])
     assert response.last_visited == parser.parse(share["lastVisited"])
     assert response.visit_count == share["visitCount"]
-    assert type(response.songs) is list
+    assert isinstance(response.songs, list)
     assert response.songs[0].title == song["title"]
 
 
@@ -91,4 +91,4 @@ def test_delete_share(
 
     response = subsonic.sharing.delete_share(share["id"])
 
-    assert type(response) is Subsonic
+    assert isinstance(response, Subsonic)

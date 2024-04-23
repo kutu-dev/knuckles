@@ -26,37 +26,13 @@ def modified_date() -> int:
 
 
 @pytest.fixture
-def indexes() -> dict[str, Any]:
+def indexes(artist: dict[str, Any]) -> dict[str, Any]:
     return {
         "ignoredArticles": "The An A Die Das Ein Eine Les Le La",
         "index": [
             {
                 "name": "C",
-                "artist": [
-                    {
-                        "id": "100000016",
-                        "name": "CARNÚN",
-                        "coverArt": "ar-100000016",
-                        "albumCount": 1,
-                    },
-                    {
-                        "id": "100000027",
-                        "name": "Chi.Otic",
-                        "coverArt": "ar-100000027",
-                        "albumCount": 0,
-                    },
-                ],
-            },
-            {
-                "name": "I",
-                "artist": [
-                    {
-                        "id": "100000013",
-                        "name": "IOK-1",
-                        "coverArt": "ar-100000013",
-                        "albumCount": 1,
-                    }
-                ],
+                "artist": [artist],
             },
         ],
     }
@@ -332,6 +308,15 @@ def album_info(base_url: str) -> dict[str, Any]:
 
 
 @pytest.fixture
+def mock_get_album_info_non_id3(
+    mock_generator: MockGenerator, album: dict[str, Any], album_info: dict[str, Any]
+) -> list[Response]:
+    return mock_generator(
+        "getAlbumInfo", {"id": album["id"]}, {"albumInfo": album_info}
+    )
+
+
+@pytest.fixture
 def mock_get_album_info(
     mock_generator: MockGenerator, album: dict[str, Any], album_info: dict[str, Any]
 ) -> list[Response]:
@@ -354,28 +339,61 @@ def artist_info(artist: dict[str, Any]) -> dict[str, Any]:
 
 
 @pytest.fixture
+def max_num_similar_artists() -> int:
+    return 21
+
+
+@pytest.fixture
+def artist_include_not_present() -> bool:
+    return False
+
+
+@pytest.fixture
+def mock_get_artist_info_non_id3(
+    mock_generator: MockGenerator,
+    artist: dict[str, Any],
+    artist_info: dict[str, Any],
+    max_num_similar_artists: int,
+    artist_include_not_present: bool,
+) -> list[Response]:
+    return mock_generator(
+        "getArtistInfo",
+        {
+            "id": artist["id"],
+            "count": max_num_similar_artists,
+            "includeNotPresent": artist_include_not_present,
+        },
+        {"artistInfo": artist_info},
+    )
+
+
+@pytest.fixture
 def mock_get_artist_info(
-    mock_generator: MockGenerator, artist: dict[str, Any], artist_info: dict[str, Any]
+    mock_generator: MockGenerator,
+    artist: dict[str, Any],
+    artist_info: dict[str, Any],
+    max_num_similar_artists: int,
+    artist_include_not_present: bool,
 ) -> list[Response]:
     return mock_generator(
         "getArtistInfo2",
         {
             "id": artist["id"],
+            "count": max_num_similar_artists,
+            "includeNotPresent": artist_include_not_present,
         },
         {"artistInfo2": artist_info},
     )
 
 
 @pytest.fixture
-def mock_get_artist_info_with_all_optional_params(
+def mock_get_artist_info_minimal(
     mock_generator: MockGenerator, artist: dict[str, Any], artist_info: dict[str, Any]
 ) -> list[Response]:
     return mock_generator(
         "getArtistInfo2",
         {
             "id": artist["id"],
-            "count": len(artist_info["similarArtist"]),
-            "includeNotPresent": False,
         },
         {"artistInfo2": artist_info},
     )
@@ -384,6 +402,17 @@ def mock_get_artist_info_with_all_optional_params(
 @pytest.fixture
 def songs_count() -> int:
     return 125
+
+
+@pytest.fixture
+def mock_get_similar_songs_non_id3(
+    mock_generator: MockGenerator, song: dict[str, Any], songs_count: int
+) -> list[Response]:
+    return mock_generator(
+        "getSimilarSongs",
+        {"id": song["id"], "count": songs_count},
+        {"similarSongs": {"song": [song]}},
+    )
 
 
 @pytest.fixture

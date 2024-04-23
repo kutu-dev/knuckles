@@ -11,11 +11,11 @@ from tests.conftest import AddResponses
 def test_generate(
     add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_artist_info: list[Response],
+    mock_get_artist_info_minimal: list[Response],
     artist: dict[str, Any],
     artist_info: dict[str, Any],
 ) -> None:
-    add_responses(mock_get_artist_info)
+    add_responses(mock_get_artist_info_minimal)
 
     response = subsonic.browsing.get_artist_info(artist["id"])
     response.biography = ""

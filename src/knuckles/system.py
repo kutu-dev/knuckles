@@ -55,3 +55,17 @@ class System:
         return [
             OpenSubsonicExtension(name, versions) for name, versions in response.items()
         ]
+
+    def check_open_subsonic_extension(
+        self, extension_name: str, extension_version: int
+    ) -> bool:
+        extensions = self.get_open_subsonic_extensions()
+
+        for extension in extensions:
+            if extension.name != extension_name:
+                continue
+
+            if extension_version in extension.versions:
+                return True
+
+        return False

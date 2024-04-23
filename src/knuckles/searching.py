@@ -22,7 +22,7 @@ class Searching:
         # Only to pass it to the models
         self.subsonic = subsonic
 
-    def search(
+    def _generic_search(
         self,
         query: str = "",
         song_count: int | None = None,
@@ -32,30 +32,10 @@ class Searching:
         artist_count: int | None = None,
         artist_offset: int | None = None,
         music_folder_id: str | None = None,
+        id3: bool = True,
     ) -> SearchResult:
-        """Calls the "search3" endpoint of the API.
-
-        :param query: The query
-        :type query: str
-        :param song_count: Maximum number of songs to return
-        :type song_count: int
-        :param song_offset: Offset the results for songs
-        :type song_offset: int
-        :param album_count: Maximum number of albums to return
-        :type album_count: int
-        :param album_offset: Offset the results for albums
-        :type album_offset: int
-        :param artist_count: Maximum number of artists to return
-        :type artist_count: int
-        :param artist_offset: Offset the results for artists
-        :type artist_offset: int
-        :param music_folder_id: The id of the music folder to search results
-        :type music_folder_id: str
-        :return:
-        :rtype:
-        """
         response = self.api.json_request(
-            "search3",
+            "search3" if id3 else "search2",
             {
                 "query": query,
                 "songCount": song_count,
@@ -66,7 +46,7 @@ class Searching:
                 "artistOffset": artist_offset,
                 "musicFolderId": music_folder_id,
             },
-        )["searchResult3"]
+        )["searchResult3" if id3 else "searchResult2"]
 
         search_result_songs = (
             [Song(self.subsonic, **song) for song in response["song"]]
@@ -89,4 +69,48 @@ class Searching:
             search_result_songs,
             search_result_albums,
             search_result_artists,
+        )
+
+    def search(
+        self,
+        query: str = "",
+        song_count: int | None = None,
+        song_offset: int | None = None,
+        album_count: int | None = None,
+        album_offset: int | None = None,
+        artist_count: int | None = None,
+        artist_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> SearchResult:
+        return self._generic_search(
+            query,
+            song_count,
+            song_offset,
+            album_count,
+            album_offset,
+            artist_count,
+            artist_offset,
+        )
+
+    def search_non_id3(
+        self,
+        query: str,
+        song_count: int | None = None,
+        song_offset: int | None = None,
+        album_count: int | None = None,
+        album_offset: int | None = None,
+        artist_count: int | None = None,
+        artist_offset: int | None = None,
+        music_folder_id: str | None = None,
+    ) -> SearchResult:
+        return self._generic_search(
+            query,
+            song_count,
+            song_offset,
+            album_count,
+            album_offset,
+            artist_count,
+            artist_offset,
+            music_folder_id,
+            False,
         )

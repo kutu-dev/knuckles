@@ -87,7 +87,7 @@ def test_delete_bookmark(
 
     response = subsonic.bookmarks.delete_bookmark(song["id"])
 
-    assert type(response) is Subsonic
+    assert isinstance(response, Subsonic)
 
 
 @responses.activate
@@ -108,7 +108,7 @@ def test_get_play_queue(
     assert response.current.id == song["id"]
     assert response.changed == parser.parse(play_queue["changed"])
     assert response.changed_by == client
-    assert type(response.songs) is list
+    assert isinstance(response.songs, list)
     assert response.songs[0].id == song["id"]
 
 

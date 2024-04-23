@@ -320,6 +320,66 @@ def test_get_video_info(
 
 
 @responses.activate
+def test_get_artist_info_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_artist_info_non_id3: list[Response],
+    max_num_similar_artists: int,
+    artist: dict[str, Any],
+    artist_info: dict[str, Any],
+) -> None:
+    add_responses(mock_get_artist_info_non_id3)
+
+    response = subsonic.browsing.get_artist_info_non_id3(
+        artist["id"], max_num_similar_artists, False
+    )
+
+    assert response.biography == artist_info["biography"]
+
+
+@responses.activate
+def test_get_artist_info(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_artist_info: list[Response],
+    max_num_similar_artists: int,
+    artist: dict[str, Any],
+    artist_info: dict[str, Any],
+) -> None:
+    add_responses(mock_get_artist_info)
+
+    response = subsonic.browsing.get_artist_info(
+        artist["id"], max_num_similar_artists, False
+    )
+
+    assert response.biography == artist_info["biography"]
+    assert response.music_brainz_id == artist_info["musicBrainzId"]
+    assert response.last_fm_url == artist_info["lastFmUrl"]
+    assert response.small_image_url == artist_info["smallImageUrl"]
+    assert response.medium_image_url == artist_info["mediumImageUrl"]
+    assert response.large_image_url == artist_info["largeImageUrl"]
+    assert response.large_image_url == artist_info["largeImageUrl"]
+    assert response.similar_artists is not None
+    assert len(response.similar_artists) == len(artist_info["similarArtist"])
+    assert response.similar_artists[0].name == artist["name"]
+
+
+@responses.activate
+def test_get_album_info_non_id3(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_album_info_non_id3: list[Response],
+    album: dict[str, Any],
+    album_info: dict[str, Any],
+) -> None:
+    add_responses(mock_get_album_info_non_id3)
+
+    response = subsonic.browsing.get_album_info_non_id3(album["id"])
+
+    assert response.notes == album_info["notes"]
+
+
+@responses.activate
 def test_get_album_info(
     add_responses: AddResponses,
     subsonic: Subsonic,
@@ -341,29 +401,18 @@ def test_get_album_info(
 
 
 @responses.activate
-def test_get_artist_info(
+def test_get_similar_songs_non_id3(
     add_responses: AddResponses,
     subsonic: Subsonic,
-    mock_get_artist_info_with_all_optional_params: list[Response],
-    artist: dict[str, Any],
-    artist_info: dict[str, Any],
+    mock_get_similar_songs_non_id3: list[Response],
+    song: dict[str, Any],
+    songs_count: int,
 ) -> None:
-    add_responses(mock_get_artist_info_with_all_optional_params)
+    add_responses(mock_get_similar_songs_non_id3)
 
-    response = subsonic.browsing.get_artist_info(
-        artist["id"], len(artist_info["similarArtist"]), False
-    )
+    response = subsonic.browsing.get_similar_songs_non_id3(song["id"], songs_count)
 
-    assert response.biography == artist_info["biography"]
-    assert response.music_brainz_id == artist_info["musicBrainzId"]
-    assert response.last_fm_url == artist_info["lastFmUrl"]
-    assert response.small_image_url == artist_info["smallImageUrl"]
-    assert response.medium_image_url == artist_info["mediumImageUrl"]
-    assert response.large_image_url == artist_info["largeImageUrl"]
-    assert response.large_image_url == artist_info["largeImageUrl"]
-    assert response.similar_artists is not None
-    assert len(response.similar_artists) == len(artist_info["similarArtist"])
-    assert response.similar_artists[0].name == artist["name"]
+    assert response[0].id == song["id"]
 
 
 @responses.activate

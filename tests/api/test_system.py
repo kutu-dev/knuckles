@@ -67,3 +67,51 @@ def test_get_open_subsonic_extensions(
 
     assert response[0].name == open_subsonic_extension_name
     assert response[0].versions == open_subsonic_extension_versions
+
+
+@responses.activate
+def test_check_open_subsonic_extension_available(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_open_subsonic_extensions: list[Response],
+    open_subsonic_extension_name: str,
+    open_subsonic_extension_versions: list[int],
+) -> None:
+    add_responses(mock_get_open_subsonic_extensions)
+    response = subsonic.system.check_open_subsonic_extension(
+        open_subsonic_extension_name, open_subsonic_extension_versions[0]
+    )
+
+    assert response
+
+
+@responses.activate
+def test_check_open_subsonic_extension_unavailable_extension(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_open_subsonic_extensions: list[Response],
+    open_subsonic_extension_name: str,
+    open_subsonic_extension_versions: list[int],
+) -> None:
+    add_responses(mock_get_open_subsonic_extensions)
+    response = subsonic.system.check_open_subsonic_extension(
+        "unavailableExtension", open_subsonic_extension_versions[0]
+    )
+
+    assert not response
+
+
+@responses.activate
+def test_check_open_subsonic_extension_unavailable_version(
+    add_responses: AddResponses,
+    subsonic: Subsonic,
+    mock_get_open_subsonic_extensions: list[Response],
+    open_subsonic_extension_name: str,
+    open_subsonic_extension_versions: list[int],
+) -> None:
+    add_responses(mock_get_open_subsonic_extensions)
+    response = subsonic.system.check_open_subsonic_extension(
+        open_subsonic_extension_name, 72
+    )
+
+    assert not response
