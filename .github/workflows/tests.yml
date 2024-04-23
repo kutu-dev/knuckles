@@ -19,10 +19,9 @@ jobs:
         with:
           path: venv
           key: ${{ runner.os }}-${{ hashFiles('requirements-tests.txt') }}
-      - name: Install Python testing dependencies
+      - name: Run the tests
         run: |
           python -m venv create venv
           source venv/bin/activate
           python -m pip install -r requirements-tests.txt
-      - name: Run tests
-        run: python -m pytest
+          python -m pytest

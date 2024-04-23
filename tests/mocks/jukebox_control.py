@@ -27,8 +27,7 @@ class JukeboxStatusGenerator(Protocol):
         self,
         action: str,
         extra_params: dict[str, Any] | None = None,
-    ) -> list[Response]:
-        ...
+    ) -> list[Response]: ...
 
 
 @pytest.fixture
