@@ -1,9 +1,5 @@
 # TODO
-- [ ] Make all modules private (leading underscore).
-- [ ] Improve error handling:
-  - [ ] Check and rewrite all docstrings taking care about raising exceptions.
-- [ ] Decide if `raw_request()` and `json_request` should be public, if not `self.api` should be `self._api`,
-- [ ] Remove unnecessary packages installed in GitHub Actions `tests` job.
+- [ ] Check and rewrite all docstrings taking care about raising exceptions.
 - [ ] Spin up a `MkDocs` documentation.
   - [ ] Add the URL in the GitHub page.
 

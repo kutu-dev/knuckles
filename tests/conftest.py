@@ -6,7 +6,7 @@ import pytest
 import requests
 import responses
 from _pytest.fixtures import FixtureRequest
-from knuckles.subsonic import Subsonic
+from knuckles import Subsonic
 from responses import GET, POST, Response, matchers
 
 pytest_plugins = [

@@ -1,8 +1,7 @@
 from typing import Any
 
 import responses
-from knuckles import Jukebox
-from knuckles.subsonic import Subsonic
+from knuckles import Jukebox, Subsonic
 from responses import Response
 
 from tests.conftest import AddResponses

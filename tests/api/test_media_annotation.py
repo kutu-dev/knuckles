@@ -136,7 +136,7 @@ def test_set_invalid_rating(
         InvalidRatingNumber,
         match=(
             "Invalid rating number, "
-            + "only numbers between 1 and 5 \(inclusive\) are allowed"
+            + r"only numbers between 1 and 5 \(inclusive\) are allowed"
         ),
     ):
         subsonic.media_annotation.set_rating(song["id"], rating)

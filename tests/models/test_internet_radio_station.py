@@ -1,8 +1,8 @@
 from typing import Any
 
 import responses
-from knuckles.models.internet_radio_station import InternetRadioStation
-from knuckles.subsonic import Subsonic
+from knuckles import Subsonic
+from knuckles.models._internet_radio_station import InternetRadioStation
 from responses import Response
 
 from tests.conftest import AddResponses

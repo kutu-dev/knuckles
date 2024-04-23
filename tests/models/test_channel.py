@@ -1,8 +1,7 @@
 from typing import Any
 
 import responses
-from knuckles import Subsonic
-from knuckles.models.podcast import Channel
+from knuckles import Channel, Subsonic
 from responses import Response
 
 from tests.conftest import AddResponses

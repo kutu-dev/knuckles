@@ -5,8 +5,7 @@ from urllib import parse
 import pytest
 import responses
 from _pytest.fixtures import FixtureRequest
-from knuckles import Subsonic
-from knuckles.media_retrieval import SubtitlesFileFormat
+from knuckles import Subsonic, SubtitlesFileFormat
 from responses import Response
 
 from tests.conftest import AddResponses

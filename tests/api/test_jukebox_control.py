@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 import responses
-from knuckles.subsonic import Subsonic
+from knuckles import Subsonic
 from responses import Response
 
 from tests.conftest import AddResponses
@@ -235,6 +235,6 @@ def test_jukebox_set_invalid_gain(
 ) -> None:
     with pytest.raises(
         ValueError,
-        match="The gain should be between 0 and 1 \(inclusive\)",
+        match=r"The gain should be between 0 and 1 \(inclusive\)",
     ):
         subsonic.jukebox.set_gain(2)

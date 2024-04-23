@@ -11,14 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11.5"
-      - uses: Gr1N/setup-poetry@v8
+          python-version: "3.11.0"
       - uses: actions/cache@v3
         with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-      - run: poetry install
-      - run: poetry run pytest
+          path: venv
+          key: ${{ runner.os }}-${{ hashFiles('requirements-tests.txt') }}
+      - name: Install Python testing dependencies
+        run: |
+          python -m venv create venv
+          source venv/bin/activate
+          python -m pip install -r requirements-tests.txt
+      - name: Run tests
+        run: python -m pytest

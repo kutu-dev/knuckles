@@ -2,9 +2,8 @@ from typing import Any
 
 import pytest
 import responses
-from knuckles import Subsonic
+from knuckles import Share, Subsonic
 from knuckles.exceptions import ResourceNotFound, ShareInvalidSongList
-from knuckles.models.share import Share
 from responses import Response
 
 from tests.conftest import AddResponses
