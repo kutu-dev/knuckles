@@ -18,46 +18,37 @@ class RequestMethod(Enum):
 
 
 class Api:
-    """Class used to internally access and requests to the Subsonic API.
-
-    Allow easy interactions with the Subsonic API
-    with the given authentication values.
+    """Class in charge of managing the access to the REST API
+    of the OpenSubsonic server.
     """
 
     def __init__(
         self,
         url: str,
-        user: str,
+        username: str,
         password: str,
         client: str,
-        use_https: bool,
-        use_token: bool,
-        request_method: RequestMethod,
+        use_https: bool = True,
+        use_token: bool = True,
+        request_method: RequestMethod = RequestMethod.GET,
     ) -> None:
-        """Class used to internally access and interacts with the Subsonic API.
+        """Class in charge of managing the access to the REST API of
+        the OpenSubsonic server.
 
-        Allow easy interactions with the Subsonic API
-        with the given authentication values.
-
-        :param url: The url of the Subsonic server.
-        :type url: str
-        :param user: The user to authenticate with
-        :type user: str
-        :param password: The password to authenticate with
-        :type password: str
-        :param client: A unique string identifying the client application.
-        :type client: str
-        :param use_https: If the requests should be sent using HTTPS,
-            defaults to True
-        :type use_https: bool, optional
-        :param use_token: If the connection should send to the server the clean password
-            or encode it in a token with a random salt, defaults to True
-        :type use_token: bool, optional
+        Args:
+            url: The base URL that points to the server,
+                **without** the `/rest/` path.
+            username: The name of the user to login as in the API.
+            password: The password of the user to login as in the API.
+            client: The name of the client to report to the API.
+            use_https:  If HTTPS should be used.
+            use_token: If the modern token based authentication should be used.
+            request_method: If the requests should send the data as
+                GET parameters or POST form data.
         """
-
         pass
 
-        self.user = user
+        self.username = username
         self.password = password
         self.client = client
         self.use_token = use_token
@@ -77,22 +68,16 @@ class Api:
     def _generate_params(
         self, extra_params: dict[str, Any] | None = None
     ) -> dict[str, Any]:
-        """Generate the parameters for any request to the API.
+        """Generates the parameters needed for a request to the API.
 
-        This allows the user to change any variable in any time without issues.
-        If it's enabled (True by default) it will generate a different token and salt
-        for each call.
+        Args:
+            extra_params: Extra parameters to be added to the request.
 
-        :param extra_params: Extra parameters to be attached to the generated ones,
-            defaults to {}.
-        :type extra_params: dict[str, Any], optional
-        :return: All the parameters needed by the Subsonic API to authenticate
-            with the extra ones attached to them.
-        :rtype: dict[str, Any]
+        Returns:
+            All the parameters with a randomly generated salt.
         """
-
         params: dict[str, Any] = {
-            "u": self.user,
+            "u": self.username,
             "v": "1.16.1",
             "c": self.client,
             "f": "json",
@@ -115,21 +100,26 @@ class Api:
 
         return {**params, "t": token, "s": salt}
 
-    def generate_url(self, endpoint: str, params: dict[str, Any]) -> str:
-        """Using the PreparedRequest object of the Requests request package generates a
-        valid URL for any endpoint with a valid authentication parameter.
+    def generate_url(self, endpoint: str, extra_params: dict[str, Any]) -> str:
+        """Using the PreparedRequest object of the Requests request package
+        generates a valid URL for any endpoint with
+        a valid authentication parameter.
 
-        :param endpoint: The endpoint of the API to be used.
-        :type endpoint: str
-        :param params: Extra parameters to be added to the URL.
-        :type params: dict[str, Any]
-        :return: The generated url.
-        :rtype: str
+
+        Args:
+            endpoint: The endpoint to be appended in the URL, **without** the
+                leading `/rest/`.
+            extra_params: The extra parameters to be added to the URL.
+
+        Returns:
+            A valid URL pointing to the desired endpoint and with the
+                requested parameters, including the ones needed
+                for authentication.
         """
 
         prepared_request = PreparedRequest()
         prepared_request.prepare_url(
-            f"{self.url}/rest/{endpoint}", {**self._generate_params(params)}
+            f"{self.url}/rest/{endpoint}", {**self._generate_params(extra_params)}
         )
 
         # Ignore the type error caused by the url parameter of prepared_request
@@ -139,20 +129,18 @@ class Api:
     def raw_request(
         self, endpoint: str, extra_params: dict[str, Any] | None = None
     ) -> Response:
-        """Make a request to the Subsonic API.
+        """Makes a request to the OpenSubsonic server REST API.
 
-        :param endpoint: The endpoint where the request should be made,
-            only specifies the route name, without slashes.
-            E.g. "ping", "getLicense", etc.
-        :type endpoint: str
-        :param extra_params: The extra parameters required by the endpoint,
-            defaults to {}.
-        :raises code_error: Raises an exception with the format CodeErrorXX or
-            UnknownCodeError if the request fails.
-        :return: The Response object returned by the request.
-        :rtype: dict[str, Any]
+        Args:
+            endpoint: The endpoint to be appended in the URL, **without** the
+                leading `/rest/`.
+            extra_params: Extra parameters to the added to the request.
+
+        Returns:
+            The
+                [`requests`](https://docs.python-requests.org/en/latest/index.html)
+                `response` object of the executed request.
         """
-
         match self.request_method:
             case RequestMethod.POST:
                 return requests.post(
@@ -169,20 +157,24 @@ class Api:
     def json_request(
         self, endpoint: str, extra_params: dict[str, Any] | None = None
     ) -> dict[str, Any]:
-        """Make a request to the Subsonic API and returns a JSON response.
-        Don't use with binary data endpoints.
+        """Makes a request to the OpenSubsonic server REST API and returns the
+        data from the `subsonic_response` property. Should **never** be used
+        with non-json compatible endpoints.
 
-        :param endpoint: The endpoint where the request should be made,
-            only specifies the route name, without slashes.
-            E.g. "ping", "getLicense", etc.
-        :type endpoint: str
-        :param extra_params: The extra parameters required by the endpoint,
-            defaults to {}.
-        :type extra_params: dict[str, Any], optional
-        :raises code_error: Raises an exception with the format CodeErrorXX or
-            UnknownCodeError if the request fails.
-        :return: The JSON data inside the "subsonic-response" object.
-        :rtype: dict[str, Any]
+        Args:
+            endpoint: The endpoint to be appended in the URL, **without** the
+                leading `/rest/`.
+            extra_params: Extra parameters to the added to the request.
+
+        Raises:
+            code_error: Raise an error if the server reports and issue with the
+                request in the form of a code error, the raised follows
+                the form `CodeErrorXX` where `XX` is the raised code error.
+                `UnknownCodeError` is raised if the error code
+                is not part of the standard.
+
+        Returns:
+            The data contained in the `subsonic_response` property.
         """
 
         response = self.raw_request(endpoint, extra_params)
