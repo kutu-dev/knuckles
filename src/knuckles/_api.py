@@ -9,7 +9,7 @@ import requests
 from requests import Response
 from requests.models import PreparedRequest
 
-from .exceptions import CODE_ERROR_EXCEPTIONS, get_code_error_exception
+from .exceptions import ERROR_CODE_EXCEPTION, get_error_code_exception
 
 
 class RequestMethod(Enum):
@@ -182,7 +182,7 @@ class Api:
         json_response: dict[str, Any] = response.json()["subsonic-response"]
 
         if json_response["status"] == "failed":
-            code_error: CODE_ERROR_EXCEPTIONS = get_code_error_exception(
+            code_error: ERROR_CODE_EXCEPTION = get_error_code_exception(
                 json_response["error"]["code"]
             )
 
