@@ -144,8 +144,7 @@ def get_error_code_exception(
     Args:
         error_code: The number of the error to get its exception.
 
-    Returns:
-        The exception of the given error code
+    Returns: The exception of the given error code
     """
     match error_code:
         case 0:
