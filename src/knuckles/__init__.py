@@ -3,12 +3,12 @@ from ._media_retrieval import SubtitlesFileFormat
 from ._subsonic import Subsonic
 from .models._album import Album, AlbumInfo, Disc, RecordLabel, ReleaseDate
 from .models._artist import Artist, ArtistInfo
+from .models._artist_index import ArtistIndex
 from .models._bookmark import Bookmark
 from .models._chat_message import ChatMessage
 from .models._contributor import Contributor
 from .models._cover_art import CoverArt
 from .models._genre import Genre, ItemGenre
-from .models._index import Index
 from .models._internet_radio_station import InternetRadioStation
 from .models._jukebox import Jukebox
 from .models._lyrics import Lyrics
@@ -45,7 +45,7 @@ __all__ = [
     "CoverArt",
     "ItemGenre",
     "Genre",
-    "Index",
+    "ArtistIndex",
     "InternetRadioStation",
     "Jukebox",
     "Lyrics",

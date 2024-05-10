@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from .._subsonic import Subsonic
 
 
-class Index(Model):
+class ArtistIndex(Model):
     def __init__(
         self,
         subsonic: "Subsonic",

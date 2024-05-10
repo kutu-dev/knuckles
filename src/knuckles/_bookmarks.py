@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class Bookmarks:
     """Class that contains all the methods needed to interact with the
-    [browsing endpoints](https://opensubsonic.netlify.app/categories/bookmarks)
+    [bookmark endpoints](https://opensubsonic.netlify.app/categories/bookmarks)
     in the Subsonic API.
     """
 

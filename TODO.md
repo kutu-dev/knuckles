@@ -1,7 +1,7 @@
 # TODO
 
 - [x] `_api.py`
-- [ ] `_bookmarks.py`
+- [x] `_bookmarks.py`
 - [ ] `_browsing.py`
 - [ ] `_chat.py`
 - [ ] `_internet_radio.py`
