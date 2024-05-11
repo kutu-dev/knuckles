@@ -8,9 +8,9 @@ if TYPE_CHECKING:
 
 
 class InternetRadio:
-    """Class that contains all the methods needed to interact
-    with the internet radio calls and actions in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/internet-radio/>
+    """Class that contains all the methods needed to interact with the
+    [internet radio endpoints](https://opensubsonic.netlify.app/
+    categories/internet-radio) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -22,10 +22,9 @@ class InternetRadio:
     def get_internet_radio_stations(
         self,
     ) -> list[InternetRadioStation]:
-        """Calls the "getInternetRadioStation" endpoint of the API.
+        """Get all the internet radio stations available in the server.
 
-        :return: A list with all the internet radio stations.
-        :rtype: list[InternetRadioStation]
+        Returns: A list with all the reported internet radio stations.
         """
 
         response = self.api.json_request("getInternetRadioStations")[
@@ -34,20 +33,23 @@ class InternetRadio:
 
         return [InternetRadioStation(self.subsonic, **station) for station in response]
 
-    def get_internet_radio_station(self, id_: str) -> InternetRadioStation | None:
-        """Using the "getInternetRadioStation" endpoint iterates over all the stations
-        and find the one with the same ID.
+    def get_internet_radio_station(
+        self, internet_radio_station_id: str
+    ) -> InternetRadioStation | None:
+        """Get all the info related with a internet radio station.
 
-        :param id_: The ID of the station to find.
-        :type id_: str
-        :return: The found internet radio station or None if no one is found.
-        :rtype: InternetRadioStation | None
+        Args:
+            internet_radio_station_id: The ID of the internet radio station
+                to get its info.
+
+        Returns: An object that contains all the info about the requested
+                internet radio station.
         """
 
         stations = self.get_internet_radio_stations()
 
         for station in stations:
-            if station.id == id_:
+            if station.id == internet_radio_station_id:
                 return station
 
         return None
@@ -55,16 +57,17 @@ class InternetRadio:
     def create_internet_radio_station(
         self, stream_url: str, name: str, homepage_url: str | None = None
     ) -> "Subsonic":
-        """Calls the "createInternetRadioStation" endpoint of the API.
+        """Create a new internet radio station.
 
-        :param stream_url: The stream url of the station.
-        :type stream_url: str
-        :param name: The name of the station.
-        :type name: str
-        :param homepage_url: The url of the homepage of the station, defaults to None.
-        :type homepage_url: str | None, optional
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            stream_url: The URL of the stream to be added to the
+                internet radio station.
+            name: The name of the new created internet radio station.
+            homepage_url: An URL for the homepage of the internet
+                radio station.
+
+        Returns: An object that holds all the data about the new created
+            internet radio station.
         """
 
         self.api.json_request(
@@ -75,27 +78,29 @@ class InternetRadio:
         return self.subsonic
 
     def update_internet_radio_station(
-        self, id_: str, stream_url: str, name: str, homepage_url: str | None = None
+        self,
+        internet_radio_station_id: str,
+        stream_url: str,
+        name: str,
+        homepage_url: str | None = None,
     ) -> "Subsonic":
-        """Calls the "updateInternetRadioStation" endpoint ot the API.
+        """Update the data of an internet radio station.
 
-        :param id_: The ID of the station to update.
-        :type id_: str
-        :param stream_url: The new steam url of the station.
-        :type stream_url: str
-        :param name: The new name of the station.
-        :type name: str
-        :param homepage_url: The new url of the homepage of the station,
-            defaults to None.
-        :type homepage_url: str | None, optional
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            internet_radio_station_id: The ID of the internet radio station
+                to edit its data.
+            stream_url: A new stream URL for the internet radio station.
+            name: a new name for the internet radio station.
+            homepage_url: A new homepage URL for the internet radio
+                station.
+
+        Returns: An object that holds all the data about the new updated
+                internet radio station.
         """
-
         self.api.json_request(
             "updateInternetRadioStation",
             {
-                "id": id_,
+                "id": internet_radio_station_id,
                 "streamUrl": stream_url,
                 "name": name,
                 "homepageUrl": homepage_url,
@@ -104,15 +109,20 @@ class InternetRadio:
 
         return self.subsonic
 
-    def delete_internet_radio_station(self, id_: str) -> "Subsonic":
-        """Calls the "deleteInternetRadioStation" endpoint of the API.
+    def delete_internet_radio_station(
+        self, internet_radio_station_id: str
+    ) -> "Subsonic":
+        """Delete an internet radio station.
 
-        :param id_: The ID of the station to delete
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            internet_radio_station_id: The ID of the internet radio station
+                to delete.
+
+        Returns: The Subsonic object where this method was called to allow
+            method chaining.
         """
-
-        self.api.json_request("deleteInternetRadioStation", {"id": id_})
+        self.api.json_request(
+            "deleteInternetRadioStation", {"id": internet_radio_station_id}
+        )
 
         return self.subsonic

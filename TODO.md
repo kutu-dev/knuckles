@@ -1,10 +1,12 @@
 # TODO
 
+Except `__init__` methods.
+
 - [x] `_api.py`
 - [x] `_bookmarks.py`
-- [ ] `_browsing.py`
-- [ ] `_chat.py`
-- [ ] `_internet_radio.py`
+- [x] `_browsing.py`
+- [x] `_chat.py`
+- [x] `_internet_radio.py`
 - [ ] `_jukebox.py`
 - [ ] `_lists.py`
 - [ ] `_media_annotation.py`

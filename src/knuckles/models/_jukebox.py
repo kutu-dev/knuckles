@@ -142,7 +142,7 @@ class Jukebox(Model):
 
         return self
 
-    def set(self, id: str) -> Self:
+    def set(self, songs_ids: list[str]) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "set".
 
         :param id: The ID of a song to set it in the jukebox.
@@ -152,14 +152,15 @@ class Jukebox(Model):
         :rtype: Self
         """
 
-        song_to_set: Song = Song(self._subsonic, id)
+        self._subsonic.jukebox.set(songs_ids)
 
-        self._subsonic.jukebox.set(song_to_set.id)
-        self.playlist = [song_to_set]
+        self.playlist = [
+            Song(subsonic=self._subsonic, id=song_id) for song_id in songs_ids
+        ]
 
         return self
 
-    def add(self, id: str) -> Self:
+    def add(self, songs_ids: list[str]) -> Self:
         """Calls the "jukeboxControl" endpoint of the API with the action "add".
 
         :param id: The ID of a song to add it in the jukebox.
@@ -170,16 +171,18 @@ class Jukebox(Model):
         :rtype: Self
         """
 
-        song_to_add: Song = Song(self._subsonic, id)
+        self._subsonic.jukebox.add(songs_ids)
 
-        self._subsonic.jukebox.add(song_to_add.id)
-
+        songs_to_add = [
+            Song(subsonic=self._subsonic, id=song_id) for song_id in songs_ids
+        ]
         if self.playlist is not None:
-            self.playlist.append(song_to_add)
+            self.playlist += songs_to_add
             return self
 
-        # If the playlist is None the real value of it is unknown,
-        # so a call the API is necessary to get a correct representation of the jukebox
+        # If the playlist is None then the real value of it is unknown,
+        # so a call the API is necessary to get a correct representation
+        # of the jukebox
         self.playlist = self.generate().playlist
         return self
 

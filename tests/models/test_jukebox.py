@@ -159,7 +159,7 @@ def test_jukebox_set(
     add_responses(mock_jukebox_control_set)
 
     response: Jukebox = subsonic.jukebox.status()
-    response = response.set(song["id"])
+    response = response.set([song["id"]])
 
     assert isinstance(response, Jukebox)
     assert isinstance(response.playlist, list)
@@ -196,7 +196,7 @@ def test_jukebox_add_with_a_populated_playlist(
     add_responses(mock_jukebox_control_add)
 
     response: Jukebox = subsonic.jukebox.get()
-    response = response.add(song["id"])
+    response = response.add([song["id"]])
 
     assert isinstance(response, Jukebox)
     assert isinstance(response.playlist, list)
@@ -217,7 +217,7 @@ def test_jukebox_add_without_a_populated_playlist(
     add_responses(mock_jukebox_control_add)
 
     response: Jukebox = subsonic.jukebox.status()
-    response = response.add(song["id"])
+    response = response.add([song["id"]])
 
     assert isinstance(response, Jukebox)
     # Ignore the error as in normal conditions it should exist

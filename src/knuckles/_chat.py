@@ -8,9 +8,9 @@ if TYPE_CHECKING:
 
 
 class Chat:
-    """Class that contains all the methods needed to interact
-    with the chat calls in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/chat/>
+    """Class that contains all the methods needed to interact with the
+    [chat endpoints](https://opensubsonic.netlify.app/categories/chat)
+    in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -18,23 +18,22 @@ class Chat:
         self.subsonic = subsonic
 
     def add_chat_message(self, message: str) -> "Subsonic":
-        """Calls to the "addChatMessage" endpoint of the API:
+        """Add chat message.
 
-        :param message: The message to send.
-        :type message: str
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            message: The message content to add.
+
+        Returns: The Subsonic object where this method was called to allow
+            method chaining.
         """
-
         self.api.json_request("addChatMessage", {"message": message})
 
         return self.subsonic
 
     def get_chat_messages(self) -> list[ChatMessage]:
-        """Calls to the "getChatMessages" endpoint of the API.
+        """Get all send chat messages.
 
-        :return: A list of ChatMessage objects.
-        :rtype: list[ChatMessage]
+        Returns: A list with all the messages info.
         """
 
         response: list[dict[str, Any]] = self.api.json_request("getChatMessages")[
