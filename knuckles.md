@@ -10,5 +10,3 @@ It follows strictly the [OpenSubsonic API Spec](https://opensubsonic.netlify.app
 
 ## Acknowledgements
 Created with :heart: by [Jorge "Kutu" Dobón Blanco](https://dobon.dev).
-
-::: knuckles.models._user

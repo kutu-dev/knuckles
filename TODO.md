@@ -7,8 +7,8 @@ Except `__init__` methods.
 - [x] `_browsing.py`
 - [x] `_chat.py`
 - [x] `_internet_radio.py`
-- [ ] `_jukebox.py`
-- [ ] `_lists.py`
+- [x] `_jukebox.py`
+- [x] `_lists.py`
 - [ ] `_media_annotation.py`
 - [ ] `_media_library_scanning.py`
 - [ ] `_media_retrieval.py`
