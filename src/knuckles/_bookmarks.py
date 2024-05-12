@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 class Bookmarks:
     """Class that contains all the methods needed to interact with the
-    [bookmark endpoints](https://opensubsonic.netlify.app/categories/bookmarks)
+    [bookmark endpoints](https://opensubsonic.netlify.app/categories/bookmarks/)
     in the Subsonic API.
     """
 
@@ -21,7 +21,8 @@ class Bookmarks:
     def get_bookmarks(self) -> list[Bookmark]:
         """Get all the bookmarks created by the authenticated user.
 
-        Returns: A list containing all the bookmarks for the authenticated user.
+        Returns:
+            A list containing all the bookmarks for the authenticated user.
         """
 
         response = self.api.json_request("getBookmarks")["bookmarks"]["bookmark"]
@@ -34,7 +35,8 @@ class Bookmarks:
         Args:
             bookmark_id: The id of the bookmark to get.
 
-        Returns: A object that contains all the info of the requested bookmark.
+        Returns:
+            A object that contains all the info of the requested bookmark.
         """
 
         bookmarks = self.get_bookmarks()
@@ -56,7 +58,8 @@ class Bookmarks:
                 or video.
             comment: A comment to be attached with the song or video.
 
-        Returns: An object that contains all the info of the new created
+        Returns:
+            An object that contains all the info of the new created
                 bookmark.
         """
 
@@ -81,7 +84,8 @@ class Bookmarks:
             position: A position in milliseconds to be indicated with the song
                 or video.
             comment: A comment to be attached with the song or video.
-        Returns: An object that contains all the info of the new created
+        Returns:
+            An object that contains all the info of the new created
                 bookmark.
         """
 
@@ -93,8 +97,9 @@ class Bookmarks:
         Args:
             song_or_video_id: The ID of the song or video to delete its
                 bookmark.
-        Returns: The Subsonic object where this method was called to allow
-            method chaining.
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
         self.api.json_request("deleteBookmark", {"id": song_or_video_id})
 
@@ -103,8 +108,9 @@ class Bookmarks:
     def get_play_queue(self) -> PlayQueue:
         """Get the play queue of the authenticated user.
 
-        Returns: An object that contains all the info of the
-            play queue of the user.
+        Returns:
+            An object that contains all the info of the
+                play queue of the user.
         """
 
         response = self.api.json_request("getPlayQueue")["playQueue"]
@@ -125,8 +131,9 @@ class Bookmarks:
             position: A position in milliseconds of where the current song
                 playback it at.
 
-        Returns: An object that contains all the info of the new
-            saved play queue.
+        Returns:
+            An object that contains all the info of the new
+                saved play queue.
         """
 
         self.api.json_request(

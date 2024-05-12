@@ -24,7 +24,8 @@ class InternetRadio:
     ) -> list[InternetRadioStation]:
         """Get all the internet radio stations available in the server.
 
-        Returns: A list with all the reported internet radio stations.
+        Returns:
+            A list with all the reported internet radio stations.
         """
 
         response = self.api.json_request("getInternetRadioStations")[
@@ -42,7 +43,8 @@ class InternetRadio:
             internet_radio_station_id: The ID of the internet radio station
                 to get its info.
 
-        Returns: An object that contains all the info about the requested
+        Returns:
+            An object that contains all the info about the requested
                 internet radio station.
         """
 
@@ -66,8 +68,9 @@ class InternetRadio:
             homepage_url: An URL for the homepage of the internet
                 radio station.
 
-        Returns: An object that holds all the data about the new created
-            internet radio station.
+        Returns:
+            An object that holds all the data about the new created
+                internet radio station.
         """
 
         self.api.json_request(
@@ -94,7 +97,8 @@ class InternetRadio:
             homepage_url: A new homepage URL for the internet radio
                 station.
 
-        Returns: An object that holds all the data about the new updated
+        Returns:
+            An object that holds all the data about the new updated
                 internet radio station.
         """
         self.api.json_request(
@@ -118,8 +122,9 @@ class InternetRadio:
             internet_radio_station_id: The ID of the internet radio station
                 to delete.
 
-        Returns: The Subsonic object where this method was called to allow
-            method chaining.
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
         self.api.json_request(
             "deleteInternetRadioStation", {"id": internet_radio_station_id}

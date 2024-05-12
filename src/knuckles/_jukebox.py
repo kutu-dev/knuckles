@@ -23,8 +23,9 @@ class JukeboxControl:
         """Get all the info related with the current playlist of
         the jukebox.
 
-        Returns: An object that holds all the info related with
-            the playlist of the jukebox.
+        Returns:
+            An object that holds all the info related with
+                the playlist of the jukebox.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "get"})[
@@ -37,8 +38,9 @@ class JukeboxControl:
         """Get all the info related with the current state of
         the jukebox.
 
-        Returns: An object that holds all the info related with
-            the state of the jukebox.
+        Returns:
+            An object that holds all the info related with
+                the scate of the jukebox.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "status"})[
@@ -53,8 +55,9 @@ class JukeboxControl:
         Args:
             songs_ids: A list of song IDs to set the jukebox playlist.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
@@ -69,8 +72,9 @@ class JukeboxControl:
     def start(self) -> Jukebox:
         """Start the playback of the current song in the jukebox playlist.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "start"})[
@@ -82,8 +86,9 @@ class JukeboxControl:
     def stop(self) -> Jukebox:
         """Stop the playback of the current song in the jukebox playlist.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "stop"})[
@@ -99,8 +104,9 @@ class JukeboxControl:
             index: The index of the song to skip to.
             offset: The offset of seconds to start playing the next song.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
@@ -115,8 +121,9 @@ class JukeboxControl:
         Args:
             songs_ids: A list of song IDs to add to the jukebox playlist.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
@@ -128,8 +135,9 @@ class JukeboxControl:
     def clear(self) -> Jukebox:
         """Clear the playlist of the jukebox.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
         response = self.api.json_request("jukeboxControl", {"action": "clear"})[
             "jukeboxStatus"
@@ -143,8 +151,9 @@ class JukeboxControl:
         Args:
             index: The index of the song to remove from the playlist.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
@@ -156,8 +165,9 @@ class JukeboxControl:
     def shuffle(self) -> Jukebox:
         """Shuffle all the songs in the playlist of the jukebox.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "shuffle"})[
@@ -175,8 +185,9 @@ class JukeboxControl:
         Raises:
             ValueError: Raised if the given gain is not between 0 and 1.
 
-        Returns: An object that contains the updated jukebox status
-            and playlist.
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         if not 1 > gain > 0:

@@ -8,9 +8,10 @@ if TYPE_CHECKING:
 
 
 class MediaLibraryScanning:
-    """Class that contains all the methods needed to interact
-    with the media library scanning calls in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/media-library-scanning/>
+    """Class that contains all the methods needed to interact with the
+    [media library scanning endpoints](https://opensubsonic.netlify.app/
+    categories/media-library-scanning/)
+    in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -20,10 +21,11 @@ class MediaLibraryScanning:
         self.subsonic = subsonic
 
     def get_scan_status(self) -> ScanStatus:
-        """Calls to the "getScanStatus" endpoint of the API.
+        """Get the status of the scanning of the library.
 
-        :return: An object with the information about the status of the scan.
-        :rtype: ScanStatus
+        Returns:
+            An object that holds all the info about the
+                current state of the scanning of the library.
         """
 
         response = self.api.json_request("getScanStatus")["scanStatus"]
@@ -31,10 +33,11 @@ class MediaLibraryScanning:
         return ScanStatus(self.subsonic, **response)
 
     def start_scan(self) -> ScanStatus:
-        """Calls to the "scanStatus" endpoint of the API.
+        """Request to the server to start a scanning of the library.
 
-        :return: An object with the information about the status of the scan.
-        :rtype: ScanStatus
+        Returns:
+            An object that holds all the info about the
+                current state of the scanning of the library.
         """
 
         response = self.api.json_request("startScan")["scanStatus"]

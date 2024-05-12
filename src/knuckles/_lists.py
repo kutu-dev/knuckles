@@ -44,7 +44,8 @@ class Lists:
             id3: If the request should be send to the ID3 or non-ID3 version
                 of the endpoint.
 
-        Returns: A list with all the info about the received albums.
+        Returns:
+            A list with all the info about the received albums.
         """
 
         response = self.api.json_request(
@@ -76,7 +77,8 @@ class Lists:
             music_folder_id: The ID of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about random albums.
+        Returns:
+            A list that contains the info about random albums.
         """
 
         return self._get_album_list_generic(
@@ -99,7 +101,8 @@ class Lists:
             music_folder_id: The ID of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from newest to oldest.
         """
 
@@ -123,7 +126,8 @@ class Lists:
             music_folder_id: The ID of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from the highest rated to the lowest ones.
         """
 
@@ -148,7 +152,8 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from the most frequent listened to the least.
         """
 
@@ -173,7 +178,8 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from the most recent listened to the least.
         """
 
@@ -197,8 +203,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            organized alphabetically by their names.
+        Returns:
+            A list that contains the info about the albums
+                organized alphabetically by their names.
         """
 
         return self._get_album_list_generic(
@@ -225,8 +232,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            organized alphabetically by their artist name.
+        Returns:
+            A list that contains the info about the albums
+                organized alphabetically by their artist name.
         """
 
         return self._get_album_list_generic(
@@ -253,8 +261,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            starred by the user.
+        Returns:
+            A list that contains the info about the albums
+                starred by the user.
         """
 
         return self._get_album_list_generic(
@@ -283,8 +292,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            that where released in the given year range.
+        Returns:
+            A list that contains the info about the albums
+                that where released in the given year range.
         """
 
         return self._get_album_list_generic(
@@ -316,8 +326,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            that are tagged with the given album.
+        Returns:
+            A list that contains the info about the albums
+                that are tagged with the given album.
         """
 
         return self._get_album_list_generic(
@@ -344,7 +355,8 @@ class Lists:
             music_folder_id: The ID of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about random albums.
+        Returns:
+            A list that contains the info about random albums.
         """
 
         return self._get_album_list_generic(
@@ -367,7 +379,8 @@ class Lists:
             music_folder_id: The ID of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from newest to oldest.
         """
 
@@ -391,7 +404,8 @@ class Lists:
             music_folder_id: The ID of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from the highest rated to the lowest ones.
         """
 
@@ -416,7 +430,8 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from the most frequent listened to the least.
         """
 
@@ -441,7 +456,8 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
+        Returns:
+            A list that contains the info about the albums
                 organized from the most recent listened to the least.
         """
 
@@ -465,8 +481,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            organized alphabetically by their names.
+        Returns:
+            A list that contains the info about the albums
+                organized alphabetically by their names.
         """
 
         return self._get_album_list_generic(
@@ -489,8 +506,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            organized alphabetically by their artist name.
+        Returns:
+            A list that contains the info about the albums
+                organized alphabetically by their artist name.
         """
 
         return self._get_album_list_generic(
@@ -513,8 +531,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            starred by the user.
+        Returns:
+            A list that contains the info about the albums
+                starred by the user.
         """
 
         return self._get_album_list_generic(
@@ -543,8 +562,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            that where released in the given year range.
+        Returns:
+            A list that contains the info about the albums
+                that where released in the given year range.
         """
 
         return self._get_album_list_generic(
@@ -575,8 +595,9 @@ class Lists:
             music_folder_id: the id of a music folder to list where the album
                 are from.
 
-        Returns: A list that contains the info about the albums
-            that are tagged with the given album.
+        Returns:
+            A list that contains the info about the albums
+                that are tagged with the given album.
         """
 
         return self._get_album_list_generic(
@@ -608,8 +629,9 @@ class Lists:
             music_folder_id: An ID of a music folder
                 to limit where the songs should be from.
 
-        Returns: A list that contains all the info about
-            that were randomly selected by the server.
+        Returns:
+            A list that contains all the info about
+                that were randomly selected by the server.
         """
 
         response = self.api.json_request(
@@ -644,8 +666,9 @@ class Lists:
             music_folder_id: An ID of a music folder where all the songs
                 should be from.
 
-        Returns: A list that contains all the info about
-            that are tagged with the given genre.
+        Returns:
+            A list that contains all the info about
+                that are tagged with the given genre.
         """
 
         response = self.api.json_request(
@@ -663,7 +686,8 @@ class Lists:
     def get_now_playing(self) -> list[NowPlayingEntry]:
         """Get the songs that are currently playing by all the users.
 
-        Returns: A list that holds all the info about all the
+        Returns:
+            A list that holds all the info about all the
                 song that are current playing by all the users.
         """
 
@@ -679,8 +703,9 @@ class Lists:
             music_folder_id: An ID of a music folder where all the songs
                 albums, and artists should be from.
 
-        Returns: An object that holds all the info about all the starred
-            songs, albums and artists by the user.
+        Returns:
+            An object that holds all the info about all the starred
+                songs, albums and artists by the user.
         """
 
         response = self.api.json_request(
@@ -697,8 +722,9 @@ class Lists:
             music_folder_id: An ID of a music folder where all the songs
                 albums, and artists should be from.
 
-        Returns: An object that holds all the info about all the starred
-            songs, albums and artists by the user.
+        Returns:
+            An object that holds all the info about all the starred
+                songs, albums and artists by the user.
         """
 
         response = self.api.json_request(

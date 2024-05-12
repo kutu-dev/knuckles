@@ -38,7 +38,8 @@ class MediaRetrieval:
             downloaded_file_path: A path where the file to download should
                 be saved.
 
-        Returns: The path where the file was finally saved.
+        Returns:
+            The path where the file was finally saved.
         """
 
         response.raise_for_status()
@@ -72,7 +73,8 @@ class MediaRetrieval:
             determinate_filename: The callback to be used to determine the
                 filename in case the given path points to a directory.
 
-        Returns: The path where the file was finally saved.
+        Returns:
+            The path where the file was finally saved.
         """
 
         if not file_or_directory_path.is_dir():
@@ -113,8 +115,9 @@ class MediaRetrieval:
                 transcoded version in `MP4`. Only works with video
                 streaming.
 
-        Returns: An URL with all the needed parameters to start a streaming
-            using a GET request.
+        Returns:
+            An URL with all the needed parameters to start a streaming
+                using a GET request.
         """
 
         return self.subsonic.api.generate_url(
@@ -140,7 +143,8 @@ class MediaRetrieval:
                 be downloaded inside of it, if its a valid file path it will be
                 downloaded using this exact filename.
 
-        Returns: The path where the song or video was finally saved.
+        Returns:
+            The path where the song or video was finally saved.
         """
 
         response = self.api.raw_request("download", {"id": song_or_video_id})
@@ -183,8 +187,9 @@ class MediaRetrieval:
             audio_track_id: The ID of an audio track to be added to the stream
                 if video is being streamed.
 
-        Returns: An URL with all the needed parameters to start a streaming
-            with hls.m3u8 using a GET request.
+        Returns:
+            An URL with all the needed parameters to start a streaming
+                with hls.m3u8 using a GET request.
         """
 
         return self.subsonic.api.generate_url(
@@ -213,7 +218,8 @@ class MediaRetrieval:
             subtitles_file_format: The format that the subtitle file should
                 have.
 
-        Returns: The path where the captions was finally saved.
+        Returns:
+            The path where the captions was finally saved.
         """
 
         # Check if the given file format is a valid one
@@ -254,7 +260,8 @@ class MediaRetrieval:
             size: The width in pixels that the image should have,
                 the cover arts are always squares.
 
-        Returns: The path where the captions was finally saved.
+        Returns:
+            The path where the captions was finally saved.
         """
 
         response = self.api.raw_request(
@@ -282,9 +289,11 @@ class MediaRetrieval:
                 lyrics from.
             song_title: The title of the song to get its lyrics from.
 
-        Returns: An object that contains all the info about the requested
-            lyrics.
+        Returns:
+            An object that contains all the info about the requested
+                lyrics.
         """
+
         response = self.api.json_request(
             "getLyrics", {"artist": artist_name, "title": song_title}
         )["lyrics"]
@@ -301,7 +310,8 @@ class MediaRetrieval:
                 be downloaded inside of it, if its a valid file path it will be
                 downloaded using this exact filename.
 
-        Returns: The path where the avatar image was finally saved.
+        Returns:
+            The path where the avatar image was finally saved.
         """
 
         response = self.api.raw_request("getAvatar", {"username": username})

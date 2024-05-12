@@ -10,9 +10,9 @@ Change `stream()` to `stream_song()` and `stream_video()`.
 - [x] `_internet_radio.py`
 - [x] `_jukebox.py`
 - [x] `_lists.py`
-- [ ] `_media_annotation.py` **[IN PROGRESS]**
-- [ ] `_media_library_scanning.py`
-- [ ] `_media_retrieval.py`
+- [ ] `_media_annotation.py`
+- [x] `_media_library_scanning.py`
+- [x] `_media_retrieval.py`
 - [ ] `_playlists.py`
 - [ ] `_podcast.py`
 - [ ] `_searching.py`

@@ -23,8 +23,9 @@ class Chat:
         Args:
             message: The message content to add.
 
-        Returns: The Subsonic object where this method was called to allow
-            method chaining.
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
         self.api.json_request("addChatMessage", {"message": message})
 
@@ -33,7 +34,8 @@ class Chat:
     def get_chat_messages(self) -> list[ChatMessage]:
         """Get all send chat messages.
 
-        Returns: A list with all the messages info.
+        Returns:
+            A list with all the messages info.
         """
 
         response: list[dict[str, Any]] = self.api.json_request("getChatMessages")[

@@ -9,105 +9,121 @@ if TYPE_CHECKING:
 
 
 class MediaAnnotation:
-    """Class that contains all the methods needed to interact
-    with the media annotation calls in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/media-annotation/>
+    """Class that contains all the methods needed to interact with the
+    [media annotations endpoints](https://opensubsonic.netlify.app/
+    categories/media-annotation/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
         self.api = api
         self.subsonic = subsonic
 
-    def star_song(self, id_: str) -> "Subsonic":
-        """Calls the "star" endpoint of the API.
+    def star_song(self, song_id: str) -> "Subsonic":
+        """Star a song from the server.
 
-        :param id_: The ID of a song to star.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            song_id: The ID of the song to star.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
-        self.api.json_request("star", {"id": id_})
+        self.api.json_request("star", {"id": song_id})
 
         return self.subsonic
 
-    def star_album(self, id_: str) -> "Subsonic":
-        """Calls the "star" endpoint of the API.
+    def star_album(self, album_id: str) -> "Subsonic":
+        """Star an album from the server.
 
-        :param id_: The ID of an album to star.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            album_id: The ID of the album to star.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
-        self.api.json_request("star", {"albumId": id_})
+        self.api.json_request("star", {"albumId": album_id})
 
         return self.subsonic
 
-    def star_artist(self, id_: str) -> "Subsonic":
-        """Calls the "star" endpoint of the API.
+    def star_artist(self, artist_id: str) -> "Subsonic":
+        """Star an artist from the server.
 
-        :param id_: The ID of an artist to star.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            artist_id: The ID of the artist to star.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
-        self.api.json_request("star", {"artistId": id_})
+        self.api.json_request("star", {"artistId": artist_id})
 
         return self.subsonic
 
-    def unstar_song(self, id_: str) -> "Subsonic":
-        """Calls the "unstar" endpoint of the API.
+    def unstar_song(self, song_id: str) -> "Subsonic":
+        """Unstar a song from the server.
 
-        :param id_: The ID of a song to unstar.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            song_id: The ID of the song to unstar.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
-        self.api.json_request("unstar", {"id": id_})
+        self.api.json_request("unstar", {"id": song_id})
 
         return self.subsonic
 
-    def unstar_album(self, id_: str) -> "Subsonic":
-        """Calls the "unstar" endpoint of the API.
+    def unstar_album(self, album_id: str) -> "Subsonic":
+        """Unstar an album from the server.
 
-        :param id_: The ID of an album to unstar.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            album_id: The ID of the album to unstar.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
-        self.api.json_request("unstar", {"albumId": id_})
+        self.api.json_request("unstar", {"albumId": album_id})
 
         return self.subsonic
 
-    def unstar_artist(self, id_: str) -> "Subsonic":
-        """Calls the "unstar" endpoint of the API.
+    def unstar_artist(self, artist_id: str) -> "Subsonic":
+        """Unstar an artist from the server.
 
-        :param id_: The ID of an artist to unstar.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            artist_id: The ID of the artist to unstar.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
-        self.api.json_request("unstar", {"artistId": id_})
+        self.api.json_request("unstar", {"artistId": artist_id})
 
         return self.subsonic
 
-    def set_rating(self, id_: str, rating: int) -> "Subsonic":
-        """Calls to the "setRating" endpoint of the API.
+    def set_rating(self, song_id: str, rating: int) -> "Subsonic":
+        """The the rating of a song.
 
-        :param id_: The ID of a song to set its rating.
-        :type id_: str
-        :param rating: The rating to set. It should be a number
-            between 1 and 5 (inclusive).
-        :type rating: int
-        :raises InvalidRatingNumber: Raised if the given rating number
-            isn't in the valid range.
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            song_id: The ID of the song to set its rating.
+            rating: The rating between 1 and 5 (inclusive) to set
+                the rating of the song to.
+
+        Raises:
+            InvalidRatingNumber: Raised when a number that is not
+                between 1 and 5 (inclusive) has been pass in into
+                the `rating` parameter.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
         if rating not in range(1, 6):
@@ -118,45 +134,49 @@ class MediaAnnotation:
                 )
             )
 
-        self.api.json_request("setRating", {"id": id_, "rating": rating})
+        self.api.json_request("setRating", {"id": song_id, "rating": rating})
 
         return self.subsonic
 
-    def remove_rating(self, id_: str) -> "Subsonic":
-        """Calls the "setRating" endpoint of the API with a rating of 0.
+    def remove_rating(self, song_id: str) -> "Subsonic":
+        """Remove the rating entry of a song.
 
-        :param id_: The ID of a song to set its rating.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            song_id: The ID of the song which entry should
+                be removed.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
-        self.api.json_request("setRating", {"id": id_, "rating": 0})
+        self.api.json_request("setRating", {"id": song_id, "rating": 0})
 
         return self.subsonic
 
     def scrobble(
-        self, id_: list[str], time: list[datetime], submission: bool = True
+        self, song_id: list[str], time: list[datetime], submission: bool = True
     ) -> "Subsonic":
-        """Calls to the "scrobble" endpoint of the API
+        """Scrobble (register) that some song have been locally played or
+        is being played.
 
-        :param id_: The list of song IDs to scrobble.
-        :type id_: list[str]
-        :param time: The time at which the song was listened to.
-        :type time: datetime
-        :param submission: If the scrobble is a submission
-            or a "now playing" notification, defaults to True.
-        :type submission: bool, optional
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            song_id: The ID of the song to scrobble.
+            time: How many times in second the song has been listened.
+            submission: If true it will be registered that the song **was
+                played**, if false the song will be scrobble as
+                **now playing**.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
-
         self.api.json_request(
             "scrobble",
             # Multiply by 1000 because the API uses
             # milliseconds instead of seconds for UNIX time
             {
-                "id": id_,
+                "id": song_id,
                 "time": [int(seconds.timestamp()) * 1000 for seconds in time],
                 "submission": submission,
             },

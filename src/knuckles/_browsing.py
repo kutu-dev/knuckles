@@ -27,7 +27,8 @@ class Browsing:
     def get_music_folders(self) -> list[MusicFolder]:
         """Get all the top level music folders.
 
-        Returns: A list that contains all the info about all the available
+        Returns:
+            A list that contains all the info about all the available
                 music folders.
         """
 
@@ -43,7 +44,8 @@ class Browsing:
         Args:
             music_folder_id: The ID of the music folder to get.
 
-        Returns: An object that contains all the info about the
+        Returns:
+            An object that contains all the info about the
                 requested music folder, or None if it wasn't found.
         """
 
@@ -61,7 +63,9 @@ class Browsing:
         Args:
             music_directory_id: The ID of the music directory to get its info.
 
-        Returns: An object that holds all the info about the requested music directory.
+        Returns:
+            An object that holds all the info about the requested music
+                directory.
         """
 
         response = self.api.json_request(
@@ -73,7 +77,8 @@ class Browsing:
     def get_genres(self) -> list[Genre]:
         """Get all the available genres in the server.
 
-        Returns: A list with all the registered genres in the server.
+        Returns:
+            A list with all the registered genres in the server.
         """
 
         response = self.api.json_request("getGenres")["genres"]["genre"]
@@ -86,7 +91,8 @@ class Browsing:
         Args:
             genre_name: The name of the genre to get its info.
 
-        Returns: An object that contains all the info
+        Returns:
+            An object that contains all the info
                 about the requested genre.
         """
 
@@ -105,7 +111,8 @@ class Browsing:
             music_folder_id: A music folder ID to reduce the scope of the
                 artists to return.
 
-        Returns: A list with all the info about all the received artists.
+        Returns:
+            A list with all the info about all the received artists.
         """
 
         response = self.api.json_request(
@@ -127,8 +134,9 @@ class Browsing:
         Args:
             artist_id: The ID of the artist to get its info.
 
-        Returns: An object that contains all the info about
-            the requested artist.
+        Returns:
+            An object that contains all the info about
+                the requested artist.
         """
 
         response = self.api.json_request("getArtist", {"id": artist_id})["artist"]
@@ -146,7 +154,8 @@ class Browsing:
             modified_since: Time in milliseconds since the artist have changed
                 its collection.
 
-        Returns: An object containt all the artist alphabetically indexed.
+        Returns:
+            An object containt all the artist alphabetically indexed.
         """
 
         response = self.api.json_request(
@@ -162,8 +171,9 @@ class Browsing:
         Args:
             album_id: The ID of the album to get its info.
 
-        Returns: An object that contains all the info about
-            the requested album.
+        Returns:
+            An object that contains all the info about
+                the requested album.
         """
 
         response = self.api.json_request("getAlbum", {"id": album_id})["album"]
@@ -177,7 +187,8 @@ class Browsing:
         Args:
             album_id: The ID of the album to get its extra info.
 
-        Returns: An object that contains all the extra info about
+        Returns:
+            An object that contains all the extra info about
                 the requested album.
         """
 
@@ -191,7 +202,8 @@ class Browsing:
         Args:
             album_id: The ID of the album to get its extra info.
 
-        Returns: An object that contains all the extra info about
+        Returns:
+            An object that contains all the extra info about
                 the requested album.
         """
 
@@ -205,7 +217,8 @@ class Browsing:
         Args:
             song_id: The ID of the song to get its info.
 
-        Returns: An object that contains all the info
+        Returns:
+            An object that contains all the info
                 about the requested song.
         """
 
@@ -216,8 +229,9 @@ class Browsing:
     def get_videos(self) -> list[Video]:
         """Get all the registered videos in the server.
 
-        Returns: A list with all the info about al the videos
-            available in the server.
+        Returns:
+            A list with all the info about al the videos
+                available in the server.
         """
 
         response = self.api.json_request("getVideos")["videos"]["video"]
@@ -230,7 +244,8 @@ class Browsing:
         Args:
             video_id: The ID of the video to get its info.
 
-        Returns: An object that contains all the info about
+        Returns:
+            An object that contains all the info about
                 the requested video.
         """
 
@@ -248,8 +263,9 @@ class Browsing:
         Args:
             video_id: The ID of the video to get its extra info.
 
-        Returns: An object that holds all the extra info about
-            the requested video.
+        Returns:
+            An object that holds all the extra info about
+                the requested video.
         """
 
         response = self.api.json_request("getVideoInfo", {"id": video_id})["videoInfo"]
@@ -272,7 +288,8 @@ class Browsing:
             include_similar_artists_not_present: Include similar artists
                 that are not present in any the media library.
 
-        Returns: An object that contains all the extra info about
+        Returns:
+            An object that contains all the extra info about
                 the requested artist.
         """
 
@@ -302,7 +319,8 @@ class Browsing:
             include_similar_artists_not_present: Include similar artists
                 that are not present in any the media library.
 
-        Returns: An object that contains all the extra info about
+        Returns:
+            An object that contains all the extra info about
                 the requested artist.
         """
 
@@ -327,7 +345,8 @@ class Browsing:
             song_id: The ID of the song to get similar songs.
             song_count: The number of songs to return.
 
-        Returns: A list that contains all the songs that are similar
+        Returns:
+            A list that contains all the songs that are similar
                 to the given one.
         """
 
@@ -346,7 +365,8 @@ class Browsing:
             song_id: The ID of the song to get similar songs.
             song_count: The number of songs to return.
 
-        Returns: A list that contains all the songs that are similar
+        Returns:
+            A list that contains all the songs that are similar
                 to the given one.
         """
 
@@ -364,8 +384,10 @@ class Browsing:
                 given artist.
             max_num_of_songs: The max number of songs to return.
 
-        Returns: A list that contains the top rated songs of the server.
+        Returns:
+            A list that contains the top rated songs of the server.
         """
+
         response = self.api.json_request(
             "getTopSongs", {"artist": artist_name, "count": max_num_of_songs}
         )["topSongs"]["song"]
