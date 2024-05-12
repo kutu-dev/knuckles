@@ -1,6 +1,7 @@
 # TODO
 
 Except `__init__` methods.
+Change `stream()` to `stream_song()` and `stream_video()`.
 
 - [x] `_api.py`
 - [x] `_bookmarks.py`
@@ -9,7 +10,7 @@ Except `__init__` methods.
 - [x] `_internet_radio.py`
 - [x] `_jukebox.py`
 - [x] `_lists.py`
-- [ ] `_media_annotation.py`
+- [ ] `_media_annotation.py` **[IN PROGRESS]**
 - [ ] `_media_library_scanning.py`
 - [ ] `_media_retrieval.py`
 - [ ] `_playlists.py`
