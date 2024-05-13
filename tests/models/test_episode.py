@@ -18,7 +18,7 @@ def test_generate(
 ) -> None:
     add_responses(mock_get_podcasts_with_episodes)
 
-    response = subsonic.podcast.get_episode(episode["id"])
+    response = subsonic.podcast.get_podcast_episode(episode["id"])
     response.title = "Foo"
     response = response.generate()
 
@@ -53,7 +53,7 @@ def test_download(
     add_responses(mock_get_podcasts_with_episodes)
     add_responses(mock_download_podcast_episode)
 
-    response = subsonic.podcast.get_episode(episode["id"])
+    response = subsonic.podcast.get_podcast_episode(episode["id"])
     response = response.download()
 
     assert type(response) is Episode
@@ -70,7 +70,7 @@ def test_delete(
     add_responses(mock_get_podcasts_with_episodes)
     add_responses(mock_delete_podcast_episode)
 
-    requested_episode = subsonic.podcast.get_episode(episode["id"])
+    requested_episode = subsonic.podcast.get_podcast_episode(episode["id"])
     requested_episode = requested_episode.delete()
 
     assert type(requested_episode) is Episode

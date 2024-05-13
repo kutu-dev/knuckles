@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 
 class Bookmarks:
     """Class that contains all the methods needed to interact with the
-    [bookmark endpoints](https://opensubsonic.netlify.app/categories/bookmarks/)
-    in the Subsonic API.
+    [bookmark endpoints](https://opensubsonic.netlify.app/
+    categories/bookmarks/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:

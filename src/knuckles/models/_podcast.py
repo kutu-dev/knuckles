@@ -110,7 +110,7 @@ class Episode(Model):
         :rtype: Episode
         """
 
-        get_episode = self._subsonic.podcast.get_episode(self.id)
+        get_episode = self._subsonic.podcast.get_podcast_episode(self.id)
 
         if get_episode is None:
             raise ResourceNotFound(
@@ -206,7 +206,7 @@ class Channel(Model):
         :rtype: Channel
         """
 
-        return self._subsonic.podcast.get_podcast(self.id)
+        return self._subsonic.podcast.get_podcast_channel(self.id)
 
     def create(self) -> Self:
         """Calls the "createPodcastChannel" endpoint of the API.

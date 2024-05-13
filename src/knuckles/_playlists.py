@@ -8,9 +8,9 @@ if TYPE_CHECKING:
 
 
 class Playlists:
-    """Class that contains all the methods needed to interact
-    with the playlists calls and actions in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/playlists/>
+    """Class that contains all the methods needed to interact with the
+    [playlists endpoints](https://opensubsonic.netlify.app/
+    categories/playlists/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -20,14 +20,17 @@ class Playlists:
         self.subsonic = subsonic
 
     def get_playlists(self, username: str | None = None) -> list[Playlist]:
-        """Calls to the "getPlaylists" endpoint of the API.
+        """Get all the playlists available to the authenticated user.
 
-        :param username: The user to get its playlist,
-            if None gets the playlist of the authenticated user, defaults to None.
-        :type username: str | None, optional
-        :return: A list with all the playlist of the desired user.
-        :rtype: list[Playlist]
+        Args:
+            username: The username of another user if is wanted to get the
+                playlists they can access.
+
+        Returns:
+            A list that holds all the info about all the playlist
+                that the user can play.
         """
+
         response = self.api.json_request(
             "getPlaylists",
             {"username": username} if username else {},
@@ -37,15 +40,18 @@ class Playlists:
 
         return playlists
 
-    def get_playlist(self, id_: str) -> Playlist:
-        """Calls to the "getPlaylist" endpoint of the API.
+    def get_playlist(self, playlist_id: str) -> Playlist:
+        """Get all the info about a playlist available for the authenticated
+        user.
 
-        :param id_: The ID of the playlist to get.
-        :type id_: str
-        :return: The requested playlist.
-        :rtype: Playlist
+        Args:
+            playlist_id: The ID of the playlist to get its info.
+
+        Returns:
+            An object that holds all the info about the requested playlist.
         """
-        response = self.api.json_request("getPlaylist", {"id": id_})["playlist"]
+
+        response = self.api.json_request("getPlaylist", {"id": playlist_id})["playlist"]
 
         return Playlist(self.subsonic, **response)
 
@@ -56,23 +62,19 @@ class Playlists:
         public: bool | None = None,
         song_ids: list[str] | None = None,
     ) -> Playlist:
-        """Calls the "createPlaylist" endpoint of the API.
+        """Create a new playlist for the authenticated user.
 
-        The Subsonic API only allows to set a name and a list of songs when creating
-        a playlist. To allow more initial customization (comment and public)
-        this method calls the "updatePlaylist" endpoint internally.
+        Args:
+            name: The name of the playlist to be created.
+            comment: A comment to be added to the new created playlist.
+            public: If the song should be public or not.
+            song_ids: A list of ID of the songs that should be included
+                with the playlist.
 
-        :param name: The name of the new playlist.
-        :type name: str
-        :param comment: A comment to append to the playlist, defaults to None.
-        :type comment: str | None, optional
-        :param public: If the playlist should be public of private, defaults to None.
-        :type public: bool | None, optional
-        :param song_ids: A list of songs to add to the playlist, defaults to None.
-        :type song_ids: list[str] | None, optional
-        :return: The new created playlist.
-        :rtype: Playlist
+        Returns:
+            An object that holds all the info about the new created playlist.
         """
+
         response = self.api.json_request(
             "createPlaylist", {"name": name, "songId": song_ids}
         )["playlist"]
@@ -91,36 +93,33 @@ class Playlists:
 
     def update_playlist(
         self,
-        id_: str,
+        playlist_id: str,
         name: str | None = None,
         comment: str | None = None,
         public: bool | None = None,
         song_ids_to_add: list[str] | None = None,
         song_indexes_to_remove: list[int] | None = None,
     ) -> Playlist:
-        """Calls the "updatePlaylist" endpoint of the API.
+        """Update the info of a playlist.
 
-        :param id_: The ID of the playlist to update.
-        :type id_: str
-        :param name: A new name for the playlist, defaults to None.
-        :type name: str | None, optional
-        :param comment: A new comment for the playlist, defaults to None.
-        :type comment: str | None, optional
-        :param public: A new public state for the playlist, defaults to None.
-        :type public: bool | None, optional
-        :param song_ids_to_add: A list of IDs of songs to add to the playlist,
-            defaults to None.
-        :type song_ids_to_add: list[str] | None, optional
-        :param song_indexes_to_remove: A list of indexes of songs to remove
-            in the playlist, defaults to None.
-        :type song_indexes_to_remove: list[int] | None, optional
-        :return: The updated version of the playlist.
-        :rtype: Playlist
+        Args:
+            playlist_id: The ID of the playlist to update its info.
+            name: A new name for the playlist.
+            comment: A new comment for the playlist.
+            public: Change if the playlist should be public or private.
+            song_ids_to_add: A list of IDs of new songs to be added to the
+                playlist.
+            song_indexes_to_remove: A list in indexes of songs that should
+                be removed from the playlist.
+
+        Returns:
+            An object that holds all the info about the updated playlist.
         """
+
         self.api.json_request(
             "updatePlaylist",
             {
-                "playlistId": id_,
+                "playlistId": playlist_id,
                 "name": name,
                 "comment": comment,
                 "public": public,
@@ -130,17 +129,20 @@ class Playlists:
         )
 
         return Playlist(
-            self.subsonic, id=id_, name=name, comment=comment, public=public
+            self.subsonic, id=playlist_id, name=name, comment=comment, public=public
         )
 
-    def delete_playlist(self, id_: str) -> "Subsonic":
-        """Calls the "deletePlaylist" endpoint of the API.
+    def delete_playlist(self, playlist_id: str) -> "Subsonic":
+        """Delete a playlist.
 
-        :param id_: The ID of the song to remove.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            playlist_id: The ID of the playlist to remove.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
-        self.api.json_request("deletePlaylist", {"id": id_})
+
+        self.api.json_request("deletePlaylist", {"id": playlist_id})
 
         return self.subsonic

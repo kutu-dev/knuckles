@@ -2,6 +2,7 @@
 
 Except `__init__` methods.
 Change `stream()` to `stream_song()` and `stream_video()`.
+Add `justfile`.
 
 - [x] `_api.py`
 - [x] `_bookmarks.py`
@@ -10,11 +11,11 @@ Change `stream()` to `stream_song()` and `stream_video()`.
 - [x] `_internet_radio.py`
 - [x] `_jukebox.py`
 - [x] `_lists.py`
-- [ ] `_media_annotation.py`
+- [x] `_media_annotation.py`
 - [x] `_media_library_scanning.py`
 - [x] `_media_retrieval.py`
-- [ ] `_playlists.py`
-- [ ] `_podcast.py`
+- [x] `_playlists.py`
+- [x] `_podcast.py`
 - [ ] `_searching.py`
 - [ ] `_sharing.py`
 - [ ] `_subsonic.py`

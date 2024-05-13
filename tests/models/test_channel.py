@@ -16,7 +16,7 @@ def test_generate(
 ) -> None:
     add_responses(mock_get_podcast_default)
 
-    response = subsonic.podcast.get_podcast(channel["id"])
+    response = subsonic.podcast.get_podcast_channel(channel["id"])
     response.title = "Foo"
     response = response.generate()
 
@@ -34,7 +34,7 @@ def test_create(
     add_responses(mock_get_podcast_default)
     add_responses(mock_create_podcast_channel)
 
-    response = subsonic.podcast.get_podcast(channel["id"])
+    response = subsonic.podcast.get_podcast_channel(channel["id"])
     response = response.create()
 
     assert type(response) is Channel
@@ -51,7 +51,7 @@ def test_delete(
     add_responses(mock_get_podcast_default)
     add_responses(mock_delete_podcast_channel)
 
-    response = subsonic.podcast.get_podcast(channel["id"])
+    response = subsonic.podcast.get_podcast_channel(channel["id"])
     response = response.delete()
 
     assert type(response) is Channel
