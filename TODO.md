@@ -16,8 +16,8 @@ Add `justfile`.
 - [x] `_media_retrieval.py`
 - [x] `_playlists.py`
 - [x] `_podcast.py`
-- [ ] `_searching.py`
-- [ ] `_sharing.py`
+- [x] `_searching.py`
+- [x] `_sharing.py`
 - [ ] `_subsonic.py`
 - [ ] `_system.py`
 - [ ] `_user_management.py`
