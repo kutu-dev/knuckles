@@ -8,9 +8,9 @@ if TYPE_CHECKING:
 
 
 class UserManagement:
-    """Class that contains all the methods needed to interact
-    with the user management calls in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/user-management/>
+    """Class that contains all the methods needed to interact with the
+    [user management endpoints](https://opensubsonic.netlify.app/
+    categories/user-management/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -18,14 +18,14 @@ class UserManagement:
         self.subsonic = subsonic
 
     def get_user(self, username: str) -> User:
-        """Calls the "getUser" endpoint of the API.
+        """Get all the info about a user.
 
-        :param username: The username of the user to get.
-        :type username: str
-        :return: A User object will all the data of the requested user.
-        :rtype: User
+        Args:
+            username: The username of the user to get its info.
+
+        Returns:
+            An object that holds all the info about the requested user.
         """
-
         request = self.api.json_request("getUser", {"username": username})["user"]
 
         return User(
@@ -51,10 +51,11 @@ class UserManagement:
         )
 
     def get_users(self) -> list[User]:
-        """Calls the "getUsers" endpoint of the API.
+        """Get all the users registered in the server.
 
-        :return: A list of User objects.
-        :rtype: list[User]
+        Returns:
+            A list that holds all the info about all the available
+                users in the server.
         """
 
         request = self.api.json_request("getUsers")["users"]["user"]
@@ -108,6 +109,44 @@ class UserManagement:
         music_folder_id: list[str] | None = None,
         max_bit_rate: int | None = None,
     ) -> User:
+        """Create a new user in the server.
+
+        Args:
+            username: The username of the user to create.
+            password: The password of the user to create.
+            email: The email of the user to create.
+            ldap_authenticated: If the user is authenticated in a LDAP server.
+            admin_role: If the user should be an administrator.
+            settings_role: If the user is allowed to change its
+                personal settings and password.
+            stream_role: If the user should be allowed to stream songs and
+                videos.
+            jukebox_role: If the user should be able to play songs in the
+                jukebox.
+            download_role: If the user should be able to download files from
+                the server.
+            upload_role: If the user should be allowed to upload files to
+                the server.
+            playlist_role: If the user should be able to create and delete
+                playlists.
+            cover_art_role: If the user should be allowed to change cover
+                art and tags of songs.
+            comment_role: If the user is allowed to create and edit
+                comments and ratings.
+            podcast_role: If the user should be allowed to administrate
+                podcasts.
+            share_role: If the user should be able to create share links.
+            video_conversion_role: If the use should be allowed to
+                start video conversion in the server.
+            music_folder_id: A list of IDs where the used should have access
+                to. If no one is specified all of them will be accessible.
+            max_bit_rate: The max bitrate that the user should be able to
+                stream.
+
+        Returns:
+            An object that holds all the info about the new created user.
+        """
+
         self.api.json_request(
             "createUser",
             {
@@ -178,15 +217,42 @@ class UserManagement:
         music_folder_id: list[str] | None = None,
         max_bit_rate: int | None = None,
     ) -> User:
-        """Calls the "updateUser" endpoint of the API.
+        """Update the info of a user.
 
-        The user to update with the new data will be
-        selected with the username property of the User object.
+        Args:
+            username: The username of the user to update.
+            password: The password of the user to update.
+            email: The email of the user to update.
+            ldap_authenticated: If the user is authenticated in a LDAP server.
+            admin_role: If the user should be an administrator.
+            settings_role: If the user is allowed to change its
+                personal settings and password.
+            stream_role: If the user should be allowed to stream songs and
+                videos.
+            jukebox_role: If the user should be able to play songs in the
+                jukebox.
+            download_role: If the user should be able to download files from
+                the server.
+            upload_role: If the user should be allowed to upload files to
+                the server.
+            playlist_role: If the user should be able to create and delete
+                playlists.
+            cover_art_role: If the user should be allowed to change cover
+                art and tags of songs.
+            comment_role: If the user is allowed to create and edit
+                comments and ratings.
+            podcast_role: If the user should be allowed to administrate
+                podcasts.
+            share_role: If the user should be able to create share links.
+            video_conversion_role: If the use should be allowed to
+                start video conversion in the server.
+            music_folder_id: A list of IDs where the used should have access
+                to. If no one is specified all of them will be accessible.
+            max_bit_rate: The max bitrate that the user should be able to
+                stream.
 
-        :param updated_data_user: A user object with the updated data.
-        :type updated_data_user: User
-        :return: The object itself to allow method chaining.
-        :rtype: User
+        Returns:
+            An object that holds all the info about the update user.
         """
 
         self.api.json_request(
@@ -238,12 +304,14 @@ class UserManagement:
         return updated_user
 
     def delete_user(self, username: str) -> "Subsonic":
-        """Calls the "deleteUser" endpoint of the API.
+        """Delete a user from the server.
 
-        :param username: The username of the user to delete.
-        :type username: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            username: The username of the user to delete.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
         self.api.json_request("deleteUser", {"username": username})
@@ -251,14 +319,15 @@ class UserManagement:
         return self.subsonic
 
     def change_password(self, username: str, new_password: str) -> "Subsonic":
-        """Calls the "changePassword" endpoint of the API.
+        """Change the password of a user.
 
-        :param username: The username of the user to change its password.
-        :type username: str
-        :param new_password: The new password of the user
-        :type new_password: str
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            username: The username of the user to change its password.
+            new_password: The new password for the user.
+
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
 
         self.api.json_request(

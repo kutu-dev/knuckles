@@ -3,6 +3,7 @@
 Except `__init__` methods.
 Change `stream()` to `stream_song()` and `stream_video()`.
 Add `justfile`.
+Add default username to the authenticated user in the user management methods.
 
 - [x] `_api.py`
 - [x] `_bookmarks.py`
@@ -20,7 +21,7 @@ Add `justfile`.
 - [x] `_sharing.py`
 - [x] `_subsonic.py`
 - [x] `_system.py`
-- [ ] `_user_management.py`
+- [x] `_user_management.py`
 - [x] `exceptions.py`
 - [ ] `_album.py`
 - [ ] `_artist.py`
