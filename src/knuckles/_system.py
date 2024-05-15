@@ -13,9 +13,9 @@ class OpenSubsonicExtension(NamedTuple):
 
 
 class System:
-    """Class that contains all the methods needed to interact
-    with the systems calls in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/system/>
+    """Class that contains all the methods needed to interact with the
+    [system endpoints](https://opensubsonic.netlify.app/
+    categories/system/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -25,12 +25,10 @@ class System:
         self.subsonic = subsonic
 
     def ping(self) -> SubsonicResponse:
-        """Calls to the "ping" endpoint of the API.
+        """Make a ping to the server.
 
-        Useful to test the status of the server.
-
-        :return: An object with all the data received from the server.
-        :rtype: SubsonicResponse
+        Returns:
+            An object that holds all the info returned by the server.
         """
 
         response = self.api.json_request("ping")
@@ -38,10 +36,11 @@ class System:
         return SubsonicResponse(self.subsonic, **response)
 
     def get_license(self) -> License:
-        """Calls to the "getLicense" endpoint of the API.
+        """Get the current status of the license of the server.
 
-        :return: An object with all the information about the status of the license.
-        :rtype: License
+        Returns:
+            An object that contains all the info about the status
+                of the license of the server.
         """
 
         response = self.api.json_request("getLicense")["license"]
@@ -49,6 +48,14 @@ class System:
         return License(self.subsonic, **response)
 
     def get_open_subsonic_extensions(self) -> list[OpenSubsonicExtension]:
+        """Get all the available OpenSubsonic REST API extensions for the
+        connected server.
+
+        Returns:
+            A list that contains all the info about all the available
+                extensions in the connected server.
+        """
+
         response = self.api.json_request("getOpenSubsonicExtensions")[
             "openSubsonicExtensions"
         ]
@@ -59,6 +66,20 @@ class System:
     def check_open_subsonic_extension(
         self, extension_name: str, extension_version: int
     ) -> bool:
+        """Check if a OpenSubonic REST API extension is available on the
+        connected server.
+
+        Args:
+            extension_name: The name of the extension to check if its
+                available.
+            extension_version: The version of the extension to check if
+                its available.
+
+        Returns:
+            If the given extension at the given version is available on
+                the connected server or not.
+        """
+
         extensions = self.get_open_subsonic_extensions()
 
         for extension in extensions:

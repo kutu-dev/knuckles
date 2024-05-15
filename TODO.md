@@ -18,8 +18,8 @@ Add `justfile`.
 - [x] `_podcast.py`
 - [x] `_searching.py`
 - [x] `_sharing.py`
-- [ ] `_subsonic.py`
-- [ ] `_system.py`
+- [x] `_subsonic.py`
+- [x] `_system.py`
 - [ ] `_user_management.py`
 - [x] `exceptions.py`
 - [ ] `_album.py`
