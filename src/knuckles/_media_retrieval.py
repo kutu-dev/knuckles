@@ -86,9 +86,9 @@ class MediaRetrieval:
 
     def stream(
         self,
-        id_: str,
+        song_or_video_id: str,
         max_bitrate_rate: int | None = None,
-        format_: str | None = None,
+        stream_format: str | None = None,
         time_offset: int | None = None,
         size: str | None = None,
         estimate_content_length: bool | None = None,
@@ -123,9 +123,9 @@ class MediaRetrieval:
         return self.subsonic.api.generate_url(
             "stream",
             {
-                "id": id_,
+                "id": song_or_video_id,
                 "maxBitRate": max_bitrate_rate,
-                "format": format_,
+                "format": stream_format,
                 "timeOffset": time_offset,
                 "size": size,
                 "estimateContentLength": estimate_content_length,

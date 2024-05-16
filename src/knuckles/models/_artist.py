@@ -13,7 +13,19 @@ from dateutil import parser
 
 
 class ArtistInfo(Model):
-    """Representation of all the data related to an artist info in Subsonic."""
+    """Object that holds all the extra info of an artist.
+
+    Attributes:
+        artist_id (str): The ID of the artist.
+        biography (str): The biography of an artist.
+        music_brainz_id (str | None): The ID of the MusicBrainz database
+            entry of the artist.
+        last_fm_url (str | None):
+        small_image_url (str | None):
+        medium_image_url (str | None):
+        large_image_url (str | None):
+        similar_artists (list[Artist] | None):
+    """
 
     def __init__(
         self,
@@ -27,25 +39,6 @@ class ArtistInfo(Model):
         largeImageUrl: str | None,
         similarArtist: list[dict[str, Any]] | None = None,
     ) -> None:
-        """Representation of all the data related to an album info in Subsonic.
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param artist_id: The ID3 of the artist associated with the info.
-        :type artist_id: str
-        :param biography: A biography for the album.
-        :type biography: str
-        :param musicBrainzId:The ID in music Brainz of the album.
-        :type musicBrainzId: str
-        :param smallImageUrl: An URL to the small size cover image of the artist.
-        :type smallImageUrl: str
-        :param mediumImageUrl: An URL to the medium size cover image of the artist.
-        :type mediumImageUrl: str
-        :param largeImageUrl: An URL to the large size cover image of the artist.
-        :type largeImageUrl: str
-        :param similarArtist: A list with all the similar artists.
-        :type similarArtist: list[str, Any]
-        """
-
         super().__init__(subsonic)
 
         self.artist_id = artist_id

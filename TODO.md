@@ -4,6 +4,7 @@ Except `__init__` methods.
 Change `stream()` to `stream_song()` and `stream_video()`.
 Add `justfile`.
 Add default username to the authenticated user in the user management methods.
+Document in contributing why attributes are double typed.
 
 - [x] `_api.py`
 - [x] `_bookmarks.py`
@@ -23,8 +24,8 @@ Add default username to the authenticated user in the user management methods.
 - [x] `_system.py`
 - [x] `_user_management.py`
 - [x] `exceptions.py`
-- [ ] `_album.py`
-- [ ] `_artist.py`
+- [x] `_album.py`
+- [ ] `_artist.py` **[IN PROGRESS: ArtistInfo]**
 - [ ] `_bookmark.py`
 - [ ] `_chat_message.py`
 - [ ] `_contributor.py`
