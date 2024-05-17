@@ -20,11 +20,15 @@ class ArtistInfo(Model):
         biography (str): The biography of an artist.
         music_brainz_id (str | None): The ID of the MusicBrainz database
             entry of the artist.
-        last_fm_url (str | None):
-        small_image_url (str | None):
-        medium_image_url (str | None):
-        large_image_url (str | None):
-        similar_artists (list[Artist] | None):
+        last_fm_url (str | None): The last.fm URL of the artist.
+        small_image_url (str | None): The URL of the small sized image of
+            the artist.
+        medium_image_url (str | None): The URL of the medium sized image
+            of the artist.
+        large_image_url (str | None): The URL of the large sized image
+            of the artist.
+        similar_artists (list[Artist] | None): A list that contains the
+            all the info about similar artists.
     """
 
     def __init__(
@@ -61,15 +65,37 @@ class ArtistInfo(Model):
         Useful for making copies with updated data or updating the object itself
         with immutability, e.g., foo = foo.generate().
 
-        :return: A new album info object with all the data updated.
-        :rtype: ArtistInfo
+        Returns:
+            A new object with the updated model.
         """
 
         return self._subsonic.browsing.get_artist_info(self.artist_id)
 
 
 class Artist(Model):
-    """Representation of all the data related to an artist in Subsonic."""
+    """Object that holds all the info of an artist.
+
+    Attributes:
+        id (str): The ID of the artist.
+        name (str | None): The name of the artist.
+        cover_art (CoverArt | None): The cover art associated with the artist.
+        artist_image_url (str | None): The URL of the image of the artist.
+        album_count (int | None): The number of albums created by the artist.
+        starred (datetime | None): The timestamp when the artist was starred if
+            it is.
+        user_rating (int | None): The rating from 0 to 5 (inclusive) that the
+            used has given to the artist if it is rated.
+        average_rating (float | None): The average rating given by all the
+            users.
+        albums (list[Album] | None): A list that holds all the info about
+            all the albums created by the artist.
+        info (ArtistInfo | None): All the extra info about the artist.
+        music_brainz_id (str | None): The ID of the MusicBrainz database entry
+            of the artist.
+        sort_name (str | None): The sort name of the artist.
+        roles (list[str] | None): List with all the roles the artist has been
+            in.
+    """
 
     def __init__(
         self,
@@ -87,30 +113,6 @@ class Artist(Model):
         sortName: str | None = None,
         roles: list[str] | None = None,
     ) -> None:
-        """Representation of all the data related to an artist in Subsonic.
-
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param id: The ID of the artist.
-        :type id: str
-        :param name: The name of the artist.
-        :type name: str
-        :param coverArt: The ID of the cover art of the artist.
-        :type coverArt: str
-        :param albumCount: The number of albums that the artist has.
-        :type albumCount: int
-        :param artistImageUrl: A URL to an image of the artist.
-        :type artistImageUrl: str
-        :param starred: The time when the artist was starred.
-        :type starred: str
-        :param userRating: The rating of the authenticated user.
-        :type userRating: int
-        :param averageRating: The average rating of all the users.
-        :type averageRating: float
-        :param album: A list with all the albums made by the artist.
-        :type album: list[dict[str, Any]]
-        """
-
         super().__init__(subsonic)
 
         self.id = id
@@ -135,14 +137,14 @@ class Artist(Model):
         self.roles = roles
 
     def generate(self) -> "Artist":
-        """Return a new artist with all the data updated from the API,
+        """Return a new artist info with all the data updated from the API,
         using the endpoint that return the most information possible.
 
         Useful for making copies with updated data or updating the object itself
         with immutability, e.g., foo = foo.generate().
 
-        :return: A new album info object with all the data updated.
-        :rtype: Artist
+        Returns:
+            A new object with the updated model.
         """
 
         new_artist = self._subsonic.browsing.get_artist(self.id)
@@ -151,11 +153,11 @@ class Artist(Model):
         return new_artist
 
     def get_artist_info(self) -> ArtistInfo:
-        """Returns the extra info given by the "getAlbumInfo2" endpoint,
-        also sets it in the info property of the model.
+        """Get all the extra info about the artist, it's
+        set to the `info` attribute of the object.
 
-        :return: An AlbumInfo object with all the extra info given by the API.
-        :rtype: AlbumInfo
+        Returns:
+            The extra info returned by the server.
         """
 
         self.info = self._subsonic.browsing.get_artist_info(self.id)

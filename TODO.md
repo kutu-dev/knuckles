@@ -25,13 +25,13 @@ Document in contributing why attributes are double typed.
 - [x] `_user_management.py`
 - [x] `exceptions.py`
 - [x] `_album.py`
-- [ ] `_artist.py` **[IN PROGRESS: ArtistInfo]**
-- [ ] `_bookmark.py`
-- [ ] `_chat_message.py`
-- [ ] `_contributor.py`
-- [ ] `_cover_art.py`
-- [ ] `_genre.py`
-- [ ] `_index.py`
+- [x] `_artist.py`
+- [x] `_bookmark.py`
+- [x] `_chat_message.py`
+- [x] `_contributor.py`
+- [x] `_cover_art.py`
+- [x] `_genre.py`
+- [x] `_index.py`
 - [ ] `_internet_radio_station.py`
 - [ ] `_jukebox.py`
 - [ ] `_lyrics.py`

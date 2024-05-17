@@ -12,7 +12,20 @@ from dateutil import parser
 
 
 class Bookmark(Model):
-    """Representation of all the data related to a bookmark in Subsonic."""
+    """Object that holds all the info about a bookmark.
+
+    Attributes:
+        song (Song): All the info about the bookmarked song.
+        position (int): The position in seconds of the playback
+            of the song when it was bookmarked.
+        user (User | None): All the info about the user that
+            created the bookmark.
+        comment (str | None): A comment attached to the bookmark.
+        created (datetime | None): The timestamp when the bookmark
+            was created.
+        changed (datetime | None): The timestamp when the bookmark
+            was updated.
+    """
 
     def __init__(
         self,
@@ -36,14 +49,14 @@ class Bookmark(Model):
         self.changed = parser.parse(changed) if changed else None
 
     def generate(self) -> "Bookmark":
-        """Return a new bookmark with all the data updated from the API,
+        """Return a new album object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new album info object with all the data updated.
-        :rtype: Bookmark
+        Returns:
+            A new object with all the updated info.
         """
 
         get_bookmark = self._subsonic.bookmarks.get_bookmark(self.song.id)
@@ -54,10 +67,12 @@ class Bookmark(Model):
         return get_bookmark
 
     def create(self) -> Self:
-        """Calls the "createBookmark" endpoint of the API.
+        """Create a new bookmark for the authenticated user
+        with the same data of the object where this method is
+        called.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.bookmarks.create_bookmark(
@@ -67,11 +82,11 @@ class Bookmark(Model):
         return self
 
     def update(self) -> Self:
-        """Calls the "createBookmark" endpoint of the API, as creating and updating
-        a bookmark uses the same endpoint. Useful for having more self-descriptive code.
+        """Update the info about the bookmark of this song using the
+        current data of the object.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.bookmarks.update_bookmark(
@@ -81,10 +96,10 @@ class Bookmark(Model):
         return self
 
     def delete(self) -> Self:
-        """Calls the "deleteBookmark" endpoint of the API.
+        """Delete the bookmark entry from the server.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.bookmarks.delete_bookmark(self.song.id)

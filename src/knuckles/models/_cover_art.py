@@ -7,15 +7,13 @@ if TYPE_CHECKING:
 
 
 class CoverArt(Model):
-    """Representation of all the data related to a cover art in Subsonic."""
+    """Object that holds all the info of a cover art.
+
+    Attributes:
+        id: The ID of the cover art.
+    """
 
     def __init__(self, subsonic: "Subsonic", id: str) -> None:
-        """Representation of all the data related to a cover art in Subsonic.
-
-        :param id: The ID of the cover art.
-        :type id: str
-        """
-
         super().__init__(subsonic)
 
         self.id: str = id
