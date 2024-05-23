@@ -8,7 +8,18 @@ if TYPE_CHECKING:
 
 
 class Jukebox(Model):
-    """Representation of all the data related to the jukebox in Subsonic."""
+    """Object that holds all the info about a jukebox.
+
+    Attributes:
+        current_index (int): The index in the playlist of the
+            current playing song in the jukebox.
+        playing (bool): If the jukebox is playing a song
+            or not.
+        gain (float): The gain of the playback of the jukebox.
+        position (int): How many seconds the song has been already player.
+        playlist (list[Song] | None): A list that holds all the info about
+            all the songs that are in the playlist of the jukebox.
+    """
 
     def __init__(
         self,
@@ -19,22 +30,6 @@ class Jukebox(Model):
         position: int,
         entry: list[dict[str, Any]] | None = None,
     ) -> None:
-        """Representation of all the data related to the jukebox in Subsonic.
-
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param currentIndex: The current index of the jukebox.
-        :type currentIndex: int
-        :param playing: If the jukebox is playing a song.
-        :type playing: bool
-        :param gain: The gain of the jukebox.
-        :type gain: float
-        :param position: The position of the jukebox.
-        :type position: int
-        :param entry: A list with all the songs inside the jukebox, defaults to None.
-        :type entry: list[dict[str, Any]] | None, optional
-        """
-
         super().__init__(subsonic)
 
         self.current_index: int = currentIndex
@@ -52,49 +47,48 @@ class Jukebox(Model):
             self.playlist.append(Song(subsonic=self._subsonic, **song))
 
     def generate(self) -> "Jukebox":
-        """Return a new jukebox with all the data updated from the API,
+        """Return a new jukebox object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new jukebox object with all the data updated.
-        :rtype: Jukebox
+        Returns:
+            A new object with all the updated info.
         """
 
         return self._subsonic.jukebox.get()
 
     def start(self) -> Self:
-        """Calls the "jukeboxControl" endpoint of the API with the action "start".
+        """Start the playback of the next song in the playlist.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
-
         self._subsonic.jukebox.start()
 
         return self
 
     def stop(self) -> Self:
-        """Calls the "jukeboxControl" endpoint of the API with the action "stop".
+        """Stop the playback of the jukebox.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
-
         self._subsonic.jukebox.stop()
 
         return self
 
     def skip(self, index: int, offset: float = 0) -> Self:
-        """_summary_
+        """Skips the current playing song of the jukebox to another one.
 
-        :param index: The index in the jukebox playlist to skip to.
-        :type index: int
-        :param offset: Start playing this many seconds into the track, defaults to 0.
-        :type offset: float, optional
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            index: The index of the song to skip to.
+            offset: An offset in seconds where the playback of the song
+                should start at.
+
+        Returns:
+            The object itself.
         """
 
         self._subsonic.jukebox.skip(index, offset)
@@ -102,10 +96,10 @@ class Jukebox(Model):
         return self
 
     def shuffle(self) -> Self:
-        """Calls the "jukeboxControl" endpoint of the API with the action "shuffle".
+        """Shuffle the playlist of the jukebox.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.jukebox.shuffle()
@@ -117,12 +111,13 @@ class Jukebox(Model):
         return self
 
     def set_gain(self, gain: float) -> Self:
-        """Calls the "jukeboxControl" endpoint of the API with the action "setGain"
+        """Set the gain of the jukebox.
 
-        :param gain: A number between 0 and 1 (inclusive) to set the gain.
-        :type gain: float
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            gain: The new gain of the jukebox.
+
+        Returns:
+            The object itself.
         """
 
         self._subsonic.jukebox.set_gain(gain)
@@ -143,13 +138,13 @@ class Jukebox(Model):
         return self
 
     def set(self, songs_ids: list[str]) -> Self:
-        """Calls the "jukeboxControl" endpoint of the API with the action "set".
+        """Set the songs of the playlist of the jukebox.
 
-        :param id: The ID of a song to set it in the jukebox.
-        :type id: str
-        :raises ValueError: Raised if the gain argument isn't between the valid range.
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            songs_ids: The IDs of the songs to be set the playlist to.
+
+        Returns:
+            The object itself.
         """
 
         self._subsonic.jukebox.set(songs_ids)
@@ -161,14 +156,13 @@ class Jukebox(Model):
         return self
 
     def add(self, songs_ids: list[str]) -> Self:
-        """Calls the "jukeboxControl" endpoint of the API with the action "add".
+        """Add songs to the playlist of the jukebox.
 
-        :param id: The ID of a song to add it in the jukebox.
-        :type id: str
-        :raises TypeError: Raised if the passed value to song isn't a Song object
-             or an ID.
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            songs_ids: The IDs of the songs to add.
+
+        Returns:
+            The object itself.
         """
 
         self._subsonic.jukebox.add(songs_ids)
@@ -187,12 +181,13 @@ class Jukebox(Model):
         return self
 
     def remove(self, index: int) -> Self:
-        """Calls the "jukeboxControl" endpoint of the API with the action "remove".
+        """Remove a song from the playlist of the jukebox.
 
-        :param index: The index in the jukebox playlist for the song to remove.
-        :type index: int
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            index: The index of the song in the playlist to remove.
+
+        Returns:
+            The object itself.
         """
 
         self._subsonic.jukebox.remove(index)

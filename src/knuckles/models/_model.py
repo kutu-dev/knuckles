@@ -5,5 +5,10 @@ if TYPE_CHECKING:
 
 
 class Model:
+    """Generic parent class for all the models.
+    Have an internal attribute to hold a Subsonic object to
+    access the OpenSubsonic REST API.
+    """
+
     def __init__(self, subsonic: "Subsonic") -> None:
         self._subsonic = subsonic

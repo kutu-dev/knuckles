@@ -32,12 +32,12 @@ Document in contributing why attributes are double typed.
 - [x] `_cover_art.py`
 - [x] `_genre.py`
 - [x] `_index.py`
-- [ ] `_internet_radio_station.py`
-- [ ] `_jukebox.py`
-- [ ] `_lyrics.py`
-- [ ] `_model.py`
-- [ ] `_music_directory.py`
-- [ ] `_music_folder.py`
+- [x] `_internet_radio_station.py`
+- [x] `_jukebox.py`
+- [x] `_lyrics.py`
+- [x] `_model.py`
+- [x] `_music_directory.py`
+- [x] `_music_folder.py`
 - [ ] `_now_playing_entry.py`
 - [ ] `_play_queue.py`
 - [ ] `_playlist.py`

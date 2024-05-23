@@ -8,8 +8,13 @@ if TYPE_CHECKING:
 
 
 class InternetRadioStation(Model):
-    """Representation of all the data related to
-    an internet radio station in Subsonic.
+    """Object that holds all the info about a Internet radio station.
+
+    Attributes:
+        id (str): The ID of the Internet radio station.
+        name (str): Then name of the Internet radio station.
+        stream_url (str): The URL of the stream of the Internet radio station.
+        homepage_url (str): The URl of the hompage of the Internet radio station.
     """
 
     def __init__(
@@ -20,21 +25,6 @@ class InternetRadioStation(Model):
         streamUrl: str,
         homepageUrl: str,
     ) -> None:
-        """Representation of all the data related to
-        an internet radio station in Subsonic.
-
-        :param id: The id of the radio station.
-        :type streamUrl: str
-        :param name: The name of the radio station.
-        :type name: str
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param streamUrl: The stream url of the radio station.
-        :type streamUrl: str
-        :param homepageUrl: The url of the homepage of the radio station.
-        :type homepageUrl: str
-        """
-
         super().__init__(subsonic)
 
         self.id = id
@@ -43,14 +33,14 @@ class InternetRadioStation(Model):
         self.homepage_url = homepageUrl
 
     def generate(self) -> "InternetRadioStation | None":
-        """Return a new internet radio station with all the data updated from the API,
+        """Return a new album object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new internet radio station object with all the data updated.
-        :rtype: InternetRadioStation
+        Returns:
+            A new object with all the updated info.
         """
 
         get_station = self._subsonic.internet_radio.get_internet_radio_station(self.id)
@@ -66,10 +56,12 @@ class InternetRadioStation(Model):
         return get_station
 
     def create(self) -> Self:
-        """Calls the "createInternetRadioStation" endpoint of the API.
+        """Create a new Internet radio station for the authenticated user
+        with the same data of the object where this method is
+        called.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.internet_radio.create_internet_radio_station(
@@ -79,10 +71,11 @@ class InternetRadioStation(Model):
         return self
 
     def update(self) -> Self:
-        """Calls the "updateInternetRadioStation" endpoint of the API.
+        """Update the info about the Internet radio station using the
+        current data of the object.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.internet_radio.update_internet_radio_station(
@@ -92,10 +85,10 @@ class InternetRadioStation(Model):
         return self
 
     def delete(self) -> Self:
-        """Calls the "deleteInternetRadioStation" endpoint of the API.
+        """Delete the Internet radio station entry from the server.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.internet_radio.delete_internet_radio_station(self.id)

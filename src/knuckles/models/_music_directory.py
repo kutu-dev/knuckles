@@ -10,6 +10,24 @@ if TYPE_CHECKING:
 
 
 class MusicDirectory(Model):
+    """Object that holds all the info about a music directory.
+
+    Attributes:
+        id (str): The ID of the music directory.
+        name (str):
+        parent (str | None):
+        starred (datetime | None): The timestamp when the music directory
+            was starred by the authenticated user if it was.
+        user_rating (int): The rating given by the authenticated user
+            if they rated it.
+        average_rating (float | None): The average rating given to the music
+            directory.
+        play_count (int | None): The number of times songs have been played
+            that are in the music directory.
+        songs (list[Song] | None): List that holds all the info about all
+            the songs that are part of the music directory.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",
