@@ -1,3 +1,4 @@
+# Default recipe of the justfile
 default: help
 
 # Show this info message
@@ -22,6 +23,11 @@ setup-check: generic-setup
 setup-tests: generic-setup
   .venv/bin/pip install .
   .venv/bin/pip install -r requirements/requirements-tests.txt
+
+[private]
+setup-docs: generic-setup
+  .venv/bin/pip install .
+  .venv/bin/pip install -r requirements/requirements-docs.txt
 
 # Check if the project is following the guidelines
 check:
