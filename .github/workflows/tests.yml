@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  run_tests:
+  run-tests:
     runs-on: ubuntu-24.04
 
     steps:
@@ -18,7 +18,7 @@ jobs:
           python-version: "3.11.9"
       - uses: actions/cache@v3
         with:
-          path: venv
+          path: .venv
           key: ${{ runner.os }}-${{ hashFiles('requirements/requirements-tests.txt') }}
       - run: just setup-tests
       - run: just test
