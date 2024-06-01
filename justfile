@@ -18,6 +18,10 @@ check:
   ruff check --fix
   ruff format
 
+install-hook:
+  rm .git/hooks/pre-commit
+  cp scripts/pre-commit.sh .git/hooks/pre-commit
+
 # Spin up a local documentation of the project
 docs:
   .venv/bin/mkdocs serve
