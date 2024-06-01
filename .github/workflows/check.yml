@@ -8,7 +8,7 @@ on:
 
 jobs:
   run_pre_commit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - run: sudo apt-get install -y just
