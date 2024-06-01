@@ -20,5 +20,5 @@ jobs:
         with:
           path: venv
           key: ${{ runner.os }}-${{ hashFiles('requirements/requirements-tests.txt') }}
-      - run: just setup-test
+      - run: just setup-tests
       - run: just test
