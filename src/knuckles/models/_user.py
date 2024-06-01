@@ -9,7 +9,36 @@ from ..exceptions import MissingRequiredProperty
 
 
 class User(Model):
-    """Representation of all the data related to a user in Subsonic."""
+    """Object that holds all the info about a user.
+
+    Attributes:
+        username (str): The username of the user.
+        password (str | None): The password of the user.
+        email (str | None): The email of the user.
+        ldap_authenticated (bool | None): If the user is has been
+            authenticated using LDAP.
+        admin_role (bool | None): If the user has access to admin functionalities.
+        settings_role (bool | None): If the user has access to change the settings
+            of the server.
+        stream_role (bool | None): If the user has access to stream media.
+        jukebox_role (bool | None): If the user has access to control the jukebox.
+        download_role (bool | None): If the user has access to download media.
+        upload_role (bool | None): If the user has access to upload media.
+        playlist_role (bool | None): If the user has access to create, edit and
+            delete playlists.
+        cover_art_role (bool | None): If the user has access to manipulate
+            cover arts of media.
+        comment_role (bool | None): If the user has access to manipulate
+            comments.
+        podcast_role (bool | None): If the user has access to manipulate podcasts.
+        share_role (bool | None): If the user has access to create, modify and
+            delete shares.
+        video_conversion_role (bool | None): If the user is able to trigger
+            video conversions.
+        music_folder_id (list[str] | None): The IDs of the music folders
+            where the user is able to access content from.
+        max_bit_rate (int | None): The max bit rate the user can stream.
+    """
 
     def __init__(
         self,
@@ -55,25 +84,26 @@ class User(Model):
         self.max_bit_rate = max_bit_rate
 
     def generate(self) -> "User":
-        """Returns the function to the same user with the maximum possible
-        information from the Subsonic API.
+        """Return a new user object with all the data updated from the API,
+        using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :raises NoApiAccess: Raised if the subsonic property is None.
-        :return: A new user object with all the data updated.
-        :rtype: User
+        Returns:
+            A new object with all the updated info.
         """
 
         return self._subsonic.user_management.get_user(self.username)
 
     def create(self) -> Self:
-        """Calls the "createUser" endpoint of the API.
+        """Create a new user with the attributes of the model.
 
-        :raises NoApiAccess: Raised if the subsonic property is None.
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Raises:
+            MissingRequiredProperty: Raised if a required property to create
+                the user is missing.
+        Returns:
+            The object itself.
         """
 
         if not self.email:
@@ -110,14 +140,11 @@ class User(Model):
         return self
 
     def update(self) -> Self:
-        """Calls the "updateUser" endpoint of the API.
+        """Updates the info about the user in the server with
+        the one in the model.
 
-        The user will be updated with
-        the data stored in the properties of the object itself.
-
-        :raises NoApiAccess: Raised if the subsonic property is None.
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.user_management.update_user(
@@ -144,11 +171,10 @@ class User(Model):
         return self
 
     def delete(self) -> Self:
-        """Calls the "deleteUser" endpoint of the API.
+        """Delete the user from the server.
 
-        :raises NoApiAccess: Raised if the subsonic property is None.
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.user_management.delete_user(self.username)
@@ -156,17 +182,15 @@ class User(Model):
         return self
 
     def change_password(self, new_password: str) -> Self:
-        """Calls the "changePassword" endpoint of the API.
+        """Change the password of the user.
 
-        The password is changed with the user corresponding
-        to the username property of the object.
+        Args:
+            new_password: The new password for the user
 
-        :param new_password: The new password for the user.
-        :type new_password: str
-        :raises NoApiAccess: Raised if the subsonic property is None.
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
+
         self._subsonic.user_management.change_password(self.username, new_password)
 
         return self

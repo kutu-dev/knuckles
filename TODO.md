@@ -48,6 +48,6 @@ Document in contributing why attributes are double typed.
 - [x] `_share.py`
 - [x] `_song.py`
 - [x] `_starred_content.py`
-- [ ] `_system.py`
-- [ ] `_user.py`
-- [ ] `_video.py`
+- [x] `_system.py`
+- [x] `_user.py`
+- [x] `_video.py`

@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from dateutil import parser
+
 from knuckles.models._model import Model
 
 if TYPE_CHECKING:
@@ -9,8 +10,16 @@ if TYPE_CHECKING:
 
 
 class SubsonicResponse(Model):
-    """Representation of the generic successful response data
-    in a request to the API.
+    """Object that holds all the generic info about a
+    response in a OpenSubsonic REST API call.
+
+    Attributes:
+        status (str): The status of the response, can be "ok" or "failed".
+        version (str): The server supported version of the OpenSubonic REST API.
+        type (str | None): The name of the server reported by itself.
+        server_version (str | None): The server actual version.
+        open_subsonic (bool | None): If the server supports OpenSubsonic REST API
+            extensions.
     """
 
     def __init__(
@@ -20,37 +29,28 @@ class SubsonicResponse(Model):
         version: str,
         type: str | None = None,
         serverVersion: str | None = None,
-        openSubsonic: bool = False,
+        openSubsonic: bool | None = None,
     ) -> None:
-        """Representation of the generic successful response data
-        in a request to the API.
-
-        Transform all the data in camelCase to snake_case.
-
-        :param status: The command result. It can be "ok" or "failed".
-        :type status: str
-        :param version: The server supported Subsonic API version.
-        :type version: str
-        :param type: The server actual name (OpenSubsonic), defaults to None
-        :type type: str | None, optional
-        :param serverVersion: The server actual version (OpenSubsonic), defaults to None
-        :type serverVersion: str | None, optional
-        :param openSubsonic: The support of the OpenSubsonic v1 specifications,
-            defaults to False
-        :type openSubsonic: bool, optional
-        """
-
         super().__init__(subsonic)
 
-        self.status: str = status
-        self.version: str = version
-        self.type: str | None = type
-        self.server_version: str | None = serverVersion
-        self.open_subsonic: bool = openSubsonic
+        self.status = status
+        self.version = version
+        self.type = type
+        self.server_version = serverVersion
+        self.open_subsonic = openSubsonic
 
 
 class License(Model):
-    """Representation of the license related data in Subsonic."""
+    """Object that holds all the info about the license status of the server.
+
+    Attributes:
+        valid (bool): If the license of the server is valid.
+        email (str | None): The email of the authenticated user.
+        license_expires (datetime | None): The timestamp when the
+            license expires.
+        trial_expires (datetime | None): The timestamp when the
+            trial expires if it has not already.
+    """
 
     def __init__(
         self,
@@ -60,18 +60,6 @@ class License(Model):
         licenseExpires: str | None = None,
         trialExpires: str | None = None,
     ) -> None:
-        """Representation of the license related data in Subsonic.
-
-        :param valid: The status of the license
-        :type valid: bool
-        :param email: The email of the user which the request was made, defaults to None
-        :type email: str | None, optional
-        :param licenseExpires: End of license date, defaults to None
-        :type licenseExpires: str | None, optional
-        :param trialExpires: End of trial date., defaults to None
-        :type trialExpires: str | None, optional
-        """
-
         super().__init__(subsonic)
 
         self.valid: bool = valid
