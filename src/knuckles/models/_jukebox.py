@@ -65,6 +65,7 @@ class Jukebox(Model):
         Returns:
             The object itself.
         """
+
         self._subsonic.jukebox.start()
 
         return self

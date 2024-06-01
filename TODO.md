@@ -38,16 +38,16 @@ Document in contributing why attributes are double typed.
 - [x] `_model.py`
 - [x] `_music_directory.py`
 - [x] `_music_folder.py`
-- [ ] `_now_playing_entry.py`
-- [ ] `_play_queue.py`
-- [ ] `_playlist.py`
-- [ ] `_podcast.py`
-- [ ] `_replay_gain.py`
-- [ ] `_scan_status.py`
-- [ ] `_search_result.py`
-- [ ] `_share.py`
-- [ ] `_song.py`
-- [ ] `_starred_content.py`
+- [x] `_now_playing_entry.py`
+- [x] `_play_queue.py`
+- [x] `_playlist.py`
+- [x] `_podcast.py`
+- [x] `_replay_gain.py`
+- [x] `_scan_status.py`
+- [x] `_search_result.py`
+- [x] `_share.py`
+- [x] `_song.py`
+- [x] `_starred_content.py`
 - [ ] `_system.py`
 - [ ] `_user.py`
 - [ ] `_video.py`

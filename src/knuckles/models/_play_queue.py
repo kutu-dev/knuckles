@@ -11,7 +11,20 @@ if TYPE_CHECKING:
 
 
 class PlayQueue(Model):
-    """Representation of all the data related to a play queue in Subsonic."""
+    """Object that holds al the info about a play queue.
+
+    Attributes:
+        songs (list[Song]): All the info about all the songs in
+            the play queue.
+        current (Song | None): The current playing song in the play queue.
+        position (int | None): The index of the current playing song in
+            the play queue.
+        user (User | None): The user owner of the play queue.
+        changed (timedate | None): The timestamp when the play queue
+            received any change.
+        changed_by (str | None): The name of the client that made the last
+            modification to the play queue.
+    """
 
     def __init__(
         self,
@@ -33,14 +46,14 @@ class PlayQueue(Model):
         self.songs = [Song(self._subsonic, **song) for song in entry] if entry else None
 
     def generate(self) -> "PlayQueue":
-        """Return a new play queue with all the data updated from the API,
+        """Return a new play queue object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new share object with all the data updated.
-        :rtype: PlayQueue
+        Returns:
+            A new object with all the updated info.
         """
 
         get_play_queue = self._subsonic.bookmarks.get_play_queue()

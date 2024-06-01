@@ -7,20 +7,14 @@ if TYPE_CHECKING:
 
 
 class ScanStatus(Model):
-    """Representation of all the data related to the status
-    of a library scan in Subsonic.
+    """Object that holds all the info about a scan status.
+
+    Attributes:
+        scanning (bool): If the server is scanning media or not.
+        count (int): The number of media already scanned.
     """
 
     def __init__(self, subsonic: "Subsonic", scanning: bool, count: int) -> None:
-        """Representation of all the data related to the status
-        of a library scan in Subsonic.
-
-        :param scanning: The status of the scan.
-        :type scanning: bool
-        :param count: Scanned item count.
-        :type count: int
-        """
-
         super().__init__(subsonic)
 
         self.scanning: bool = scanning

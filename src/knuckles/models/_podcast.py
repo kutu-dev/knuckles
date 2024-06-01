@@ -11,7 +11,34 @@ from dateutil import parser
 
 
 class Episode(Model):
-    """Representation of all the data related to a podcast episode in Subsonic."""
+    """Object that holds all the info about a episode
+
+    Attributes:
+        id: (str) The ID of the episode
+        stream_id (str | None): The ID of the stream of the
+            episode.
+        channel (Channel | None): The channel where the episode is
+            from.
+        title (str | None): The title of the episode.
+        description (str | None): The description of the episode.
+        publish_date (datetime | None): The timestamp when the episode
+            was publised.
+        status (str | None): The status of the episode.
+        parent (str | None): The ID of the parent of the episode.
+        is_dir (bool | None): If the episode is a directory.
+        year (int | None): The year when the episode was released.
+        genre (str | None): The name of the genre of the episode.
+        cover_art (CoverArt | None): All the info related with the
+            cover art of the episode.
+        size (int | None): The size of the episode.
+        content_type (str | None): The HTTP Content-Type of the file
+            of the episode.
+        suffix (str | None): The suffix of the filename of the file
+            of the episode.
+        duration (int | None): The duration in seconds of the episode.
+        bit_rate (int | None): The bit rate of the episode.
+        path (str | None): The path of the episode.
+    """
 
     def __init__(
         self,
@@ -35,49 +62,6 @@ class Episode(Model):
         bitRate: int | None = None,
         path: str | None = None,
     ) -> None:
-        """Representation of all the data related to a podcast episode in Subsonic.
-
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param id: The ID of the episode.
-        :type id: str
-        :param streamId: The ID to stream the episode, defaults to None.
-        :type streamId: str | None, optional
-        :param channelId: The ID of the channel where the episode comes from,
-            defaults to None.
-        :type channelId: str | None, optional
-        :param title: The title of the episode, defaults to None.
-        :type title: str | None, optional
-        :param description: The description of the episode, defaults to None.
-        :type description: str | None, optional
-        :param publishDate: The date of publish of the episode, defaults to None.
-        :type publishDate: str | None, optional
-        :param status: The status of the episode, defaults to None.
-        :type status: str | None, optional
-        :param parent: The ID of the parent folder of the episode, defaults to None.
-        :type parent: str | None, optional
-        :param isDir: If the episode is a dir, defaults to None.
-        :type isDir: bool | None, optional
-        :param year: The year of release of the episode, defaults to None.
-        :type year: int | None, optional
-        :param genre: The genre of the episode, defaults to None.
-        :type genre: str | None, optional
-        :param coverArt: The cover art ID of the episode, defaults to None.
-        :type coverArt: str | None, optional
-        :param size: The file size of the episode, defaults to None.
-        :type size: int | None, optional
-        :param contentType: The content type of the episode file, defaults to None.
-        :type contentType: str | None, optional
-        :param suffix: The suffix of the episode file, defaults to None.
-        :type suffix: str | None, optional
-        :param duration: The duration in seconds of the episode, defaults to None.
-        :type duration: int | None, optional
-        :param bitRate: The bit rate of the episode, defaults to None.
-        :type bitRate: int | None, optional
-        :param path: The path of the episode, defaults to None.
-        :type path: str | None, optional
-        """
-
         super().__init__(subsonic)
 
         self.id = id
@@ -100,14 +84,14 @@ class Episode(Model):
         self.path = path
 
     def generate(self) -> "Episode":
-        """Return a new episode with all the data updated from the API,
+        """Return a new episode object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new episode object with all the data updated.
-        :rtype: Episode
+        Returns:
+            A new object with all the updated info.
         """
 
         get_episode = self._subsonic.podcast.get_podcast_episode(self.id)
@@ -120,10 +104,10 @@ class Episode(Model):
         return get_episode
 
     def download(self) -> Self:
-        """Calls the "downloadPodcastEpisode" endpoint of the API.
+        """Request the server to download the episode.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.podcast.download_podcast_episode(self.id)
@@ -131,10 +115,10 @@ class Episode(Model):
         return self
 
     def delete(self) -> Self:
-        """Calls the "deletePodcastEpisode" endpoint of the API.
+        """Delete the episode from the server.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.podcast.delete_podcast_episode(self.id)
@@ -143,7 +127,21 @@ class Episode(Model):
 
 
 class Channel(Model):
-    """Representation of all the data related to a podcast channel in Subsonic."""
+    """Object that holds all the info about a channel.
+
+    Attributes:
+        id (str): The ID of the channel.
+        url (str | None): The URL of the channel.
+        title (str | None): The title of the channel.
+        description (str | None): The description of the channel.
+        cover_art (CoverArt | None): All the info related with the
+            cover art of the channel.
+        original_image_url (str | None): The URL of the original image
+            of the channel.
+        status (str | None): The status of the channel.
+        episodes (list[Episode] | None): List that holds all the info about
+            all the episodes of the channel.
+    """
 
     def __init__(
         self,
@@ -157,29 +155,6 @@ class Channel(Model):
         status: str | None = None,
         episode: list[dict[str, Any]] | None = None,
     ) -> None:
-        """Representation of all the data related to a podcast channel in Subsonic.
-
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param id: The ID of the channel.
-        :type id: str
-        :param url: The url to get the episodes from, defaults to None.
-        :type url: str | None, optional
-        :param title: The title of the channel, defaults to None.
-        :type title: str | None, optional
-        :param description: The description of the channel, defaults to None.
-        :type description: str | None, optional
-        :param coverArt: The cover art ID of the channel, defaults to None.
-        :type coverArt: str | None, optional
-        :param originalImageUrl: The url of the original image of the channel,
-            defaults to None.
-        :type originalImageUrl: str | None, optional
-        :param status: The status of the channel, defaults to None.
-        :type status: str | None, optional
-        :param episode: A list will all the episodes of the podcast, defaults to None.
-        :type episode: list[dict[str, Any]] | None, optional
-        """
-
         super().__init__(subsonic)
 
         self.id = id
@@ -196,23 +171,23 @@ class Channel(Model):
         )
 
     def generate(self) -> "Channel":
-        """Return a new channel with all the data updated from the API,
+        """Return a new channel object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new channel object with all the data updated.
-        :rtype: Channel
+        Returns:
+            A new object with all the updated info.
         """
 
         return self._subsonic.podcast.get_podcast_channel(self.id)
 
     def create(self) -> Self:
-        """Calls the "createPodcastChannel" endpoint of the API.
+        """Create a new podcast with the info of the current one.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         # Ignore the None type error as the server
@@ -224,10 +199,10 @@ class Channel(Model):
         return self
 
     def delete(self) -> Self:
-        """Calls the "deletePodcastChannel" endpoint of the API.
+        """Delete the podcast from the server.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.podcast.delete_podcast_channel(self.id)

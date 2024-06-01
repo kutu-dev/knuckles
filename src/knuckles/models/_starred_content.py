@@ -11,6 +11,17 @@ if TYPE_CHECKING:
 
 
 class StarredContent(Model):
+    """Object that holds all the info about starred content.
+
+    Attributes:
+        songs (list[Song] | None): List that holds all the info
+            about all the starred songs.
+        albums (list[Album] | None): List that holds all the info
+            about all the starred albums.
+        artists (list[Artist] | None): List that holds all the info
+            about all the starred artists.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",
