@@ -1,14 +1,15 @@
-name: Linting and formatting
+name: Deploy docs to GitHub Pages
 
 on:
   push:
     branches:
       - master
-  pull_request:
 
 jobs:
-  run-docs:
+  deploy-docs:
     runs-on: ubuntu-24.04
+    permissions:
+        contents: write
 
     steps:
       - run: sudo apt-get install -y just
