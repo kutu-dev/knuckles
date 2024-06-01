@@ -19,6 +19,15 @@ from dateutil import parser
 
 
 class AudioTrack(Model):
+    """Object that holds all the info about an audio track.
+
+    Attributes:
+        id (str): The ID of the audio track.
+        name (str | None): The name of the audio track.
+        language_code (str | None): The code of the language in which the
+            audio track is in.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",
@@ -34,6 +43,13 @@ class AudioTrack(Model):
 
 
 class Captions(Model):
+    """Object that holds all the info about captions:
+
+    Attributes:
+        id (str): The ID of the captions.
+        name (str | None): The ID of the captions.
+    """
+
     def __init__(self, subsonic: "Subsonic", id: str, name: str | None = None) -> None:
         super().__init__(subsonic)
 
@@ -42,6 +58,20 @@ class Captions(Model):
 
 
 class VideoInfo(Model):
+    """Object that holds all the info about extra video info.
+
+    Attributes:
+        video_id (str): The ID of the video where the extra info are from.
+        id (str): The ID of the extra info.
+        captions (Captions | None): All the info about the captions of
+            the video.
+        conversion (Video | None): All the info about the converted video
+            of this one.
+        audio_tracks (dict[str, AudioTrack] | None): A dict that holds all the info
+            about the audio tracks of the video, with the key being the language code
+            of the audio track and the value the info about the track itself.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",
@@ -81,6 +111,75 @@ class VideoInfo(Model):
 
 
 class Video(Model):
+    """Object that holds all the info about a video.
+
+    Attributes:
+        id (str): The ID of the song.
+        title (str | None): The title of the song.
+        parent (str | None): The ID of the parent of the song.
+        track (int | None): The track
+        year (int | None): The year when the song was released.
+        genre (Genre | None): All the info related with the genre
+            of the song.
+        size (int | None): The size of the file of the song.
+        content_type (str | None): The HTTP ContentType of the
+            file of the song.
+        suffix (str | None): The suffix of the filename of the
+            file of the song.
+        transcoded_content_type (str | None): The HTTP ContentType
+            of the transcoded file of the song.
+        transcoded_suffix (str | None): The suffix of the filename
+            of the transcoded file of the song.
+        duration (int | None): The duration in seconds of the song.
+        bit_rate (int | None): The bit rate of the song.
+        path (str | None): The path of the song.
+        user_rating (int | None): The rating given to the song by
+            the user.
+        average_rating (float | None): The average rating of all the
+            user for the song.
+        play_count (int | None): The number of the times the song
+            has been played.
+        disc_number (int | None): The disc number of the song.
+        type (str |  None): The type of media.
+        bookmark_position (int | None): The position in seconds
+            where the song is bookmarked for the authenticated user.
+        album (Album | None): All the info related with the album
+            of the song.
+        artist (Artist | None): All the info related with the main
+            artist of the song.
+        cover_art (CoverArt | None): All the info related
+            with the cover art of the song.
+        created (datetime | None): The timestamp when the song
+            was created.
+        starred (datetime | None): The timestamp when the song
+            was starred by the authenticated user if they have.
+        played (datetime | None): The timestamp when the song
+            was last played.
+        bpm (int | None): The bpm of the song.
+        comment (str | None): The comment of the song.
+        sort_name (str | None): The sort name of the song.
+        music_brainz_id (str | None): The ID of the MusicBrainz entry
+            of the song.
+        genres (list[ItemGenre | None): List that holds all the info
+            about all the genres of the song.
+        artists (list[Artist] | None): List that holds all the info
+            about all the artists that made the song.
+        display_artist (str | None): The display name of the artist
+            of the song.
+        album_artists (list[Artist] | None): List that holds all the info
+            about all the artists that made the album where the song
+            is from.
+        display_album_artist (str | None): THe display name of the artist
+            of the album of the song.
+        contributors (list[Contributor] | None): List that holds all the
+            info about all the contributors of the song.
+        display_composer (str | None): The display name of the composer
+            of the song.
+        moods (list[str] | None): List off all the moods of the song.
+        replay_gain (ReplayGain | None): All the info about the replay
+            gain of the song.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",
@@ -193,14 +292,14 @@ class Video(Model):
         self.info: VideoInfo | None = None
 
     def generate(self) -> "Video":
-        """Return a new song with all the data updated from the API,
+        """Return a new video object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new song object with all the data updated.
-        :rtype: Song
+        Returns:
+            A new object with all the updated info.
         """
 
         video = self._subsonic.browsing.get_video(self.id)
@@ -211,6 +310,13 @@ class Video(Model):
         return video
 
     def get_video_info(self) -> VideoInfo:
+        """Get all the extra info about the video, it's
+        set to the `info` attribute of the object.
+
+        Returns:
+            The extra info returned by the server.
+        """
+
         self.info = self._subsonic.browsing.get_video_info(self.id)
 
         return self.info

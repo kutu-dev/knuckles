@@ -18,9 +18,9 @@ class SubtitlesFileFormat(Enum):
 
 
 class MediaRetrieval:
-    """Class that contains all the methods needed to interact
-    with the media retrieval calls in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/media-retrieval/>
+    """Class that contains all the methods needed to interact with the
+    [media retrieval endpoints](https://opensubsonic.netlify.app/
+    categories/media-retrieval/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -29,14 +29,17 @@ class MediaRetrieval:
 
     @staticmethod
     def _download_file(response: Response, downloaded_file_path: Path) -> Path:
-        """Downloads a file attached to a Response object.
+        """Download to the local filesystem the binary file data attached to a
+        `requests` Response object.
+        Doesn't check if the Response object is valid for file downloading.
 
-        :param response: The response to get the download binary data.
-        :type response: Response
-        :param downloaded_file_path: The file path to save the downloaded file.
-        :type downloaded_file_path: Path
-        :return: The same path given in downloaded_file_path.
-        :rtype: Path
+        Args:
+            response: The response object to get the file from.
+            downloaded_file_path: A path where the file to download should
+                be saved.
+
+        Returns:
+            The path where the file was finally saved.
         """
 
         response.raise_for_status()
@@ -54,6 +57,26 @@ class MediaRetrieval:
         file_or_directory_path: Path,
         determinate_filename: Callable[[Response], str],
     ) -> Path:
+        """Download the file attached with the given `requests` Response
+        object, if the given path is a directory then the file will be
+        downloaded inside of it, if its a valid file path it will be downloaded
+        using this exact filename.
+
+        In case of not being a directory then a custom callback to determine
+        the name of the file to be created.
+
+
+        Args:
+            response: The response object to get the file from.
+            file_or_directory_path: The directory or filename where the file
+                should be saved to.
+            determinate_filename: The callback to be used to determine the
+                filename in case the given path points to a directory.
+
+        Returns:
+            The path where the file was finally saved.
+        """
+
         if not file_or_directory_path.is_dir():
             return cls._download_file(response, file_or_directory_path)
 
@@ -63,44 +86,46 @@ class MediaRetrieval:
 
     def stream(
         self,
-        id_: str,
+        song_or_video_id: str,
         max_bitrate_rate: int | None = None,
-        format_: str | None = None,
+        stream_format: str | None = None,
         time_offset: int | None = None,
         size: str | None = None,
         estimate_content_length: bool | None = None,
         converted: bool | None = None,
     ) -> str:
-        """Returns a valid url for streaming the requested song or video
+        """Get the URL required to stream a song or video.
 
-        :param id_: The id of the song or video to stream
-        :type id_: str
-        :param max_bitrate_rate: A limit for the stream bitrate
-        :type max_bitrate_rate: int | None
-        :param format_: The file format of preference to be used in the stream.
-        :type format_: str | None
-        :param time_offset: Only applicable to video streaming.
-            An offset in seconds from where the video should start.
-        :type time_offset: int | None
-        :param size: Only applicable to video streaming.
-            The resolution for the streamed video, in the format of "WIDTHHxHEIGHT".
-        :type size: str | None
-        :param estimate_content_length: If the response should set a
-            Content-Length HTTP header with an estimation of the duration of the media.
-        :type estimate_content_length: bool | None
-        :param converted: Only applicable to video streaming.
-            Try to retrieve from the server an optimize video in MP4 if it's available.
-        :type converted: bool | None
-        :return A url that points to the given song in the stream endpoint
-        :rtype str
+        Args:
+            song_or_video_id: The ID of the song or video to get its
+                steam URL
+            max_bitrate_rate: The max bitrate the stream should have.
+            stream_format: The format the song or video should be.
+                **Warning**: The available formats are dependant of the
+                server implementation. The only secure format is "raw",
+                which disabled transcoding at all.
+            time_offset: An offset where the stream should start. It may
+                not work with video, depending of the server configuration.
+            size: The maximum resolution of the streaming in the format `WxH`,
+                only works with video streaming.
+            estimate_content_length: When set to true the response with have
+                the `Content-Length` HTTP header set to a estimated duration
+                for the streamed song or video.
+            converted: If set to true the server will try to stream a
+                transcoded version in `MP4`. Only works with video
+                streaming.
+
+        Returns:
+            An URL with all the needed parameters to start a streaming
+                using a GET request.
         """
 
         return self.subsonic.api.generate_url(
             "stream",
             {
-                "id": id_,
+                "id": song_or_video_id,
                 "maxBitRate": max_bitrate_rate,
-                "format": format_,
+                "format": stream_format,
                 "timeOffset": time_offset,
                 "size": size,
                 "estimateContentLength": estimate_content_length,
@@ -108,20 +133,21 @@ class MediaRetrieval:
             },
         )
 
-    def download(self, id_: str, file_or_directory_path: Path) -> Path:
-        """Calls the "download" endpoint of the API.
+    def download(self, song_or_video_id: str, file_or_directory_path: Path) -> Path:
+        """Download a song or video from the server.
 
-        :param id_: The id of the song or video to download.
-        :type id_: str
-        :param file_or_directory_path: If a directory path is passed the file will be
-            inside of it with the default filename given by the API,
-            if not the file will be saved directly in the given path.
-        :type file_or_directory_path: Path
-        :return The path of the downloaded file
-        :rtype Path
+        Args:
+            song_or_video_id: The ID of the song or video to download.
+            file_or_directory_path: The path where the downloaded file should
+                be saved. If the given path is a directory then the file will
+                be downloaded inside of it, if its a valid file path it will be
+                downloaded using this exact filename.
+
+        Returns:
+            The path where the song or video was finally saved.
         """
 
-        response = self.api.raw_request("download", {"id": id_})
+        response = self.api.raw_request("download", {"id": song_or_video_id})
 
         def determinate_filename(file_response: Response) -> str:
             filename = (
@@ -146,48 +172,54 @@ class MediaRetrieval:
 
     def hls(
         self,
-        id_: str,
+        song_or_video_id: str,
         custom_bitrates: list[str] | None = None,
         audio_track_id: str | None = None,
     ) -> str:
-        """Returns a valid url for streaming the requested song with hls.m3u8
+        """Get the URL required to stream a song or video with hls.m3u8.
 
-        :param id_: The id of the song to stream.
-        :type id_: str
-        :param custom_bitrates: A list of bitrates to be added to the hls playlist
-            for video streaming, the resolution can also be specified with
-            this format: "BITRATE@WIDTHxHEIGHT".
-        :type custom_bitrates: list[str] | None
-        :param audio_track_id: The id of the audio track to be used
-            if the playlist is for a video.
-        :type audio_track_id: str | None
-        :return A url that points to the given song in the hls.m3u8 endpoint
-        :rtype str
+        Args:
+            song_or_video_id: The ID of the song or video to stream.
+            custom_bitrates: The bitrate that the server should try to
+                limit the stream to. If more that one is specified the
+                server will create a `variant playlist`, suitable for adaptive
+                bitrate streaming.
+            audio_track_id: The ID of an audio track to be added to the stream
+                if video is being streamed.
+
+        Returns:
+            An URL with all the needed parameters to start a streaming
+                with hls.m3u8 using a GET request.
         """
 
         return self.subsonic.api.generate_url(
             "hls.m3u8",
-            {"id": id_, "bitRate": custom_bitrates, "audioTrack": audio_track_id},
+            {
+                "id": song_or_video_id,
+                "bitRate": custom_bitrates,
+                "audioTrack": audio_track_id,
+            },
         )
 
     def get_captions(
         self,
-        id_: str,
+        caption_id: str,
         file_or_directory_path: Path,
         subtitles_file_format: SubtitlesFileFormat = SubtitlesFileFormat.VTT,
     ) -> Path:
-        """Calls the "getCaptions" endpoint of the API.
+        """Download a video caption file from the server.
 
-        :param id_: The ID of the video to get the captions
-        :type id_: str
-        :param file_or_directory_path: If a directory path is passed the file will be
-            inside of it with the default filename given by the API,
-            if not the file will be saved directly in the given path.
-        :type file_or_directory_path: Path
-        :param subtitles_file_format: The preferred captions file format.
-        :type subtitles_file_format: SubtitlesFileFormat
-        :return: The path of the downloaded captions file.
-        :rtype:
+        Args:
+            caption_id: The ID of the caption to download.
+            file_or_directory_path: The path where the downloaded file should
+                be saved. If the given path is a directory then the file will
+                be downloaded inside of it, if its a valid file path it will be
+                downloaded using this exact filename.
+            subtitles_file_format: The format that the subtitle file should
+                have.
+
+        Returns:
+            The path where the captions was finally saved.
         """
 
         # Check if the given file format is a valid one
@@ -195,7 +227,7 @@ class MediaRetrieval:
 
         response = self.api.raw_request(
             "getCaptions",
-            {"id": id_, "format": subtitles_file_format.value},
+            {"id": caption_id, "format": subtitles_file_format.value},
         )
 
         def determinate_filename(file_response: Response) -> str:
@@ -208,38 +240,40 @@ class MediaRetrieval:
             else:
                 file_extension = guess_extension(mime_type)
 
-            return id_ + file_extension if file_extension else id_
+            return caption_id + file_extension if file_extension else caption_id
 
         return self._handle_download(
             response, file_or_directory_path, determinate_filename
         )
 
     def get_cover_art(
-        self, id_: str, file_or_directory_path: Path, size: int | None = None
+        self, cover_art_id: str, file_or_directory_path: Path, size: int | None = None
     ) -> Path:
-        """Calls the "getCoverArt" endpoint of the API.
+        """Download the cover art from the server.
 
-        :param id_: The id of the cover art to download.
-        :type id_: str
-        :param file_or_directory_path: If a directory path is passed the file will be
-        inside of it with the filename being the name of the user and
-        a guessed file extension, if not the file will be saved
-        directly in the given path.
-        :type file_or_directory_path: Path
-        :param size: The size of the image to be scale to in a square.
-        :type size: int
-        :return Returns the given path
-        :rtype Path
+        Args:
+            cover_art_id: The ID of the cover art to download.
+            file_or_directory_path: The path where the downloaded file should
+                be saved. If the given path is a directory then the file will
+                be downloaded inside of it, if its a valid file path it will be
+                downloaded using this exact filename.
+            size: The width in pixels that the image should have,
+                the cover arts are always squares.
+
+        Returns:
+            The path where the captions was finally saved.
         """
 
-        response = self.api.raw_request("getCoverArt", {"id": id_, "size": size})
+        response = self.api.raw_request(
+            "getCoverArt", {"id": cover_art_id, "size": size}
+        )
 
         def determinate_filename(file_response: Response) -> str:
             file_extension = guess_extension(
                 file_response.headers["content-type"].partition(";")[0].strip()
             )
 
-            return id_ + file_extension if file_extension else id_
+            return cover_art_id + file_extension if file_extension else cover_art_id
 
         return self._handle_download(
             response, file_or_directory_path, determinate_filename
@@ -248,6 +282,18 @@ class MediaRetrieval:
     def get_lyrics(
         self, artist_name: str | None = None, song_title: str | None = None
     ) -> Lyrics:
+        """Get the lyrics of a song.
+
+        Args:
+            artist_name: The name of the artist that made the song to get its
+                lyrics from.
+            song_title: The title of the song to get its lyrics from.
+
+        Returns:
+            An object that contains all the info about the requested
+                lyrics.
+        """
+
         response = self.api.json_request(
             "getLyrics", {"artist": artist_name, "title": song_title}
         )["lyrics"]
@@ -255,17 +301,17 @@ class MediaRetrieval:
         return Lyrics(subsonic=self.subsonic, **response)
 
     def get_avatar(self, username: str, file_or_directory_path: Path) -> Path:
-        """Calls the "getAvatar" endpoint of the API.
+        """Download the avatar image of a user from the server.
 
-        :param username: The username of the profile picture to download.
-        :type username: str
-        :param file_or_directory_path: If a directory path is passed the file will be
-        inside of it with the filename being the name of the user and
-        a guessed file extension, if not the file will be saved
-        directly in the given path.
-        :type file_or_directory_path: Path
-        :return Returns the given path
-        :rtype Path
+        Args:
+            username: The username of the user to get its avatar from.
+            file_or_directory_path: The path where the downloaded file should
+                be saved. If the given path is a directory then the file will
+                be downloaded inside of it, if its a valid file path it will be
+                downloaded using this exact filename.
+
+        Returns:
+            The path where the avatar image was finally saved.
         """
 
         response = self.api.raw_request("getAvatar", {"username": username})

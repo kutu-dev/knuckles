@@ -8,6 +8,12 @@ if TYPE_CHECKING:
 
 
 class ItemGenre(Model):
+    """Object that holds all the info about a item genre.
+
+    Attributes:
+        name: The name of the genre.
+    """
+
     def __init__(self, subsonic: "Subsonic", name: str) -> None:
         super().__init__(subsonic)
 
@@ -15,7 +21,15 @@ class ItemGenre(Model):
 
 
 class Genre(Model):
-    """Representation of all the data related to a genre in Subsonic."""
+    """Object that holds all the info about a genre.
+
+    Attributes:
+        value (str): The name of the genre.
+        song_count (int | None): Number of songs tagged with the
+            genre.
+        album_count (int | None): Number of albums tagged with
+            the genre.
+    """
 
     def __init__(
         self,

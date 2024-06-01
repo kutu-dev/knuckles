@@ -7,33 +7,28 @@ if TYPE_CHECKING:
 
 
 class MusicFolder(Model):
-    """Representation of all the data related to a music folder in Subsonic."""
+    """Object that holds all the info about a music folder
+
+    Attributes:
+        id: The ID of the music folder.
+        name: The name of the music folder.
+    """
 
     def __init__(self, subsonic: "Subsonic", id: str, name: str | None = None) -> None:
-        """Representation of all the data related to a music folder in Subsonic.
-
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param id: The ID of the music folder.
-        :type id: str
-        :param name: The name of the music folder, defaults to None.
-        :type name: str | None, optional
-        """
-
         super().__init__(subsonic)
 
         self.id = id
         self.name = name
 
     def generate(self) -> "MusicFolder":
-        """Return a new music folder with all the data updated from the API,
-        using the endpoint that return the most information possible.
+        """Return a new music folder object with all the data updated from the
+        API, using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new album info object with all the data updated.
-        :rtype: MusicFolder
+        Returns:
+            A new object with all the updated info.
         """
 
         music_folders = self._subsonic.browsing.get_music_folders()

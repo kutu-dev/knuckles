@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 
 
 class Bookmarks:
-    """Class that contains all the methods needed to interact
-    with the browsing calls in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/bookmarks/>
+    """Class that contains all the methods needed to interact with the
+    [bookmark endpoints](https://opensubsonic.netlify.app/
+    categories/bookmarks/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -19,93 +19,98 @@ class Bookmarks:
         self.subsonic = subsonic
 
     def get_bookmarks(self) -> list[Bookmark]:
-        """Calls the "getBookmarks" endpoints of the API.
+        """Get all the bookmarks created by the authenticated user.
 
-        :return: A list with all the bookmarks given by the server.
-        :rtype: list[Bookmark]
+        Returns:
+            A list containing all the bookmarks for the authenticated user.
         """
 
         response = self.api.json_request("getBookmarks")["bookmarks"]["bookmark"]
 
         return [Bookmark(self.subsonic, **bookmark) for bookmark in response]
 
-    def get_bookmark(self, id_: str) -> Bookmark | None:
-        """Using the "getBookmarks" endpoint iterates over all the bookmarks
-        and find the one with the same ID.
+    def get_bookmark(self, bookmark_id: str) -> Bookmark | None:
+        """Get all the info of a bookmark given its ID.
 
-        :param id_: The ID of the song of the bookmark to find.
-        :type id_: str
-        :return: The found bookmark or None if no one is found.
-        :rtype: Bookmark | None
+        Args:
+            bookmark_id: The id of the bookmark to get.
+
+        Returns:
+            A object that contains all the info of the requested bookmark.
         """
 
         bookmarks = self.get_bookmarks()
 
         for bookmark in bookmarks:
-            if bookmark.song.id == id_:
+            if bookmark.song.id == bookmark_id:
                 return bookmark
 
         return None
 
     def create_bookmark(
-        self, id_: str, position: int, comment: str | None = None
+        self, song_or_video_id: str, position: int, comment: str | None = None
     ) -> Bookmark:
-        """Calls the "createBookmark" endpoint of the API.
+        """Creates a new bookmark for the authenticated user.
 
-        :param id_: The ID of the song of the bookmark.
-        :type id_: str
-        :param position: The position in seconds of the bookmark.
-        :type position: int
-        :param comment: The comment of the bookmark, defaults to None.
-        :type comment: str | None, optional
-        :return: The new created share.
-        :rtype: Bookmark
+        Args:
+            song_or_video_id: The ID of the song or video to bookmark.
+            position: A position in milliseconds to be indicated with the song
+                or video.
+            comment: A comment to be attached with the song or video.
+
+        Returns:
+            An object that contains all the info of the new created
+                bookmark.
         """
 
         self.api.json_request(
-            "createBookmark", {"id": id_, "position": position, "comment": comment}
+            "createBookmark",
+            {"id": song_or_video_id, "position": position, "comment": comment},
         )
 
         # Fake the song structure given by in the API.
-        return Bookmark(self.subsonic, {"id": id_}, position=position, comment=comment)
+        return Bookmark(
+            self.subsonic, {"id": song_or_video_id}, position=position, comment=comment
+        )
 
     def update_bookmark(
-        self, id_: str, position: int, comment: str | None = None
+        self, song_or_video_id: str, position: int, comment: str | None = None
     ) -> Bookmark:
-        """Method that internally calls the create_bookmark method
-        as creating and updating a bookmark uses the same endpoint. Useful for having
-        more self-descriptive code.
+        """Updates a bookmark for the authenticated user.
 
-        :param id_: The ID of the song of the bookmark.
-        :type id_: str
-        :param position: The position in seconds of the bookmark.
-        :type position: int
-        :param comment: The comment of the bookmark, defaults to None.
-        :type comment: str | None, optional
-        :return: A Bookmark object with all the updated info.
-        :rtype: Bookmark
+        Args:
+            song_or_video_id: The ID of the song or video to update its
+                bookmark.
+            position: A position in milliseconds to be indicated with the song
+                or video.
+            comment: A comment to be attached with the song or video.
+        Returns:
+            An object that contains all the info of the new created
+                bookmark.
         """
 
-        return self.create_bookmark(id_, position, comment)
+        return self.create_bookmark(song_or_video_id, position, comment)
 
-    def delete_bookmark(self, id_: str) -> "Subsonic":
-        """Calls the "deleteBookmark" endpoint of the API.
+    def delete_bookmark(self, song_or_video_id: str) -> "Subsonic":
+        """Deletes a bookmark for the authenticated user.
 
-        :param id_: The ID of the song of the bookmark to delete.
-        :type id_: str
-        :return: The object itself to allow method chaining.
-        :rtype: Subsonic
+        Args:
+            song_or_video_id: The ID of the song or video to delete its
+                bookmark.
+        Returns:
+            The Subsonic object where this method was called to allow
+                method chaining.
         """
-
-        self.api.json_request("deleteBookmark", {"id": id_})
+        self.api.json_request("deleteBookmark", {"id": song_or_video_id})
 
         return self.subsonic
 
     def get_play_queue(self) -> PlayQueue:
-        """Calls the "getPlayQueue" endpoint of the API.
+        """Get the play queue of the authenticated user.
 
-        :return: The play queue of the authenticated user.
-        :rtype: PlayQueue
+        Returns:
+            An object that contains all the info of the
+                play queue of the user.
         """
 
         response = self.api.json_request("getPlayQueue")["playQueue"]
@@ -118,18 +123,17 @@ class Bookmarks:
         current_song_id: str | None = None,
         position: int | None = None,
     ) -> PlayQueue:
-        """Calls the "savePlayQueue" endpoint of the API.
+        """Saves a new play queue for the authenticated user.
 
-        :param song_ids: A list with all the IDs of the songs to add.
-        :type song_ids: list[str]
-        :param current_song_id: The ID of the current song in the queue,
-            defaults to None.
-        :type current_song_id: str | None, optional
-        :param position: The position in seconds of the current song,
-            defaults to None.
-        :type position: int | None, optional
-        :return: The new saved play queue.
-        :rtype: PlayQueue
+        Args:
+            song_ids: A list with all the songs to add to the queue.
+            current_song_id: The ID of the current playing song.
+            position: A position in milliseconds of where the current song
+                playback it at.
+
+        Returns:
+            An object that contains all the info of the new
+                saved play queue.
         """
 
         self.api.json_request(

@@ -9,6 +9,15 @@ if TYPE_CHECKING:
 
 
 class Contributor(Model):
+    """Object that holds all the info about a contributor.
+
+    Attributes:
+        role (str): The role of the contributor.
+        artist (Artist): All the artist info associated with the
+            contributor.
+        subrole (str | None): The subrole of the contributor.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",
@@ -19,5 +28,5 @@ class Contributor(Model):
         super().__init__(subsonic)
 
         self.role = role
-        self.subrole = subRole
         self.artist = artist
+        self.subrole = subRole

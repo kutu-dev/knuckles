@@ -11,9 +11,9 @@ if TYPE_CHECKING:
 
 
 class Searching:
-    """Class that contains all the methods needed to interact
-    with the searching calls and actions in the Subsonic API.
-    <https://opensubsonic.netlify.app/categories/searching/>
+    """Class that contains all the methods needed to interact with the
+    [bookmark endpoints](https://opensubsonic.netlify.app/
+    categories/searching/) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -34,6 +34,32 @@ class Searching:
         music_folder_id: str | None = None,
         id3: bool = True,
     ) -> SearchResult:
+        """Direct method to call the "search2" and "search3" endpoints,
+        abstracting all the parameters of them.
+
+        Args:
+            query: The query string to be send to the server.
+            song_count: The numbers of songs that the server
+                should return.
+            song_offset: The number of songs to offset in the list,
+                useful for pagination.
+            album_count: The numbers of albums that the server
+                should return.
+            album_offset: The number of album to offset in the list,
+                useful for pagination.
+            artist_count: The numbers of artists that the server
+                should return.
+            artist_offset: The number of artists to offset in the list,
+                useful for pagination.
+            music_folder_id: An ID of a music folder to limit where the
+                songs, albums and artists should come from.
+            id3: If the ID3 organized endpoint should be called or not.
+
+        Returns:
+            An object that contains all the info about the found songs,
+                albums and artists received with the given query.
+        """
+
         response = self.api.json_request(
             "search3" if id3 else "search2",
             {
@@ -82,6 +108,31 @@ class Searching:
         artist_offset: int | None = None,
         music_folder_id: str | None = None,
     ) -> SearchResult:
+        """Search and find all the songs, albums and artists that
+        whose title match the given query.
+
+        Args:
+            query: The query string to be send to the server.
+            song_count: The numbers of songs that the server
+                should return.
+            song_offset: The number of songs to offset in the list,
+                useful for pagination.
+            album_count: The numbers of albums that the server
+                should return.
+            album_offset: The number of album to offset in the list,
+                useful for pagination.
+            artist_count: The numbers of artists that the server
+                should return.
+            artist_offset: The number of artists to offset in the list,
+                useful for pagination.
+            music_folder_id: An ID of a music folder to limit where the
+                songs, albums and artists should come from.
+
+        Returns:
+            An object that contains all the info about the found songs,
+                albums and artists received with the given query.
+        """
+
         return self._generic_search(
             query,
             song_count,
@@ -103,6 +154,32 @@ class Searching:
         artist_offset: int | None = None,
         music_folder_id: str | None = None,
     ) -> SearchResult:
+        """Search and find all the songs, albums and artists that
+        whose title match the given query. Not organized according
+        ID3 tags.
+
+        Args:
+            query: The query string to be send to the server.
+            song_count: The numbers of songs that the server
+                should return.
+            song_offset: The number of songs to offset in the list,
+                useful for pagination.
+            album_count: The numbers of albums that the server
+                should return.
+            album_offset: The number of album to offset in the list,
+                useful for pagination.
+            artist_count: The numbers of artists that the server
+                should return.
+            artist_offset: The number of artists to offset in the list,
+                useful for pagination.
+            music_folder_id: An ID of a music folder to limit where the
+                songs, albums and artists should come from.
+
+        Returns:
+            An object that contains all the info about the found songs,
+                albums and artists received with the given query.
+        """
+
         return self._generic_search(
             query,
             song_count,

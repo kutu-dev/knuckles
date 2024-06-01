@@ -24,7 +24,7 @@ def test_get_music_folders(
 
 
 @responses.activate
-def test_get_indexes(
+def test_get_artist_indexes(
     add_responses: AddResponses,
     subsonic: Subsonic,
     mock_get_indexes: list[Response],
@@ -34,7 +34,9 @@ def test_get_indexes(
 ) -> None:
     add_responses(mock_get_indexes)
 
-    response = subsonic.browsing.get_indexes(music_folders[0]["id"], modified_date)
+    response = subsonic.browsing.get_artists_indexed(
+        music_folders[0]["id"], modified_date
+    )
 
     print(response.index)
 

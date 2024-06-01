@@ -33,7 +33,7 @@ def test_get_chat_messages(
 
     response: list[ChatMessage] = subsonic.chat.get_chat_messages()
 
-    assert response[0].username == message["username"]
+    assert response[0].user.username == message["username"]
 
     # Divide by 1000 because messages are saved in milliseconds instead of seconds
     assert response[0].time == datetime.fromtimestamp(message["time"] / 1000)

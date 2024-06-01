@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any
 
+from dateutil import parser
+
 # Avoid circular import error
 import knuckles.models._song as song_model_module
-from dateutil import parser
 
 from ._artist import Artist
 from ._cover_art import CoverArt
@@ -14,6 +15,12 @@ if TYPE_CHECKING:
 
 
 class RecordLabel(Model):
+    """Object that holds all the info about a record label.
+
+    Attributes:
+        name (str): The name of the record label.
+    """
+
     def __init__(self, subsonic: "Subsonic", name: str) -> None:
         super().__init__(subsonic)
 
@@ -21,6 +28,13 @@ class RecordLabel(Model):
 
 
 class Disc(Model):
+    """Object that holds all the info about a disc.
+
+    Attributes:
+        disc_number (int): The number of the disc.
+        title (str): The title of the disc.
+    """
+
     def __init__(self, subsonic: "Subsonic", disc: int, title: str) -> None:
         super().__init__(subsonic)
 
@@ -29,6 +43,14 @@ class Disc(Model):
 
 
 class ReleaseDate(Model):
+    """Object that holds all the info about the release date of a media.
+
+    Attributes:
+        year (int): The year when it was released.
+        month (int): The month when it was released.
+        day (int): The day when it was released.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",
@@ -44,7 +66,17 @@ class ReleaseDate(Model):
 
 
 class AlbumInfo(Model):
-    """Representation of all the data related to an album info in Subsonic."""
+    """Object that holds all the info about the extra info of an album.
+
+    Attributes:
+        album_id (str): The ID of the album where the extra info is from.
+        notes (str): Notes of the album.
+        music_brainz_id (str | None): The music brainz ID of the album.
+        last_fm_url (str | None): The last.fm URL of the album
+        small_image_user (str | None): The URL of the small sized image of the album.
+        medium_image_user (str | None): The URL of the medium sized image of the album.
+        large_image_user (str | None): The URL of the large sized image of the album.
+    """
 
     def __init__(
         self,
@@ -57,23 +89,6 @@ class AlbumInfo(Model):
         mediumImageUrl: str | None,
         largeImageUrl: str | None,
     ) -> None:
-        """Representation of all the data related to an album info in Subsonic.
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param album_id: The ID3 of the album associated with the info.
-        :type album_id: str
-        :param notes: A note for the album.
-        :type notes: str
-        :param musicBrainzId:The ID in music Brainz of the album.
-        :type musicBrainzId: str
-        :param smallImageUrl: An URL to the small size cover image of the album.
-        :type smallImageUrl: str
-        :param mediumImageUrl: An URL to the medium size cover image of the album.
-        :type mediumImageUrl: str
-        :param largeImageUrl: An URL to the large size cover image of the album.
-        :type largeImageUrl: str
-        """
-
         super().__init__(subsonic)
 
         self.album_id = album_id
@@ -85,21 +100,69 @@ class AlbumInfo(Model):
         self.large_image_url = largeImageUrl
 
     def generate(self) -> "AlbumInfo":
-        """Return a new album info with all the data updated from the API,
+        """Return a new album info object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new album info object with all the data updated.
-        :rtype: AlbumInfo
+        Returns:
+            A new object with all the updated info.
         """
 
         return self._subsonic.browsing.get_album_info(self.album_id)
 
 
 class Album(Model):
-    """Representation of all the data related to an album in Subsonic."""
+    """Object that holds all the info of an album.
+
+    Attributes:
+        id (str): The ID of the album.
+        parent (str | None): The ID of the parent media of the album.
+        name (str | None): The name of the album.
+        album (str | None): The name of the album (Can differ the `name` and
+            `title` attributes, **not documented in the [OpenSubsonic Spec](ht
+            tps://opensubsonic.netlify.app/docs/responses/albumid3/)).
+        is_dir (bool | None): If the album is a directory.
+        title (str | None): The name of the album (Can differ the `name` and
+            `album` attributes, **not documented in the [OpenSubsonic Spec](ht
+            tps://opensubsonic.netlify.app/docs/responses/albumid3/)).
+        artist (Artist | None): The artist of the album.
+        cover_art (CoverArt): All the info about the cover art of the album.
+        song_count (int | None): The number of songs inside the album.
+        duration (int | None): The total duration of the album in seconds.
+        play_count (int | None): The times the album has been played.
+        created (datetime | None): The timestamp when the album was created.
+        starred (datetime | None): The timestamp when the album was starred if
+            it is.
+        year (int | None): The year when the album was released.
+        genre (str | None): The genre of the album.
+        played (datetime | None): The timestamp when the album was played.
+        user_rating (int | None): The rating from 0 to 5 (inclusive) that the
+            used has given to the album if it is rated.
+        songs (list[Song] | None): The list of songs that the album contains.
+        info (AlbumInfo | None): Extra info about the album.
+        record_labels (list[RecordLabel] | None): List of all the record labels
+            that have licensed the album.
+        music_brainz_id (str | None): The ID of the MusicBrainz database entry
+            of the album.
+        genres (list[ItemGenre] | None): List of all the genres that the album
+            has.
+        artists (list[Artist] | None): List of all the artists involved with
+            the album.
+        display_artist (str | None): String that condense all the artists
+            involved with the album.
+        release_types (list[str] | None): The types of album that the
+            album is.
+        moods (list[str] | None): List of all the moods that the album
+            has.
+        sort_name (str | None): The name of the album used for sorting.
+        original_release_date (ReleaseDate | None): The original release date
+            of the album.
+        release_date (ReleaseDate | None): The release date of the album.
+        is_compilation (bool | None): If the album is a compilation or not.
+        discs (list[Disc] | None):
+    """
 
     def __init__(
         self,
@@ -136,51 +199,6 @@ class Album(Model):
         isCompilation: bool | None = None,
         discTitles: list[dict[str, Any]] | None = None,
     ) -> None:
-        """Representation of all the data related to an album in Subsonic.
-
-        :param subsonic:The subsonic object to make all the internal requests with it.
-            The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param id: The ID of the album.
-        :type id: str
-        :param parent: The ID of the parent directory.
-        :type parent: str
-        :param album: The name of the album (Same as title and name).
-        :type album: str
-        :param title: The name of the album (Same as album and name).
-        :type title: str
-        :param name: The name of the album (Same as album and title).
-        :type name: str
-        :param isDir: If the album is a directory.
-        :type isDir: bool
-        :param artist: The name of the artist author of the album.
-        :type artist: str
-        :param artistId: The ID of the artist author of the album.
-        :type artistId: str
-        :param coverArt: The ID of the cover art of the album.
-        :type coverArt: str
-        :param songCount: The number of songs inside the album.
-        :type songCount: int
-        :param duration: The total duration of the album.
-        :type duration: int
-        :param playCount: The times the album has been played.
-        :type playCount: int
-        :param created: The time when the album was created.
-        :type created: str
-        :param starred: The time when the album was starred.
-        :type starred: str
-        :param year: The year when the album was released.
-        :type year: int
-        :param genre: The genre of the album.
-        :type genre: str
-        :param played: The time the album was last played.
-        :type played: str
-        :param userRating:
-        :type userRating: int
-        :param song: A list with all the songs of the album.
-        :type song: list[dict[str, Any]]
-        """
-
         super().__init__(subsonic)
 
         self.id = id
@@ -243,14 +261,14 @@ class Album(Model):
         )
 
     def generate(self) -> "Album":
-        """Return a new album with all the data updated from the API,
-        using the endpoints that return the most information possible.
+        """Return a new album object with all the data updated from the API,
+        using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new album info object with all the data updated.
-        :rtype: Album
+        Returns:
+            A new object with all the updated info.
         """
 
         new_album = self._subsonic.browsing.get_album(self.id)
@@ -259,11 +277,11 @@ class Album(Model):
         return new_album
 
     def get_album_info(self) -> AlbumInfo:
-        """Returns the extra info given by the "getAlbumInfo2" endpoint,
-        also sets it in the info property of the model.
+        """Get all the extra info about the album, it's
+        set to the `info` attribute of the object.
 
-        :return: An AlbumInfo object with all the extra info given by the API.
-        :rtype: AlbumInfo
+        Returns:
+            The extra info returned by the server.
         """
 
         self.info = self._subsonic.browsing.get_album_info(self.id)

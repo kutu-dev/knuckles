@@ -55,7 +55,7 @@ def test_jukebox_set(
 ) -> None:
     add_responses(mock_jukebox_control_set)
 
-    response = subsonic.jukebox.set(song["id"])
+    response = subsonic.jukebox.set([song["id"]])
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]
@@ -148,7 +148,7 @@ def test_jukebox_add(
 ) -> None:
     add_responses(mock_jukebox_control_add)
 
-    response = subsonic.jukebox.add(song["id"])
+    response = subsonic.jukebox.add([song["id"]])
 
     assert response.current_index == jukebox_status["currentIndex"]
     assert response.playing == jukebox_status["playing"]

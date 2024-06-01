@@ -19,7 +19,74 @@ from dateutil import parser
 
 
 class Song(Model):
-    """Representation of all the data related to a song in Subsonic."""
+    """Object that holds all the info about a song.
+
+    Attributes:
+        id (str): The ID of the song.
+        title (str | None): The title of the song.
+        parent (str | None): The ID of the parent of the song.
+        track (int | None): The track
+        year (int | None): The year when the song was released.
+        genre (Genre | None): All the info related with the genre
+            of the song.
+        size (int | None): The size of the file of the song.
+        content_type (str | None): The HTTP ContentType of the
+            file of the song.
+        suffix (str | None): The suffix of the filename of the
+            file of the song.
+        transcoded_content_type (str | None): The HTTP ContentType
+            of the transcoded file of the song.
+        transcoded_suffix (str | None): The suffix of the filename
+            of the transcoded file of the song.
+        duration (int | None): The duration in seconds of the song.
+        bit_rate (int | None): The bit rate of the song.
+        path (str | None): The path of the song.
+        user_rating (int | None): The rating given to the song by
+            the user.
+        average_rating (float | None): The average rating of all the
+            user for the song.
+        play_count (int | None): The number of the times the song
+            has been played.
+        disc_number (int | None): The disc number of the song.
+        type (str |  None): The type of media.
+        bookmark_position (int | None): The position in seconds
+            where the song is bookmarked for the authenticated user.
+        album (Album | None): All the info related with the album
+            of the song.
+        artist (Artist | None): All the info related with the main
+            artist of the song.
+        cover_art (CoverArt | None): All the info related
+            with the cover art of the song.
+        created (datetime | None): The timestamp when the song
+            was created.
+        starred (datetime | None): The timestamp when the song
+            was starred by the authenticated user if they have.
+        played (datetime | None): The timestamp when the song
+            was last played.
+        bpm (int | None): The bpm of the song.
+        comment (str | None): The comment of the song.
+        sort_name (str | None): The sort name of the song.
+        music_brainz_id (str | None): The ID of the MusicBrainz entry
+            of the song.
+        genres (list[ItemGenre | None): List that holds all the info
+            about all the genres of the song.
+        artists (list[Artist] | None): List that holds all the info
+            about all the artists that made the song.
+        display_artist (str | None): The display name of the artist
+            of the song.
+        album_artists (list[Artist] | None): List that holds all the info
+            about all the artists that made the album where the song
+            is from.
+        display_album_artist (str | None): THe display name of the artist
+            of the album of the song.
+        contributors (list[Contributor] | None): List that holds all the
+            info about all the contributors of the song.
+        display_composer (str | None): The display name of the composer
+            of the song.
+        moods (list[str] | None): List off all the moods of the song.
+        replay_gain (ReplayGain | None): All the info about the replay
+            gain of the song.
+    """
 
     def __init__(
         self,
@@ -70,85 +137,6 @@ class Song(Model):
         moods: list[str] | None = None,
         replayGain: dict[str, Any] | None = None,
     ) -> None:
-        """Representation of all the data related to song in Subsonic.
-
-        :param subsonic: The subsonic object to make all the internal requests with it.
-        :type subsonic: Subsonic
-        :param id: The id of the media.
-        :type id: str
-        :param title:  The song name, defaults to None.
-        :type title: str | None, optional
-        :param isDir: If the media is a dir (should always be False), defaults to False.
-        :type isDir: bool, optional
-        :param parent: The ID of the parent folder, defaults to None.
-        :type parent: str | None, optional
-        :param album: The album name, defaults to None.
-        :type album: str | None, optional
-        :param artist: The artist name, defaults to None.
-        :type artist: str | None, optional
-        :param track: The track number, defaults to None.
-        :type track: int | None, optional
-        :param year: The media year, defaults to None.
-        :type year: int | None, optional
-        :param genre: The media genre, defaults to None.
-        :type genre: str | None, optional
-        :param coverArt: A covertArt id, defaults to None.
-        :type coverArt: str | None, optional
-        :param size: A file size of the media, defaults to None.
-        :type size: int | None, optional
-        :param contentType: The mimeType of the media, defaults to None.
-        :type contentType: str | None, optional
-        :param suffix: The file suffix of the media, defaults to None.
-        :type suffix: str | None, optional
-        :param transcodedContentType: The transcoded mediaType
-            if transcoding should happen, defaults to None.
-        :type transcodedContentType: str | None, optional
-        :param transcodedSuffix: The file suffix of the transcoded media,
-            defaults to None.
-        :type transcodedSuffix: str | None, optional
-        :param duration: The duration of the media in seconds, defaults to None.
-        :type duration: int | None, optional
-        :param bitRate: The bitrate of the media, defaults to None.
-        :type bitRate: int | None, optional
-        :param path: The full path of the media, defaults to None.
-        :type path: str | None, optional
-        :param isVideo: If the media is a video (should always be false),
-            defaults to False.
-        :type isVideo: bool, optional
-        :param userRating: The user rating of the media (between 1 and 5, inclusive),
-            defaults to None.
-        :type userRating: int | None, optional
-        :param averageRating: The average rating of the media
-            (between 1.0 and 5.0 inclusive), defaults to None.
-        :type averageRating: float | None, optional
-        :param playCount: The play count, defaults to None.
-        :type playCount: int | None, optional
-        :param discNumber: The disc number, defaults to None.
-        :type discNumber: int | None, optional
-        :param created: Date the media was created, defaults to None.
-        :type created: str | None, optional
-        :param starred: Date the media was starred, defaults to None.
-        :type starred: str | None, optional
-        :param albumId: The corresponding album id, defaults to None.
-        :type albumId: str | None, optional
-        :param artistId: The corresponding artist id, defaults to None.
-        :type artistId: str | None, optional
-        :param type: The media type, defaults to None.
-        :type type: str | None, optional
-        :param bookmarkPosition: The bookmark position in seconds, defaults to None.
-        :type bookmarkPosition: int | None, optional
-        :param originalWidth: The video original Width, defaults to None.
-        :type originalWidth: None, optional
-        :param originalHeight: The video original Height, defaults to None.
-        :type originalHeight: None, optional
-        :param played: Date the album was last played (OpenSubsonic), defaults to None.
-        :type played: str | None, optional
-        :raises VideoArgumentsInSong: Raised if arguments only valid
-            for videos are passed in.
-        :raises AlbumOrArtistArgumentsInSong: Raised if arguments only valid
-            for albums or artists are passed in.
-        """
-
         super().__init__(subsonic)
 
         self.id: str = id
@@ -212,23 +200,23 @@ class Song(Model):
         )
 
     def generate(self) -> "Song":
-        """Return a new song with all the data updated from the API,
+        """Return a new song object with all the data updated from the API,
         using the endpoint that return the most information possible.
 
-        Useful for making copies with updated data or updating the object itself
-        with immutability, e.g., foo = foo.generate().
+        Useful for making copies with updated data or updating the object
+        itself with immutability, e.g., `foo = foo.generate()`.
 
-        :return: A new song object with all the data updated.
-        :rtype: Song
+        Returns:
+            A new object with all the updated info.
         """
 
         return self._subsonic.browsing.get_song(self.id)
 
     def star(self) -> Self:
-        """Calls the "star" endpoint of the API.
+        """Star the song for the authenticated user.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.media_annotation.star_song(self.id)
@@ -236,10 +224,10 @@ class Song(Model):
         return self
 
     def unstar(self) -> Self:
-        """Calls the "unstar" endpoint of the API.
+        """Unstar the song for the authenticated user.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.media_annotation.unstar_song(self.id)
@@ -247,12 +235,13 @@ class Song(Model):
         return self
 
     def set_rating(self, rating: int) -> Self:
-        """Calls the "setRating" endpoint of the API.
+        """Set the rating of the song.
 
-        :param rating: The rating between 1 and 5 (inclusive).
-        :type rating: int
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            rating: The new rating for the song.
+
+        Returns:
+            The object itself.
         """
 
         self._subsonic.media_annotation.set_rating(self.id, rating)
@@ -260,10 +249,10 @@ class Song(Model):
         return self
 
     def remove_rating(self) -> Self:
-        """Calls the "setRating" endpoint of the API with a rating of 0.
+        """Remove the rating for the song.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Returns:
+            The object itself.
         """
 
         self._subsonic.media_annotation.remove_rating(self.id)
@@ -271,10 +260,15 @@ class Song(Model):
         return self
 
     def scrobble(self, time: datetime, submission: bool = True) -> Self:
-        """Calls the "scrobble" endpoint of the API.
+        """Scrobble the song.
 
-        :return: The object itself to allow method chaining.
-        :rtype: Self
+        Args:
+            time: The timestamp when the song was scrobble:
+            submission: If the scrobble is a request to a submission or
+                it is a now playing entry.
+
+        Returns:
+            The object itself.
         """
 
         self._subsonic.media_annotation.scrobble([self.id], [time], submission)

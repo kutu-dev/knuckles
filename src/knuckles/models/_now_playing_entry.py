@@ -9,6 +9,18 @@ if TYPE_CHECKING:
 
 
 class NowPlayingEntry(Model):
+    """Object that holds all the info about a now playing entry.
+
+    Attributes:
+        user: The user that is currently playing a song.
+        song (Song): All the info about the song that is now playing.
+        minutes_ago (int | None): How many minutes ago the songs started
+            its playback.
+        player_id (int | None): The ID of the played where the song is playing.
+        player_name (song | None): The name of the player where the song is
+            playing.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",

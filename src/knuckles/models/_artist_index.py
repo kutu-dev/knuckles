@@ -7,7 +7,17 @@ if TYPE_CHECKING:
     from .._subsonic import Subsonic
 
 
-class Index(Model):
+class ArtistIndex(Model):
+    """Object that holds all the info about an artist index.
+
+    Attributes:
+        ignored_articles (list[str]): Ignored articles in the index.
+        index (dict[str, list[Artist]] | None): Dictionary that holds
+            the index, where the key is the index letter and the value
+            a list of objects that holds all the info related with the
+            artists in that are in the given index.
+    """
+
     def __init__(
         self,
         subsonic: "Subsonic",

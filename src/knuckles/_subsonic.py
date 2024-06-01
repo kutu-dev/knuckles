@@ -17,7 +17,40 @@ from ._user_management import UserManagement
 
 
 class Subsonic:
-    """Container of all the methods to interact with the OpenSubsonic API"""
+    """Object that holds all the other helper objects to interact
+    with the OpenSubsonic REST API.
+
+    Inside this object there are helper object that holds all the methods
+    used to access the REST API. The methods are split following the
+    [categories listed in the OpenSubsonic REST API Spec](https://opensubsonic.
+    netlify.app/categories/).
+
+    Attributes:
+        api: Helper object used to directly access the REST API of the given
+            server.
+        system: Helper object used to access all system related endpoints.
+        browsing: Helper object used to access all system related endpoints.
+        lists: Helper object used to access all lists related endpoints.
+        searching: Helper object used to access all searching related
+            endpoints.
+        playlists: Helper object used to access playlists related endpoints.
+        media_retrieval: Helper object used to access all media retrieval
+            related endpoints.
+        media_annotation: Helper object used to access all media
+            annotation related endpoints.
+        sharing: Helper object used to access all sharing related endpoints.
+        podcast: Helper object used to access all podcast related endpoints.
+        jukebox: Helper object used to access all jukebox related endpoints.
+        internet_radio: Helper object used to access all internet radio
+            related endpoints.
+        chat: Helper object used to access all chat related endpoints.
+        user_management: Helper object used to access all user management
+            related endpoints.
+        bookmarks: Helper object used to access all bookmarks related
+            endpoints.
+        media_library_scanning: Helper object used to access all media
+            library scanning related endpoints.
+    """
 
     def __init__(
         self,
@@ -29,16 +62,20 @@ class Subsonic:
         use_token: bool = True,
         request_method: RequestMethod = RequestMethod.POST,
     ) -> None:
-        """FF
+        """Construction method of the Subsonic object used to
+        interact with the OpenSubsonic REST API.
 
         Args:
             url: The URL of the Subsonic server to connect to.
-            user: The name of the user
-            password: asd
-            client: sad
-            use_https: d a
-            use_token: as
-            request_method: as
+            user: The name of the user to authenticate.
+            password: The password of the user to authenticate.
+            client: A unique name of the client to report to the
+                server.
+            use_https: If the requests should be use of HTTPS.
+            use_token: If the authentication should be made
+                using a salted token or in plain text.
+            request_method: If the requests should be made
+                using a GET verb or a POST verb.
         """
 
         self.api = Api(

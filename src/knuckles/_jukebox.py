@@ -8,9 +8,9 @@ if TYPE_CHECKING:
 
 
 class JukeboxControl:
-    """Class that contains all the methods needed to interact
-    with the jukebox calls and actions in the Subsonic API.
-    <https://opensubsonic.netlify.app/docs/endpoints/jukeboxcontrol/>
+    """Class that contains all the methods needed to interact with the
+    [jukebox control endpoint](https://opensubsonic.netlify.app/
+    categories/jukebox) in the Subsonic API.
     """
 
     def __init__(self, api: Api, subsonic: "Subsonic") -> None:
@@ -20,10 +20,12 @@ class JukeboxControl:
         self.subsonic = subsonic
 
     def get(self) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "get".
+        """Get all the info related with the current playlist of
+        the jukebox.
 
-        :return: An object with all the given information about the jukebox.
-        :rtype: Jukebox
+        Returns:
+            An object that holds all the info related with
+                the playlist of the jukebox.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "get"})[
@@ -33,11 +35,12 @@ class JukeboxControl:
         return Jukebox(self.subsonic, **response)
 
     def status(self) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "status".
+        """Get all the info related with the current state of
+        the jukebox.
 
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Returns:
+            An object that holds all the info related with
+                the scate of the jukebox.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "status"})[
@@ -46,28 +49,32 @@ class JukeboxControl:
 
         return Jukebox(self.subsonic, **response)
 
-    def set(self, id_: str) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "set".
+    def set(self, songs_ids: list[str]) -> Jukebox:
+        """Set the song playlist for the jukebox.
 
-        :param id_: The ID of a song to set it in the jukebox.
-        :type id_: str
-        :return: An object with all the given information about the jukebox.
-        :rtype: Jukebox
+        Args:
+            songs_ids: A list of song IDs to set the jukebox playlist.
+
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
-            "jukeboxControl", {"action": "set", "id": id_}
+            "jukeboxControl", {"action": "set", "id": songs_ids}
         )["jukeboxStatus"]
 
         # Preset the song list as this call changes it in a predictable way
-        return Jukebox(self.subsonic, **response, entry=[{"id": id_}])
+        return Jukebox(
+            self.subsonic, **response, entry=[{"id": song_id} for song_id in songs_ids]
+        )
 
     def start(self) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "start".
+        """Start the playback of the current song in the jukebox playlist.
 
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "start"})[
@@ -77,11 +84,11 @@ class JukeboxControl:
         return Jukebox(self.subsonic, **response)
 
     def stop(self) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "stop".
+        """Stop the playback of the current song in the jukebox playlist.
 
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "stop"})[
@@ -91,15 +98,15 @@ class JukeboxControl:
         return Jukebox(self.subsonic, **response)
 
     def skip(self, index: int, offset: float = 0) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "skip".
+        """Skip the playback of the current song in the jukebox playlist.
 
-        :param index: The index in the jukebox playlist to skip to.
-        :type index: int
-        :param offset: Start playing this many seconds into the track, defaults to 0
-        :type offset: float, optional
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Args:
+            index: The index of the song to skip to.
+            offset: The offset of seconds to start playing the next song.
+
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
@@ -108,30 +115,30 @@ class JukeboxControl:
 
         return Jukebox(self.subsonic, **response)
 
-    def add(self, id_: str) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "add".
+    def add(self, songs_ids: list[str]) -> Jukebox:
+        """Add songs to the jukebox playlist.
 
-        :param id_: The ID of a song to add it in the jukebox.
-        :type id_: str
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Args:
+            songs_ids: A list of song IDs to add to the jukebox playlist.
+
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
-            "jukeboxControl", {"action": "add", "id": id_}
+            "jukeboxControl", {"action": "add", "id": songs_ids}
         )["jukeboxStatus"]
 
         return Jukebox(self.subsonic, **response)
 
     def clear(self) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "clear".
+        """Clear the playlist of the jukebox.
 
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
-
         response = self.api.json_request("jukeboxControl", {"action": "clear"})[
             "jukeboxStatus"
         ]
@@ -139,13 +146,14 @@ class JukeboxControl:
         return Jukebox(self.subsonic, **response)
 
     def remove(self, index: int) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "remove".
+        """Remove a song from the playlist of the jukebox.
 
-        :param index: The index in the jukebox playlist for the song to remove.
-        :type index: int
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Args:
+            index: The index of the song to remove from the playlist.
+
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request(
@@ -155,11 +163,11 @@ class JukeboxControl:
         return Jukebox(self.subsonic, **response)
 
     def shuffle(self) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "shuffle".
+        """Shuffle all the songs in the playlist of the jukebox.
 
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         response = self.api.json_request("jukeboxControl", {"action": "shuffle"})[
@@ -169,14 +177,17 @@ class JukeboxControl:
         return Jukebox(self.subsonic, **response)
 
     def set_gain(self, gain: float) -> Jukebox:
-        """Calls the "jukeboxControl" endpoint of the API with the action "setGain".
+        """Set the gain of the playback of the jukebox.
 
-        :param gain: A number between 0 and 1 (inclusive) to set the gain.
-        :type gain: float
-        :raises ValueError: Raised if the gain argument isn't between the valid range.
-        :return: An object with all the given information about the jukebox.
-        Except the jukebox playlist.
-        :rtype: Jukebox
+        Args:
+            gain: A number between 0 and 1 (inclusive) to be set as the gain.
+
+        Raises:
+            ValueError: Raised if the given gain is not between 0 and 1.
+
+        Returns:
+            An object that contains the updated jukebox status
+                and playlist.
         """
 
         if not 1 > gain > 0:

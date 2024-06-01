@@ -8,28 +8,28 @@ from knuckles import Subsonic
 from tests.conftest import AddResponses, MockGenerator
 
 code_errors = [
-    (0, "A generic error.", knuckles.exceptions.CodeError0),
-    (10, "Required parameter is missing.", knuckles.exceptions.CodeError10),
+    (0, "A generic error.", knuckles.exceptions.ErrorCode0),
+    (10, "Required parameter is missing.", knuckles.exceptions.ErrorCode10),
     (
         20,
         "Incompatible Subsonic REST protocol version. Client must upgrade.",
-        knuckles.exceptions.CodeError20,
+        knuckles.exceptions.ErrorCode20,
     ),
     (
         30,
         "Incompatible Subsonic REST protocol version. Server must upgrade.",
-        knuckles.exceptions.CodeError30,
+        knuckles.exceptions.ErrorCode30,
     ),
-    (40, "Wrong username or password.", knuckles.exceptions.CodeError40),
+    (40, "Wrong username or password.", knuckles.exceptions.ErrorCode40),
     (
         41,
         "Token authentication not supported for LDAP users.",
-        knuckles.exceptions.CodeError41,
+        knuckles.exceptions.ErrorCode41,
     ),
     (
         50,
         "User is not authorized for the given operation.",
-        knuckles.exceptions.CodeError50,
+        knuckles.exceptions.ErrorCode50,
     ),
     (
         60,
@@ -37,9 +37,9 @@ code_errors = [
             "The trial period for the Subsonic server is over. "
             + "Please upgrade to Subsonic Premium. Visit subsonic.org for details."
         ),
-        knuckles.exceptions.CodeError60,
+        knuckles.exceptions.ErrorCode60,
     ),
-    (70, "The requested data was not found.", knuckles.exceptions.CodeError70),
+    (70, "The requested data was not found.", knuckles.exceptions.ErrorCode70),
     (80, "The cake is a lie!", knuckles.exceptions.UnknownErrorCode),
 ]
 
