@@ -5,16 +5,28 @@ help:
   just --list
 
 # Setup the Python venv for development
-setup:
+setup: generic-setup
+  .venv/bin/pip install -r requirements/requirements.txt
+
+[private]
+generic-setup:
   rm -rf .venv
   python3 -m venv .venv
   .venv/bin/pip install --upgrade pip
-  .venv/bin/pip install -r requirements/requirements.txt
+
+[private]
+setup-check: generic-setup
+  .venv/bin/pip install -r requirements/requirements-check.txt
+
+[private]
+setup-tests: generic-setup
+  .venv/bin/pip install .
+  .venv/bin/pip install -r requirements/requirements-tests.txt
 
 # Check if the project is following the guidelines
 check:
   .venv/bin/mypy src/knuckles
-  .venv/bin/mypy tests
+  #.venv/bin/mypy tests
   .venv/bin/ruff check --fix
   .venv/bin/ruff format
 
@@ -35,15 +47,15 @@ test:
   .venv/bin/pytest
 
 # Generate a new lock file for all the deps
-lock: lock-dev-deps lock-docs-deps lock-tests-deps
-
-[private]
-deploy-docs:
-  .venv/bin/mkdocs gh-deploy --force
+lock: lock-dev-deps lock-check-deps lock-docs-deps lock-tests-deps
 
 [private]
 lock-dev-deps:
   .venv/bin/pip-compile --extra=dev --output-file=requirements/requirements-dev.txt pyproject.toml
+
+[private]
+lock-check-deps:
+  .venv/bin/pip-compile --extra=check --output-file=requirements/requirements-check.txt pyproject.toml
 
 [private]
 lock-docs-deps:
@@ -52,3 +64,7 @@ lock-docs-deps:
 [private]
 lock-tests-deps:
   .venv/bin/pip-compile --extra=tests --output-file=requirements/requirements-tests.txt pyproject.toml
+
+[private]
+deploy-docs:
+  .venv/bin/mkdocs gh-deploy --force

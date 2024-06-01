@@ -1,4 +1,5 @@
 -e .
 -r requirements-dev.txt
+-r requirements-check.txt
 -r requirements-tests.txt
 -r requirements-docs.txt
