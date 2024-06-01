@@ -8,7 +8,7 @@ on:
 
 jobs:
   run_tests:
-    runs-on: ubuntu-24.02
+    runs-on: ubuntu-24.04
 
     steps:
       - run: sudo apt-get install -y just
@@ -19,6 +19,6 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: venv
-          key: ${{ runner.os }}-${{ hashFiles('requirements-tests.txt') }}
+          key: ${{ runner.os }}-${{ hashFiles('requirements/requirements-tests.txt') }}
       - run: just setup-test
       - run: just test
