@@ -2,7 +2,7 @@ name: Publish update to PyPI
 
 on:
   release:
-    types: publised
+    types: published
 
 jobs:
   publish-pypi:
