@@ -49,8 +49,10 @@ def mock_unstar_artist(
 
 
 @pytest.fixture
-def mock_set_rating_zero(mock_generator: MockGenerator) -> list[Response]:
-    return mock_generator("setRating", {"rating": 0})
+def mock_set_rating_zero(
+    song: dict[str, Any], mock_generator: MockGenerator
+) -> list[Response]:
+    return mock_generator("setRating", {"id": song["id"], "rating": 0})
 
 
 @pytest.fixture

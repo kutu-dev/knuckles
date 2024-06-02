@@ -81,11 +81,11 @@ def test_jukebox_skip_with_offset(
     add_responses: AddResponses,
     subsonic: Subsonic,
     mock_jukebox_control_status: list[Response],
-    mock_jukebox_control_skip_without_offset: list[Response],
+    mock_jukebox_control_skip_with_offset: list[Response],
     offset_time: int,
 ) -> None:
     add_responses(mock_jukebox_control_status)
-    add_responses(mock_jukebox_control_skip_without_offset)
+    add_responses(mock_jukebox_control_skip_with_offset)
 
     response: Jukebox = subsonic.jukebox.status()
     response = response.skip(0, offset_time)

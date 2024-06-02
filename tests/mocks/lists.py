@@ -457,6 +457,7 @@ def mock_get_random_songs(
         "getRandomSongs",
         {
             "genre": genre["value"],
+            "size": num_of_songs,
             "fromYear": from_year,
             "toYear": to_year,
             "musicFolderId": music_folders[0]["id"],

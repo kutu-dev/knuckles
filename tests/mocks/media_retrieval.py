@@ -91,7 +91,7 @@ def mock_get_captions_vtt(
 ) -> list[Response]:
     return mock_download_file_generator(
         "getCaptions",
-        {"id": video["id"]},
+        {"id": video["id"], "format": "vtt"},
         vtt_metadata.content_type,
     )
 
@@ -123,7 +123,7 @@ def mock_get_captions_srt(
 ) -> list[Response]:
     return mock_download_file_generator(
         "getCaptions",
-        {"id": video["id"]},
+        {"id": video["id"], "format": "srt"},
         srt_metadata.content_type,
     )
 

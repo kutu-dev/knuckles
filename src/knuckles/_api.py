@@ -1,5 +1,4 @@
 import hashlib
-import json
 import secrets
 from enum import Enum
 from typing import Any
@@ -146,7 +145,7 @@ class Api:
             case RequestMethod.POST:
                 return requests.post(
                     url=f"{self.url}/rest/{endpoint}",
-                    data=json.dumps(self._generate_params(extra_params)),
+                    data=self._generate_params(extra_params),
                 )
 
             case RequestMethod.GET | _:

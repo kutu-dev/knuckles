@@ -1,4 +1,4 @@
-import json
+import urllib.parse
 from typing import Any, Callable, Protocol
 
 import knuckles
@@ -100,50 +100,42 @@ class MockGenerator(Protocol):
 
 
 def match_json(
-    mocked_data: dict[str, Any],
+    mocked_params: dict[str, Any],
 ) -> Callable[[requests.PreparedRequest], tuple[bool, str]]:
     def inner(
         response: requests.PreparedRequest,
     ) -> tuple[bool, str]:
-        print(response.body)
-        print(mocked_data)
-
         if not isinstance(response.body, str):
             return (
                 False,
                 "The request body wasn't a string",
             )
 
-        for key, value in json.loads(response.body).items():
-            print(key, value)
+        decoded_post_body = urllib.parse.parse_qs(response.body)
 
-            if key not in mocked_data:
+        if "t" in decoded_post_body:
+            del decoded_post_body["t"]
+
+        if "s" in decoded_post_body:
+            del decoded_post_body["s"]
+
+        for key, value in decoded_post_body.items():
+            if not isinstance(value, list):
                 continue
 
-            # When the passed value is a list different checks should be made,
-            # this happens when the same parameters is in the request multiple times,
-            # this happens for example when using
-            # the parameter "songId" in the endpoint "createPlaylist".
-            if (
-                isinstance(value, list)
-                and isinstance(mocked_data[key], str)
-                and (
-                    mocked_data[key] in value
-                    # The values inside the list "value" can sometimes be integers,
-                    # so a extra check is needed for them.
-                    or (
-                        str.isdigit(mocked_data[key]) and int(mocked_data[key]) in value
-                    )
-                )
-            ):
+            if len(value) != 1:
                 continue
 
-            if str(value) != str(mocked_data[key]):
-                return (
-                    False,
-                    f"The value '{value}' in the key '{key}' is"
-                    + f"not equal to '{mocked_data[key]}'",
-                )
+            decoded_post_body[key] = value[0]
+
+        print(f"{mocked_params=}")
+        print(f"{decoded_post_body=}")
+
+        if mocked_params != decoded_post_body:
+            return False, (
+                "Mismatch data between the request POST body and "
+                + "the mocked parameters"
+            )
 
         return True, ""
 
@@ -167,6 +159,8 @@ def mock_generator(
         mocked_params = params.copy()
         if extra_params is not None:
             mocked_params.update(extra_params)
+
+        print("CC", extra_params)
 
         mocked_data = {"subsonic-response": {**subsonic_response}}
         if extra_data is not None:

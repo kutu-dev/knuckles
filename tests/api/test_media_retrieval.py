@@ -2,10 +2,11 @@ from pathlib import Path
 from typing import Any
 from urllib import parse
 
+import knuckles
 import pytest
 import responses
 from _pytest.fixtures import FixtureRequest
-from knuckles import Subsonic, SubtitlesFileFormat
+from knuckles import Subsonic
 from responses import Response
 
 from tests.conftest import AddResponses
@@ -165,7 +166,14 @@ def test_get_captions_without_a_given_filename(
 
     add_responses(get_mock)
 
-    download_path = subsonic.media_retrieval.get_captions(video["id"], tmp_path)
+    if metadata == "vtt_metadata":
+        subtitle_format = knuckles.SubtitlesFileFormat.VTT
+    else:
+        subtitle_format = knuckles.SubtitlesFileFormat.SRT
+
+    download_path = subsonic.media_retrieval.get_captions(
+        video["id"], tmp_path, subtitle_format
+    )
 
     # Check if the file data has been altered
     with open(tmp_path / get_metadata.default_filename, "r") as file:
@@ -176,10 +184,10 @@ def test_get_captions_without_a_given_filename(
 
 @responses.activate
 @pytest.mark.parametrize(
-    "mock, metadata, file_format",
+    "mock, metadata",
     [
-        ("mock_get_captions_prefer_vtt", "vtt_metadata", SubtitlesFileFormat.VTT),
-        ("mock_get_captions_prefer_srt", "srt_metadata", SubtitlesFileFormat.SRT),
+        ("mock_get_captions_prefer_vtt", "vtt_metadata"),
+        ("mock_get_captions_prefer_srt", "srt_metadata"),
     ],
 )
 def test_get_captions_with_a_preferred_file_format(
@@ -191,7 +199,6 @@ def test_get_captions_with_a_preferred_file_format(
     placeholder_data: str,
     video: dict[str, Any],
     metadata: str,
-    file_format: SubtitlesFileFormat,
 ) -> None:
     # Retrieve the mocks dynamically as their tests are equal
     get_mock: list[Response] = request.getfixturevalue(mock)
@@ -199,8 +206,13 @@ def test_get_captions_with_a_preferred_file_format(
 
     add_responses(get_mock)
 
+    if metadata == "vtt_metadata":
+        subtitle_format = knuckles.SubtitlesFileFormat.VTT
+    else:
+        subtitle_format = knuckles.SubtitlesFileFormat.SRT
+
     download_path = subsonic.media_retrieval.get_captions(
-        video["id"], tmp_path, file_format
+        video["id"], tmp_path, subtitle_format
     )
 
     # Check if the file data has been altered

@@ -14,7 +14,16 @@ def mock_search_song_non_id3(
 ) -> list[Response]:
     return mock_generator(
         "search2",
-        {"songCount": 1, "songOffset": 0},
+        {
+            "query": song["title"],
+            "songCount": 1,
+            "songOffset": 0,
+            "albumCount": 0,
+            "albumOffset": 0,
+            "artistCount": 0,
+            "artistOffset": 0,
+            "musicFolderId": 1,
+        },
         {"musicFolderId": music_folders[0]["id"], "searchResult2": {"song": [song]}},
     )
 
@@ -27,7 +36,16 @@ def mock_search_album_non_id3(
 ) -> list[Response]:
     return mock_generator(
         "search2",
-        {"albumCount": 1, "albumOffset": 0},
+        {
+            "query": album["title"],
+            "songCount": 0,
+            "songOffset": 0,
+            "albumCount": 1,
+            "albumOffset": 0,
+            "artistCount": 0,
+            "artistOffset": 0,
+            "musicFolderId": 1,
+        },
         {"musicFolderId": music_folders[0]["id"], "searchResult2": {"album": [album]}},
     )
 
@@ -40,7 +58,16 @@ def mock_search_artist_non_id3(
 ) -> list[Response]:
     return mock_generator(
         "search2",
-        {"artistCount": 1, "artistOffset": 0},
+        {
+            "query": artist["name"],
+            "songCount": 0,
+            "songOffset": 0,
+            "albumCount": 0,
+            "albumOffset": 0,
+            "artistCount": 1,
+            "artistOffset": 0,
+            "musicFolderId": 1,
+        },
         {
             "musicFolderId": music_folders[0]["id"],
             "searchResult2": {"artist": [artist]},
@@ -56,7 +83,15 @@ def mock_search_song(
 ) -> list[Response]:
     return mock_generator(
         "search3",
-        {"songCount": 1, "songOffset": 0},
+        {
+            "query": song["title"],
+            "songCount": 1,
+            "songOffset": 0,
+            "albumCount": 0,
+            "albumOffset": 0,
+            "artistCount": 0,
+            "artistOffset": 0,
+        },
         {"musicFolderId": music_folders[0]["id"], "searchResult3": {"song": [song]}},
     )
 
@@ -69,7 +104,15 @@ def mock_search_album(
 ) -> list[Response]:
     return mock_generator(
         "search3",
-        {"albumCount": 1, "albumOffset": 0},
+        {
+            "query": album["title"],
+            "songCount": 0,
+            "songOffset": 0,
+            "albumCount": 1,
+            "albumOffset": 0,
+            "artistCount": 0,
+            "artistOffset": 0,
+        },
         {"musicFolderId": music_folders[0]["id"], "searchResult3": {"album": [album]}},
     )
 
@@ -82,7 +125,15 @@ def mock_search_artist(
 ) -> list[Response]:
     return mock_generator(
         "search3",
-        {"artistCount": 1, "artistOffset": 0},
+        {
+            "query": artist["name"],
+            "songCount": 0,
+            "songOffset": 0,
+            "albumCount": 0,
+            "albumOffset": 0,
+            "artistCount": 1,
+            "artistOffset": 0,
+        },
         {
             "musicFolderId": music_folders[0]["id"],
             "searchResult3": {"artist": [artist]},

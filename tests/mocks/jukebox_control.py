@@ -68,9 +68,10 @@ def mock_jukebox_control_status(
 
 @pytest.fixture
 def mock_jukebox_control_set(
+    song: dict[str, Any],
     jukebox_status_generator: JukeboxStatusGenerator,
 ) -> list[Response]:
-    return jukebox_status_generator("set")
+    return jukebox_status_generator("set", {"id": song["id"]})
 
 
 @pytest.fixture
@@ -91,7 +92,7 @@ def mock_jukebox_control_stop(
 def mock_jukebox_control_skip_without_offset(
     jukebox_status_generator: JukeboxStatusGenerator,
 ) -> list[Response]:
-    return jukebox_status_generator("skip", {"index": 0})
+    return jukebox_status_generator("skip", {"index": 0, "offset": 0})
 
 
 @pytest.fixture

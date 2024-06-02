@@ -116,7 +116,7 @@ class Playlist(Model):
         """
 
         self._subsonic.playlists.update_playlist(
-            self.id, self.name, self.comment, self.public
+            self.id, comment=self.comment, public=self.public
         )
 
         return self

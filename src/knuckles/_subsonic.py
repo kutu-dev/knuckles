@@ -60,7 +60,7 @@ class Subsonic:
         client: str,
         use_https: bool = True,
         use_token: bool = True,
-        request_method: RequestMethod = RequestMethod.POST,
+        request_method: RequestMethod = RequestMethod.GET,
     ) -> None:
         """Construction method of the Subsonic object used to
         interact with the OpenSubsonic REST API.
