@@ -19,6 +19,16 @@ just check
 just docs
 ```
 
+A git pre-commit hook that will run `just check` at every commit and block it if something is wrong can be installed with:
+```sh title="Command Line"
+just install-hook
+```
+
+You can uninstall it with:
+```sh title="Command Line"
+just uninstall-hook
+```
+
 See more recipes with:
 ```sh title="Command Line"
 just help

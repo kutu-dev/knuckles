@@ -1,10 +1,11 @@
+from importlib.metadata import version
 from typing import Any
 
 import responses
 from dateutil import parser
 from knuckles import Subsonic, __version__
 from responses import Response
-from importlib.metadata import version
+
 from tests.conftest import AddResponses
 
 
