@@ -43,7 +43,7 @@ print(ping.version)
 ```
 
 ### Learning More
-To start making more complex interactions with the API make use of [the reference](https://kutu-dev.github.io/knuckles/reference/Api/). Enjoy coding and good luck!
+To start making more complex interactions with the API make use of [the API reference](https://kutu-dev.github.io/knuckles/reference/Api/). Enjoy coding and good luck!
 
 ## Acknowledgements
 Created with :heart: by [Jorge "Kutu" Dobón Blanco](https://dobon.dev).

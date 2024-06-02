@@ -38,7 +38,7 @@ theme:
 
 nav:
   - Home:
-      Home: "index.md"
+      Getting Started: "index.md"
       Contributing: "contributing.md"
   - Reference: "reference/"
 
@@ -68,3 +68,4 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.snippets
   - pymdownx.emoji
+  - admonition

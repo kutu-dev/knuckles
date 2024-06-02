@@ -27,8 +27,12 @@ from .models._starred_content import StarredContent
 from .models._system import License, SubsonicResponse
 from .models._user import User
 from .models._video import AudioTrack, Captions, Video, VideoInfo
+from importlib.metadata import version
+
+__version__ = version("knuckles")
 
 __all__ = [
+    "__version__",
     "Subsonic",
     "RequestMethod",
     "SubtitlesFileFormat",
