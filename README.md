@@ -1,5 +1,13 @@
+<div align="center" markdown="1">
 # Knuckles
-> A [OpenSubsonic](https://opensubsonic.netlify.app/) API wrapper for Python 3.11.0+.
+
+![PyPI - Version](https://img.shields.io/pypi/v/knuckles)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/knuckles)
+![GitHub Actions - PyPI Publishing](https://github.com/kutu-dev/knuckles/actions/workflows/publish.yml/badge.svg)
+![GitHub Actions - Docs Deploying](https://github.com/kutu-dev/knuckles/actions/workflows/docs.yml/badge.svg)
+
+An unopinionated [OpenSubsonic](https://opensubsonic.netlify.app/) API wrapper for Python.
+</div>
 
 ## Compatiblity
 Knuckles **only** works with servers compatible with the REST API version 1.4.0 onwards (Subsonic 4.2+).

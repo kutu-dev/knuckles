@@ -38,8 +38,6 @@ def test_get_artist_indexes(
         music_folders[0]["id"], modified_date
     )
 
-    print(response.index)
-
     assert response.ignored_articles == indexes["ignoredArticles"]
     assert isinstance(response.index, dict)
     assert (

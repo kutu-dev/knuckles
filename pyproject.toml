@@ -2,12 +2,46 @@
 name = "knuckles"
 description = "A Subsonic/OpenSubsonic API wrapper for Python."
 requires-python = ">=3.11.0"
+
 dependencies = [
     "requests>=2.32.3",
     "python-dateutil>=2.8.2"
 ]
-version = "0.1.0"
+
+version = "0.2.0"
 readme = "README.md"
+
+authors = [
+  {name = 'Jorge "Kutu" Dobón Blanco', email="code@dobon.dev"}
+]
+
+keywords = [
+  "api-wrapper",
+  "api",
+  "wrapper",
+  "library",
+  "subsonic",
+  "opensubsonic",
+]
+
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Environment :: Web Environment",
+  "Operating System :: OS Independent",
+  "Topic :: Internet",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Multimedia",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Typing :: Typed",
+]
 
 [project.optional-dependencies]
 dev = [

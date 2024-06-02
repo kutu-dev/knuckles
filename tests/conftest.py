@@ -128,9 +128,6 @@ def match_json(
 
             decoded_post_body[key] = value[0]
 
-        print(f"{mocked_params=}")
-        print(f"{decoded_post_body=}")
-
         if mocked_params != decoded_post_body:
             return False, (
                 "Mismatch data between the request POST body and "
@@ -159,8 +156,6 @@ def mock_generator(
         mocked_params = params.copy()
         if extra_params is not None:
             mocked_params.update(extra_params)
-
-        print("CC", extra_params)
 
         mocked_data = {"subsonic-response": {**subsonic_response}}
         if extra_data is not None:

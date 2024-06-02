@@ -40,6 +40,7 @@ nav:
   - Home:
       Getting Started: "index.md"
       Contributing: "contributing.md"
+      Changelog: "changelog.md"
   - Reference: "reference/"
 
 plugins:
@@ -69,3 +70,4 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.emoji
   - admonition
+  - md_in_html
