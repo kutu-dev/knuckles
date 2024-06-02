@@ -2,4 +2,5 @@
 
 - [ ] Document in contributing why attributes are double typed.
 - [ ] Add general documentation and tutorials.
-- [ ] Fix PR requirements.
+- [ ] Explain why CI uses `24.04` and not latest.
+- [ ] Write that compat funcions for non standard behaviour servers is not planed.

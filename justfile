@@ -39,6 +39,7 @@ check:
 # Install a pre-commit hook to ensure that the CI will pass
 install-hook: uninstall-hook
   cp scripts/pre-commit.sh .git/hooks/pre-commit
+  chmod +x .git/hooks/pre-commit
 
 # Uninstall the pre-commit hook
 uninstall-hook:

@@ -119,7 +119,8 @@ class Api:
 
         prepared_request = PreparedRequest()
         prepared_request.prepare_url(
-            f"{self.url}/rest/{endpoint}", {**self._generate_params(extra_params)}
+            f"{self.url}/rest/{endpoint}", {**
+                                            self._generate_params(extra_params)}
         )
 
         # Ignore the type error caused by the url parameter of prepared_request
@@ -141,6 +142,7 @@ class Api:
                 [`requests`](https://docs.python-requests.org/en/latest/index.html)
                 `response` object of the executed request.
         """
+
         match self.request_method:
             case RequestMethod.POST:
                 return requests.post(

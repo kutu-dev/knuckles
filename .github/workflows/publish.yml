@@ -1,0 +1,27 @@
+name: Publish update to PyPI
+
+on:
+  - workflow_dispatch
+  - release:
+    types: publised
+
+jobs:
+  publish-pypi:
+    runs-on: ubuntu-latest
+
+    environment: release
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.0"
+
+
+    - run: python3 -m pip install build
+    - run: python3 -m build --sdist --wheel --outdir dist/ .
+
+    - name: Publish updated package to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
