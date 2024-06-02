@@ -6,6 +6,7 @@ dependencies = [
     "python-dateutil>=2.8.2"
 ]
 version = "0.1.0"
+readme = "README.md"
 
 [project.optional-dependencies]
 dev = [
