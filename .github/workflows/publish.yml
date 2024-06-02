@@ -1,8 +1,8 @@
 name: Publish update to PyPI
 
 on:
-  - workflow_dispatch
-  - release:
+  workflow_dispatch:
+  release:
     types: publised
 
 jobs:

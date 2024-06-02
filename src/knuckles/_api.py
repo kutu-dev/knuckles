@@ -119,8 +119,7 @@ class Api:
 
         prepared_request = PreparedRequest()
         prepared_request.prepare_url(
-            f"{self.url}/rest/{endpoint}", {**
-                                            self._generate_params(extra_params)}
+            f"{self.url}/rest/{endpoint}", {**self._generate_params(extra_params)}
         )
 
         # Ignore the type error caused by the url parameter of prepared_request
