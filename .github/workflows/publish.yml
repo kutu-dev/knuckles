@@ -20,8 +20,8 @@ jobs:
           python-version: "3.11.0"
 
 
-    - run: python3 -m pip install build
-    - run: python3 -m build --sdist --wheel --outdir dist/ .
+      - run: python3 -m pip install build
+      - run: python3 -m build --sdist --wheel --outdir dist/ .
 
-    - name: Publish updated package to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish updated package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
