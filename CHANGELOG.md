@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.0
+- Add missing project links.
+
 ## 1.0.0
 - Official stable release.
 

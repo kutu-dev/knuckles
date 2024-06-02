@@ -8,7 +8,7 @@ dependencies = [
     "python-dateutil>=2.8.2"
 ]
 
-version = "1.0.0"
+version = "1.1.0"
 readme = "README.md"
 
 authors = [
@@ -42,6 +42,12 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
 ]
+
+[project.urls]
+Documentation = "https://kutu-dev.github.io/knuckles/"
+Repository = "https://github.com/kutu-dev/knuckles"
+Issues = "https://github.com/kutu-dev/knuckles/issues"
+Changelog = "https://github.com/kutu-dev/knuckles/blob/master/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
