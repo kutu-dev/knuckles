@@ -1,5 +1,5 @@
 <div align="center" markdown="1">
-# Knuckles
+<h1>Knuckles</h1>
 
 ![PyPI - Version](https://img.shields.io/pypi/v/knuckles)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/knuckles)
