@@ -31,7 +31,7 @@ setup-docs: generic-setup
 
 # Check if the project is following the guidelines
 check:
-  .venv/bin/mypy src/knuckles
+  .venv/bin/mypy src
   .venv/bin/ruff check --fix
   .venv/bin/ruff format
 
