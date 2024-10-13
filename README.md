@@ -26,7 +26,7 @@ Or add it to your project:
 
 ```toml title="pyproject.toml"
 project = [
-    "knuckles>=1.0.0"
+    "knuckles>=1.1.0"
 ]
 ```
 
