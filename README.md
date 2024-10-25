@@ -35,7 +35,7 @@ project = [
 ```python3 title="__main__.py"
 import knuckles
 
-server = knuckles.subsonic(
+server = knuckles.Subsonic(
     # Adding https:// is done automatically,
     # /rest should never be added to the URL
     url = "example.com",
