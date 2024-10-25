@@ -44,7 +44,7 @@ server = knuckles.Subsonic(
     client = "knuckles client"
 )
 
-ping = server.ping()
+ping = server.system.ping()
 
 # Print the supported version of the OpenSubsonic REST API
 print(ping.version)
