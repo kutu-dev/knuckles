@@ -198,6 +198,7 @@ class Album(Model):
         releaseDate: dict[str, Any] | None = None,
         isCompilation: bool | None = None,
         discTitles: list[dict[str, Any]] | None = None,
+        **kargs,
     ) -> None:
         super().__init__(subsonic)
 

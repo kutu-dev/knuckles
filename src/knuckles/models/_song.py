@@ -138,6 +138,7 @@ class Song(Model):
         moods: list[str] | None = None,
         replayGain: dict[str, Any] | None = None,
         mediaType: str | None = None,
+        **kwargs,
     ) -> None:
         super().__init__(subsonic)
 

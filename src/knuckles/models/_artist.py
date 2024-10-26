@@ -42,6 +42,7 @@ class ArtistInfo(Model):
         mediumImageUrl: str | None,
         largeImageUrl: str | None,
         similarArtist: list[dict[str, Any]] | None = None,
+        **kwargs,
     ) -> None:
         super().__init__(subsonic)
 
