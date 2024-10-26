@@ -86,6 +86,7 @@ class Song(Model):
         moods (list[str] | None): List off all the moods of the song.
         replay_gain (ReplayGain | None): All the info about the replay
             gain of the song.
+        media_type (str | None): The type of media of the song.
     """
 
     def __init__(
@@ -136,6 +137,7 @@ class Song(Model):
         displayComposer: str | None = None,
         moods: list[str] | None = None,
         replayGain: dict[str, Any] | None = None,
+        mediaType: str | None = None,
     ) -> None:
         super().__init__(subsonic)
 
@@ -198,6 +200,7 @@ class Song(Model):
         self.replay_gain = (
             ReplayGain(self._subsonic, **replayGain) if replayGain else None
         )
+        self.media_type = mediaType
 
     def generate(self) -> "Song":
         """Return a new song object with all the data updated from the API,
