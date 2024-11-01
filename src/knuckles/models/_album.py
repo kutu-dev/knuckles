@@ -88,6 +88,7 @@ class AlbumInfo(Model):
         smallImageUrl: str | None,
         mediumImageUrl: str | None,
         largeImageUrl: str | None,
+        **kargs,
     ) -> None:
         super().__init__(subsonic)
 
