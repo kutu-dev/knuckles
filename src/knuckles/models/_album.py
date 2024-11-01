@@ -82,7 +82,7 @@ class AlbumInfo(Model):
         self,
         subsonic: "Subsonic",
         album_id: str,
-        notes: str,
+        notes: str | None = None,
         musicBrainzId: str | None = None,
         lastFmUrl: str | None = None,
         smallImageUrl: str | None = None,
