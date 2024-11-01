@@ -83,11 +83,11 @@ class AlbumInfo(Model):
         subsonic: "Subsonic",
         album_id: str,
         notes: str,
-        musicBrainzId: str | None,
-        lastFmUrl: str | None,
-        smallImageUrl: str | None,
-        mediumImageUrl: str | None,
-        largeImageUrl: str | None,
+        musicBrainzId: str | None = None,
+        lastFmUrl: str | None = None,
+        smallImageUrl: str | None = None,
+        mediumImageUrl: str | None = None,
+        largeImageUrl: str | None = None,
         **kargs,
     ) -> None:
         super().__init__(subsonic)
