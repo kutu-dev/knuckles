@@ -54,9 +54,9 @@ class ReleaseDate(Model):
     def __init__(
         self,
         subsonic: "Subsonic",
-        year: int,
-        month: int,
-        day: int,
+        year: int | None = None,
+        month: int | None = None,
+        day: int | None = None,
     ) -> None:
         super().__init__(subsonic)
 
