@@ -30,6 +30,7 @@ class SubsonicResponse(Model):
         type: str | None = None,
         serverVersion: str | None = None,
         openSubsonic: bool | None = None,
+        **kwargs,
     ) -> None:
         super().__init__(subsonic)
 
