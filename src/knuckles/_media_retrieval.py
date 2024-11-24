@@ -2,7 +2,7 @@ from enum import Enum
 from mimetypes import guess_extension
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable
-
+import datetime
 from requests import Response
 
 if TYPE_CHECKING:
@@ -133,7 +133,9 @@ class MediaRetrieval:
             },
         )
 
-    def download(self, song_or_video_id: str, file_or_directory_path: Path) -> Path:
+    def download(
+        self, song_or_video_id: str, file_or_directory_path: Path, use_stream=False
+    ) -> Path:
         """Download a song or video from the server.
 
         Args:
@@ -147,14 +149,20 @@ class MediaRetrieval:
             The path where the song or video was finally saved.
         """
 
-        response = self.api.raw_request("download", {"id": song_or_video_id})
+        if not use_stream:
+            response = self.api.raw_request("download", {"id": song_or_video_id})
+        else:
+            response = self.api.raw_request("stream", {"id": song_or_video_id})
 
         def determinate_filename(file_response: Response) -> str:
-            filename = (
-                file_response.headers["Content-Disposition"]
-                .split("filename=")[1]
-                .strip()
-            )
+            if "Content-Disposition" in file_response.headers:
+                filename = (
+                    file_response.headers["Content-Disposition"]
+                    .split("filename=")[1]
+                    .strip()
+                )
+            else:
+                filename = str(datetime.datetime.now())
 
             # Remove leading quote char
             if filename[0] == '"':
